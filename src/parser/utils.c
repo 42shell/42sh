@@ -22,13 +22,11 @@ void	print_ast(t_node *ast, int indent_level)
 	int i;
 	int	n;
 
-	if (ast == NULL)
-		return ;
 	n = 0;
 	while (n++ < indent_level)
 		write(1, "  ", 2);
 	if (ast == NULL)
-		ft_printf("NULL NODE");
+		return ((void)ft_printf("NULL NODE"));
 	if (ast->data != NULL)
 		ft_printf("%s\n", ((t_token *)ast->data)->value->str);
 	else
