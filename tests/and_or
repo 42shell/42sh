@@ -1,0 +1,48 @@
+echo 'ls && ls'
+ls && ls
+echo '~~~'
+
+echo 'ls -# && ls'
+ls -# && ls
+echo '~~~'
+
+echo 'ls || ls'
+ls || ls
+echo '~~~'
+
+echo 'ls -# || ls'
+ls -# || ls
+echo '~~~'
+
+echo 'false && echo foo || echo bar'
+false && echo foo || echo bar
+echo '~~~'
+
+echo 'true && echo foo || echo bar'
+true && echo foo || echo bar
+echo '~~~'
+
+echo 'true || echo foo && echo bar'
+true || echo foo && echo bar
+echo '~~~'
+
+echo 'false || echo foo && echo bar'
+false || echo foo && echo bar
+echo '~~~'
+
+echo '&& || newline test'
+ls &&
+ls &&
+
+
+ls
+echo '~~~'
+
+
+echo 'hard test 1'
+ls -# || ls -# && echo true && echo true && echo true || ls -# || ls -# || echo true || echo true || ls -# || ls -# && echo true || echo true && echo true && ls -# && echo true || ls -# || ls -# && echo true && echo true && ls -#
+echo '~~~'
+
+echo 'hard test 2'
+echo true && echo true || ls -# || echo true || ls -# || ls -# || echo true || echo true && echo true || ls -# || echo true || echo true || echo true || echo true || echo true && echo true && ls -# || echo true || ls -# || echo true || echo true
+echo '~~~'

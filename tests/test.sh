@@ -2,7 +2,7 @@
 
 #this script needs GNU csplit and gnu "$SED" to work on macOS, run
 #brew install coreutils
-#brew install gnu-"$SED"
+#brew install gnu-sed
 #to install it
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -57,6 +57,9 @@ bash "$DIR/quotes" > "$DIR/quotes.bash" 2>&1
 
 ./21sh "$DIR/heredoc" > "$DIR/heredoc.21sh" 2>&1
 bash "$DIR/heredoc" > "$DIR/heredoc.bash" 2>&1
+
+./21sh "$DIR/and_or" > "$DIR/and_or.21sh" 2>&1
+bash "$DIR/and_or" > "$DIR/and_or.bash" 2>&1
 
 
 "$SED" -i -E  's/.*:.*: (.*:)/21sh: \1/g' "$DIR/"*.bash
