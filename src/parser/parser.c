@@ -123,8 +123,6 @@ static int	run(t_lexer *lexer, t_term *term, t_ast *ast, t_env *env)
 
 	while (ast != NULL)
 	{
-		if (ast->node == NULL && g_parse_error == NOERR)
-			g_parse_error = NULL_AST_NODE;
 		if (g_parse_error == NOERR)
 		{
 			get_all_heredocs(lexer->inputp, &g_heredocs);
@@ -161,19 +159,15 @@ int			parse(t_lexer *lexer, t_env *env, t_term *term)
 		return (0);
 	g_parse_error = NOERR;
 	ast = get_ast(lexer);
-	if (!(lexer->state & START) && (!(lexer->state & END)
-	|| lexer->curr_tok != NULL))
+	if (lexer->curr_tok != NULL)
 	{
-		g_parse_error = (g_parse_error == NOERR) ? TOKENS_LEFT : g_parse_error;
 		token_del(&lexer->curr_tok);
 		while (eat(lexer) != END_OF_INPUT)
 			token_del(&lexer->curr_tok);
 	}
-	if (ast == NULL && g_parse_error == NOERR)
-		g_parse_error = NULL_AST;
-	if (run(lexer, term, ast, env) == 0 && g_parse_error > 0)
-		ft_dprintf(2, "21sh: parse error near '%s' errno:%d\n",
-		g_error_near, g_parse_error);
+	run(lexer, term, ast, env);
+	if (g_parse_error > 0)
+		ft_dprintf(2, "21sh: parse error near '%s'\n", g_error_near);
 	free(g_error_near);
 	g_error_near = NULL;
 	return (0);

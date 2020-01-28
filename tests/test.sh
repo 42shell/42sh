@@ -63,20 +63,20 @@ bash "$DIR/and_or" > "$DIR/and_or.bash" 2>&1
 
 ./21sh "$DIR/parse_error" > "$DIR/parse_error.21sh" 2>&1
 cat << EOF > "$DIR/parse_error.bash"
-21sh: parse error near '&&' errno:5
-21sh: parse error near '&&' errno:5
-21sh: parse error near '>' errno:4
-21sh: parse error near '>' errno:4
-21sh: parse error near ';' errno:9
-21sh: parse error near ';' errno:9
-21sh: parse error near '<<' errno:8
-21sh: parse error near '<<' errno:8
-21sh: parse error near '>' errno:4
-21sh: parse error near '>' errno:4
-21sh: parse error near '&' errno:9
-21sh: parse error near '|' errno:5
-21sh: parse error near '|' errno:6
-21sh: parse error near '|' errno:5
+21sh: parse error near '&&'
+21sh: parse error near '&&'
+21sh: parse error near '>'
+21sh: parse error near '>'
+21sh: parse error near ';'
+21sh: parse error near ';'
+21sh: parse error near '<<'
+21sh: parse error near '<<'
+21sh: parse error near '>'
+21sh: parse error near '>'
+21sh: parse error near '&'
+21sh: parse error near '|'
+21sh: parse error near '|'
+21sh: parse error near '|'
 EOF
 
 ./21sh "$DIR/builtin_error" > "$DIR/builtin_error.21sh" 2>&1
