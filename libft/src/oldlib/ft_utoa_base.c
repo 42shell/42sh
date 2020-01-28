@@ -24,7 +24,6 @@ int		ft_dtoc_36(int d)
 		return (d + 'A' - 10);
 }
 
-
 char	*ft_utoa_base(uintmax_t n, unsigned int base)
 {
 	uintmax_t		tmp;

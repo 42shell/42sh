@@ -28,11 +28,11 @@ void	print_ast(t_node *ast, int indent_level)
 	while (n++ < indent_level)
 		write(1, "  ", 2);
 	if (ast == NULL)
-		printf("NULL NODE");
+		ft_printf("NULL NODE");
 	if (ast->data != NULL)
-		printf("%s\n", ((t_token *)ast->data)->value->str);
+		ft_printf("%s\n", ((t_token *)ast->data)->value->str);
 	else
-		printf("NULL DATA\n");
+		ft_printf("NULL DATA\n");
 	fflush(stdout);
 	if (ast->nb_children > 0)
 	{

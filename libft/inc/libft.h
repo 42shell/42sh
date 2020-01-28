@@ -29,13 +29,13 @@ typedef unsigned long	t_uint64;
 
 # define DOUBLE_EXPONENT_MASK		0x7ff
 # define DOUBLE_MANTISSA_MASK		0xfffffffffffff
-# define DOUBLE_EXPONENT_MAX		(0x800 - 1)
-# define DOUBLE_EXPONENT_SHIFT		(0x400 - 1)
+# define DOUBLE_EXPONENT_MAX		0x7ff
+# define DOUBLE_EXPONENT_SHIFT		0x3ff
 
 # define LDOUBLE_EXPONENT_MASK		0x7fff
 # define LDOUBLE_MANTISSA_MASK		0xffffffffffffffff
-# define LDOUBLE_EXPONENT_MAX		(0x8000 - 1)
-# define LDOUBLE_EXPONENT_SHIFT		(0x4000 - 1)
+# define LDOUBLE_EXPONENT_MAX		0x7fff
+# define LDOUBLE_EXPONENT_SHIFT		0x3fff
 
 typedef struct			s_double
 {
@@ -221,6 +221,7 @@ int						ft_dtoc_36(int d);
 int						ft_islower(int c);
 int						ft_isupper(int c);
 void					ft_putstr(const char *s);
-char					*ft_strpad(char *str, size_t field_width, int side, char c);
+char					*ft_strpad(char *str, size_t field_width,
+						int side, char c);
 
 #endif

@@ -53,20 +53,6 @@ static t_node	*command(t_lexer *lexer)
 	return (command);
 }
 
-/*
-
-** pipeline         : command pipe_list
-
-** pipe_list        : '|' command pipe_list
-**                  | EMPTY
-**                  ;
-
-** command          : simple_command cmd_subst
-
-** cmd_subst		: CMD_SUBST
-					| EMTPY
-*/
-
 static t_node	*pipe_list(t_lexer *lexer, t_node *left_command)
 {
 	t_node	*left_pipe;

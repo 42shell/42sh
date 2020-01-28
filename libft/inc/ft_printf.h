@@ -22,26 +22,26 @@
 ** Flags
 */
 
-# define HASH_FLAG		(1 << 0)
-# define ZERO_FLAG		(1 << 1)
-# define MINUS_FLAG		(1 << 2)
-# define EQU_FLAG		(1 << 3)
-# define SPACE_FLAG 	(1 << 4)
-# define PLUS_FLAG		(1 << 5)
-# define PREC_FLAG		(1 << 6)
-# define UP_FLAG		(1 << 7)
+# define HASH_FLAG		0x1
+# define ZERO_FLAG		0x2
+# define MINUS_FLAG		0x4
+# define EQU_FLAG		0x8
+# define SPACE_FLAG 	0x10
+# define PLUS_FLAG		0x20
+# define PREC_FLAG		0x40
+# define UP_FLAG		0x80
 
 /*
 ** Length modifiers
 */
 
-# define HH_LEN			(1 << 0)
-# define H_LEN			(1 << 1)
-# define L_LEN			(1 << 2)
-# define LL_LEN			(1 << 3)
-# define LD_LEN			(1 << 4)
-# define J_LEN			(1 << 5)
-# define Z_LEN			(1 << 6)
+# define HH_LEN			0x1
+# define H_LEN			0x2
+# define L_LEN			0x4
+# define LL_LEN			0x8
+# define LD_LEN			0x10
+# define J_LEN			0x20
+# define Z_LEN			0x40
 
 typedef unsigned char	t_uint8;
 typedef unsigned short	t_uint16;

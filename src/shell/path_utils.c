@@ -112,7 +112,7 @@ char		*get_executable_path(char *command, t_env *env)
 	}
 	if ((path == NULL || path[i] == NULL))
 	{
-		printf("21sh: %s: command not found\n", command);
+		ft_dprintf(2, "21sh: %s: command not found\n", command);
 		fflush(stdout);
 		g_last_exit_st = 127;
 		ret = NULL;
