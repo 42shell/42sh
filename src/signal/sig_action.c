@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/23 18:09:09 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/25 17:31:24 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	sig_action(t_sh *shell, int sig)
 	{
 		signal(sig, SIG_DFL);
 		getwinsize(&sh->term);
+		getcpos(&sh->term);
 		signal(sig, sig_handle);
 	}
 	else if ((1 <= sig && sig <= 15) || sig == 17

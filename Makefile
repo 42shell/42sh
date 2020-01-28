@@ -1,6 +1,6 @@
 NAME = 21sh 
-CC = gcc
-CFLAGS = -Wall -Wextra  -glldb#-Werror
+CC = gcc 
+CFLAGS = -Wall -Wextra $(DBG_FLAGS)# -Werror
 LFLAGS = -ltermcap
 DIR_SRC = src/
 DIR_OBJ = obj/

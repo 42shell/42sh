@@ -42,9 +42,9 @@ echo "> test | echo blabla; rm test"
 > test | echo blabla; rm test
 echo '~~~'
 
-echo 'echo 1>&2 1 | echo 2 > noright | echo 3'
+echo 'echo 2 > noright | sleep 0.1 && echo lol'
 touch norights; chmod 000 norights
-echo 1>&2 1 | echo 2 > norights | echo 3
+echo 2 > norights | sleep 0.1 && echo lol
 rm -f norights
 echo '~~~'
 
