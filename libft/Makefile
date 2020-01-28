@@ -76,12 +76,6 @@ SRC =	mem/ft_xmalloc.c \
 		struct/dstr/ft_dstr_remove.c \
 		struct/dstr/ft_dstr_del.c \
 		struct/dstr/ft_dstr_clear.c \
-		oldlib/ft_ceil_double.c \
-		oldlib/ft_ceil_ldouble.c \
-		oldlib/ft_frexp.c \
-		oldlib/ft_frexpl.c \
-		oldlib/ft_dtoa.c \
-		oldlib/ft_ldtoa.c \
 		oldlib/ft_strprefix.c \
 		oldlib/ft_strsuffix.c \
 		oldlib/ft_strtolower.c \
@@ -92,29 +86,18 @@ SRC =	mem/ft_xmalloc.c \
 		oldlib/ft_putstr.c \
 		oldlib/ft_strpad.c \
 		oldlib/ft_utoa.c \
-		ft_printf/pf_print_double/pf_print_double_hex.c \
-		ft_printf/pf_print_double/pf_print_double_sci.c \
-		ft_printf/pf_print_double/pf_print_double.c \
-		ft_printf/pf_print_double/pf_print_ldouble_hex.c \
-		ft_printf/pf_print_double/pf_print_ldouble_sci.c \
-		ft_printf/pf_print_double/pf_print_ldouble.c \
 		ft_printf/pf_print_int/pf_print_int.c \
 		ft_printf/pf_print_uint/pf_print_uint.c \
 		ft_printf/pf_print_string/pf_print_string.c \
 		ft_printf/pf_utils/pf_del.c \
 		ft_printf/pf_utils/pf_error.c \
 		ft_printf/pf_utils/pf_format_error.c \
-		ft_printf/pf_utils/pf_get_double_exp.c \
-		ft_printf/pf_utils/pf_get_ldouble_exp.c \
 		ft_printf/pf_utils/pf_init.c \
 		ft_printf/pf_utils/pf_isconv.c \
 		ft_printf/pf_utils/pf_isflag.c \
 		ft_printf/pf_utils/pf_ismodif.c \
-		ft_printf/pf_utils/pf_mantissa_to_hex.c \
-		ft_printf/pf_utils/pf_lmantissa_to_hex.c \
 		ft_printf/pf_utils/pf_pad.c \
 		ft_printf/pf_utils/pf_buffer.c \
-		ft_printf/pf_utils/pf_print_inf_nan.c \
 		ft_printf/pf_handlers/pf_handle_arg.c \
 		ft_printf/pf_handlers/pf_handle_color.c \
 		ft_printf/pf_parser/pf_parser.c \

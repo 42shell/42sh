@@ -17,6 +17,8 @@ int			main(int argc, char **argv)
 	struct s_sh	shell;
 
 	init(&shell, --argc, ++argv);
+	printf("%.1lf\n", 152.29);
+	ft_printf("%.1lf\n", 152.29);
 	while (1)
 		parse(&shell.lexer, &shell.env, &shell.term);
 	return (0);

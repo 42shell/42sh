@@ -84,6 +84,12 @@ void					pf_pad_precision(t_printf *pf);
 
 void					pf_print_int(t_printf *pf);
 void					pf_print_uint(t_printf *pf, t_uint32 base);
+void					pf_print_double(t_printf *pf);
+void					pf_print_ldouble(t_printf *pf);
+void					pf_print_double_sci(t_printf *pf);
+void					pf_print_ldouble_sci(t_printf *pf);
+void					pf_print_double_hex(t_printf *pf);
+void					pf_print_ldouble_hex(t_printf *pf);
 void					pf_print_string(t_printf *pf);
 
 /*
@@ -107,6 +113,11 @@ int						pf_isconv(char c);
 void					pf_pad_field_width(t_printf *pf);
 void					pf_pad_precision(t_printf *pf);
 
+int						pf_get_double_exp(double *f);
+int						pf_get_ldouble_exp(long double *lf);
+char					*pf_mantissa_to_hex(t_double *t_f, size_t precision);
+char					*pf_lmantissa_to_hex(t_double *t_f, size_t precision);
+void					print_inf_nan(t_printf *pf, t_double *t_f);
 
 void					pf_del(t_printf *pf);
 void					pf_error(t_printf *pf, char *message);
@@ -116,6 +127,11 @@ void					pf_format_error(t_printf *pf);
 ** Old lib
 */
 
+void					ft_ceil_double(double *fp, size_t precision);
+void					ft_ceil_ldouble(long double *fp, size_t precision);
+void					ft_frexpl(t_double *t_f, long double lf);
+void					ft_frexp(t_double *t_f, double f);
+char					*ft_ldtoa(long double lf, size_t precision);
 char					*ft_strprefix(char *str, char *prefix, int alloc);
 char					*ft_strsuffix(char *str, char *suffix, int alloc);
 void					ft_strtolower(char *str);

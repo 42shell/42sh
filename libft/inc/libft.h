@@ -206,12 +206,6 @@ char					*ft_itoa_base(long n, t_uint32 base);
 ** -----------------------------Old lib-----------------------------
 */
 
-void					ft_ceil_double(double *fp, size_t precision);
-void					ft_ceil_ldouble(long double *fp, size_t precision);
-void					ft_frexpl(t_double *t_f, long double lf);
-void					ft_frexp(t_double *t_f, double f);
-char					*ft_dtoa(double f, size_t precision);
-char					*ft_ldtoa(long double lf, size_t precision);
 char					*ft_strprefix(char *str, char *prefix, int alloc);
 char					*ft_strsuffix(char *str, char *suffix, int alloc);
 void					ft_strtolower(char *str);

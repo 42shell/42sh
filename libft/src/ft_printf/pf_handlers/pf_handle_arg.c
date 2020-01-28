@@ -17,28 +17,6 @@ static void	handle_strings(t_printf *pf)
 	return (pf_print_string(pf));
 }
 
-static void	handle_float(t_printf *pf)
-{
-	if (pf->conv == 'f' || pf->conv == 'F')
-	{
-		if (pf->len_modif & LD_LEN)
-			return (pf_print_ldouble(pf));
-		return (pf_print_double(pf));
-	}
-	else if (pf->conv == 'e' || pf->conv == 'E')
-	{
-		if (pf->len_modif & LD_LEN)
-			return (pf_print_ldouble_sci(pf));
-		return (pf_print_double_sci(pf));
-	}
-	else if (pf->conv == 'a' || pf->conv == 'A')
-	{
-		if (pf->len_modif & LD_LEN)
-			return (pf_print_ldouble_hex(pf));
-		return (pf_print_double_hex(pf));
-	}
-}
-
 static void	handle_int(t_printf *pf)
 {
 	if (pf->conv == 'd' || pf->conv == 'D' || pf->conv == 'i')
@@ -58,8 +36,6 @@ void		pf_handle_arg(t_printf *pf)
 {
 	if (ft_strchr("dDioOuUxXbBpP", pf->conv))
 		return (handle_int(pf));
-	else if (ft_strchr("fFaAeEgG", pf->conv))
-		return (handle_float(pf));
 	else if (ft_strchr("cCsS%", pf->conv))
 		return (handle_strings(pf));
 }
