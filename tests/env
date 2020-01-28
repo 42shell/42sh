@@ -1,21 +1,9 @@
-echo "env bonjour=kikoo env"
-env bonjour=kikoo env
-echo ~~~
-
 echo "env bonjour=kikoo kikoo=bonjour foo=bar jj=aa env"
 env bonjour=kikoo kikoo=bonjour foo=bar jj=aa env
 echo ~~~
 
 echo "env -i env"
 env -i env
-echo ~~~
-
-echo "env -i bonjour=salut env"
-env -i bonjour=salut env
-echo ~~~
-
-echo "env -i bonjour=salut jj=gg env"
-env -i bonjour=salut jj=gg env
 echo ~~~
 
 echo "env -i ls /"

@@ -1,0 +1,4 @@
+ignore:
+  - src/term/
+  - src/input/
+  - src/signal/

@@ -1,0 +1,25 @@
+os:
+  - linux
+
+dist: xenial
+
+language: c
+
+compiler: gcc
+
+env:
+  - DBG_FLAGS="-fsanitize=address -ggdb -O0 -coverage"
+
+addons:
+  apt:
+    packages:
+      - make
+      - gcc
+      - libncurses-dev
+      - tcsh
+
+install: make
+script:
+  - tests/test.sh
+  - gcov --version
+after_success: bash <(curl -s https://codecov.io/bash)

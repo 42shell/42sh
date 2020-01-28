@@ -1,15 +1,18 @@
 #!/bin/bash
 
-#this script needs GNU csplit to work on macOS, run
+#this script needs GNU csplit and gnu "$SED" to work on macOS, run
 #brew install coreutils
+#brew install gnu-sed
 #to install it
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
 	CSPLIT=gcsplit
+	SED=gsed
 else
 	CSPLIT=csplit
+	SED=sed
 fi
 
 export DIR_21SH=$PWD
@@ -55,32 +58,66 @@ bash "$DIR/quotes" > "$DIR/quotes.bash" 2>&1
 ./21sh "$DIR/heredoc" > "$DIR/heredoc.21sh" 2>&1
 bash "$DIR/heredoc" > "$DIR/heredoc.bash" 2>&1
 
+./21sh "$DIR/and_or" > "$DIR/and_or.21sh" 2>&1
+bash "$DIR/and_or" > "$DIR/and_or.bash" 2>&1
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-	sed -i '' -E  's/.*:.*: (.*:)/21sh: \1/g' "$DIR/"*.bash
-	sed -i '' -E "s/(.+)\/$/\1/g" "$DIR/cd.21sh" #remove / at the end of line for $PWD
-	sed -i '' -E "/TERMINFO=/d" "$DIR/env.21sh" "$DIR/env.bash"
-	sed -i '' -E "/_=/d" "$DIR/env.21sh" "$DIR/env.bash"
-	sed -i '' -E "s/21sh:(.*): command not found/env:\1: No such file or directory/g" "$DIR/env.21sh"
-	sed -i '' -E "/_=|HOSTTYPE=|VENDOR=|OSTYPE=|MACHTYPE=|GROUP=|HOST=/d" "$DIR/setenv.bash"
-	sed -i '' -E "/_=/d" "$DIR/setenv.21sh"
-	sed -i '' -E "s/norights: Permission denied/Could not open file/g" "$DIR/pipe.bash"
-	sed -i '' -E "s/21sh: .*: Bad file descriptor/21sh: Bad file descriptor/g" "$DIR/redir.bash"
-	sed -i '' -E "s/21sh: .*: No such file or directory/21sh: Could not open file/g" "$DIR/redir.bash"
-else
-	sed -i -E  's/.*:.*: (.*:)/21sh: \1/g' "$DIR/"*.bash
-	sed -i -E "s/(.+)\/$/\1/g" "$DIR/cd.21sh" #remove / at the end of line for $PWD
-	sed -i -E "/TERMINFO=/d" "$DIR/env.21sh" "$DIR/env.bash"
-	sed -i -E "/_=/d" "$DIR/env.21sh" "$DIR/env.bash"
-	sed -i -E "s/21sh:(.*): command not found/env:\1: No such file or directory/g" "$DIR/env.21sh"
-	sed -i -E "s/‘//g" "$DIR/env.bash"
-	sed -i -E "s/’//g" "$DIR/env.bash"
-	sed -i -E "/_=|HOSTTYPE=|VENDOR=|OSTYPE=|MACHTYPE=|GROUP=|HOST=/d" "$DIR/setenv.bash"
-	sed -i -E "/_=|HOSTTYPE=/d" "$DIR/setenv.21sh"
-	sed -i -E "s/norights: Permission denied/Could not open file/g" "$DIR/pipe.bash"
-	sed -i -E "s/21sh: .*: Bad file descriptor/21sh: Bad file descriptor/g" "$DIR/redir.bash"
-	sed -i -E "s/21sh: .*: No such file or directory/21sh: Could not open file/g" "$DIR/redir.bash"
-fi
+./21sh "$DIR/parse_error" > "$DIR/parse_error.21sh" 2>&1
+cat << EOF > "$DIR/parse_error.bash"
+21sh: parse error near '&&' errno:5
+21sh: parse error near '&&' errno:5
+21sh: parse error near '>' errno:4
+21sh: parse error near '>' errno:4
+21sh: parse error near ';' errno:9
+21sh: parse error near ';' errno:9
+21sh: parse error near '<<' errno:8
+21sh: parse error near '<<' errno:8
+21sh: parse error near '>' errno:4
+21sh: parse error near '>' errno:4
+21sh: parse error near '&' errno:9
+21sh: parse error near '|' errno:5
+21sh: parse error near '|' errno:6
+21sh: parse error near '|' errno:5
+EOF
+
+./21sh "$DIR/builtin_error" > "$DIR/builtin_error.21sh" 2>&1
+cat << EOF > "$DIR/builtin_error.bash"
+env: ./lol: No such file or directory
+~~~
+env: illegal option -- q
+~~~
+~~~
+~~~
+setenv: Too many arguments.
+~~~
+setenv: Invalid variable name
+~~~
+setenv: Invalid variable name
+~~~
+~~~
+$PWD
+~~~
+cd: error
+~~~
+~~~
+cd: error
+cd: error
+cd: PWD not set
+getcwd: could not get current dir
+cd: PWD not set
+getcwd: could not get current dir
+~~~
+cd: OLDPWD not set
+EOF
+
+
+"$SED" -i -E  's/.*:.*: (.*:)/21sh: \1/g' "$DIR/"*.bash
+"$SED" -i -E "s/(.+)\/$/\1/g" "$DIR/cd.21sh" #remove / at the end of line for $PWD
+"$SED" -i -E "s/21sh:(.*): command not found/env:\1: No such file or directory/g" "$DIR/env.21sh"
+"$SED" -i -E "s/‘//g" "$DIR/env.bash"
+"$SED" -i -E "s/’//g" "$DIR/env.bash"
+"$SED" -i -E "s/norights: Permission denied/Could not open file/g" "$DIR/pipe.bash"
+"$SED" -i -E "s/21sh: .*: Bad file descriptor/21sh: Bad file descriptor/g" "$DIR/redir.bash"
+"$SED" -i -E "s/21sh: .*: No such file or directory/21sh: Could not open file/g" "$DIR/redir.bash"
 
 
 mkdir -p "$DIR/bash" "$DIR/21sh"
@@ -98,6 +135,17 @@ do
 		--prefix "$DIR/bash/$name "
 done
 
+"$SED" -n -E -i "/bonjour|kikoo|foo|jj/p" "$DIR/21sh/env 00" "$DIR/bash/env 00"
+"$SED" -n -E -i "/kkk=lkjlkj/p" "$DIR/21sh/env 03" "$DIR/bash/env 03"
+"$SED" -n -E -i "/kkkk|assa|lkjlkj|kkk/p" "$DIR/21sh/env 04" "$DIR/bash/env 04"
+"$SED" -n -E -i "/kkkk|assa|lkjlkj|kkk/p" "$DIR/21sh/env 04" "$DIR/bash/env 04"
+for file in "$DIR/bash/setenv"*
+do
+	file="$(basename "$file")"
+	"$SED" -n -E -i "/test.*=/p" "$DIR/21sh/$file" "$DIR/bash/$file"
+done
+
+EXIT_ST=0
 for file in "$DIR/bash/"*
 do
 	file="$(basename "$file")"
@@ -105,7 +153,9 @@ do
 		echo "$file" ✅
 	else
 		echo "$file" ❌
+		EXIT_ST=1
 	fi
 done
 
 rm -rf "$DIR/"*21sh "$DIR/"*bash
+exit $EXIT_ST
