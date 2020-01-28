@@ -61,6 +61,54 @@ bash "$DIR/heredoc" > "$DIR/heredoc.bash" 2>&1
 ./21sh "$DIR/and_or" > "$DIR/and_or.21sh" 2>&1
 bash "$DIR/and_or" > "$DIR/and_or.bash" 2>&1
 
+./21sh "$DIR/parse_error" > "$DIR/parse_error.21sh" 2>&1
+cat << EOF > "$DIR/parse_error.bash"
+21sh: parse error near '&&' errno:5
+21sh: parse error near '&&' errno:5
+21sh: parse error near '>' errno:4
+21sh: parse error near '>' errno:4
+21sh: parse error near ';' errno:9
+21sh: parse error near ';' errno:9
+21sh: parse error near '<<' errno:8
+21sh: parse error near '<<' errno:8
+21sh: parse error near '>' errno:4
+21sh: parse error near '>' errno:4
+21sh: parse error near '&' errno:9
+21sh: parse error near '|' errno:5
+21sh: parse error near '|' errno:6
+21sh: parse error near '|' errno:5
+EOF
+
+./21sh "$DIR/builtin_error" > "$DIR/builtin_error.21sh" 2>&1
+cat << EOF > "$DIR/builtin_error.bash"
+env: ./lol: No such file or directory
+~~~
+env: illegal option -- q
+~~~
+~~~
+~~~
+setenv: Too many arguments.
+~~~
+setenv: Invalid variable name
+~~~
+setenv: Invalid variable name
+~~~
+~~~
+$PWD
+~~~
+cd: error
+~~~
+~~~
+cd: error
+cd: error
+cd: PWD not set
+getcwd: could not get current dir
+cd: PWD not set
+getcwd: could not get current dir
+~~~
+cd: OLDPWD not set
+EOF
+
 
 "$SED" -i -E  's/.*:.*: (.*:)/21sh: \1/g' "$DIR/"*.bash
 "$SED" -i -E "s/(.+)\/$/\1/g" "$DIR/cd.21sh" #remove / at the end of line for $PWD

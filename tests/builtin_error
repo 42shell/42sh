@@ -1,0 +1,37 @@
+env ./lol
+echo '~~~'
+
+env -q test
+echo '~~~'
+
+unsetenv PWD; cd .
+echo '~~~'
+
+unsetenv PWD; cd ./tests; cd ..
+echo '~~~'
+
+setenv bonjour test 123
+echo '~~~'
+
+setenv 1bonjour
+echo '~~~'
+
+setenv bonjour#
+echo '~~~'
+
+cd /..
+echo '~~~'
+
+cd -
+echo '~~~'
+
+cd invaliddir/..
+echo '~~~'
+
+cd tests/..
+echo '~~~'
+
+mkdir error; cd error; rm -rf ../error; cd .; cd ..; unsetenv PWD; cd .; cd ..
+echo '~~~'
+
+unsetenv OLDPWD; cd -;
