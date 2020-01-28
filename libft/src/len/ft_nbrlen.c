@@ -12,7 +12,7 @@
 
 #include "../../inc/libft.h"
 
-size_t	ft_nbrlen(long n, t_uint32 base)
+size_t	ft_nbrlen(long n, uint32_t base)
 {
 	size_t	len;
 

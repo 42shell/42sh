@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-static void			prefix_uint(t_printf *pf, t_uint32 base, uintmax_t u)
+static void			prefix_uint(t_printf *pf, uint32_t base, uintmax_t u)
 {
 	if ((pf->flags & HASH_FLAG) || (ft_strchr("pP", pf->conv)))
 	{
@@ -29,7 +29,7 @@ static void			prefix_uint(t_printf *pf, t_uint32 base, uintmax_t u)
 		ft_strtolower(pf->str);
 }
 
-static void			write_uint(t_printf *pf, uintmax_t u, t_uint32 base)
+static void			write_uint(t_printf *pf, uintmax_t u, uint32_t base)
 {
 	if ((pf->flags & ZERO_FLAG) && (pf->flags & PREC_FLAG))
 		pf->flags ^= ZERO_FLAG;
@@ -81,7 +81,7 @@ static uintmax_t	cast_uint(t_printf *pf)
 	return (u);
 }
 
-void				pf_print_uint(t_printf *pf, t_uint32 base)
+void				pf_print_uint(t_printf *pf, uint32_t base)
 {
 	uintmax_t	u;
 

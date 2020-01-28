@@ -14,10 +14,10 @@
 
 void	ft_bzero(void *m, size_t n)
 {
-	t_uint8	*s;
+	uint8_t	*s;
 	size_t	i;
 
-	s = (t_uint8 *)m;
+	s = (uint8_t *)m;
 	i = 0;
 	while (i < n)
 		s[i++] = 0;

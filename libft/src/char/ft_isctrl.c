@@ -12,7 +12,7 @@
 
 #include "../../inc/libft.h"
 
-int		ft_isctrl(t_uint32 c)
+int		ft_isctrl(uint32_t c)
 {
 	return (c < 32 || c == 127);
 }

@@ -12,7 +12,7 @@
 
 #include "../../inc/libft.h"
 
-size_t	ft_charlen(t_uint8 c)
+size_t	ft_charlen(uint8_t c)
 {
 	size_t	size;
 

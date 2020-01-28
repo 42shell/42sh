@@ -12,9 +12,9 @@
 
 #include "../../inc/libft.h"
 
-t_uint32	ft_base_isvalid(char *base)
+uint32_t	ft_base_isvalid(char *base)
 {
-	t_uint32	b;
+	uint32_t	b;
 	int			i;
 	int			j;
 

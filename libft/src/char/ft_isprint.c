@@ -12,7 +12,7 @@
 
 #include "../../inc/libft.h"
 
-int		ft_isprint(t_uint32 c)
+int		ft_isprint(uint32_t c)
 {
 	return (32 <= c && c != 127);
 }

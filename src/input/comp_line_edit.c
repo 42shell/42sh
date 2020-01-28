@@ -20,7 +20,7 @@ void		rl_put_match(t_input *input, char *partial, char *match)
 	diff = match + ft_strlen(partial);
 	diff_len = ft_strlen(diff);
 	while (diff_len--)
-		addchar(input, (t_uint8 **)&diff);
+		addchar(input, (uint8_t **)&diff);
 }
 
 static int	get_max_len(t_list_head *comp_list)

@@ -17,11 +17,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <stdbool.h>
-
-typedef unsigned char	t_uint8;
-typedef unsigned short	t_uint16;
-typedef unsigned int	t_uint32;
-typedef unsigned long	t_uint64;
+# include <stdint.h>
 
 /*
 ** -----------------------------Struct double-----------------------------
@@ -41,13 +37,13 @@ typedef struct			s_double
 {
 	double				f;
 	long double			lf;
-	t_uint8				neg;
-	t_uint16			exponent;
-	t_uint64			mantissa;
+	uint8_t				neg;
+	uint16_t			exponent;
+	uint64_t			mantissa;
 	int					real_exponent;
-	t_uint8				is_denormalized;
-	t_uint8				is_inf;
-	t_uint8				is_nan;
+	uint8_t				is_denormalized;
+	uint8_t				is_inf;
+	uint8_t				is_nan;
 }						t_double;
 
 /*
@@ -164,9 +160,9 @@ void					ft_putendl(char const *s);
 ** -----------------------------Char-----------------------------
 */
 
-int						ft_isprint(t_uint32 c);
+int						ft_isprint(uint32_t c);
 int						ft_iswhitespace(int c);
-int						ft_isctrl(t_uint32 c);
+int						ft_isctrl(uint32_t c);
 int						ft_isalpha(int c);
 int						ft_isdigit(int c);
 int						ft_isalnum(int c);
@@ -177,10 +173,10 @@ bool					ft_isquote(char c);
 ** -----------------------------Length-----------------------------
 */
 
-size_t					ft_charlen(t_uint8 c);
+size_t					ft_charlen(uint8_t c);
 size_t					ft_charlen_rev(char *c);
 size_t					ft_strlen(const char *str);
-size_t					ft_nbrlen(long n, t_uint32 base);
+size_t					ft_nbrlen(long n, uint32_t base);
 size_t					ft_strarray_len(char **array);
 
 /*
@@ -196,11 +192,11 @@ unsigned int			ft_next_power_of_two(unsigned int v);
 ** -----------------------------Conv-----------------------------
 */
 
-t_uint32				ft_base_isvalid(char *base);
+uint32_t				ft_base_isvalid(char *base);
 long					ft_atoi(const char *str);
-long					ft_atoi_base(const char *nbr, t_uint32 base);
+long					ft_atoi_base(const char *nbr, uint32_t base);
 char					*ft_itoa(long n);
-char					*ft_itoa_base(long n, t_uint32 base);
+char					*ft_itoa_base(long n, uint32_t base);
 
 /*
 ** -----------------------------Old lib-----------------------------

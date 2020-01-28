@@ -43,11 +43,6 @@
 # define J_LEN			0x20
 # define Z_LEN			0x40
 
-typedef unsigned char	t_uint8;
-typedef unsigned short	t_uint16;
-typedef unsigned int	t_uint32;
-typedef unsigned long	t_uint64;
-
 typedef struct			s_printf
 {
 	char				buff[BUFF_SIZE];
@@ -57,11 +52,11 @@ typedef struct			s_printf
 	va_list				*args;
 	int					ret;
 	int					fd;
-	t_uint16			flags;
+	uint16_t			flags;
 	size_t				field_width;
 	size_t				precision;
-	t_uint8				len_modif;
-	t_uint8				conv;
+	uint8_t				len_modif;
+	uint8_t				conv;
 	char				*str;
 }						t_printf;
 
@@ -83,7 +78,7 @@ void					pf_pad_precision(t_printf *pf);
 */
 
 void					pf_print_int(t_printf *pf);
-void					pf_print_uint(t_printf *pf, t_uint32 base);
+void					pf_print_uint(t_printf *pf, uint32_t base);
 void					pf_print_string(t_printf *pf);
 
 /*
@@ -106,7 +101,6 @@ int						pf_isconv(char c);
 
 void					pf_pad_field_width(t_printf *pf);
 void					pf_pad_precision(t_printf *pf);
-
 
 void					pf_del(t_printf *pf);
 void					pf_error(t_printf *pf, char *message);
