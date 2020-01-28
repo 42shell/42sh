@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 19:46:45 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/23 11:51:23 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 00:32:59 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@
 
 int		g_parse_error;
 char	*g_error_near = NULL;
+
+/*
+** g_heredocs' children are pointers to the heredoc nodes currently in the AST
+*/
+
 t_node	g_heredocs = (t_node){NULL, 0, 0, NULL};
 
 /*
@@ -139,6 +144,7 @@ static int	run(t_lexer *lexer, t_term *term, t_ast *ast, t_env *env)
 		ast = ast->next;
 		free(tmp);
 	}
+	g_heredocs.nb_children = 0;
 	return (0);
 }
 

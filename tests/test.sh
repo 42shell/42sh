@@ -77,6 +77,10 @@ cat << EOF > "$DIR/parse_error.bash"
 21sh: parse error near '|'
 21sh: parse error near '|'
 21sh: parse error near '|'
+21sh: parse error near ';'
+lol
+21sh: parse error near '&&'
+lol
 EOF
 
 ./21sh "$DIR/builtin_error" > "$DIR/builtin_error.21sh" 2>&1

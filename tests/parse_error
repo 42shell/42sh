@@ -25,3 +25,11 @@ ls 8>
 ls |
 
 |
+
+cat << EOF ;;
+
+echo lol
+
+cat << EOF; &&
+
+echo lol
