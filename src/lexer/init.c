@@ -24,7 +24,7 @@ int			reset_lexer(t_lexer *lexer)
 		lexer = lexer_ptr;
 	lexer->state = START;
 	free(lexer->str);
-	token_del((void **)&lexer->curr_tok, NULL);
+	token_del(&lexer->curr_tok);
 	lexer->str = NULL;
 	lexer->quote = 0;
 	lexer->and_or = false;

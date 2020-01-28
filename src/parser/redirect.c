@@ -75,7 +75,7 @@ static t_node	*io_file(t_lexer *lexer, t_token *io_number)
 				g_parse_error = NO_REDIR_FILENAME;
 				g_error_near = ft_strdup(node_token(node)->value->str);
 			}
-			token_del((void **)&io_number, NULL);
+			token_del(&io_number);
 			free_ast_nodes(node);
 			return (NULL);
 		}

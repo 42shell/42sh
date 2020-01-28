@@ -105,7 +105,7 @@ int					comment(t_lexer *lexer);
 int					word_start(t_lexer *lexer);
 
 t_token				*token_new(int type);
-void				token_del(void **tok, void *priv);
+void				token_del(t_token **tok);
 bool				is_operator_start(char c);
 bool				is_operator_part(char c);
 bool				is_operator_next(char *ope, char c);

@@ -1,25 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_new.c                                        :+:      :+:    :+:   */
+/*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 21:45:49 by fratajcz          #+#    #+#             */
-/*   Updated: 2019/12/08 21:46:23 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 00:02:48 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void	token_del(void **tok, void *priv)
+void	token_del(t_token **tok)
 {
-	t_token **token;
-
-	(void)priv;
-	token = (t_token **)tok;
-	ft_dstr_del((void **)&(*token)->value, NULL);
-	ft_memdel((void **)token);
+	ft_dstr_del((void **)&(*tok)->value, NULL);
+	ft_memdel((void **)tok);
 }
 
 t_token	*token_new(int type)

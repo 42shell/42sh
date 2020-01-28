@@ -91,7 +91,7 @@ t_ast		*get_ast(t_lexer *lexer)
 	if (lexer->curr_tok->type == AMPERSAND || lexer->curr_tok->type == SEMI)
 	{
 		g_error_near = ft_strdup(lexer->curr_tok->value->str);
-		token_del((void **)&lexer->curr_tok, NULL);
+		token_del(&lexer->curr_tok);
 		eat(lexer);
 		g_parse_error = NO_CMD_BEFORE_SEP;
 		return (NULL);
@@ -103,7 +103,7 @@ t_ast		*get_ast(t_lexer *lexer)
 	ast->run_in_background = (lexer->curr_tok->type == AMPERSAND);
 	if (lexer->curr_tok->type == AMPERSAND || lexer->curr_tok->type == SEMI)
 	{
-		token_del((void **)&lexer->curr_tok, NULL);
+		token_del(&lexer->curr_tok);
 		eat(lexer);
 		if (lexer->curr_tok != NULL)
 			ast->next = get_ast(lexer);
@@ -165,9 +165,9 @@ int			parse(t_lexer *lexer, t_env *env, t_term *term)
 	|| lexer->curr_tok != NULL))
 	{
 		g_parse_error = (g_parse_error == NOERR) ? TOKENS_LEFT : g_parse_error;
-		token_del((void **)&lexer->curr_tok, NULL);
+		token_del(&lexer->curr_tok);
 		while (eat(lexer) != END_OF_INPUT)
-			token_del((void **)&lexer->curr_tok, NULL);
+			token_del(&lexer->curr_tok);
 	}
 	if (ast == NULL && g_parse_error == NOERR)
 		g_parse_error = NULL_AST;
