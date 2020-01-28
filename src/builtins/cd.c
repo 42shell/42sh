@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:50:00 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/24 15:29:40 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/28 17:05:21 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #define CD_P		1
 #define HAS_ARG		2
 #define PRINT_DIR	4
+#define NO_OLDPWD	1
 
 char	*get_cd_dir(char **argv, int *options, t_env *env)
 {
@@ -32,9 +33,12 @@ char	*get_cd_dir(char **argv, int *options, t_env *env)
 	{
 		if (ft_strcmp(argv[i], "-") == 0)
 		{
-			ret = get_env_var("OLDPWD", env);
-			ret = (ret == NULL) ? get_pwd(env) : ret;
-			*options = (ret != NULL) ? (*options | PRINT_DIR) : *options;
+			if ((ret = get_env_var("OLDPWD", env)) == NULL)
+			{
+				ft_putstr_fd("cd: OLDPWD not set\n", 2);
+				return ((char *)NO_OLDPWD);
+			}
+			*options = *options | PRINT_DIR;
 		}
 		else
 			ret = argv[i];
@@ -139,7 +143,8 @@ int		builtin_cd(char **argv, t_env *env)
 	options = 0;
 	if (get_cd_options(argv, &options) == -1)
 		return (1);
-	dir = get_cd_dir(argv, &options, env);
+	if ((dir = get_cd_dir(argv, &options, env)) == (char *)NO_OLDPWD)
+		return (1);
 	if (!(options & HAS_ARG) && !(dir = get_home_dir(env)))
 		return (1);
 	if (dir[0] == '/' || !get_curpath_in_cdpath(dir, &curpath, env, &options))
