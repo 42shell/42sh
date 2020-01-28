@@ -1,36 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_base_isvalid.c                                  :+:      :+:    :+:   */
+/*   ft_dtoc_36.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/16 20:31:22 by nbousset          #+#    #+#             */
-/*   Updated: 2019/05/16 20:31:26 by nbousset         ###   ########.fr       */
+/*   Created: 2019/04/21 10:01:35 by nbousset          #+#    #+#             */
+/*   Updated: 2019/06/13 22:15:50 by nbousset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/libft.h"
-
-uint32_t	ft_base_isvalid(char *base)
+int		ft_dtoc_36(int d)
 {
-	uint32_t	b;
-	int			i;
-	int			j;
-
-	if ((b = ft_strlen(base)) < 2)
-		return (0);
-	i = 0;
-	while (base[i])
-	{
-		j = 0;
-		while (base[j])
-		{
-			if (j != i && base[j] == base[i])
-				return (0);
-			j++;
-		}
-		i++;
-	}
-	return (b);
+	if (d < -35 || d > 35)
+		return (-1);
+	if (d < 0)
+		d = -d;
+	if (d < 10)
+		return (d + '0');
+	else
+		return (d + 'A' - 10);
 }

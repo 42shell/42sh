@@ -73,7 +73,7 @@ int					init_input(t_input *input, struct s_term *term);
 t_key_func			*init_functable(void);
 char				*readline(t_input *input, const char *prompt);
 
-int					addchar(t_input *input, t_uint8 **bufp);
+int					addchar(t_input *input, uint8_t **bufp);
 int					backspace(t_input *input);
 int					delete(t_input *input);
 int					enter(t_input *input);
@@ -102,7 +102,7 @@ int					cpos_to_nextline(t_input *input);
 int					ctrl_c(t_input *input);
 int					ctrl_d(t_input *input);
 
-int					escape(t_input *input, t_uint8 **bufp);
+int					escape(t_input *input, uint8_t **bufp);
 
 int					rl_complete(t_input *input);
 void				rl_put_match(t_input *input, char *partial, char *match);

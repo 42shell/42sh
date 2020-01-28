@@ -20,7 +20,7 @@ void		rl_put_match(t_input *input, char *partial, char *match)
 	diff = match + ft_strlen(partial);
 	diff_len = ft_strlen(diff);
 	while (diff_len--)
-		addchar(input, (t_uint8 **)&diff);
+		addchar(input, (uint8_t **)&diff);
 }
 
 static int	get_max_len(t_list_head *comp_list)
@@ -58,11 +58,11 @@ static void	print_list_cols(t_list_head *comp_list, int max_width,
 		i = 0;
 		while (i < nb_col && cur != comp_list)
 		{
-			printf("%-*s", max_width, (char *)cur->data + skip_len);
+			ft_printf("%-*s", max_width, (char *)cur->data + skip_len);
 			cur = cur->next;
 			i++;
 		}
-		printf("\n");
+		ft_printf("\n");
 	}
 }
 

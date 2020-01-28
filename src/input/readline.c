@@ -17,7 +17,7 @@
 ** and the char is not terminated.
 */
 
-int			addchar(t_input *input, t_uint8 **bufp)
+int			addchar(t_input *input, uint8_t **bufp)
 {
 	static size_t	i = 0;
 	static size_t	charlen = 0;
@@ -46,7 +46,7 @@ int			addchar(t_input *input, t_uint8 **bufp)
 	return (CONTINUE);
 }
 
-static int	process(t_input *input, t_uint8 **bufp)
+static int	process(t_input *input, uint8_t **bufp)
 {
 	static t_key_func *functable = NULL;
 
@@ -113,8 +113,8 @@ static char	*readline_return(t_input *input)
 
 char		*readline(t_input *input, const char *prompt)
 {
-	t_uint8		buf[BUFSIZE];
-	t_uint8		*bufp;
+	uint8_t		buf[BUFSIZE];
+	uint8_t		*bufp;
 	int			ret;
 
 	if (input->multiline)
@@ -131,8 +131,8 @@ char		*readline(t_input *input, const char *prompt)
 		{
 			if ((ret = process(input, &bufp)) == CONTINUE)
 				continue ;
-			input->oldkey = *(t_uint64 *)input->key;
-			*(t_uint64 *)input->key = 0;
+			input->oldkey = *(uint64_t *)input->key;
+			*(uint64_t *)input->key = 0;
 			if (ret == EOL)
 				return (readline_return(input));
 		}

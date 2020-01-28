@@ -53,12 +53,6 @@ static t_node	*command(t_lexer *lexer)
 	return (command);
 }
 
-/*
-** pipe_list        : '|' command pipe_list
-**                  | EMPTY
-**                  ;
-*/
-
 static t_node	*pipe_list(t_lexer *lexer, t_node *left_command)
 {
 	t_node	*left_pipe;

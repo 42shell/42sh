@@ -23,7 +23,7 @@ int		ft_i(char c)
 	return (-1);
 }
 
-long	ft_atoi_base(const char *nbr, t_uint32 base)
+long	ft_atoi_base(const char *nbr, uint32_t base)
 {
 	long	result;
 	int		sign;

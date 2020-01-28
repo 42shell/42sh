@@ -1,36 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_base_isvalid.c                                  :+:      :+:    :+:   */
+/*   pf_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/16 20:31:22 by nbousset          #+#    #+#             */
-/*   Updated: 2019/05/16 20:31:26 by nbousset         ###   ########.fr       */
+/*   Created: 2019/04/11 20:07:44 by nbousset          #+#    #+#             */
+/*   Updated: 2019/04/15 01:08:47 by nbousset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/libft.h"
+#include "ft_printf.h"
 
-uint32_t	ft_base_isvalid(char *base)
+void		pf_error(t_printf *pf, char *message)
 {
-	uint32_t	b;
-	int			i;
-	int			j;
-
-	if ((b = ft_strlen(base)) < 2)
-		return (0);
-	i = 0;
-	while (base[i])
-	{
-		j = 0;
-		while (base[j])
-		{
-			if (j != i && base[j] == base[i])
-				return (0);
-			j++;
-		}
-		i++;
-	}
-	return (b);
+	write(pf->fd, pf->buff, pf->buff_index);
+	pf->ret += pf->buff_index;
+	pf->buff_index = 0;
+	if (message)
+		ft_putstr(message);
+	pf_del(pf);
+	exit(EXIT_FAILURE);
 }

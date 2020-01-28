@@ -172,7 +172,7 @@ int			parse(t_lexer *lexer, t_env *env, t_term *term)
 	if (ast == NULL && g_parse_error == NOERR)
 		g_parse_error = NULL_AST;
 	if (run(lexer, term, ast, env) == 0 && g_parse_error > 0)
-		printf("21sh: parse error near '%s' errno:%d\n",
+		ft_dprintf(2, "21sh: parse error near '%s' errno:%d\n",
 		g_error_near, g_parse_error);
 	free(g_error_near);
 	g_error_near = NULL;

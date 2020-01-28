@@ -65,7 +65,6 @@ SRC =		shell/main.c \
 			builtins/cd.c\
 			builtins/cd_utils.c
 
-
 OBJ = $(addprefix $(DIR_OBJ), $(SRC:.c=.o))
 LIB = $(addprefix $(DIR_LIB), libft.a)
 
@@ -77,7 +76,7 @@ $(NAME) : $(OBJ)
 
 $(DIR_OBJ)%.o : $(DIR_SRC)%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@ -I$(DIR_INC)
+	$(CC) $(CFLAGS) -c $< -o $@ -I$(DIR_INC) -I$(DIR_LIB)inc
 
 clean :
 	@$(MAKE) clean -C $(DIR_LIB)

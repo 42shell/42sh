@@ -24,6 +24,7 @@
 # include <limits.h>
 # include <dirent.h>
 # include "libft.h"
+# include "ft_printf.h"
 # include "env.h"
 # include "terminal.h"
 # include "input.h"

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 08:48:18 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/28 17:54:56 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/28 19:27:37 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,15 @@ t_token	*node_token(t_node *node)
 **	int i;
 **	int	n;
 **
-**	if (ast == NULL)
-**		return ;
 **	n = 0;
 **	while (n++ < indent_level)
 **		write(1, "  ", 2);
 **	if (ast == NULL)
-**		printf("NULL NODE");
+**		return ((void)ft_printf("NULL NODE"));
 **	if (ast->data != NULL)
-**		printf("%s\n", ((t_token *)ast->data)->value->str);
+**		ft_printf("%s\n", ((t_token *)ast->data)->value->str);
 **	else
-**		printf("NULL DATA\n");
+**		ft_printf("NULL DATA\n");
 **	fflush(stdout);
 **	if (ast->nb_children > 0)
 **	{

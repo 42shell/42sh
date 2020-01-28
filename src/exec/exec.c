@@ -61,7 +61,7 @@ int			exec_command_argv(char **argv, t_env *env)
 	{
 		if ((execve(argv[0], argv, env->env) == -1))
 		{
-			perror("21sh");
+			ft_dprintf(2, "21sh: %s: error\n", argv[0]);
 			exit(g_last_exit_st);
 		}
 		exit(0);
@@ -90,7 +90,7 @@ int			exec_command(t_node *cmd, t_env *env)
 			exit(1);
 		if (execve(argv->cmd_path, argv->argv, env->env) == -1)
 		{
-			perror("21sh");
+			ft_dprintf(2, "21sh: %s: cannot execute command\n", argv->argv[0]);
 			exit(g_last_exit_st);
 		}
 		exit(0);

@@ -12,17 +12,17 @@
 
 #include "shell.h"
 
-static t_uint64	get_csi_code(t_input *input, t_uint8 **bufp)
+static uint64_t	get_csi_code(t_input *input, uint8_t **bufp)
 {
 	static int	i = 1;
-	t_uint64	code;
+	uint64_t	code;
 
 	while (**bufp)
 	{
 		input->key[i] = *(*bufp)++;
 		if (i != 1 && '@' <= input->key[i])
 		{
-			code = *(t_uint64 *)input->key;
+			code = *(uint64_t *)input->key;
 			input->esc = false;
 			i = 1;
 			return (code);
@@ -32,9 +32,9 @@ static t_uint64	get_csi_code(t_input *input, t_uint8 **bufp)
 	return (0);
 }
 
-int				escape(t_input *input, t_uint8 **bufp)
+int				escape(t_input *input, uint8_t **bufp)
 {
-	t_uint64	code;
+	uint64_t	code;
 
 	input->esc = true;
 	if (!(code = get_csi_code(input, bufp)))

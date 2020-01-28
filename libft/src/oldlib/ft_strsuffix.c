@@ -1,36 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_base_isvalid.c                                  :+:      :+:    :+:   */
+/*   ft_strsuffix.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/05/16 20:31:22 by nbousset          #+#    #+#             */
-/*   Updated: 2019/05/16 20:31:26 by nbousset         ###   ########.fr       */
+/*   Created: 2019/04/11 20:07:44 by nbousset          #+#    #+#             */
+/*   Updated: 2019/04/15 01:08:47 by nbousset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../inc/libft.h"
 
-uint32_t	ft_base_isvalid(char *base)
+char	*ft_strsuffix(char *str, char *suffix, int alloc)
 {
-	uint32_t	b;
-	int			i;
-	int			j;
+	size_t	str_len;
+	size_t	suffix_len;
 
-	if ((b = ft_strlen(base)) < 2)
-		return (0);
-	i = 0;
-	while (base[i])
-	{
-		j = 0;
-		while (base[j])
-		{
-			if (j != i && base[j] == base[i])
-				return (0);
-			j++;
-		}
-		i++;
-	}
-	return (b);
+	if (!str)
+		return (NULL);
+	if (!suffix)
+		return (str);
+	str_len = ft_strlen(str);
+	suffix_len = ft_strlen(suffix);
+	if (alloc && !(str = (char *)ft_memrealloc(str, str_len,
+													str_len + suffix_len + 1)))
+		return (NULL);
+	ft_memcpy(str + str_len, suffix, suffix_len);
+	return (str);
 }

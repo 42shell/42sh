@@ -75,7 +75,34 @@ SRC =	mem/ft_xmalloc.c \
 		struct/dstr/ft_dstr_insert.c \
 		struct/dstr/ft_dstr_remove.c \
 		struct/dstr/ft_dstr_del.c \
-		struct/dstr/ft_dstr_clear.c
+		struct/dstr/ft_dstr_clear.c \
+		oldlib/ft_strprefix.c \
+		oldlib/ft_strsuffix.c \
+		oldlib/ft_strtolower.c \
+		oldlib/ft_utoa_base.c \
+		oldlib/ft_dtoc_36.c \
+		oldlib/ft_islower.c \
+		oldlib/ft_isupper.c \
+		oldlib/ft_putstr.c \
+		oldlib/ft_strpad.c \
+		oldlib/ft_utoa.c \
+		ft_printf/pf_print_int/pf_print_int.c \
+		ft_printf/pf_print_uint/pf_print_uint.c \
+		ft_printf/pf_print_string/pf_print_string.c \
+		ft_printf/pf_utils/pf_del.c \
+		ft_printf/pf_utils/pf_error.c \
+		ft_printf/pf_utils/pf_format_error.c \
+		ft_printf/pf_utils/pf_init.c \
+		ft_printf/pf_utils/pf_isconv.c \
+		ft_printf/pf_utils/pf_isflag.c \
+		ft_printf/pf_utils/pf_ismodif.c \
+		ft_printf/pf_utils/pf_pad.c \
+		ft_printf/pf_utils/pf_buffer.c \
+		ft_printf/pf_handlers/pf_handle_arg.c \
+		ft_printf/pf_handlers/pf_handle_color.c \
+		ft_printf/pf_parser/pf_parser.c \
+		ft_printf/ft_printf.c
+
 
 OBJ = $(addprefix $(DIR_OBJ), $(SRC:.c=.o))
 
@@ -86,7 +113,7 @@ $(NAME) : $(OBJ)
 
 $(DIR_OBJ)%.o : $(DIR_SRC)%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@ -Iinc
 
 clean :
 	rm -rf $(OBJ)
