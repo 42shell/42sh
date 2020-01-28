@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 08:48:18 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/04 17:17:50 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/28 17:54:56 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,30 +17,32 @@ t_token	*node_token(t_node *node)
 	return ((t_token *)(node->data));
 }
 
-void	print_ast(t_node *ast, int indent_level)
-{
-	int i;
-	int	n;
-
-	if (ast == NULL)
-		return ;
-	n = 0;
-	while (n++ < indent_level)
-		write(1, "  ", 2);
-	if (ast == NULL)
-		printf("NULL NODE");
-	if (ast->data != NULL)
-		printf("%s\n", ((t_token *)ast->data)->value->str);
-	else
-		printf("NULL DATA\n");
-	fflush(stdout);
-	if (ast->nb_children > 0)
-	{
-		i = 0;
-		while (i < ast->nb_children)
-			print_ast(ast->child[i++], indent_level + 1);
-	}
-}
+/*
+**void	print_ast(t_node *ast, int indent_level)
+**{
+**	int i;
+**	int	n;
+**
+**	if (ast == NULL)
+**		return ;
+**	n = 0;
+**	while (n++ < indent_level)
+**		write(1, "  ", 2);
+**	if (ast == NULL)
+**		printf("NULL NODE");
+**	if (ast->data != NULL)
+**		printf("%s\n", ((t_token *)ast->data)->value->str);
+**	else
+**		printf("NULL DATA\n");
+**	fflush(stdout);
+**	if (ast->nb_children > 0)
+**	{
+**		i = 0;
+**		while (i < ast->nb_children)
+**			print_ast(ast->child[i++], indent_level + 1);
+**	}
+**}
+*/
 
 void	free_ast_nodes(t_node *node)
 {
