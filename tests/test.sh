@@ -81,6 +81,7 @@ cat << EOF > "$DIR/parse_error.bash"
 lol
 21sh: parse error near '&&'
 lol
+21sh: parse error near '<'
 EOF
 
 ./21sh "$DIR/builtin_error" > "$DIR/builtin_error.21sh" 2>&1

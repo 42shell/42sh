@@ -33,3 +33,5 @@ echo lol
 cat << EOF; &&
 
 echo lol
+
+ls <> test

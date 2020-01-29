@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2019/12/08 21:36:29 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 15:04:17 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ bool	is_operator_next(char *ope, char c)
 		if (c == '<')
 			return (ft_strequ(ope, "<"));
 		else if (c == '>')
-			return (ft_strequ(ope, "<") || ft_strequ(ope, ">"));
+			return (ft_strequ(ope, ">"));
 		else if (c == '&')
 			return (ft_strequ(ope, "<")
 			|| ft_strequ(ope, ">")
@@ -57,7 +57,6 @@ int		get_operator_type(char *ope)
 	|| (ft_strequ(ope, ">>") && (ret = DGREAT))
 	|| (ft_strequ(ope, "<&") && (ret = LESSAND))
 	|| (ft_strequ(ope, ">&") && (ret = GREATAND))
-	|| (ft_strequ(ope, "<>") && (ret = LESSGREAT))
 	|| (ft_strequ(ope, "<<-") && (ret = DLESSDASH))
 	|| (ft_strequ(ope, "&") && (ret = AMPERSAND))
 	|| (ft_strequ(ope, "&&") && (ret = AND_IF))
