@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 20:03:18 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/29 16:27:15 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 16:43:39 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static char			*get_heredoc(t_input *input, char *delim)
 	}
 	if (g_parse_error == SILENT_ABORT)
 		ft_dstr_del((void **)&heredoc, NULL);
-	else
+	else if (cmp != NULL)
 		ft_dstr_remove(heredoc, heredoc->len - ft_strlen(cmp), ft_strlen(cmp));
 	free(delim_cmp);
 	str = heredoc ? heredoc->str : NULL;

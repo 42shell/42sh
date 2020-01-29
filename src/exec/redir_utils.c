@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:48:51 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/29 15:38:56 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 16:16:34 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ bool		is_valid_fd(int fd)
 {
 	struct stat	buf;
 
-	return (fd < 256 && !fd_used_for_backup(fd) && fstat(fd, &buf) != -1);
+	return (!fd_used_for_backup(fd) && fstat(fd, &buf) != -1);
 }
 
 void		move_fd(int *fd)

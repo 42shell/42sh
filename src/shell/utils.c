@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:58:50 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/29 14:53:08 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 16:13:53 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,9 @@ char	*ft_mktemp(char *template)
 	if (fd >= 0)
 		close(fd);
 	else
+	{
+		free(template);
 		return (NULL);
+	}
 	return (template);
 }
