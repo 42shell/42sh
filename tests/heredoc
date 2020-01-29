@@ -45,6 +45,7 @@ cat << EOF
 testing line cont combined with expansion\
 $HOME
 EOF
+echo ~~~
 
 cat << EOF
 testing backslash removal
@@ -53,4 +54,8 @@ testing backslash removal
 \$lol\
 $\
 \$USER
+EOF
+echo ~~~
+
+cat << EOF
 EOF

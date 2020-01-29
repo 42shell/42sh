@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 20:03:18 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/29 14:11:39 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 15:32:19 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ static const char	*find_cmp(const char *s)
 			return (&s[i + 1]);
 		i--;
 	}
+	if (i == -1)
+		return (s);
 	return (NULL);
 }
 
@@ -78,7 +80,7 @@ static char			*get_heredoc(t_input *input, char *delim)
 			append_line_to_hist(input->head, str);
 		ft_dstr_insert(heredoc, heredoc->len, str, ft_strlen(str));
 		if ((remove_bslash_nl(heredoc) == 0 && ((cmp = find_cmp(heredoc->str))
-		&& ft_strequ(cmp, delim_cmp))) || g_parse_error == SILENT_ABORT)
+			&& ft_strequ(cmp, delim_cmp))) || g_parse_error == SILENT_ABORT)
 			break ;
 	}
 	if (g_parse_error == SILENT_ABORT)
