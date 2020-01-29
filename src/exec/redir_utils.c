@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:48:51 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/24 14:31:27 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 15:38:56 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,10 @@ int			restore_fds(void)
 		if (backup->backup == -1)
 			close(backup->orig_number);
 		else
+		{
 			dup2(backup->backup, backup->orig_number);
-		close(backup->backup);
+			close(backup->backup);
+		}
 		free(cur->data);
 		tmp = cur;
 		cur = cur->next;
