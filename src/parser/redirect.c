@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 04:05:12 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/21 17:04:58 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 15:35:20 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,13 +128,11 @@ t_node			*io_redirect(t_lexer *lexer)
 	{
 		io_number = lexer->curr_tok;
 		eat(lexer);
-		if (lexer->curr_tok && (lexer->curr_tok->type == DLESS ||
-					lexer->curr_tok->type == DLESSDASH))
+		if (lexer->curr_tok && (lexer->curr_tok->type == DLESS))
 			return (io_here(lexer, io_number));
 		return (io_file(lexer, io_number));
 	}
-	if (lexer->curr_tok && (lexer->curr_tok->type == DLESS ||
-				lexer->curr_tok->type == DLESSDASH))
+	if (lexer->curr_tok && (lexer->curr_tok->type == DLESS))
 		return (io_here(lexer, NULL));
 	return (io_file(lexer, NULL));
 }
