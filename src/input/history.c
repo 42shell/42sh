@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 23:14:17 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/11 20:08:46 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 15:51:20 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,14 @@ int				history_down(t_input *input)
 	move_home(input);
 	if (input->line)
 		ft_dstr_del((void **)&input->line, NULL);
-	if ((target = getnextline(input)) && input->curr != input->head
-	&& !(input->line = ft_dstr_new(target->str, target->len, target->size)))
-		return (-1);
-	else if (input->curr == input->head)
+	target = getnextline(input);
+	if (input->curr == input->head)
 	{
 		input->line = input->temp;
 		input->temp = NULL;
 	}
+	else
+		input->line = ft_dstr_new(target->str, target->len, target->size);
 	clearfromc(input->termp);
 	printstr(input->termp, input->line->str);
 	input->pos = input->line->len;
@@ -72,9 +72,8 @@ int				history_up(t_input *input)
 	}
 	else if (input->line)
 		ft_dstr_del((void **)&input->line, NULL);
-	if ((target = getprevline(input))
-	&& !(input->line = ft_dstr_new(target->str, target->len, target->size)))
-		return (-1);
+	target = getprevline(input);
+	input->line = ft_dstr_new(target->str, target->len, target->size);
 	clearfromc(input->termp);
 	printstr(input->termp, input->line->str);
 	input->pos = input->line->len;
