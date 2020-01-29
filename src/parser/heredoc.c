@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 20:03:18 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/29 16:43:39 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 17:00:04 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,27 @@ static int			remove_bslash_nl(t_dstr *str)
 	return (0);
 }
 
-static const char	*find_cmp(const char *s)
+static bool			is_heredoc_end(t_dstr *heredoc, char *delim)
 {
 	int		i;
+	char	*last_line;
 
-	i = ft_strlen(s) - 2;
+	i = heredoc->len - 2;
+	last_line = NULL;
 	while (i >= 0)
 	{
-		if (s[i] == '\n')
-			return (&s[i + 1]);
+		if (heredoc->str[i] == '\n')
+		{
+			last_line = &heredoc->str[i + 1];
+			break ;
+		}
 		i--;
 	}
 	if (i == -1)
-		return (s);
-	return (NULL);
+		last_line = heredoc->str;
+	if (last_line == NULL)
+		return (false);
+	return (ft_strequ(last_line, delim));
 }
 
 static char			*get_heredoc(t_input *input, char *delim)
@@ -69,7 +76,6 @@ static char			*get_heredoc(t_input *input, char *delim)
 	char		*str;
 	t_dstr		*heredoc;
 	char		*delim_cmp;
-	const char	*cmp;
 
 	delim_cmp = ft_strjoin(delim, "\n");
 	heredoc = ft_dstr_new("", 0, 32);
@@ -79,14 +85,15 @@ static char			*get_heredoc(t_input *input, char *delim)
 		if (input->interactive)
 			append_line_to_hist(input->head, str);
 		ft_dstr_insert(heredoc, heredoc->len, str, ft_strlen(str));
-		if ((remove_bslash_nl(heredoc) == 0 && ((cmp = find_cmp(heredoc->str))
-			&& ft_strequ(cmp, delim_cmp))) || g_parse_error == SILENT_ABORT)
+		remove_bslash_nl(heredoc);
+		if (is_heredoc_end(heredoc, delim_cmp) || g_parse_error == SILENT_ABORT)
 			break ;
 	}
 	if (g_parse_error == SILENT_ABORT)
 		ft_dstr_del((void **)&heredoc, NULL);
-	else if (cmp != NULL)
-		ft_dstr_remove(heredoc, heredoc->len - ft_strlen(cmp), ft_strlen(cmp));
+	else if (heredoc->len >= ft_strlen(delim_cmp))
+		ft_dstr_remove(heredoc, heredoc->len - ft_strlen(delim_cmp)
+						, ft_strlen(delim_cmp));
 	free(delim_cmp);
 	str = heredoc ? heredoc->str : NULL;
 	free(heredoc);
