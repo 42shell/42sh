@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 14:52:04 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/24 18:30:33 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 14:49:53 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,30 +49,20 @@ extern t_env *g_env;
 static int	get_output_fd(t_node *op_node, int flags)
 {
 	int		type;
-	int		fd;
-	char	*tmp_file;
+	t_dstr	*filename;
 
 	type = node_token(op_node)->type;
-	if (ft_strequ(node_token(op_node->child[1])->value->str, "-"))
+	filename = node_token(op_node->child[1])->value;
+	if (ft_strequ(filename->str, "-"))
 	{
 		close(get_input_fd(op_node));
 		return (CLOSE);
 	}
-	if (type == DLESS && (tmp_file = ft_mktemp(ft_strdup("/tmp/21sh_XXXXXX"))))
-	{
-		fd = open(tmp_file, O_WRONLY);
-		param_expand(node_token(op_node->child[1])->value, 0, g_env, true);
-		remove_bslash(node_token(op_node->child[1])->value);
-		ft_putstr_fd(node_token(op_node->child[1])->value->str, fd);
-		close(fd);
-		fd = open(tmp_file, O_RDONLY);
-		free(tmp_file);
-		return (fd);
-	}
-	if ((type == GREATAND || type == LESSAND)
-	&& (ft_strisnbr(node_token(op_node->child[1])->value->str)))
-		return (ft_atoi(node_token(op_node->child[1])->value->str));
-	return (open(node_token(op_node->child[1])->value->str, flags, RIGHTS));
+	if (type == DLESS)
+		return (open_heredoc(filename));
+	if ((type == GREATAND || type == LESSAND) && (ft_strisnbr(filename->str)))
+		return (ft_atoi(filename->str));
+	return (open(filename->str, flags, RIGHTS));
 }
 
 static int	set_one_redir(t_node *op_node, bool backup)

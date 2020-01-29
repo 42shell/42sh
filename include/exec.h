@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:00:39 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/24 15:56:01 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 14:40:40 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,7 @@ void			free_argv(t_argv *argv);
 
 void			kill_all_forks(void);
 int				set_pipe_redir(int input_fd, int fildes[2]);
+
+int				open_heredoc(t_dstr *heredoc);
 
 #endif

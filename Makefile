@@ -45,6 +45,7 @@ SRC =		shell/main.c \
 			exec/redir.c\
 			exec/redir_utils.c\
 			exec/pipe.c\
+			exec/open_heredoc.c\
 			lexer/init.c \
 			lexer/token.c \
 			lexer/append.c\
