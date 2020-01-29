@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:58:50 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/14 13:42:23 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 14:32:04 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ char	*ft_mktemp(char *template)
 	static uint64_t		v;
 	int					fd;
 
+	fd = -1;
 	xxxxxx = template + ft_strlen(template) - 6;
 	v = INT64_MAX;
 	while (v != 0)
@@ -79,10 +80,10 @@ char	*ft_mktemp(char *template)
 		xxxxxx[4] = letters[v % 58];
 		xxxxxx[5] = letters[v % 57];
 		v--;
-		if ((fd = open(template, O_CREAT | O_EXCL, 420))
-				> 0)
+		if ((fd = open(template, O_CREAT | O_EXCL, 420)) >= 0)
 			break ;
 	}
-	close(fd);
+	if (fd >= 0)
+		close(fd);
 	return (template);
 }
