@@ -44,8 +44,6 @@ enum				e_toktype
 	DGREAT,
 	LESSAND,
 	GREATAND,
-	LESSGREAT,
-	DLESSDASH,
 	AMPERSAND,
 	SEMI,
 	PIPE,
