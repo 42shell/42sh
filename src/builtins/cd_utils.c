@@ -6,14 +6,14 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 14:02:44 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/14 16:28:47 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 14:26:13 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
 #define CD_P		1
-#define PRINT_DIR	4
+#define PRINT_DIR	2
 
 char	*get_pwd(t_env *env)
 {
@@ -40,7 +40,7 @@ char	*get_home_dir(t_env *env)
 
 	home = get_env_var("HOME", env);
 	if (home == NULL)
-		write(2, "minishell: cd: HOME not set\n", 28);
+		write(2, "21sh: cd: HOME not set\n", 23);
 	return (ft_strdup(home));
 }
 

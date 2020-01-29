@@ -31,6 +31,9 @@ echo '~~~'
 cd tests/..
 echo '~~~'
 
+unsetenv HOME; cd
+echo '~~~'
+
 mkdir error; cd error; rm -rf ../error; cd .; cd ..; unsetenv PWD; cd .; cd ..
 echo '~~~'
 

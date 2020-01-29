@@ -103,6 +103,8 @@ $PWD
 cd: error
 ~~~
 ~~~
+21sh: cd: HOME not set
+~~~
 cd: error
 cd: error
 cd: PWD not set

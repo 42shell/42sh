@@ -6,15 +6,14 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:50:00 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/28 17:48:22 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 14:23:23 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
 #define CD_P		1
-#define HAS_ARG		2
-#define PRINT_DIR	4
+#define PRINT_DIR	2
 #define NO_OLDPWD	1
 
 char	*get_cd_dir(char **argv, int *options, t_env *env)
@@ -28,8 +27,6 @@ char	*get_cd_dir(char **argv, int *options, t_env *env)
 		if (ft_strcmp(argv[i++], "--") == 0)
 			break ;
 	if (argv[i] != NULL)
-		*options |= HAS_ARG;
-	if (*options & HAS_ARG)
 	{
 		if (ft_strcmp(argv[i], "-") == 0)
 		{
@@ -145,8 +142,12 @@ int		builtin_cd(char **argv, t_env *env)
 		return (1);
 	if ((dir = get_cd_dir(argv, &options, env)) == (char *)NO_OLDPWD)
 		return (1);
-	if (!(options & HAS_ARG) && !(dir = get_home_dir(env)))
-		return (1);
+	if (dir == NULL)
+	{
+		dir = get_home_dir(env);
+		if (dir == NULL)
+			return (1);
+	}
 	if (dir[0] == '/' || !get_curpath_in_cdpath(dir, &curpath, env, &options))
 		curpath = ft_strdup(dir);
 	if (curpath[0] != '/' && !(options & CD_P))
