@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 14:52:04 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/24 17:38:47 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 15:00:54 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,8 @@ static void		exec_pipes(t_node *pipe, t_env *env, int pipe_count)
 	int			input_fd;
 	int			i;
 
-	pid = ft_xmalloc((pipe_count + 1) * sizeof(int *));
-	status = ft_xmalloc((pipe_count + 1) * sizeof(int *));
+	pid = ft_xmalloc((pipe_count + 1) * sizeof(int));
+	status = ft_xmalloc((pipe_count + 1) * sizeof(int));
 	g_argv_list = ft_list_first_head(NULL);
 	input_fd = 0;
 	i = -1;
@@ -113,6 +113,7 @@ static void		exec_pipes(t_node *pipe, t_env *env, int pipe_count)
 		{
 			expand(pipe->child[1], env);
 			exec_last_pipe(pipe->child[1], env, &pid[++i], input_fd);
+			break ;
 		}
 		pipe = pipe->child[1];
 	}
