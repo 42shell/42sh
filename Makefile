@@ -14,6 +14,7 @@ SRC =		shell/main.c \
 			shell/path_utils.c\
 			shell/utils.c\
 			shell/get_opt.c\
+			shell/ft_mktemp.c\
 			signal/init.c\
 			signal/sig_action.c \
 			signal/sig_handle.c \
