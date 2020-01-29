@@ -16,15 +16,17 @@ char	*ft_strpad(char *str, size_t field_width, int side, char c)
 {
 	size_t	str_len;
 	size_t	pad_len;
+	char	*tmp;
 
 	if (!str)
 		return (NULL);
-	str_len = ft_strlen(str);
-	if (field_width <= str_len)
+	if (field_width <= (str_len = ft_strlen(str)))
 		return (str);
 	pad_len = field_width - str_len;
+	tmp = str;
 	if (!(str = (char *)ft_memrealloc(str, str_len, field_width + 1)))
 		return (NULL);
+	free(tmp);
 	ft_memset(str + str_len, c, pad_len);
 	if (side == 0)
 	{
