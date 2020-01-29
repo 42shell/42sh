@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _init.c                                            :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/03 15:42:33 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 14:18:16 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static int	parse_args(t_sh *shell, int argc, char **argv)
 			exit(1);
 		}
 		dup2(fd, STDIN_FILENO);
+		close(fd);
 		return (0);
 	}
 	shell->input.interactive = true;
