@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 20:03:18 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/21 18:15:28 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 14:11:39 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern int	g_parse_error;
 
-static void	append_line_to_hist(t_list_head *hist_head, char *line)
+static void			append_line_to_hist(t_list_head *hist_head, char *line)
 {
 	t_dstr	*hist;
 
@@ -28,7 +28,7 @@ static void	append_line_to_hist(t_list_head *hist_head, char *line)
 	}
 }
 
-static int	remove_bslash_nl(t_dstr *str)
+static int			remove_bslash_nl(t_dstr *str)
 {
 	int i;
 	int	count;
@@ -48,7 +48,7 @@ static int	remove_bslash_nl(t_dstr *str)
 	return (0);
 }
 
-static char	*find_cmp(const char *s)
+static const char	*find_cmp(const char *s)
 {
 	int		i;
 
@@ -56,18 +56,18 @@ static char	*find_cmp(const char *s)
 	while (i >= 0)
 	{
 		if (s[i] == '\n')
-			return ((char *)&s[i]);
+			return (&s[i + 1]);
 		i--;
 	}
 	return (NULL);
 }
 
-static char	*get_heredoc(t_input *input, char *delim)
+static char			*get_heredoc(t_input *input, char *delim)
 {
-	char	*str;
-	t_dstr	*heredoc;
-	char	*delim_cmp;
-	char	*cmp;
+	char		*str;
+	t_dstr		*heredoc;
+	char		*delim_cmp;
+	const char	*cmp;
 
 	delim_cmp = ft_strjoin(delim, "\n");
 	heredoc = ft_dstr_new("", 0, 32);
@@ -77,20 +77,21 @@ static char	*get_heredoc(t_input *input, char *delim)
 		if (input->interactive)
 			append_line_to_hist(input->head, str);
 		ft_dstr_insert(heredoc, heredoc->len, str, ft_strlen(str));
-		if ((!remove_bslash_nl(heredoc) && ((cmp = find_cmp(heredoc->str))
-		&& ft_strequ(++cmp, delim_cmp))) || g_parse_error == SILENT_ABORT)
+		if ((remove_bslash_nl(heredoc) == 0 && ((cmp = find_cmp(heredoc->str))
+		&& ft_strequ(cmp, delim_cmp))) || g_parse_error == SILENT_ABORT)
 			break ;
 	}
-	ft_bzero(cmp, ft_strlen(delim) + 1);
 	if (g_parse_error == SILENT_ABORT)
 		ft_dstr_del((void **)&heredoc, NULL);
+	else
+		ft_dstr_remove(heredoc, heredoc->len - ft_strlen(cmp), ft_strlen(cmp));
 	free(delim_cmp);
 	str = heredoc ? heredoc->str : NULL;
 	free(heredoc);
 	return (str);
 }
 
-void		get_all_heredocs(t_input *input, t_node *heredoc_list)
+void				get_all_heredocs(t_input *input, t_node *heredoc_list)
 {
 	int		i;
 	char	*heredoc_str;
