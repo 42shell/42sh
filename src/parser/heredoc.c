@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 20:03:18 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/29 15:32:19 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 16:27:15 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int			remove_bslash_nl(t_dstr *str)
 
 	count = 0;
 	i = str->len - 2;
-	while (str->str[i] == '\\')
+	while (i >= 0 && str->str[i] == '\\')
 	{
 		count++;
 		i--;

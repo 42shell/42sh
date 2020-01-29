@@ -59,3 +59,8 @@ echo ~~~
 
 cat << EOF
 EOF
+echo ~~~~
+
+cat << EOF
+\
+EOF
