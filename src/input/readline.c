@@ -64,7 +64,9 @@ static int	process(t_input *input, uint8_t **bufp)
 		return (escape(input, bufp));
 	if (*input->key == 127)
 		return (backspace(input));
-	return (functable[*input->key](input));
+	if (*input->key < 32 && functable[*input->key])
+		return (functable[*input->key](input));
+	return (0);
 }
 
 static void	readline_init(t_input *input, const char *prompt)
