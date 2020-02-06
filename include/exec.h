@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:00:39 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/29 14:40:40 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/07 00:39:57 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int				exec_pipe(t_node *ast, t_env *env);
 int				exec_with_io(t_node *cmd, t_env *env, int stdin_fd,
 				int stdout_fd);
 int				exec_command(t_node *cmd, t_env *env);
-int				exec_command_argv(char **argv, t_env *env);
+int				exec_command_env(char **argv, t_env *env);
 int				exec_builtin(t_argv *argv, t_env *env, t_node *cmd,
 				bool free_argv);
 

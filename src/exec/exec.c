@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:52:31 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/24 15:57:28 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/07 00:36:28 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int			exec_builtin(t_argv *argv, t_env *env, t_node *cmd, bool free_av)
 	return (0);
 }
 
-int			exec_command_argv(char **argv, t_env *env)
+int			exec_command_env(char **argv, t_env *env)
 {
 	pid_t		pid;
 	int			status;
@@ -61,7 +61,7 @@ int			exec_command_argv(char **argv, t_env *env)
 	{
 		if ((execve(argv[0], argv, env->env) == -1))
 		{
-			ft_dprintf(2, "21sh: %s: error\n", argv[0]);
+			ft_dprintf(2, "env: %s: No such file or directory\n", argv[0]);
 			exit(g_last_exit_st);
 		}
 		exit(0);
