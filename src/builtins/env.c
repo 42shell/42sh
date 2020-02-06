@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 17:03:57 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/24 17:39:59 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/07 00:45:28 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int		finish_env(char **argv, int i, t_env *new_env)
 	}
 	else
 	{
-		exec_command_argv(argv + i, new_env);
+		exec_command_env(argv + i, new_env);
 		ret = g_last_exit_st;
 	}
 	free_arr(new_env->env);
@@ -115,6 +115,8 @@ int		builtin_env(char **argv, t_env *env)
 		return (print_env(&new_env));
 	cmd_path = (options & NEW_PATH) ? get_executable_path(argv[i], &new_env)
 		: get_executable_path(argv[i], env);
+	if (cmd_path == NULL)
+		ft_dprintf(2, "env: %s: No such file or directory\n", argv[i]);
 	free(argv[i]);
 	argv[i] = cmd_path;
 	return (finish_env(argv, i, &new_env));

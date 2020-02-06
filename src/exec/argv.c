@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/24 15:53:32 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/07 00:18:00 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ t_argv		*get_argv(t_node *cmd, t_env *env)
 	{
 		if (is_builtin(argv->argv[0]))
 			return (argv);
-		if ((argv->cmd_path = get_executable_path(argv->argv[0], env)))
-			return (argv);
+		argv->cmd_path = get_executable_path(argv->argv[0], env);
+		return (argv);
 	}
 	free_argv(argv);
 	set_redir(cmd, true);

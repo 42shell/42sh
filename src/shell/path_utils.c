@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 10:28:53 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/29 17:49:19 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/07 00:19:33 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,11 +111,7 @@ char		*get_executable_path(char *command, t_env *env)
 		free(ret);
 	}
 	if ((path == NULL || path[i] == NULL))
-	{
-		ft_dprintf(2, "21sh: %s: command not found\n", command);
-		g_last_exit_st = 127;
 		ret = NULL;
-	}
 	free_arr(path);
 	return (ret);
 }
