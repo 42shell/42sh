@@ -46,7 +46,7 @@ static int	get_input_fd(t_node *op_node)
 
 extern t_env *g_env;
 
-static int	get_output_fd(t_node *op_node, int flags)
+static int	get_output_fd(t_node *op_node, int flags, bool backup)
 {
 	int		type;
 	t_dstr	*filename;
@@ -55,6 +55,7 @@ static int	get_output_fd(t_node *op_node, int flags)
 	filename = node_token(op_node->child[1])->value;
 	if (ft_strequ(filename->str, "-"))
 	{
+		dup2_and_backup(-1, get_input_fd(op_node), backup);
 		close(get_input_fd(op_node));
 		return (CLOSE);
 	}
@@ -74,18 +75,16 @@ static int	set_one_redir(t_node *op_node, bool backup)
 
 	type = node_token(op_node)->type;
 	flags = get_flags(type);
-	if (flags == CMD || ((output_fd = get_output_fd(op_node, flags)) == CLOSE))
+	if (flags == CMD ||
+	((output_fd = get_output_fd(op_node, flags, backup)) == CLOSE))
 		return (0);
 	if (output_fd == -1)
 		return (write(STDERR_FILENO, "21sh: Could not open file\n", 26));
 	if ((type == LESSAND || type == GREATAND) && !is_valid_fd(output_fd))
 		return (write(STDERR_FILENO, "21sh: Bad file descriptor\n", 26));
 	input_fd = get_input_fd(op_node);
-	if (input_fd > 255)
-	{
-		close(output_fd);
+	if (input_fd > 255 && close(output_fd) == 0)
 		return (write(STDERR_FILENO, "21sh: Bad file descriptor\n", 26));
-	}
 	if (output_fd == input_fd)
 		move_fd(&output_fd);
 	dup2_and_backup(output_fd, input_fd, backup);

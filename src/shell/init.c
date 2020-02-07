@@ -51,7 +51,10 @@ int			init(t_sh *shell, int argc, char **argv)
 	extern char	**environ;
 
 	if (!isatty(STDIN_FILENO))
+	{
+		ft_dprintf(2, "21sh: stdin is not a tty\n");
 		exit(1);
+	}
 	ft_bzero(shell, sizeof(*shell));
 	parse_args(shell, argc, argv);
 	if (shell->input.interactive)
