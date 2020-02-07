@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _init.c                                            :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 01:23:20 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/16 15:15:37 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/07 02:44:08 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int			init_input(struct s_input *input, struct s_term *term)
 		input->termp = term;
 		input->head = ft_list_first_head(NULL);
 		input->curr = input->head;
+		input->complete = true;
 	}
 	input->first_line = true;
 	input->first_tab_press = true;

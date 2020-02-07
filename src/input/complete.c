@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 19:22:51 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/07 02:38:22 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/07 02:46:58 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,24 +93,26 @@ int			comp_multiple_match(t_input *input, t_list_head *comp_list,
 	return (0);
 }
 
-int			rl_complete(t_input *inpt)
+int			rl_complete(t_input *input)
 {
 	static t_list_head	*comp_list = NULL;
 	char				*partial;
 	int					ret;
 
-	ret = 0;
-	if (inpt->line->str[inpt->pos] != '\0')
+	if (!input->complete)
 		return (0);
-	partial = comp_get_partial_word(inpt);
-	if (comp_list != NULL && inpt->first_tab_press)
+	ret = 0;
+	if (input->line->str[input->pos] != '\0')
+		return (0);
+	partial = comp_get_partial_word(input);
+	if (comp_list != NULL && input->first_tab_press)
 		free_comp_list(&comp_list);
 	if (comp_list == NULL)
-		comp_list = comp_get_list(inpt, partial);
+		comp_list = comp_get_list(input, partial);
 	if (g_nb_comp_match == 1)
-		rl_put_match(inpt, partial, comp_list->next->data);
+		rl_put_match(input, partial, comp_list->next->data);
 	else if (g_nb_comp_match > 1)
-		ret = comp_multiple_match(inpt, comp_list, partial);
+		ret = comp_multiple_match(input, comp_list, partial);
 	free(partial);
 	return (ret);
 }

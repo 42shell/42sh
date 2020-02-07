@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 20:03:18 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/29 17:00:04 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/07 02:50:32 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ void				get_all_heredocs(t_input *input, t_node *heredoc_list)
 	t_node	*heredoc;
 
 	i = 0;
+	input->complete = false;
 	while (i < heredoc_list->nb_children && g_parse_error != SILENT_ABORT)
 	{
 		heredoc = heredoc_list->child[i];
@@ -124,4 +125,5 @@ void				get_all_heredocs(t_input *input, t_node *heredoc_list)
 		i++;
 	}
 	heredoc_list->nb_children = 0;
+	input->complete = true;
 }
