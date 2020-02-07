@@ -6,11 +6,37 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 15:07:57 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/24 17:42:14 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/07 02:43:09 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
+
+bool	y_n_prompt(t_input *input)
+{
+	u_int64_t c;
+
+	c = 0;
+	while (read(0, &c, 8))
+	{
+		if (c == 'n')
+		{
+			write(1, "\n", 1);
+			draw_prompt(input, input->last_prompt);
+			printstr(input->termp, input->line->str);
+			return (false);
+		}
+		if (c == 'y')
+			return (true);
+		if (c == 3)
+		{
+			ctrl_c(input);
+			return (false);
+		}
+		c = 0;
+	}
+	return (false);
+}
 
 void		rl_put_match(t_input *input, char *partial, char *match)
 {
@@ -75,17 +101,25 @@ static void	print_list_cols(t_list_head *comp_list, int max_width,
 ** print src, inc...
 */
 
+extern int g_nb_comp_match;
+
 void		rl_print_match_list(t_list_head *comp_list, char *partial,
 		t_input *input)
 {
 	char		*last_slash;
 	int			skip_len;
 
+	if (g_nb_comp_match >= 100)
+	{
+		ft_printf("\nDisplay all %d possibilities? (y or n)", g_nb_comp_match);
+		if (!y_n_prompt(input))
+			return ;
+	}
+	write(1, "\n", 1);
 	if ((last_slash = ft_strrchr(partial, '/')) != NULL)
 		skip_len = last_slash - partial + 1;
 	else
 		skip_len = 0;
-	write(1, "\n", 1);
 	print_list_cols(comp_list, get_max_len(comp_list) - skip_len,
 			skip_len, input->termp);
 	draw_prompt(input, input->last_prompt);
