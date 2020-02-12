@@ -6,6 +6,8 @@
 #                     PROJECT                    |
 #------------------------------------------------#
 
+#possible values: debug, release
+BUILDTYPE       := debug
 NAME            := 42sh
 PROJECT         := 42sh
 
@@ -30,6 +32,9 @@ LFLAGS          := -ltermcap
 
 CC              := gcc
 CFLAGS          := -Wall -Wextra
+ifeq ($(BUILDTYPE), debug)
+	CFLAGS := $(CFLAGS) $(DBG_FLAGS)
+endif
 PFLAGS          := -Iinclude $(LIB_FT_INC)
 
 #------------------------------------------------#
@@ -164,7 +169,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ) $(LIB) 
 	@printf $(CR)$(GREEN)"[ $(PROJECT): All object files created ]"$(EOC)"\n"
-	@$(CC) -o $(NAME) $(OBJ) $(LDFLAGS) $(LDLIBS) $(LFLAGS)
+	@$(CC) -o $(NAME) $(OBJ) $(LDFLAGS) $(LDLIBS) $(LFLAGS) $(CFLAGS)
 	@printf $(CR)$(GREEN)"[ $(PROJECT): $(NAME) created ]\n"$(EOC)
 
 $(BUILD_PATH)/$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
