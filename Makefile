@@ -1,91 +1,242 @@
-NAME = 21sh 
-CC = gcc 
-CFLAGS = -Wall -Wextra $(DBG_FLAGS)# -Werror
-LFLAGS = -ltermcap
-DIR_SRC = src/
-DIR_OBJ = obj/
-DIR_INC = include/
-DIR_LIB = libft/
-SRC =		shell/main.c \
-			shell/init.c \
-			shell/del.c \
-			shell/env_utils.c\
-			shell/env_utils2.c\
-			shell/path_utils.c\
-			shell/utils.c\
-			shell/get_opt.c\
-			shell/ft_mktemp.c\
-			signal/init.c\
-			signal/sig_action.c \
-			signal/sig_handle.c \
-			term/init.c \
-			term/print.c \
-			term/cursor.c \
-			term/clear.c \
-			term/window.c \
-			input/init.c \
-			input/move_basic.c \
-			input/move_spec.c \
-			input/move_utils.c \
-			input/delchar.c \
-			input/enter.c \
-			input/draw.c \
-			input/readline.c \
-			input/copypaste.c \
-			input/history.c \
-			input/ctrl_c_d.c\
-			input/escape.c\
-			input/complete.c\
-			input/comp_cmd.c\
-			input/comp_files.c\
-			input/comp_line_edit.c\
-			input/comp_utils.c\
-			exec/utils.c\
-			exec/argv.c\
-			exec/exec.c\
-			exec/redir.c\
-			exec/redir_utils.c\
-			exec/pipe.c\
-			exec/open_heredoc.c\
-			lexer/init.c \
-			lexer/token.c \
-			lexer/append.c\
-			lexer/delim.c \
-			lexer/quote.c \
-			lexer/eat.c \
-			lexer/utils.c\
-			parser/parser.c\
-			parser/pipeline.c\
-			parser/redirect.c\
-			parser/utils.c\
-			parser/heredoc.c\
-			expansion/expand.c\
-			expansion/param_exp.c\
-			expansion/quotes.c\
-			builtins/env.c\
-			builtins/builtins.c\
-			builtins/cd.c\
-			builtins/cd_utils.c
+######################################################################
+#                            DEFINITIONS                             #
+######################################################################
 
-OBJ = $(addprefix $(DIR_OBJ), $(SRC:.c=.o))
-LIB = $(addprefix $(DIR_LIB), libft.a)
+#------------------------------------------------#
+#                     PROJECT                    |
+#------------------------------------------------#
 
-all : $(NAME)
+NAME            := 42sh
+PROJECT         := 42sh
 
-$(NAME) : $(OBJ)
-	@$(MAKE) -C $(DIR_LIB)
-	$(CC) $(CFLAGS) -o $(NAME) $^ $(LIB) $(LFLAGS)
+#------------------------------------------------#
+#                   LIBRARIES                    |
+#------------------------------------------------#
 
-$(DIR_OBJ)%.o : $(DIR_SRC)%.c
-	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@ -I$(DIR_INC) -I$(DIR_LIB)inc
+LIB_FT_DIR      := libft
+LIB_FT_INC      := inc
+LIB_FT_INC      := $(addprefix -I$(LIB_FT_DIR)/, $(LIB_FT_INC))
+LIB_FT_NAME     := libft.a
+LIB_FT          := $(LIB_FT_DIR)/$(LIB_FT_NAME)
+LIB_FT_FLAGS    := -lft
+LIB             := $(LIB_FT)
+LDFLAGS         := -L$(LIB_FT_DIR)
+LDLIBS          := $(LIB_FT_FLAGS) $(LIB_HT_FLAGS)
+LFLAGS          := -ltermcap
 
-clean :
-	@$(MAKE) clean -C $(DIR_LIB)
-	rm -rf $(DIR_OBJ)
+#------------------------------------------------#
+#                   BINARIES                     |
+#------------------------------------------------#
 
-fclean : clean
-	@$(MAKE) fclean -C $(DIR_LIB)
-	rm -rf $(NAME)
+CP              := /bin/cp
+MKDIR           := /bin/mkdir -p
+RM              := /bin/rm -rf
+AR              := /usr/bin/ar -rc
+CC              := /usr/bin/gcc
+MAKE            := /usr/bin/make -C
+NORMINETTE      := /usr/bin/norminette
+PRINTF          := /usr/bin/printf
+RANLIB          := /usr/bin/ranlib
+CFLAGS          := -Wall -Wextra -Werror
+CPPFLAGS        := -Iinclude $(LIB_FT_INC)
 
-re : fclean $(NAME)
+#------------------------------------------------#
+#                    SOURCES                     |
+#------------------------------------------------#
+
+SRC_BUILTINS    := builtins.c\
+                   cd.c\
+                   cd_utils.c\
+                   env.c
+SRC_BUILTINS    := $(addprefix builtins/,$(SRC_BUILTINS))
+
+SRC_EXEC        := argv.c\
+                   exec.c\
+                   open_heredoc.c\
+                   pipe.c\
+                   redir.c\
+                   redir_utils.c\
+                   utils.c
+SRC_EXEC        := $(addprefix exec/,$(SRC_EXEC))
+
+SRC_EXPANSION   := expand.c\
+                   param_exp.c\
+                   quotes.c
+SRC_EXPANSION   := $(addprefix expansion/,$(SRC_EXPANSION))
+
+SRC_HISTORY     := write_history.c
+SRC_HISTORY     := $(addprefix history/,$(SRC_HISTORY))
+
+SRC_INPUT       := comp_cmd.c\
+                   comp_files.c\
+                   comp_line_edit.c\
+                   comp_utils.c\
+                   complete.c\
+                   copypaste.c\
+                   ctrl_c_d.c\
+                   delchar.c\
+                   draw.c\
+                   enter.c\
+                   escape.c\
+                   history.c\
+                   init.c\
+                   move_basic.c\
+                   move_spec.c\
+                   move_utils.c\
+                   readline.c
+SRC_INPUT       := $(addprefix input/,$(SRC_INPUT))
+
+SRC_LEXER       := append.c\
+                   delim.c\
+                   eat.c\
+                   init.c\
+                   quote.c\
+                   token.c\
+                   utils.c
+SRC_LEXER       := $(addprefix lexer/,$(SRC_LEXER))
+
+SRC_PARSER      := heredoc.c\
+                   parser.c\
+                   pipeline.c\
+                   redirect.c\
+                   utils.c
+SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
+
+SRC_SHELL       := del.c\
+                   env_utils.c\
+                   env_utils2.c\
+                   ft_mktemp.c\
+                   get_opt.c\
+                   init.c\
+                   main.c\
+                   path_utils.c\
+                   utils.c
+SRC_SHELL       := $(addprefix shell/,$(SRC_SHELL))
+
+SRC_SIGNAL      := init.c\
+                   sig_action.c\
+                   sig_handle.c
+SRC_SIGNAL      := $(addprefix signal/,$(SRC_SIGNAL))
+
+SRC_TERM        := clear.c\
+                   cursor.c\
+                   init.c\
+                   print.c\
+                   window.c
+SRC_TERM        := $(addprefix term/,$(SRC_TERM))
+
+SRC_PATH        := src
+SRC_NAME        := $(SRC_BUILTINS)\
+                   $(SRC_EXEC)\
+                   $(SRC_EXPANSION)\
+                   $(SRC_HISTORY)\
+                   $(SRC_INPUT)\
+                   $(SRC_LEXER)\
+                   $(SRC_PARSER)\
+                   $(SRC_SHELL)\
+                   $(SRC_SIGNAL)\
+                   $(SRC_TERM)
+SRC             := $(addprefix $(SRC_PATH)/,$(SRC_NAME))
+
+OBJ_PATH        := obj
+OBJ_NAME        := $(SRC_NAME:.c=.o)
+OBJ             := $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
+
+INCDIR          := ./include
+
+#------------------------------------------------#
+#                    RELEASE                     |
+#------------------------------------------------#
+
+REL_PATH        := release
+NAME            := $(NAME)
+REL_OBJ         := $(addprefix $(REL_PATH)/,$(OBJ))
+REL_CFLAGS      := $(CFLAGS)
+
+#------------------------------------------------#
+#                     EXTRA                      |
+#------------------------------------------------#
+
+CLEAR           := "\033[0K\n\033[F"
+CR              := "\r"$(CLEAR)
+EOC             := "\033[0;0m"
+RED             := "\033[0;31m"
+GREEN           := "\033[0;32m"
+BASENAME        := `basename $(PWD)`
+
+######################################################################
+#                               RULES                                #
+######################################################################
+
+#------------------------------------------------#
+#                 RELEASE-RULES                  |
+#------------------------------------------------#
+
+all: $(NAME)
+
+$(NAME): $(REL_OBJ) $(LIB) 
+	@$(PRINTF) $(CR)$(GREEN)"[ $(PROJECT): All object files created ]"$(EOC)"\n"
+	@$(CC) -o $(NAME) $(REL_OBJ) $(LDFLAGS) $(LDLIBS) $(LFLAGS)
+	@$(PRINTF) $(CR)$(GREEN)"[ $(PROJECT): $(NAME) created ]\n"$(EOC)
+
+$(REL_PATH)/$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
+	@$(MKDIR) $(dir $@) 2>/dev/null || true
+	@$(CC) $(REL_CFLAGS) $(CPPFLAGS) -c $< -o $@
+	@$(PRINTF) $(CR)"[ $(PROJECT): %s ]"$(CLEAR) $@
+
+#------------------------------------------------#
+#                 LIBRARY-RULES                  |
+#------------------------------------------------#
+
+### LIBFT
+
+$(LIB_FT): FORCE
+	$(MAKE) $(LIB_FT_DIR)
+
+libft_clean:
+	$(MAKE) $(LIB_FT_DIR) clean
+
+libft_fclean:
+	$(MAKE) $(LIB_FT_DIR) fclean
+
+#------------------------------------------------#
+#                  CLEAN-RULES                   |
+#------------------------------------------------#
+
+libclean: libft_clean
+
+libfclean: libft_fclean
+
+soft: clean all
+
+re: fclean all
+
+clean:
+	@if [ -d $(REL_PATH)/$(OBJ_PATH) ]; then \
+		$(RM) $(REL_OBJ) \
+		&& $(RM) $(REL_PATH)/$(OBJ_PATH) \
+		&& $(PRINTF) $(CR)$(RED)"[ $(PROJECT): All object files cleaned ]\n"$(EOC); \
+	fi
+
+fclean: libfclean clean
+	@if [ -e $(NAME) ]; then \
+		$(RM) $(NAME) \
+		&& $(PRINTF) $(CR)$(RED)"[ $(PROJECT): $(NAME) cleaned ]\n"$(EOC); \
+	fi
+
+#------------------------------------------------#
+#                  OTHER-RULES                   |
+#------------------------------------------------#
+
+norme:
+	@if [ -e $(NORMINETTE) ]; then \
+		$(NORMINETTE) $(SRC) $(INCDIR) $(LIBFT_SRC) $(LIBFT_INC); \
+	else \
+		$(PRINTF) "norminette isn't installed\n"; \
+	fi
+
+FORCE:
+
+.SILENT:
+
+.PHONY: all, clean, fclean, re, norme
