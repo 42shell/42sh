@@ -46,23 +46,41 @@ done
 
 cat << EOF > "$DIR/parse_error.bash"
 42sh: parse error near '&&'
+~~~
 42sh: parse error near '&&'
+~~~
 42sh: parse error near '>'
+~~~
 42sh: parse error near '>'
+~~~
 42sh: parse error near ';'
+~~~
 42sh: parse error near ';'
+~~~
 42sh: parse error near '<<'
+~~~
 42sh: parse error near '<<'
+~~~
 42sh: parse error near '>'
+~~~
 42sh: parse error near '>'
+~~~
 42sh: parse error near '&'
+~~~
 42sh: parse error near '|'
+~~~
 42sh: parse error near '|'
+~~~
 42sh: parse error near '|'
+~~~
 42sh: parse error near ';'
+~~~
 lol
+~~~
 42sh: parse error near '&&'
+~~~
 lol
+~~~
 42sh: parse error near '<'
 EOF
 
