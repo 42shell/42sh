@@ -69,13 +69,13 @@ void	builtin_exit(char **argv)
 	{
 		if (!ft_isdigit(argv[1][i++]))
 		{
-			write(2, "21sh: exit: numeric argument required\n", 38);
+			write(2, "42sh: exit: numeric argument required\n", 38);
 			return ;
 		}
 	}
 	if (argv[2] != NULL)
 	{
-		write(2, "21sh: exit: too many arguments\n", 31);
+		write(2, "42sh: exit: too many arguments\n", 31);
 		return ;
 	}
 	i = ft_atoi(argv[1]);

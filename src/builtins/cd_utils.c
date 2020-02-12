@@ -40,7 +40,7 @@ char	*get_home_dir(t_env *env)
 
 	home = get_env_var("HOME", env);
 	if (home == NULL)
-		write(2, "21sh: cd: HOME not set\n", 23);
+		write(2, "42sh: cd: HOME not set\n", 23);
 	return (ft_strdup(home));
 }
 

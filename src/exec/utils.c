@@ -25,6 +25,6 @@ int		set_pipe_redir(int input_fd, int fildes[2])
 
 void	kill_all_forks(void)
 {
-	write(2, "21sh: too many processes, aborting\n", 35);
+	write(2, "42sh: too many processes, aborting\n", 35);
 	kill(0, SIGABRT);
 }

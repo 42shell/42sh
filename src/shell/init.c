@@ -35,7 +35,7 @@ static int	parse_args(t_sh *shell, int argc, char **argv)
 	{
 		if ((fd = open(argv[0], O_RDONLY)) == -1)
 		{
-			write(STDERR_FILENO, "21sh: Could not open file\n", 26);
+			write(STDERR_FILENO, "42sh: Could not open file\n", 26);
 			exit(1);
 		}
 		dup2(fd, STDIN_FILENO);
@@ -52,7 +52,7 @@ int			init(t_sh *shell, int argc, char **argv)
 
 	if (!isatty(STDIN_FILENO))
 	{
-		ft_dprintf(2, "21sh: stdin is not a tty\n");
+		ft_dprintf(2, "42sh: stdin is not a tty\n");
 		exit(1);
 	}
 	ft_bzero(shell, sizeof(*shell));

@@ -17,11 +17,11 @@ int		open_heredoc(t_dstr *heredoc)
 	char	*tmp_file;
 	int		fd;
 
-	tmp_file = ft_mktemp(ft_strdup("/tmp/21sh_XXXXXX"));
+	tmp_file = ft_mktemp(ft_strdup("/tmp/42sh_XXXXXX"));
 	while (tmp_file != NULL && (fd = open(tmp_file, O_WRONLY)) == -1)
 	{
 		free(tmp_file);
-		tmp_file = ft_mktemp(ft_strdup("/tmp/21sh_XXXXXX"));
+		tmp_file = ft_mktemp(ft_strdup("/tmp/42sh_XXXXXX"));
 	}
 	if (tmp_file == NULL)
 		return (-1);

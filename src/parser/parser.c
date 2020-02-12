@@ -173,7 +173,7 @@ int			parse(t_lexer *lexer, t_env *env, t_term *term)
 	}
 	run(lexer, term, ast, env);
 	if (g_parse_error > 0)
-		ft_dprintf(2, "21sh: parse error near '%s'\n", g_error_near);
+		ft_dprintf(2, "42sh: parse error near '%s'\n", g_error_near);
 	free(g_error_near);
 	g_error_near = NULL;
 	return (0);

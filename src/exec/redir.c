@@ -79,12 +79,12 @@ static int	set_one_redir(t_node *op_node, bool backup)
 	((output_fd = get_output_fd(op_node, flags, backup)) == CLOSE))
 		return (0);
 	if (output_fd == -1)
-		return (write(STDERR_FILENO, "21sh: Could not open file\n", 26));
+		return (write(STDERR_FILENO, "42sh: Could not open file\n", 26));
 	if ((type == LESSAND || type == GREATAND) && !is_valid_fd(output_fd))
-		return (write(STDERR_FILENO, "21sh: Bad file descriptor\n", 26));
+		return (write(STDERR_FILENO, "42sh: Bad file descriptor\n", 26));
 	input_fd = get_input_fd(op_node);
 	if (input_fd > 255 && close(output_fd) == 0)
-		return (write(STDERR_FILENO, "21sh: Bad file descriptor\n", 26));
+		return (write(STDERR_FILENO, "42sh: Bad file descriptor\n", 26));
 	if (output_fd == input_fd)
 		move_fd(&output_fd);
 	dup2_and_backup(output_fd, input_fd, backup);

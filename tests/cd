@@ -119,7 +119,7 @@ cd -L -P -L -P
 echo $PWD
 echo $OLDPWD
 /bin/pwd
-cd $DIR_21SH
+cd $DIR_42SH
 echo ~~~
 
 echo "cd in CDPATH"

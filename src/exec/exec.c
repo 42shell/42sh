@@ -15,7 +15,7 @@
 
 extern int		g_last_exit_st;
 
-#define ERROR "21sh: an error has occured\n"
+#define ERROR "42sh: an error has occured\n"
 
 static void	interrupt_fork(int sig)
 {
@@ -90,7 +90,7 @@ int			exec_command(t_node *cmd, t_env *env)
 			exit(1);
 		if (execve(argv->cmd_path, argv->argv, env->env) == -1)
 		{
-			ft_dprintf(2, "21sh: %s: cannot execute command\n", argv->argv[0]);
+			ft_dprintf(2, "42sh: %s: cannot execute command\n", argv->argv[0]);
 			exit(g_last_exit_st);
 		}
 		exit(0);
