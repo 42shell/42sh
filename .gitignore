@@ -1,10 +1,76 @@
+# Swp files
+*.swp
+*.swo
+
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+42sh
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+# Folders
+.DS_Store/
+libft/obj/
 obj/
-21sh
-21sh.dSYM
-libft/libft.a
-libft/obj
-**/tags
-**/.DS_Store
+
+# Tag files
+tags
+
+# Silly rename files
+.nfs.*
+
+# History list file
+.42sh_history
+
 tests/*.21sh
+tests/*.42sh
 tests/*.bash
 tests/*.tcsh
