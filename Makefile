@@ -142,13 +142,12 @@ OBJ             := $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 INCDIR          := ./include
 
 #------------------------------------------------#
-#                    RELEASE                     |
+#                     BUILD                      |
 #------------------------------------------------#
 
-REL_PATH        := release
+BUILD_PATH      := build
 NAME            := $(NAME)
-REL_OBJ         := $(addprefix $(REL_PATH)/,$(OBJ))
-REL_CFLAGS      := $(CFLAGS)
+OBJ             := $(addprefix $(BUILD_PATH)/,$(OBJ))
 
 #------------------------------------------------#
 #                     EXTRA                      |
@@ -166,19 +165,19 @@ BASENAME        := `basename $(PWD)`
 ######################################################################
 
 #------------------------------------------------#
-#                 RELEASE-RULES                  |
+#                 BUILD-RULES                    |
 #------------------------------------------------#
 
 all: $(NAME)
 
-$(NAME): $(REL_OBJ) $(LIB) 
+$(NAME): $(OBJ) $(LIB) 
 	@$(PRINTF) $(CR)$(GREEN)"[ $(PROJECT): All object files created ]"$(EOC)"\n"
-	@$(CC) -o $(NAME) $(REL_OBJ) $(LDFLAGS) $(LDLIBS) $(LFLAGS)
+	@$(CC) -o $(NAME) $(OBJ) $(LDFLAGS) $(LDLIBS) $(LFLAGS)
 	@$(PRINTF) $(CR)$(GREEN)"[ $(PROJECT): $(NAME) created ]\n"$(EOC)
 
-$(REL_PATH)/$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
+$(BUILD_PATH)/$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
 	@$(MKDIR) $(dir $@) 2>/dev/null || true
-	@$(CC) $(REL_CFLAGS) $(CPPFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 	@$(PRINTF) $(CR)"[ $(PROJECT): %s ]"$(CLEAR) $@
 
 #------------------------------------------------#
@@ -209,9 +208,9 @@ soft: clean all
 re: fclean all
 
 clean:
-	@if [ -d $(REL_PATH)/$(OBJ_PATH) ]; then \
-		$(RM) $(REL_OBJ) \
-		&& $(RM) $(REL_PATH)/$(OBJ_PATH) \
+	@if [ -d $(BUILD_PATH)/$(OBJ_PATH) ]; then \
+		$(RM) $(OBJ) \
+		&& $(RM) $(BUILD_PATH)/$(OBJ_PATH) \
 		&& $(PRINTF) $(CR)$(RED)"[ $(PROJECT): All object files cleaned ]\n"$(EOC); \
 	fi
 
