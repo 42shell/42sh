@@ -37,7 +37,7 @@ MAKE            := /usr/bin/make -C
 NORMINETTE      := /usr/bin/norminette
 PRINTF          := /usr/bin/printf
 RANLIB          := /usr/bin/ranlib
-CFLAGS          := -Wall -Wextra -Werror
+CFLAGS          := -Wall -Wextra
 CPPFLAGS        := -Iinclude $(LIB_FT_INC)
 
 #------------------------------------------------#
@@ -63,9 +63,6 @@ SRC_EXPANSION   := expand.c\
                    param_exp.c\
                    quotes.c
 SRC_EXPANSION   := $(addprefix expansion/,$(SRC_EXPANSION))
-
-SRC_HISTORY     := write_history.c
-SRC_HISTORY     := $(addprefix history/,$(SRC_HISTORY))
 
 SRC_INPUT       := comp_cmd.c\
                    comp_files.c\
@@ -234,6 +231,9 @@ norme:
 	else \
 		$(PRINTF) "norminette isn't installed\n"; \
 	fi
+
+check: $(NAME)
+	./tests/test.sh
 
 FORCE:
 
