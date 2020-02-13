@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 14:14:32 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/13 15:05:14 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/13 18:11:31 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,29 @@ bool	is_pattern(char *str)
 			if (str[i] == ']' && bracket_open)
 				return (true);
 		}
-		if (i >= 0)
-			quote_stop(str, i, &quote_status);
+		quote_stop(str, i, &quote_status);
 	}
 	return (false);
+}
+
+void	path_expand(t_node *pattern_node)
+{
+	char			*pattern;
+	DIR				*dirp;
+	struct dirent	*dp;
+
+	if (!is_pattern(node_token(pattern_node)->value->str))
+		return ;
+	node_token(pattern_node)->type = PATTERN;
+	pattern = ft_strdup(node_token(pattern_node)->value->str);
+	if ((dirp = opendir(".")))
+	{
+		while ((dp = readdir(dirp)))
+		{
+			if (is_match(dp->d_name, pattern, NONE))				
+				ft_node_add_child(pattern_node, ft_node_new(ft_strdup(dp->d_name)));
+		}
+		closedir(dirp);
+	}
+	free(pattern);
 }
