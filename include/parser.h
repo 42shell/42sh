@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 23:49:26 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/21 17:42:19 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/13 18:27:54 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int						parse(t_lexer *lexer, t_env *env, t_term *term);
 void					print_ast(t_node *ast, int indent_level);
 t_node					*io_redirect(t_lexer *lexer);
 t_node					*pipeline(t_lexer *lexer);
-void					free_ast_nodes(t_node *node);
+void					free_ast_nodes(t_node *node, bool is_pattern);
 void					get_all_heredocs(t_input *input,
 						t_node *heredoc_list);
 

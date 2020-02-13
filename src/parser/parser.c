@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 19:46:45 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/29 00:32:59 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/13 18:32:06 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ static int	run(t_lexer *lexer, t_term *term, t_ast *ast, t_env *env)
 				tputs(term->caps[C_KS], 1, ft_putc);
 			}
 		}
-		free_ast_nodes(ast->node);
+		free_ast_nodes(ast->node, false);
 		tmp = ast;
 		ast = ast->next;
 		free(tmp);
