@@ -44,78 +44,8 @@ for file in "$DIR/fixed_tests/"*.test
 do
 	test_name=$(basename "$file" | cut -d '.' -f 1)
 	./42sh "$file" > "$DIR/$test_name.42sh" 2>&1
+	cp "$DIR/fixed_tests/$test_name.right" "$DIR/$test_name.bash"
 done
-
-cat << EOF > "$DIR/parse_error.bash"
-42sh: parse error near '&&'
-~~~
-42sh: parse error near '&&'
-~~~
-42sh: parse error near '>'
-~~~
-42sh: parse error near '>'
-~~~
-42sh: parse error near ';'
-~~~
-42sh: parse error near ';'
-~~~
-42sh: parse error near '<<'
-~~~
-42sh: parse error near '<<'
-~~~
-42sh: parse error near '>'
-~~~
-42sh: parse error near '>'
-~~~
-42sh: parse error near '&'
-~~~
-42sh: parse error near '|'
-~~~
-42sh: parse error near '|'
-~~~
-42sh: parse error near '|'
-~~~
-42sh: parse error near ';'
-~~~
-lol
-~~~
-42sh: parse error near '&&'
-~~~
-lol
-~~~
-42sh: parse error near '<'
-EOF
-
-cat << EOF > "$DIR/builtin_error.bash"
-env: ./lol: No such file or directory
-~~~
-env: illegal option -- q
-~~~
-~~~
-~~~
-setenv: Too many arguments.
-~~~
-setenv: Invalid variable name
-~~~
-setenv: Invalid variable name
-~~~
-~~~
-$PWD
-~~~
-cd: error
-~~~
-~~~
-42sh: cd: HOME not set
-~~~
-cd: error
-cd: error
-cd: PWD not set
-getcwd: could not get current dir
-cd: PWD not set
-getcwd: could not get current dir
-~~~
-cd: OLDPWD not set
-EOF
 
 ./42sh "$DIR/setenv.test" > "$DIR/setenv.42sh" 2>&1
 tcsh "$DIR/setenv.test"> "$DIR/setenv.bash" 3>&1
@@ -128,6 +58,7 @@ tcsh "$DIR/setenv.test"> "$DIR/setenv.bash" 3>&1
 "$SED" -i -E "s/norights: Permission denied/Could not open file/g" "$DIR/pipe.bash"
 "$SED" -i -E "s/42sh: .*: Bad file descriptor/42sh: Bad file descriptor/g" "$DIR/redir.bash"
 "$SED" -i -E "s/42sh: .*: No such file or directory/42sh: Could not open file/g" "$DIR/redir.bash"
+"$SED" -i -E  's;\$PWD;'"${PWD}"';g' "$DIR/builtin_error.bash"
 
 
 mkdir -p "$DIR/bash" "$DIR/42sh"
