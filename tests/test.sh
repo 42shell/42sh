@@ -162,16 +162,16 @@ for file in "$DIR/bash/"*
 do
 	file="$(basename "$file")"
 	if diff -u -U 10 "$DIR/42sh/$file" "$DIR/bash/$file" 1>&2; then
-		ok=$(($ok + 1))
+		ok=$((ok + 1))
 		printf "%-15s %s ✅\n" $file 
 	else
 		echo "$file" ❌ 1>&2
 		EXIT_ST=1
 	fi
-	n=$(($n + 1))
+	n=$((n + 1))
 done
 
-if (($EXIT_ST == 0)); then 
+if ((EXIT_ST == 0)); then 
 	emoji=✅
 else
 	emoji=❌
