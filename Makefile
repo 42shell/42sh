@@ -6,6 +6,8 @@
 #                     PROJECT                    |
 #------------------------------------------------#
 
+#possible values: debug, release
+BUILDTYPE       := debug
 NAME            := 42sh
 PROJECT         := 42sh
 
@@ -25,20 +27,15 @@ LDLIBS          := $(LIB_FT_FLAGS) $(LIB_HT_FLAGS)
 LFLAGS          := -ltermcap
 
 #------------------------------------------------#
-#                   BINARIES                     |
+#                     FLAGS                      |
 #------------------------------------------------#
 
-CP              := /bin/cp
-MKDIR           := /bin/mkdir -p
-RM              := /bin/rm -rf
-AR              := /usr/bin/ar -rc
-CC              := /usr/bin/gcc
-MAKE            := /usr/bin/make -C
-NORMINETTE      := /usr/bin/norminette
-PRINTF          := /usr/bin/printf
-RANLIB          := /usr/bin/ranlib
+CC              := gcc
 CFLAGS          := -Wall -Wextra
-CPPFLAGS        := -Iinclude $(LIB_FT_INC)
+ifeq ($(BUILDTYPE), debug)
+	CFLAGS := $(CFLAGS) $(DBG_FLAGS)
+endif
+PFLAGS          := -Iinclude $(LIB_FT_INC)
 
 #------------------------------------------------#
 #                    SOURCES                     |
@@ -142,13 +139,12 @@ OBJ             := $(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 INCDIR          := ./include
 
 #------------------------------------------------#
-#                    RELEASE                     |
+#                     BUILD                      |
 #------------------------------------------------#
 
-REL_PATH        := release
+BUILD_PATH      := build
 NAME            := $(NAME)
-REL_OBJ         := $(addprefix $(REL_PATH)/,$(OBJ))
-REL_CFLAGS      := $(CFLAGS)
+OBJ             := $(addprefix $(BUILD_PATH)/,$(OBJ))
 
 #------------------------------------------------#
 #                     EXTRA                      |
@@ -166,20 +162,20 @@ BASENAME        := `basename $(PWD)`
 ######################################################################
 
 #------------------------------------------------#
-#                 RELEASE-RULES                  |
+#                 BUILD-RULES                    |
 #------------------------------------------------#
 
 all: $(NAME)
 
-$(NAME): $(REL_OBJ) $(LIB) 
-	@$(PRINTF) $(CR)$(GREEN)"[ $(PROJECT): All object files created ]"$(EOC)"\n"
-	@$(CC) -o $(NAME) $(REL_OBJ) $(LDFLAGS) $(LDLIBS) $(LFLAGS)
-	@$(PRINTF) $(CR)$(GREEN)"[ $(PROJECT): $(NAME) created ]\n"$(EOC)
+$(NAME): $(OBJ) $(LIB) 
+	@printf $(CR)$(GREEN)"[ $(PROJECT): All object files created ]"$(EOC)"\n"
+	@$(CC) -o $(NAME) $(OBJ) $(LDFLAGS) $(LDLIBS) $(LFLAGS) $(CFLAGS)
+	@printf $(CR)$(GREEN)"[ $(PROJECT): $(NAME) created ]\n"$(EOC)
 
-$(REL_PATH)/$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
-	@$(MKDIR) $(dir $@) 2>/dev/null || true
-	@$(CC) $(REL_CFLAGS) $(CPPFLAGS) -c $< -o $@
-	@$(PRINTF) $(CR)"[ $(PROJECT): %s ]"$(CLEAR) $@
+$(BUILD_PATH)/$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
+	@mkdir -p $(dir $@) 2>/dev/null || true
+	@$(CC) $(CFLAGS) $(PFLAGS) -c $< -o $@
+	@printf $(CR)"[ $(PROJECT): %s ]"$(CLEAR) $@
 
 #------------------------------------------------#
 #                 LIBRARY-RULES                  |
@@ -188,13 +184,13 @@ $(REL_PATH)/$(OBJ_PATH)/%.o: $(SRC_PATH)/%.c
 ### LIBFT
 
 $(LIB_FT): FORCE
-	$(MAKE) $(LIB_FT_DIR)
+	$(MAKE) -C $(LIB_FT_DIR)
 
 libft_clean:
-	$(MAKE) $(LIB_FT_DIR) clean
+	$(MAKE) -C $(LIB_FT_DIR) clean
 
 libft_fclean:
-	$(MAKE) $(LIB_FT_DIR) fclean
+	$(MAKE) -C $(LIB_FT_DIR) fclean
 
 #------------------------------------------------#
 #                  CLEAN-RULES                   |
@@ -209,16 +205,16 @@ soft: clean all
 re: fclean all
 
 clean:
-	@if [ -d $(REL_PATH)/$(OBJ_PATH) ]; then \
-		$(RM) $(REL_OBJ) \
-		&& $(RM) $(REL_PATH)/$(OBJ_PATH) \
-		&& $(PRINTF) $(CR)$(RED)"[ $(PROJECT): All object files cleaned ]\n"$(EOC); \
+	@if [ -d $(BUILD_PATH)/$(OBJ_PATH) ]; then \
+		$(RM) -r $(OBJ) \
+		&& $(RM) -r $(BUILD_PATH)/$(OBJ_PATH) \
+		&& printf $(CR)$(RED)"[ $(PROJECT): All object files cleaned ]\n"$(EOC); \
 	fi
 
 fclean: libfclean clean
 	@if [ -e $(NAME) ]; then \
-		$(RM) $(NAME) \
-		&& $(PRINTF) $(CR)$(RED)"[ $(PROJECT): $(NAME) cleaned ]\n"$(EOC); \
+		$(RM) -r $(NAME) \
+		&& printf $(CR)$(RED)"[ $(PROJECT): $(NAME) cleaned ]\n"$(EOC); \
 	fi
 
 #------------------------------------------------#
@@ -226,10 +222,10 @@ fclean: libfclean clean
 #------------------------------------------------#
 
 norme:
-	@if [ -e $(NORMINETTE) ]; then \
-		$(NORMINETTE) $(SRC) $(INCDIR) $(LIBFT_SRC) $(LIBFT_INC); \
+	@if [ -e norminette ]; then \
+		norminette $(SRC) $(INCDIR) $(LIBFT_SRC) $(LIBFT_INC); \
 	else \
-		$(PRINTF) "norminette isn't installed\n"; \
+		printf "norminette isn't installed\n"; \
 	fi
 
 check: $(NAME)
