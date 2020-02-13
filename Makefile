@@ -58,7 +58,8 @@ SRC_EXEC        := $(addprefix exec/,$(SRC_EXEC))
 
 SRC_EXPANSION   := expand.c\
                    param_exp.c\
-                   quotes.c
+                   quotes.c\
+				   path_exp.c
 SRC_EXPANSION   := $(addprefix expansion/,$(SRC_EXPANSION))
 
 SRC_INPUT       := comp_cmd.c\
