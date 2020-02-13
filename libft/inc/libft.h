@@ -6,7 +6,7 @@
 /*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 16:27:46 by nbousset          #+#    #+#             */
-/*   Updated: 2020/01/14 14:41:41 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/13 17:27:56 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ void					ft_dstr_del(void **ptr, void *priv);
 int						ft_dstr_add(t_dstr *dstr, char c);
 int						ft_dstr_insert(t_dstr *dstr, size_t i, char *str,
 						size_t len);
+int						ft_dstr_append(t_dstr *dstr, char *str);
 int						ft_dstr_remove(t_dstr *dstr, size_t i, size_t len);
 int						ft_dstr_clear(t_dstr *dstr, size_t size);
 

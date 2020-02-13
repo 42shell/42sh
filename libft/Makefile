@@ -76,6 +76,7 @@ SRC =	mem/ft_xmalloc.c \
 		struct/dstr/ft_dstr_remove.c \
 		struct/dstr/ft_dstr_del.c \
 		struct/dstr/ft_dstr_clear.c \
+		struct/dstr/ft_dstr_append.c \
 		oldlib/ft_strprefix.c \
 		oldlib/ft_strsuffix.c \
 		oldlib/ft_strtolower.c \
