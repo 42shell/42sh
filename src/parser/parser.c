@@ -49,9 +49,9 @@ t_node		*and_or_list(t_lexer *lexer, t_node *left_pipeline)
 	if (lexer->curr_tok->type == AND_IF
 	|| lexer->curr_tok->type == OR_IF)
 	{
-		and_or = ft_node_new(lexer->curr_tok);
+		and_or = node_new(lexer->curr_tok);
 		eat(lexer);
-		ft_node_add_child(and_or, left_pipeline);
+		node_add_child(and_or, left_pipeline);
 		while ((right_pipeline = pipeline(lexer)) == NULL
 				&& g_parse_error != SILENT_ABORT)
 		{
@@ -61,7 +61,7 @@ t_node		*and_or_list(t_lexer *lexer, t_node *left_pipeline)
 							0 : g_parse_error;
 		}
 		lexer->and_or = false;
-		ft_node_add_child(and_or, right_pipeline);
+		node_add_child(and_or, right_pipeline);
 		and_or = and_or_list(lexer, and_or);
 	}
 	return (and_or ? and_or : left_pipeline);

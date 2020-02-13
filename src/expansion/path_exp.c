@@ -68,7 +68,7 @@ void	path_expand(t_node *pattern_node)
 		while ((dp = readdir(dirp)))
 		{
 			if (is_match(dp->d_name, pattern, NONE))				
-				ft_node_add_child(pattern_node, ft_node_new(ft_strdup(dp->d_name)));
+				node_add_child(pattern_node, node_new(ft_strdup(dp->d_name)));
 		}
 		closedir(dirp);
 	}

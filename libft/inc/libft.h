@@ -90,8 +90,8 @@ typedef struct			s_node
 	struct s_node		**child;
 }						t_node;
 
-t_node					*ft_node_new(void *data);
-int						ft_node_add_child(t_node *parent, t_node *child);
+t_node					*node_new(void *data);
+int						node_add_child(t_node *parent, t_node *child);
 
 /*
 ** -------------------------Dynamic strings------------------------
