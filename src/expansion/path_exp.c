@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 14:14:32 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/13 18:11:31 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/13 19:46:27 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,6 @@ void	path_expand(t_node *pattern_node)
 		}
 		closedir(dirp);
 	}
+	sort_matches(pattern_node->child, pattern_node->nb_children);
 	free(pattern);
 }
