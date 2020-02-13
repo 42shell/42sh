@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 14:14:32 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/13 21:21:38 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/13 22:43:17 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ bool	is_match(char *str, int i, char *pat, int j)
 	return (false);
 }
 
-bool	is_pattern(char *str)
+bool	has_glob_char(char *str)
 {
 	char	quote_status;
 	bool	bracket_open;
@@ -65,7 +65,7 @@ void	path_expand(t_node *pattern_node)
 	DIR				*dirp;
 	struct dirent	*dp;
 
-	if (!is_pattern(node_token(pattern_node)->value->str))
+	if (!has_glob_char(node_token(pattern_node)->value->str))
 		return ;
 	node_token(pattern_node)->type = PATTERN;
 	pattern = ft_strdup(node_token(pattern_node)->value->str);
