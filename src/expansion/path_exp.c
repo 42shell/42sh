@@ -6,24 +6,27 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 14:14:32 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/13 19:46:27 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/13 21:11:53 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-bool	is_match(char *str, char *pat, char quote)
+bool	is_match(char *str, int i, char *pat, int j)
 {
-	if (*str && (quote_start(str, 0, &quote) || quote_stop(str, 0, &quote)))
-		return (is_match(str + 1, pat, quote));
-	if (*pat == '*' && quote == NONE)
-		return (*str == '\0'
-			? is_match(str, pat + 1, quote)
-			: is_match(str, pat + 1, quote) || is_match(str + 1, pat, quote));
-	if (*str == '\0' && *pat == '\0')
+	static char quote;
+	if (i == 0)
+		quote = NONE;
+	if (str[i] && (quote_start(str, i, &quote) || quote_stop(str, i, &quote)))
+		return (is_match(str, i + 1, pat, j));
+	if (pat[j] == '*' && quote == NONE)
+		return (str[i] == '\0'
+			? is_match(str, i, pat, j + 1)
+			: is_match(str, i, pat, j + 1)  || is_match(str, i + 1, pat, j));
+	if (str[i] == '\0' && pat[j] == '\0')
 		return (true);
-	if (*str && *str == *pat)
-		return (is_match(str + 1, pat + 1, quote));
+	if (str[i] && str[i] == pat[j])
+		return (is_match(str, i + 1, pat, j + 1));
 	return (false);
 }
 
@@ -67,7 +70,7 @@ void	path_expand(t_node *pattern_node)
 	{
 		while ((dp = readdir(dirp)))
 		{
-			if (is_match(dp->d_name, pattern, NONE))				
+			if (is_match(dp->d_name, 0, pattern, 0))				
 				node_add_child(pattern_node, node_new(ft_strdup(dp->d_name)));
 		}
 		closedir(dirp);
