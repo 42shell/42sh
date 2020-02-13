@@ -6,10 +6,11 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 14:14:32 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/13 21:12:40 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/13 21:21:38 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "parser.h"
 #include "shell.h"
 
 bool	is_match(char *str, int i, char *pat, int j)
@@ -77,6 +78,8 @@ void	path_expand(t_node *pattern_node)
 		}
 		closedir(dirp);
 	}
+	if (pattern_node->nb_children == 0)
+		node_token(pattern_node)->type = WORD;
 	sort_matches(pattern_node->child, pattern_node->nb_children);
 	free(pattern);
 }
