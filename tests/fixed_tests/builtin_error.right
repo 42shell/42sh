@@ -1,0 +1,28 @@
+env: ./lol: No such file or directory
+~~~
+env: illegal option -- q
+~~~
+~~~
+~~~
+setenv: Too many arguments.
+~~~
+setenv: Invalid variable name
+~~~
+setenv: Invalid variable name
+~~~
+~~~
+$PWD
+~~~
+cd: error
+~~~
+~~~
+42sh: cd: HOME not set
+~~~
+cd: error
+cd: error
+cd: PWD not set
+getcwd: could not get current dir
+cd: PWD not set
+getcwd: could not get current dir
+~~~
+cd: OLDPWD not set

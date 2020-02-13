@@ -1,0 +1,55 @@
+&&
+echo '~~~'
+
+&& ls
+echo '~~~'
+
+>
+echo '~~~'
+
+ls >
+echo '~~~'
+
+;
+echo '~~~'
+
+;ls
+echo '~~~'
+
+<<
+echo '~~~'
+
+cat << 
+echo '~~~'
+
+8>
+echo '~~~'
+
+ls 8>
+echo '~~~'
+
+&<<
+echo '~~~'
+
+| ls
+echo '~~~'
+
+ls |
+echo '~~~'
+
+|
+echo '~~~'
+
+cat << EOF ;;
+echo '~~~'
+
+echo lol
+echo '~~~'
+
+cat << EOF; &&
+echo '~~~'
+
+echo lol
+echo '~~~'
+
+ls <> test
