@@ -30,7 +30,7 @@ export CDPATH=$PWD/test_cdpath1:$PWD/test_cdpath2
 for file in "$DIR/bash_tests/"*
 do
 	test_name=$(basename "$file")
-	./42sh "$file" > "$DIR/$test_name.42sh" 2>&1
+	"$DIR/../42sh" "$file" > "$DIR/$test_name.42sh" 2>&1
 	bash "$file" > "$DIR/$test_name.bash" 2>&1
 done
 
@@ -41,7 +41,7 @@ rm -rf test_cdpath1 test_cdpath2
 for file in "$DIR/fixed_tests/"*
 do
 	test_name=$(basename "$file")
-	./42sh "$file" > "$DIR/$test_name.42sh" 2>&1
+	"$DIR/../42sh" "$file" > "$DIR/$test_name.42sh" 2>&1
 done
 
 cat << EOF > "$DIR/parse_error.bash"
@@ -115,7 +115,7 @@ getcwd: could not get current dir
 cd: OLDPWD not set
 EOF
 
-./42sh "$DIR/setenv" > "$DIR/setenv.42sh" 2>&1
+"$DIR/../42sh" "$DIR/setenv" > "$DIR/setenv.42sh" 2>&1
 tcsh "$DIR/setenv"> "$DIR/setenv.bash" 3>&1
 
 "$SED" -i -E  's/.*:.*: (.*:)/42sh: \1/g' "$DIR/"*.bash
