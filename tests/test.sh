@@ -3,7 +3,7 @@
 #this script needs GNU csplit and gnu "$SED" to work on macOS, run
 #brew install coreutils
 #brew install gnu-sed
-#to install it
+#to install them
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
@@ -155,16 +155,29 @@ do
 done
 
 EXIT_ST=0
+n=0
+ok=0
+
 for file in "$DIR/bash/"*
 do
 	file="$(basename "$file")"
 	if diff -u -U 10 "$DIR/42sh/$file" "$DIR/bash/$file"; then
-		echo "$file" ✅
+		ok=$(($ok + 1))
+		printf "%-15s %s ✅\n" $file 
 	else
 		echo "$file" ❌
 		EXIT_ST=1
 	fi
+	n=$(($n + 1))
 done
+
+if (($EXIT_ST == 0)); then 
+	emoji=✅
+else
+	emoji=❌
+fi
+
+printf "\n$ok/$n Succesful Tests %s\n" "$emoji" 1>&2
 
 rm -rf "$DIR/"*42sh "$DIR/"*bash
 exit $EXIT_ST
