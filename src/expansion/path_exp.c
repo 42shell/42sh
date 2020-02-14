@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 14:14:32 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/14 17:37:18 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/14 19:05:02 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,11 @@
 bool	is_match(char *str, int i, char *pat, int j)
 {
 	static char quote;
+
 	if (i == 0 && j == 0)
 		quote = NONE;
-	if (i == 0 && str[0] == '.' && quote == NONE && pat[j] == '*')
+	if (i == 0 && str[0] == '.' && quote == NONE
+			&& (pat[j] == '*' || pat[j] == '?'))
 		return (false);
 	if (str[i] && (quote_start(str, i, &quote) || quote_stop(str, i, &quote)))
 		return (is_match(str, i + 1, pat, j));
@@ -26,6 +28,8 @@ bool	is_match(char *str, int i, char *pat, int j)
 		return (str[i] == '\0'
 			? is_match(str, i, pat, j + 1)
 			: is_match(str, i, pat, j + 1)  || is_match(str, i + 1, pat, j));
+	if (pat[j] == '?' && quote == NONE)
+		return (str[i] != '\0' && is_match(str, i + 1, pat, j + 1));
 	if (str[i] == '\0' && pat[j] == '\0')
 		return (true);
 	if (str[i] && str[i] == pat[j])
