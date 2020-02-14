@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/13 18:42:45 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/14 17:52:18 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	get_argc(t_node *cmd)
 		if (node_token(cmd->child[i])->type == WORD)
 			argc++;
 		else if (node_token(cmd->child[i])->type == PATTERN)
-			argc += cmd->child[i]->nb_children;
+			argc += ((t_array *)(cmd->child[i]->child[0]->data))->size;
 		i++;
 	}
 	return (argc);
@@ -39,12 +39,14 @@ static int	get_argc(t_node *cmd)
 
 static void	add_pattern_matches(char **array, int *j, t_node *pattern_node)
 {
-	int i;
+	t_array *matches;
+	size_t	i;
 
+	matches = pattern_node->child[0]->data;
 	i = 0;
-	while (i < pattern_node->nb_children)
+	while (i < matches->size)
 	{
-		array[(*j)++] = ft_strdup(pattern_node->child[i]->data);
+		array[(*j)++] = ft_strdup(matches->array[i]);
 		i++;
 	}
 }

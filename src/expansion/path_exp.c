@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 14:14:32 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/14 16:14:05 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/14 17:37:18 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,55 +59,53 @@ bool	has_glob_char(char *str)
 	return (false);
 }
 
-char	**get_matches_in_dirs(char **directories, char *filename, bool no_dir)
+t_array *get_matches_in_dirs(t_array *directories, char *filename, bool no_dir)
 {
 	DIR				*dirp;
 	struct dirent	*dp;
-	int				j;
-	int				k;
-	char			**ret;
+	size_t			i;
+	t_array			*ret;
 
-	ret = malloc(sizeof(char *) * 512);
-	j = 0;
-	k = -1;
-	while (directories[++k])
+	i = 0;
+	ret = array_new();
+	while (i < directories->size)
 	{
-		if ((dirp = opendir(directories[k])))
+		if ((dirp = opendir(directories->array[i])))
 		{
 			while ((dp = readdir(dirp)))
 			{
 				if (is_match(dp->d_name, 0, filename, 0))
-					ret[j++] = no_dir ? ft_strdup(dp->d_name)
-								: append_filename(directories[k], dp->d_name);
+					array_append(ret,
+						no_dir ? ft_strdup(dp->d_name)
+						: append_filename(directories->array[i], dp->d_name));
 			}
 			closedir(dirp);
 		}
+		i++;
 	}
-	ret[j] = NULL;
-	free_arr(directories);
+	array_destroy(directories);
 	return (ret);
 }
 
-char	**get_dirs_to_search(char *dirname)
+t_array	*get_dirs_to_search(char *dirname)
 {
-	char	**directories;
+	t_array *directories;
 
 	if (has_glob_char(dirname))
 		directories = get_matches(dirname);
 	else
 	{
-		directories = malloc(sizeof(char *) * 2);
-		directories[0] = ft_strdup(dirname);
-		directories[1] = NULL;
+		directories = array_new();
+		array_append(directories, ft_strdup(dirname));
 	}
 	return (directories);
 }
 
-char	**get_matches(char *path)
+t_array	*get_matches(char *path)
 {
 	char	*dirname;
 	char	*filename;
-	char	**ret;
+	t_array *ret;
 	bool	no_dir;
 	int		i;
 
@@ -132,13 +130,14 @@ char	**get_matches(char *path)
 
 void	path_expand(t_node *pattern_node)
 {
-	int		i;
-	char	**res;
+	t_array *matches;
 
 	if (!has_glob_char(node_token(pattern_node)->value->str))
 		return ;
-	res = get_matches(node_token(pattern_node)->value->str);
-	i = 0;
-	free_arr(res);
-	//sort_matches(pattern_node->child, pattern_node->nb_children);
+	matches = get_matches(node_token(pattern_node)->value->str);
+	if (matches->size == 0)
+		return (array_destroy(matches));
+	sort_matches((char **)(matches->array), matches->size);
+	node_add_child(pattern_node, node_new(matches));
+	node_token(pattern_node)->type = PATTERN;
 }

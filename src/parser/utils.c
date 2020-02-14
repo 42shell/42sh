@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 08:48:18 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/28 19:27:37 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/14 17:31:49 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	free_ast_nodes(t_node *node, bool par_is_pattern)
 		free(node->data);
 	}
 	else if (par_is_pattern)
-		free(node->data);
+		array_destroy(node->data);
 	i = 0;
 	while (i < node->nb_children)
 		free_ast_nodes(node->child[i++], cur_is_pattern);
