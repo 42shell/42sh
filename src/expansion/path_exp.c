@@ -18,7 +18,7 @@ bool	is_match(char *str, int i, char *pat, int j)
 	static char quote;
 	if (i == 0 && j == 0)
 		quote = NONE;
-	if (str[0] == '.' && quote == NONE && pat[j] == '*')
+	if (i == 0 && str[0] == '.' && quote == NONE && pat[j] == '*')
 		return (false);
 	if (str[i] && (quote_start(str, i, &quote) || quote_stop(str, i, &quote)))
 		return (is_match(str, i + 1, pat, j));
