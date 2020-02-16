@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 14:14:32 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/16 07:37:52 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/16 08:12:15 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 /*
 ** returns how much pat should advance if the bracket expression in pat matches,
 ** 0 if no match
+** i == 1 exceptions are there because if ] is the first character, the ']' char
+** must match 
 */
 
 int		match_bracket(char c, char *pat)
@@ -25,7 +27,7 @@ int		match_bracket(char c, char *pat)
 	int		i;
 
 	i = 1;
-	while (pat[i] && pat[i] != ']')
+	while (pat[i] && (pat[i] != ']' || i == 1))
 	{
 		lowerc = pat[i];
 		if (pat[i + 1] == '-')
@@ -39,9 +41,9 @@ int		match_bracket(char c, char *pat)
 			break ;
 		i++;
 	}
-	if (pat[i] == ']')
+	if (pat[i] == ']' && i != 1)
 		return (0);
-	while (pat[i] && pat[i] != ']')
+	while (pat[i] && (pat[i] != ']' || i == 1))
 		i++;
 	return (pat[i] == '\0' ? 0 : i + 1);
 }
