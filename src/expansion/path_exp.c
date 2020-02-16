@@ -6,16 +6,50 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 14:14:32 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/14 19:05:02 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/16 07:37:52 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 #include "shell.h"
 
+/*
+** returns how much pat should advance if the bracket expression in pat matches,
+** 0 if no match
+*/
+
+int		match_bracket(char c, char *pat)
+{
+	int		lowerc;
+	int		upperc;	
+	int		i;
+
+	i = 1;
+	while (pat[i] && pat[i] != ']')
+	{
+		lowerc = pat[i];
+		if (pat[i + 1] == '-')
+		{
+			i += 2;
+			upperc = pat[i];
+			if (c >= lowerc && c <= upperc)
+				break ;
+		}
+		else if (lowerc == c)
+			break ;
+		i++;
+	}
+	if (pat[i] == ']')
+		return (0);
+	while (pat[i] && pat[i] != ']')
+		i++;
+	return (pat[i] == '\0' ? 0 : i + 1);
+}
+
 bool	is_match(char *str, int i, char *pat, int j)
 {
 	static char quote;
+	int			k;
 
 	if (i == 0 && j == 0)
 		quote = NONE;
@@ -24,6 +58,8 @@ bool	is_match(char *str, int i, char *pat, int j)
 		return (false);
 	if (str[i] && (quote_start(str, i, &quote) || quote_stop(str, i, &quote)))
 		return (is_match(str, i + 1, pat, j));
+	if (pat[j] == '[' && quote == NONE && (k = match_bracket(str[i], &pat[j])))
+		return (is_match(str, i + 1, pat, j + k));
 	if (pat[j] == '*' && quote == NONE)
 		return (str[i] == '\0'
 			? is_match(str, i, pat, j + 1)
@@ -53,7 +89,7 @@ bool	has_glob_char(char *str)
 		{
 			if (str[i] == '*' || str[i] == '?')
 				return (true);
-			if (str[i] == '[')
+			if (str[i] == '[' && !bracket_open)
 				bracket_open = true;
 			if (str[i] == ']' && bracket_open)
 				return (true);
