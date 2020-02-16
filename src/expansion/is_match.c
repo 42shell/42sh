@@ -57,7 +57,7 @@ bool		is_match(char *str, int i, char *pat, int j)
 	if (i == 0 && str[0] == '.' && quote == NONE
 			&& (pat[j] == '*' || pat[j] == '?'))
 		return (false);
-	if (str[i] && (quote_start(str, i, &quote) || quote_stop(str, i, &quote)))
+	if (str[i] && (quote_start(pat, j, &quote) || quote_stop(pat, j, &quote)))
 		return (is_match(str, i + 1, pat, j));
 	if (pat[j] == '[' && quote == NONE && (k = match_bracket(str[i], &pat[j])))
 		return (is_match(str, i + 1, pat, j + k));
