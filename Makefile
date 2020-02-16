@@ -60,6 +60,7 @@ SRC_EXPANSION   := expand.c\
                    param_exp.c\
                    quotes.c\
 				   path_exp.c\
+				   is_match.c\
 				   sort_matches.c
 SRC_EXPANSION   := $(addprefix expansion/,$(SRC_EXPANSION))
 
