@@ -6,7 +6,7 @@
 /*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 16:27:46 by nbousset          #+#    #+#             */
-/*   Updated: 2020/01/14 14:41:41 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/17 19:41:35 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,40 @@ typedef struct			s_node
 
 t_node					*ft_node_new(void *data);
 int						ft_node_add_child(t_node *parent, t_node *child);
+
+/*
+**------------------------------Hash table-------------------------------------
+*/
+
+typedef struct			s_pair
+{
+	char				*key;
+	char				*value;
+}						t_pair;
+
+typedef struct			s_bucket
+{
+	size_t				size;
+	t_pair				*pairs;
+}						t_bucket;
+
+typedef struct			s_ht
+{
+	size_t				size;
+	t_bucket			*buckets;
+}						t_ht;
+
+typedef void(*t_ht_enum_func)(const char *key, const char *value,
+								const void *obj);
+
+t_ht					*ht_new(size_t size);
+void					ht_delete(t_ht *map);
+char					*ht_get(const t_ht *map, const char *key);
+bool					ht_exists(const t_ht *map, const char *key);
+void					ht_put(t_ht *map, const char *key, const char *value);
+int						ht_get_count(const t_ht *map);
+int						ht_enum(const t_ht *map, t_ht_enum_func enum_func,
+								const void *obj);
 
 /*
 ** -------------------------Dynamic strings------------------------
