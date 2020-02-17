@@ -29,6 +29,17 @@ mkdir -p test_cdpath1/1 test_cdpath1/2 test_cdpath2/1 test_cdpath2/3
 mkdir -p test_cdpath1/var
 export CDPATH=$PWD/test_cdpath1:$PWD/test_cdpath2
 
+export LC_ALL=C
+
+mkdir -p glob
+for a in {a..f}; do
+	for b in {a..f}; do
+		for c in {a..f}; do
+			touch "glob/$a$b$c"
+		done
+	done
+done
+
 for file in "$DIR/bash_tests/"*.test
 do
 	test_name=$(basename "$file" | cut -d '.' -f 1)
@@ -39,6 +50,7 @@ done
 rm -rf tricky_dots
 rm -rf testing_dotdots
 rm -rf test_cdpath1 test_cdpath2
+rm -rf glob
 
 for file in "$DIR/fixed_tests/"*.test
 do

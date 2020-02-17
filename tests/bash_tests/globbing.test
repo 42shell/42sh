@@ -1,0 +1,77 @@
+cd glob
+
+echo '*'
+echo *
+echo '~~~'
+
+echo '.*'
+echo .*
+echo '~~~'
+
+echo 'echo a*'
+echo a*
+echo '~~~'
+
+echo 'echo ?bc'
+echo ?bc
+echo '~~~'
+
+echo 'echo [a]*'
+echo [a]*
+echo '~~~'
+
+echo 'echo [a-c]*'
+echo [a-c]*
+echo '~~~'
+
+echo 'echo [c-a]*'
+echo [c-a]*
+echo '~~~'
+
+echo 'echo [abc-f]*[c-d]'
+echo [abc-f]*[c-d]
+echo '~~~'
+
+echo 'echo [!a-c]*'
+echo [!a-c]*
+echo '~~~'
+
+echo 'echo "*"'
+echo "*"
+echo '~~~'
+
+echo 'echo "a"*'
+echo "a"* 
+echo '~~~'
+
+echo 'echo *\['
+echo *\[
+echo '~~~'
+
+touch "a*" "b*"
+echo 'echo *"*"'
+echo *"*"
+echo '~~~'
+
+echo 'echo *\*'
+echo *\*
+echo '~~~'
+
+rm "a*" "b*"
+touch 'b[a-c]' 'a[a-c]'
+
+echo 'echo *\[a-c]'
+echo *\[a-c]
+echo '~~~'
+
+rm 'b[a-c]' 'a[a-c]'
+
+cd ..
+
+echo 'echo */*c'
+echo */*c
+echo '~~~'
+
+echo 'echo */*/*/*.[co]'
+echo */*/*/*.[co]
+echo '~~~'
