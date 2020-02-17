@@ -65,8 +65,6 @@ tcsh "$DIR/setenv.test"> "$DIR/setenv.bash" 3>&1
 "$SED" -i -E  's/.*:.*: (.*:)/42sh: \1/g' "$DIR/"*.bash
 "$SED" -i -E "s/(.+)\/$/\1/g" "$DIR/cd.42sh" #remove / at the end of line for $PWD
 "$SED" -i -E "s/command not found/cannot execute command/g" "$DIR/expansion.bash"
-"$SED" -i -E "s/‘//g" "$DIR/env.bash"
-"$SED" -i -E "s/’//g" "$DIR/env.bash"
 "$SED" -i -E "s/norights: Permission denied/Could not open file/g" "$DIR/pipe.bash"
 "$SED" -i -E "s/42sh: .*: Bad file descriptor/42sh: Bad file descriptor/g" "$DIR/redir.bash"
 "$SED" -i -E "s/42sh: .*: No such file or directory/42sh: Could not open file/g" "$DIR/redir.bash"
