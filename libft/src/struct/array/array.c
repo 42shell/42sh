@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 16:41:57 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/16 08:59:24 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/17 13:00:15 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,20 +55,13 @@ void		array_append(t_array *array, void *data)
 	array->array[array->size++] = data; 
 }
 
-static void	free_array(void **arr)
-{
-	int i;
-
-	if (arr == NULL)
-		return ;
-	i = 0;
-	while (arr[i])
-		free(arr[i++]);
-	free(arr);
-}
-
 void		array_destroy(t_array *array)
 {
-	free_array(array->array);
+	size_t i;
+
+	i = 0;
+	while (i < array->size)
+		free(array->array[i++]);
+	free(array->array);
 	free(array);
 }
