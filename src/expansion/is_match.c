@@ -6,11 +6,13 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:31:17 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/17 12:29:53 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/17 13:19:21 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
+
+static int g_i;
 
 /*
 ** i == 1 exceptions are there because if ] is the first character, the ']' char
@@ -21,22 +23,21 @@ static bool	bracket_is_match(char c, char *pat)
 {
 	int		lowerc;
 	int		upperc;
-	int		i;
 
-	i = (pat[1] == '!' || pat[1] == '^') ? 2 : 1;
-	while (pat[i] && (pat[i] != ']' || i == 1))
+	g_i = (pat[1] == '!' || pat[1] == '^') ? 2 : 1;
+	while (pat[g_i] && (pat[g_i] != ']' || g_i == 1))
 	{
-		lowerc = pat[i];
-		if (pat[i + 1] == '-')
+		lowerc = pat[g_i];
+		if (pat[g_i + 1] == '-')
 		{
-			i += 2;
-			upperc = pat[i];
+			g_i += 2;
+			upperc = pat[g_i];
 			if (c >= lowerc && c <= upperc)
 				return (true);
 		}
 		else if (lowerc == c)
 			return (true);
-		i++;
+		g_i++;
 	}
 	return (false);
 }
@@ -51,16 +52,14 @@ static int	match_bracket(char c, char *pat)
 {
 	bool	reverse;
 	bool	is_match;
-	int		i;
 
 	reverse = (pat[1] == '!' || pat[1] == '^');
 	is_match = bracket_is_match(c, pat);
 	if (is_match != reverse)
 	{
-		i = 2;
-		while (pat[i] && pat[i] != ']')
-			i++;
-		return (i + 1);
+		while (pat[g_i] && pat[g_i] != ']')
+			g_i++;
+		return (g_i + 1);
 	}
 	return (0);
 }
