@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:31:17 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/17 14:43:50 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/17 15:05:50 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,32 +64,35 @@ static int	match_bracket(char c, char *pat)
 	return (0);
 }
 
-bool		is_match(char *str, int i, char *pat, int j, char quote)
+/*
+** is_first_char means we are at the first char of str (not pat)
+*/
+
+bool		is_match(char *str, char *pat, char quote, bool is_first_char)
 {
 	int			k;
 
-	if (i == 0 && j == 0)
-		quote = NONE;
-	if (pat[j] && (quote_start(pat, j, &quote)))
-		return (is_match(str, i, pat, j + 1, quote));
-	if (i == 0 && str[0] == '.' && pat[j] != '.')
+	if (*pat && (quote_start(pat, 0, &quote)))
+		return (is_match(str, pat + 1, quote, is_first_char));
+	if (is_first_char && *str == '.' && *pat != '.')
 		return (false);
-	if (pat[j] == '[' && quote == NONE && (k = match_bracket(str[i], &pat[j])))
-		return (is_match(str, i + 1, pat, j + k, quote));
-	if (pat[j] == '*' && quote == NONE)
+	if (*pat == '[' && quote == NONE && (k = match_bracket(*str, pat)))
+		return (is_match(str + 1, pat + k, quote, false));
+	if (*pat == '*' && quote == NONE)
 	{
-		return (str[i] == '\0'
-			? is_match(str, i, pat, j + 1, quote)
-			: is_match(str, i, pat, j + 1, quote) || is_match(str, i + 1, pat, j, quote));
+		return (*str == '\0'
+			? is_match(str, pat + 1, quote, is_first_char)
+			: is_match(str, pat + 1, quote, is_first_char)
+				|| is_match(str + 1, pat, quote, false));
 	}
-	if (pat[j] == '?' && quote == NONE)
-		return (str[i] != '\0' && is_match(str, i + 1, pat, j + 1, quote));
+	if (*pat == '?' && quote == NONE)
+		return (*str != '\0' && is_match(str + 1, pat + 1, quote, false));
 	k = (quote == BSLASH);
-	if (pat[j] && quote_stop(pat, j, &quote) && !k)
-		return (is_match(str, i, pat, j + 1, quote));
-	if (str[i] == '\0' && pat[j] == '\0')
+	if (*pat && quote_stop(pat, 0, &quote) && !k)
+		return (is_match(str, pat + 1, quote, is_first_char));
+	if (*str == '\0' && *pat == '\0')
 		return (true);
-	if (str[i] && str[i] == pat[j])
-		return (is_match(str, i + 1, pat, j + 1, quote));
+	if (*str && *str == *pat)
+		return (is_match(str + 1, pat + 1, quote, false));
 	return (false);
 }

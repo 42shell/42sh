@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 14:14:32 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/17 14:43:40 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/17 14:47:55 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_array	*get_matches_in_dirs(t_array *directories, char *filename, bool no_dir)
 		{
 			while ((dp = readdir(dirp)))
 			{
-				if (is_match(dp->d_name, 0, filename, 0, NONE))
+				if (is_match(dp->d_name, filename, NONE, true))
 					array_append(ret,
 						no_dir ? ft_strdup(dp->d_name)
 						: append_filename(directories->array[i], dp->d_name));
