@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:31:17 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/17 13:19:21 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/17 14:43:50 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,30 +64,32 @@ static int	match_bracket(char c, char *pat)
 	return (0);
 }
 
-bool		is_match(char *str, int i, char *pat, int j)
+bool		is_match(char *str, int i, char *pat, int j, char quote)
 {
-	static char quote;
 	int			k;
 
 	if (i == 0 && j == 0)
 		quote = NONE;
-	if (str[i] && (quote_start(pat, j, &quote) || quote_stop(pat, j, &quote)))
-		return (is_match(str, i + 1, pat, j));
+	if (pat[j] && (quote_start(pat, j, &quote)))
+		return (is_match(str, i, pat, j + 1, quote));
 	if (i == 0 && str[0] == '.' && pat[j] != '.')
 		return (false);
 	if (pat[j] == '[' && quote == NONE && (k = match_bracket(str[i], &pat[j])))
-		return (is_match(str, i + 1, pat, j + k));
+		return (is_match(str, i + 1, pat, j + k, quote));
 	if (pat[j] == '*' && quote == NONE)
 	{
 		return (str[i] == '\0'
-			? is_match(str, i, pat, j + 1)
-			: is_match(str, i, pat, j + 1) || is_match(str, i + 1, pat, j));
+			? is_match(str, i, pat, j + 1, quote)
+			: is_match(str, i, pat, j + 1, quote) || is_match(str, i + 1, pat, j, quote));
 	}
 	if (pat[j] == '?' && quote == NONE)
-		return (str[i] != '\0' && is_match(str, i + 1, pat, j + 1));
+		return (str[i] != '\0' && is_match(str, i + 1, pat, j + 1, quote));
+	k = (quote == BSLASH);
+	if (pat[j] && quote_stop(pat, j, &quote) && !k)
+		return (is_match(str, i, pat, j + 1, quote));
 	if (str[i] == '\0' && pat[j] == '\0')
 		return (true);
 	if (str[i] && str[i] == pat[j])
-		return (is_match(str, i + 1, pat, j + 1));
+		return (is_match(str, i + 1, pat, j + 1, quote));
 	return (false);
 }
