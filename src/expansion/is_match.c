@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:31:17 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/16 09:41:38 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/17 12:29:53 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 /*
 ** i == 1 exceptions are there because if ] is the first character, the ']' char
-** must match 
+** must match
 */
 
 static bool	bracket_is_match(char c, char *pat)
 {
 	int		lowerc;
-	int		upperc;	
+	int		upperc;
 	int		i;
 
 	i = (pat[1] == '!' || pat[1] == '^') ? 2 : 1;
@@ -79,9 +79,11 @@ bool		is_match(char *str, int i, char *pat, int j)
 	if (pat[j] == '[' && quote == NONE && (k = match_bracket(str[i], &pat[j])))
 		return (is_match(str, i + 1, pat, j + k));
 	if (pat[j] == '*' && quote == NONE)
+	{
 		return (str[i] == '\0'
 			? is_match(str, i, pat, j + 1)
-			: is_match(str, i, pat, j + 1)  || is_match(str, i + 1, pat, j));
+			: is_match(str, i, pat, j + 1) || is_match(str, i + 1, pat, j));
+	}
 	if (pat[j] == '?' && quote == NONE)
 		return (str[i] != '\0' && is_match(str, i + 1, pat, j + 1));
 	if (str[i] == '\0' && pat[j] == '\0')

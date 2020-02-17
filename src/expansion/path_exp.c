@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 14:14:32 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/16 08:32:02 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/17 12:29:53 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ bool	has_glob_char(char *str)
 	return (false);
 }
 
-t_array *get_matches_in_dirs(t_array *directories, char *filename, bool no_dir)
+t_array	*get_matches_in_dirs(t_array *directories, char *filename, bool no_dir)
 {
 	DIR				*dirp;
 	struct dirent	*dp;
@@ -105,7 +105,6 @@ t_array	*get_matches(char *path)
 		path[i - 1] = '/';
 	return (ret);
 }
-
 
 void	path_expand(t_node *pattern_node)
 {
