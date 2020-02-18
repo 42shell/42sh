@@ -20,33 +20,6 @@
 # include <stdint.h>
 
 /*
-** -----------------------------Struct double-----------------------------
-*/
-
-# define DOUBLE_EXPONENT_MASK		0x7ff
-# define DOUBLE_MANTISSA_MASK		0xfffffffffffff
-# define DOUBLE_EXPONENT_MAX		0x7ff
-# define DOUBLE_EXPONENT_SHIFT		0x3ff
-
-# define LDOUBLE_EXPONENT_MASK		0x7fff
-# define LDOUBLE_MANTISSA_MASK		0xffffffffffffffff
-# define LDOUBLE_EXPONENT_MAX		0x7fff
-# define LDOUBLE_EXPONENT_SHIFT		0x3fff
-
-typedef struct			s_double
-{
-	double				f;
-	long double			lf;
-	uint8_t				neg;
-	uint16_t			exponent;
-	uint64_t			mantissa;
-	int					real_exponent;
-	uint8_t				is_denormalized;
-	uint8_t				is_inf;
-	uint8_t				is_nan;
-}						t_double;
-
-/*
 ** -----------------------------Struct list-----------------------------
 */
 

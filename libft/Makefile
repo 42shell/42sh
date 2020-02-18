@@ -79,7 +79,7 @@ SRC =	mem/ft_xmalloc.c \
 		struct/dstr/ft_dstr_append.c \
 		struct/hash/ht_utils.c \
 		struct/hash/ht_add_or_get.c \
-    struct/array/array.c \
+    	struct/array/array.c \
 		oldlib/ft_strprefix.c \
 		oldlib/ft_strsuffix.c \
 		oldlib/ft_strtolower.c \
@@ -105,8 +105,7 @@ SRC =	mem/ft_xmalloc.c \
 		ft_printf/pf_handlers/pf_handle_arg.c \
 		ft_printf/pf_handlers/pf_handle_color.c \
 		ft_printf/pf_parser/pf_parser.c \
-		ft_printf/ft_printf.c
-
+		ft_printf/ft_printf.c \
 
 OBJ = $(addprefix $(DIR_OBJ), $(SRC:.c=.o))
 

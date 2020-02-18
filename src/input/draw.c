@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <shell.h>
+#include "shell.h"
 
 int		draw_prompt(t_input *input, const char *prompt)
 {

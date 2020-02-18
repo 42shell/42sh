@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../inc/libft.h"
+#include "libft.h"
 
 int		ft_dstr_remove(t_dstr *dstr, size_t i, size_t len)
 {

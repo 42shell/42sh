@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "shell.h"
-#include <stdlib.h>
-#include <unistd.h>
+#include "shell.h"
+#include "shell.h"
 #define EMPTY_ENV 	1
 #define NEW_PATH	2
 

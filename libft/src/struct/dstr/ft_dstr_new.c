@@ -10,19 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../inc/libft.h"
-
-/*
-** -str is the string you want to add to the dstr on creation.
-**  Just pass "" for an empty string.
-** -length is the number of bytes you want to copy from the string.
-** -size is the size you want for the dstr, it avoids to create
-**  a dstr of 1 then realloc if you know you will need more space.
-** -if len is more than string length, we reduce it to the string length
-**  to avoid segfault.
-** -if len is more than size, size is increased to have enough space.
-**  size is rounded to next power of two cause it s cool.
-*/
+#include "libft.h"
 
 t_dstr		*ft_dstr_new(char *str, size_t len, size_t size)
 {

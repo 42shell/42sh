@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../inc/libft.h"
-#include <stdlib.h>
+#include "libft.h"
+#include "libft.h"
 
 /*
 ** split a list into two equal parts

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../inc/libft.h"
+#include "libft.h"
 
 void	ft_list_add_tail(void *data, t_list_head *head)
 {

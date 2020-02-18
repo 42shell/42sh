@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../inc/libft.h"
+#include "libft.h"
 
 void	ft_dstr_del(void **ptr, void *priv)
 {

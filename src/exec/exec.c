@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "shell.h"
-#include <errno.h>
+#include "shell.h"
 
 extern int		g_last_exit_st;
 
