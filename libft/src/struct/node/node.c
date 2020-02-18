@@ -12,7 +12,7 @@
 
 #include "../../../inc/libft.h"
 
-t_node		*ft_node_new(void *data)
+t_node		*node_new(void *data)
 {
 	t_node *node;
 
@@ -26,7 +26,7 @@ t_node		*ft_node_new(void *data)
 	return (node);
 }
 
-static int	ft_node_realloc(t_node *node)
+static int	node_realloc(t_node *node)
 {
 	t_node	**child_new;
 	int		i;
@@ -46,7 +46,7 @@ static int	ft_node_realloc(t_node *node)
 	return (0);
 }
 
-int			ft_node_add_child(t_node *parent, t_node *child)
+int			node_add_child(t_node *parent, t_node *child)
 {
 	if (parent->child == NULL)
 	{
@@ -57,7 +57,7 @@ int			ft_node_add_child(t_node *parent, t_node *child)
 	}
 	else if (parent->capacity == parent->nb_children)
 	{
-		if (ft_node_realloc(parent) == -1)
+		if (node_realloc(parent) == -1)
 			return (-1);
 	}
 	parent->child[parent->nb_children++] = child;

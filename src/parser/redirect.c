@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 04:05:12 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/29 15:35:20 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/13 18:32:33 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static t_node	*filename(t_lexer *lexer)
 	node = NULL;
 	if (lexer->curr_tok->type == WORD)
 	{
-		node = ft_node_new(lexer->curr_tok);
+		node = node_new(lexer->curr_tok);
 		eat(lexer);
 	}
 	return (node);
@@ -64,7 +64,7 @@ static t_node	*io_file(t_lexer *lexer, t_token *io_number)
 	if (lexer->curr_tok == NULL || g_parse_error != NOERR)
 		return (NULL);
 	node = NULL;
-	if (is_redir(lexer->curr_tok) && (node = ft_node_new(lexer->curr_tok)))
+	if (is_redir(lexer->curr_tok) && (node = node_new(lexer->curr_tok)))
 	{
 		eat(lexer);
 		filename_node = filename(lexer);
@@ -76,11 +76,11 @@ static t_node	*io_file(t_lexer *lexer, t_token *io_number)
 				g_error_near = ft_strdup(node_token(node)->value->str);
 			}
 			token_del(&io_number);
-			free_ast_nodes(node);
+			free_ast_nodes(node, false);
 			return (NULL);
 		}
-		ft_node_add_child(node, ft_node_new(io_number));
-		ft_node_add_child(node, filename_node);
+		node_add_child(node, node_new(io_number));
+		node_add_child(node, filename_node);
 	}
 	return (node);
 }
@@ -102,18 +102,18 @@ static t_node	*io_here(t_lexer *lexer, t_token *io_number)
 	if (g_parse_error != NOERR)
 		return (NULL);
 	node = NULL;
-	node = ft_node_new(lexer->curr_tok);
+	node = node_new(lexer->curr_tok);
 	eat(lexer);
 	if (lexer->curr_tok == NULL || lexer->curr_tok->type != WORD)
 	{
 		g_parse_error = HEREDOC_NO_DELIM;
 		g_error_near = ft_strdup(node_token(node)->value->str);
-		free_ast_nodes(node);
+		free_ast_nodes(node, false);
 		return (NULL);
 	}
-	ft_node_add_child(node, ft_node_new(io_number));
-	ft_node_add_child(node, ft_node_new(lexer->curr_tok));
-	ft_node_add_child(&g_heredocs, node);
+	node_add_child(node, node_new(io_number));
+	node_add_child(node, node_new(lexer->curr_tok));
+	node_add_child(&g_heredocs, node);
 	eat(lexer);
 	return (node);
 }

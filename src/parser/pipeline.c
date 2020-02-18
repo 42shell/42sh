@@ -35,16 +35,16 @@ static t_node	*command(t_lexer *lexer)
 
 	if (lexer->curr_tok == NULL || g_parse_error != NOERR)
 		return (NULL);
-	command = ft_node_new(NULL);
+	command = node_new(NULL);
 	while ((redirect = io_redirect(lexer))
 			|| (lexer->curr_tok && lexer->curr_tok->type == WORD))
 	{
 		if (redirect != NULL)
-			ft_node_add_child(command, redirect);
+			node_add_child(command, redirect);
 		else if (lexer->curr_tok->type == WORD)
 		{
-			word = ft_node_new(lexer->curr_tok);
-			ft_node_add_child(command, word);
+			word = node_new(lexer->curr_tok);
+			node_add_child(command, word);
 			eat(lexer);
 		}
 	}
@@ -64,9 +64,9 @@ static t_node	*pipe_list(t_lexer *lexer, t_node *left_command)
 	left_pipe = NULL;
 	if (lexer->curr_tok->type == PIPE)
 	{
-		left_pipe = ft_node_new(lexer->curr_tok);
+		left_pipe = node_new(lexer->curr_tok);
 		eat(lexer);
-		ft_node_add_child(left_pipe, left_command);
+		node_add_child(left_pipe, left_command);
 		right_command = command(lexer);
 		if (right_command == NULL && g_parse_error == NOERR)
 		{
@@ -75,9 +75,9 @@ static t_node	*pipe_list(t_lexer *lexer, t_node *left_command)
 		}
 		right_pipe = pipe_list(lexer, right_command);
 		if (right_pipe != NULL)
-			ft_node_add_child(left_pipe, right_pipe);
+			node_add_child(left_pipe, right_pipe);
 		else
-			ft_node_add_child(left_pipe, right_command);
+			node_add_child(left_pipe, right_command);
 	}
 	return (left_pipe);
 }

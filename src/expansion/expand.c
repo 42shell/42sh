@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:08:22 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/24 17:39:17 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/13 18:07:31 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int		expand(t_node *command, t_env *env)
 		{
 			pos = tilde_expand(node_token(command->child[i])->value, home_dir);
 			param_expand(node_token(command->child[i])->value, pos, env, false);
+			path_expand(command->child[i]);
 			remove_quotes(node_token(command->child[i])->value);
 		}
 		i++;
