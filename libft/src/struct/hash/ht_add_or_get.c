@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 19:33:41 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/17 19:35:44 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/18 14:28:19 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static t_pair	*get_pair(t_bucket *bucket, const char *key)
 ** Returns the value associated with key, or null if no key matches.
 */
 
-char			*ht_get(const t_ht *map, const char *key)
+void			*ht_get(const t_ht *map, const char *key)
 {
 	size_t		index;
 	t_bucket	*bucket;
@@ -96,7 +96,7 @@ bool			ht_exists(const t_ht *map, const char *key)
 ** Add a new key=value pair to the hash table.
 */
 
-void			ht_put(t_ht *map, const char *key, const char *value)
+void			ht_put(t_ht *map, const char *key, void *value)
 {
 	t_bucket	*bkt;
 	t_pair		*tmp_pairs;
@@ -105,8 +105,8 @@ void			ht_put(t_ht *map, const char *key, const char *value)
 	bkt = &(map->buckets[hash_string(key) % map->size]);
 	if ((pair = get_pair(bkt, key)) != NULL)
 	{
-		free(pair->value);
-		pair->value = ft_strdup(pair->value);
+		map->free_value(pair->value);
+		pair->value = value;
 		return ;
 	}
 	if (bkt->size == 0)
@@ -122,5 +122,5 @@ void			ht_put(t_ht *map, const char *key, const char *value)
 	}
 	pair = &(bkt->pairs[bkt->size - 1]);
 	pair->key = ft_strdup(key);
-	pair->value = ft_strdup(value);
+	pair->value = value;
 }

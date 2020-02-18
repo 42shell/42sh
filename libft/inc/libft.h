@@ -6,7 +6,7 @@
 /*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 16:27:46 by nbousset          #+#    #+#             */
-/*   Updated: 2020/02/17 19:41:35 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/18 14:25:42 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int						ft_node_add_child(t_node *parent, t_node *child);
 typedef struct			s_pair
 {
 	char				*key;
-	char				*value;
+	void				*value;
 }						t_pair;
 
 typedef struct			s_bucket
@@ -109,20 +109,23 @@ typedef struct			s_bucket
 	t_pair				*pairs;
 }						t_bucket;
 
+typedef void(*t_ht_free_func)(void *value);
+
 typedef struct			s_ht
 {
 	size_t				size;
 	t_bucket			*buckets;
+	t_ht_free_func		free_value;
 }						t_ht;
 
-typedef void(*t_ht_enum_func)(const char *key, const char *value,
+typedef void(*t_ht_enum_func)(const char *key, const void *value,
 								const void *obj);
 
-t_ht					*ht_new(size_t size);
+t_ht					*ht_new(size_t size, t_ht_free_func free_value);
 void					ht_delete(t_ht *map);
-char					*ht_get(const t_ht *map, const char *key);
+void					*ht_get(const t_ht *map, const char *key);
 bool					ht_exists(const t_ht *map, const char *key);
-void					ht_put(t_ht *map, const char *key, const char *value);
+void					ht_put(t_ht *map, const char *key, void *value);
 int						ht_get_count(const t_ht *map);
 int						ht_enum(const t_ht *map, t_ht_enum_func enum_func,
 								const void *obj);

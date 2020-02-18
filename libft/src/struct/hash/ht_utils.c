@@ -6,19 +6,25 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 18:46:04 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/17 19:40:14 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/18 15:06:31 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_ht		*ht_new(size_t size)
+/*
+** free_value is called when we need to free a key's value (for example if we
+** need to free elements of a struct stored in value)
+*/
+
+t_ht		*ht_new(size_t size, t_ht_free_func free_value)
 {
 	t_ht *map;
 
 	map = ft_xmalloc(sizeof(t_ht));
 	map->size = ft_next_power_of_two(size);
 	map->buckets = ft_xmalloc(map->size * sizeof(t_bucket));
+	map->free_value = free_value;
 	return (map);
 }
 
@@ -40,7 +46,7 @@ void		ht_delete(t_ht *map)
 		while (j < bucket->size)
 		{
 			free(pair->key);
-			free(pair->value);
+			map->free_value(pair->value);
 			pair++;
 			j++;
 		}
