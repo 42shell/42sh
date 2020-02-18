@@ -112,6 +112,43 @@ void					array_append(t_array *array, void *data);
 void					array_destroy(t_array *array);
 
 /*
+**------------------------------Hash table-------------------------------------
+*/
+
+typedef struct			s_pair
+{
+	char				*key;
+	void				*value;
+}						t_pair;
+
+typedef struct			s_bucket
+{
+	size_t				size;
+	t_pair				*pairs;
+}						t_bucket;
+
+typedef void(*t_ht_free_func)(void *value);
+
+typedef struct			s_ht
+{
+	size_t				size;
+	t_bucket			*buckets;
+	t_ht_free_func		free_value;
+}						t_ht;
+
+typedef void(*t_ht_enum_func)(const char *key, const void *value,
+								const void *obj);
+
+t_ht					*ht_new(size_t size, t_ht_free_func free_value);
+void					ht_delete(t_ht *map);
+void					*ht_get(const t_ht *map, const char *key);
+bool					ht_exists(const t_ht *map, const char *key);
+void					ht_put(t_ht *map, const char *key, void *value);
+int						ht_get_count(const t_ht *map);
+int						ht_enum(const t_ht *map, t_ht_enum_func enum_func,
+								const void *obj);
+
+/*
 ** -------------------------Dynamic strings------------------------
 */
 
