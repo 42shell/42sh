@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/11 18:21:55 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/13 18:01:19 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ enum				e_toktype
 	PIPE,
 	AND_IF,
 	OR_IF,
+	PATTERN
 };
 
 enum				e_qstate

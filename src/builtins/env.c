@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 17:03:57 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/07 00:45:28 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/17 14:55:26 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int		builtin_env(char **argv, t_env *env)
 	cmd_path = (options & NEW_PATH) ? get_executable_path(argv[i], &new_env)
 		: get_executable_path(argv[i], env);
 	if (cmd_path == NULL)
-		ft_dprintf(2, "env: %s: No such file or directory\n", argv[i]);
+		ft_dprintf(2, "env: '%s': No such file or directory\n", argv[i]);
 	free(argv[i]);
 	argv[i] = cmd_path;
 	return (finish_env(argv, i, &new_env));

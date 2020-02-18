@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/07 00:18:00 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/14 17:52:18 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,25 @@ static int	get_argc(t_node *cmd)
 	{
 		if (node_token(cmd->child[i])->type == WORD)
 			argc++;
+		else if (node_token(cmd->child[i])->type == PATTERN)
+			argc += ((t_array *)(cmd->child[i]->child[0]->data))->size;
 		i++;
 	}
 	return (argc);
+}
+
+static void	add_pattern_matches(char **array, int *j, t_node *pattern_node)
+{
+	t_array *matches;
+	size_t	i;
+
+	matches = pattern_node->child[0]->data;
+	i = 0;
+	while (i < matches->size)
+	{
+		array[(*j)++] = ft_strdup(matches->array[i]);
+		i++;
+	}
 }
 
 static char	**words_to_array(t_node *cmd)
@@ -48,6 +64,8 @@ static char	**words_to_array(t_node *cmd)
 	{
 		if (node_token(cmd->child[i])->type == WORD)
 			array[j++] = ft_strdup(node_token(cmd->child[i])->value->str);
+		else if (node_token(cmd->child[i])->type == PATTERN)
+			add_pattern_matches(array, &j, cmd->child[i]);
 	}
 	array[j] = NULL;
 	return (array);

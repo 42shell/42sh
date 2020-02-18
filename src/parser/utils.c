@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 08:48:18 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/28 19:27:37 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/14 17:31:49 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,20 +42,25 @@ t_token	*node_token(t_node *node)
 **}
 */
 
-void	free_ast_nodes(t_node *node)
+void	free_ast_nodes(t_node *node, bool par_is_pattern)
 {
 	int		i;
+	bool	cur_is_pattern;
 
+	cur_is_pattern = false;
 	if (node == NULL)
 		return ;
-	if (node->data != NULL)
+	if (node->data != NULL && !par_is_pattern)
 	{
+		cur_is_pattern = (node_token(node)->type == PATTERN);
 		ft_dstr_del((void **)&node_token(node)->value, NULL);
 		free(node->data);
 	}
+	else if (par_is_pattern)
+		array_destroy(node->data);
 	i = 0;
 	while (i < node->nb_children)
-		free_ast_nodes(node->child[i++]);
+		free_ast_nodes(node->child[i++], cur_is_pattern);
 	free(node->child);
 	free(node);
 }

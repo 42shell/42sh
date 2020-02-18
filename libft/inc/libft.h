@@ -6,7 +6,7 @@
 /*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 16:27:46 by nbousset          #+#    #+#             */
-/*   Updated: 2020/02/18 14:25:42 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/14 17:23:00 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,26 @@ typedef struct			s_node
 	struct s_node		**child;
 }						t_node;
 
-t_node					*ft_node_new(void *data);
-int						ft_node_add_child(t_node *parent, t_node *child);
+t_node					*node_new(void *data);
+int						node_add_child(t_node *parent, t_node *child);
+
+
+/*
+**--------------------------Struct array----------------------------------
+*/
+
+typedef struct			s_array
+{
+	void				**array;
+	size_t				size;
+	size_t				allocated;
+}						t_array;
+
+
+t_array					*array_new();
+void					array_realloc(t_array *array);
+void					array_append(t_array *array, void *data);
+void					array_destroy(t_array *array);
 
 /*
 **------------------------------Hash table-------------------------------------
@@ -146,6 +164,7 @@ void					ft_dstr_del(void **ptr, void *priv);
 int						ft_dstr_add(t_dstr *dstr, char c);
 int						ft_dstr_insert(t_dstr *dstr, size_t i, char *str,
 						size_t len);
+int						ft_dstr_append(t_dstr *dstr, char *str);
 int						ft_dstr_remove(t_dstr *dstr, size_t i, size_t len);
 int						ft_dstr_clear(t_dstr *dstr, size_t size);
 
