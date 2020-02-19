@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/24 17:41:36 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/19 14:47:46 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 # include "expansion.h"
 # include "builtins.h"
 
+t_ht	*g_sh_vars;
+
 typedef struct		s_sh
 {
 	struct s_term	term;
@@ -41,6 +43,26 @@ typedef struct		s_sh
 	struct s_lexer	lexer;
 	struct s_env	env;
 }					t_sh;
+
+# define V_RDONLY	1
+# define V_EXPORT	2
+# define V_HIDDEN	4
+# define V_SPECIAL	8
+
+typedef char *(*t_var_value_func)(void);
+
+/*
+** value_func is used to get the values of special variables like $$.
+*/
+
+typedef struct			s_var
+{
+	char				*name;
+	char				*value;
+	char				*exportstr;
+	int					attributes;
+	t_var_value_func	value_func;
+}						t_var;
 
 int					init(t_sh *shell, int argc, char **argv);
 void				del(t_sh *shell);
@@ -69,5 +91,9 @@ bool				is_builtin(char *str);
 bool				is_valid_var_name(char *str);
 
 char				*ft_mktemp(char *template);
+
+void				import_env(t_ht *map, char **env);
+void				add_var(t_ht *map, char *name, char *value, int attributes);
+void				free_var(void *var_ptr);
 
 #endif

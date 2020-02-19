@@ -107,6 +107,7 @@ SRC_SHELL       := del.c\
                    init.c\
                    main.c\
                    path_utils.c\
+				   variables.c\
                    utils.c
 SRC_SHELL       := $(addprefix shell/,$(SRC_SHELL))
 
