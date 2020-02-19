@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 19:33:41 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/18 14:28:19 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/19 15:06:45 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,14 +110,12 @@ void			ht_put(t_ht *map, const char *key, void *value)
 		return ;
 	}
 	if (bkt->size == 0)
-	{
-		bkt->pairs = ft_xmalloc(sizeof(t_pair));
-		bkt->size = 1;
-	}
+		bkt->pairs = ft_xmalloc(sizeof(t_pair) * ++bkt->size);
 	else
 	{
 		tmp_pairs = ft_xmalloc(++bkt->size * sizeof(t_pair));
 		ft_memcpy(tmp_pairs, bkt->pairs, (bkt->size - 1) * sizeof(t_pair));
+		free(bkt->pairs);
 		bkt->pairs = tmp_pairs;
 	}
 	pair = &(bkt->pairs[bkt->size - 1]);
