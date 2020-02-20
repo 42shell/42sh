@@ -44,7 +44,8 @@ PFLAGS          := -Iinclude $(LIB_FT_INC)
 SRC_BUILTINS    := builtins.c\
                    cd.c\
                    cd_utils.c\
-                   env.c
+                   env.c\
+				   export.c
 SRC_BUILTINS    := $(addprefix builtins/,$(SRC_BUILTINS))
 
 SRC_EXEC        := argv.c\

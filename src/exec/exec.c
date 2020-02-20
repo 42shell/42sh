@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:52:31 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/07 00:36:28 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/19 15:31:29 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ int			exec_builtin(t_argv *argv, t_env *env, t_node *cmd, bool free_av)
 		builtin_echo(argv->argv);
 	else if (ft_strequ(argv->argv[0], "cd"))
 		builtin_cd(argv->argv, env);
+	else if (ft_strequ(argv->argv[0], "export"))
+		builtin_export(argv->argv);
 	restore_fds();
 	if (free_av)
 		free_argv(argv);

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:28:09 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/14 16:16:00 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/19 15:31:01 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int		builtin_unsetenv(char **argv, t_env *env);
 int		builtin_setenv(char **argv, t_env *env);
 void	builtin_exit(char **argv);
 int		builtin_echo(char **argv);
+int		builtin_export(char **argv);
 
 int		builtin_cd(char **argv, t_env *env);
 char	*get_pwd(t_env *env);

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/19 15:11:04 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/19 15:38:13 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ int			init(t_sh *shell, int argc, char **argv)
 	init_input(&shell->input, &shell->term);
 	init_lexer(&shell->lexer, &shell->input);
 	shell->env = env_dup(environ);
-	increase_shlvl(&shell->env);
 	g_env = &shell->env;
 	g_sh_vars = ht_new(1024, free_var);
 	import_env(g_sh_vars, g_env->env);
+	increase_shlvl(&shell->env);
 	return (0);
 }
