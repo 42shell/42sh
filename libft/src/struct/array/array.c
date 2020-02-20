@@ -6,20 +6,23 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 16:41:57 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/17 13:00:15 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/20 20:21:39 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../inc/libft.h"
 
-t_array		*array_new()
+t_array		*array_new(size_t alloc)
 {
 	t_array *ret;
 
 	ret = ft_xmalloc(sizeof(t_array));
-	ret->array = ft_xmalloc(4 * sizeof(void *));
+	if (alloc == 0)
+		ret->allocated = 4;
+	else
+		ret->allocated = alloc;
+	ret->array = ft_xmalloc(ret->allocated * sizeof(void *));
 	ret->size = 0;
-	ret->allocated = 4;
 	return (ret);
 }
 
@@ -52,7 +55,7 @@ void		array_append(t_array *array, void *data)
 {
 	if (array->size == array->allocated)
 		array_realloc(array);
-	array->array[array->size++] = data; 
+	array->array[array->size++] = data;
 }
 
 void		array_destroy(t_array *array)

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/19 15:13:13 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/20 20:17:37 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/20 20:23:15 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int		builtin_set(void)
 	t_array *vars;
 	size_t	i;
 
-	vars = array_new();
+	vars = array_new(ht_get_count(g_sh_vars));
 	ht_enum(g_sh_vars, add_var_to_arr, vars);
 	sort_matches((char **)vars->array, vars->size);
 	i = 0;

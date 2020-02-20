@@ -6,7 +6,7 @@
 /*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 16:27:46 by nbousset          #+#    #+#             */
-/*   Updated: 2020/02/20 20:12:40 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/20 20:24:29 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ typedef struct			s_array
 }						t_array;
 
 
-t_array					*array_new();
+t_array					*array_new(size_t alloc);
 void					array_realloc(t_array *array);
 void					array_append(t_array *array, void *data);
 void					array_destroy(t_array *array);
@@ -140,7 +140,7 @@ bool					ht_exists(const t_ht *map, const char *key);
 void					ht_put(t_ht *map, const char *key, void *value);
 int						ht_get_count(const t_ht *map);
 int						ht_enum(const t_ht *map, t_ht_enum_func enum_func,
-								const void *obj);
+								void *obj);
 void					ht_remove(const t_ht *map, const char *key);
 size_t					hash_string(const char *s);
 

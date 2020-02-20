@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 18:46:04 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/20 20:01:07 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/20 20:28:01 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,10 @@ int			ht_get_count(const t_ht *map)
 	while (i < map->size)
 	{
 		pair = bucket;
-		while (pair)
+		while (pair && pair->key)
 		{
 			count++;
-			pair++;
+			pair = pair->next;
 		}
 		bucket++;
 		i++;
@@ -89,7 +89,7 @@ int			ht_get_count(const t_ht *map)
 ** Execute enum_func(key, value, obj) for each key=value pair in the hash table.
 */
 
-int			ht_enum(const t_ht *map, t_ht_enum_func enum_func, const void *obj)
+int			ht_enum(const t_ht *map, t_ht_enum_func enum_func, void *obj)
 {
 	size_t		i;
 	t_pair		*bucket;
