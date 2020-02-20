@@ -45,7 +45,7 @@ SRC_BUILTINS    := builtins.c\
                    cd.c\
                    cd_utils.c\
                    env.c\
-				   export.c
+				   var_builtins.c
 SRC_BUILTINS    := $(addprefix builtins/,$(SRC_BUILTINS))
 
 SRC_EXEC        := argv.c\
