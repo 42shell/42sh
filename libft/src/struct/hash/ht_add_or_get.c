@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 19:33:41 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/20 16:41:03 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/20 19:36:06 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ size_t			hash_string(const char *s)
 ** Returns a pair from the bucket that matches key or NULL if no pair matches.
 */
 
-static t_pair	*get_pair(t_pair *bucket, const char *key)
+t_pair			*get_pair(t_pair *bucket, const char *key)
 {
 	t_pair	*pair;
 
@@ -45,7 +45,7 @@ static t_pair	*get_pair(t_pair *bucket, const char *key)
 	pair = bucket;
 	while (pair)
 	{
-		if (pair->key != NULL && pair->value != NULL)
+		if (pair->key != NULL)
 			if (ft_strcmp(pair->key, key) == 0)
 				return (pair);
 		pair = pair->next;
@@ -109,6 +109,7 @@ void			ht_put(t_ht *map, const char *key, void *value)
 	{
 		bkt->next = ft_xmalloc(sizeof(t_pair));
 		*(bkt->next) = *(bkt);
+		bkt->next->next = NULL;
 	}
 	bkt->key = ft_strdup(key);
 	bkt->value = value;

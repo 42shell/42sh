@@ -6,7 +6,7 @@
 /*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 16:27:46 by nbousset          #+#    #+#             */
-/*   Updated: 2020/02/20 19:49:18 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/20 19:49:34 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,8 @@ void					ht_put(t_ht *map, const char *key, void *value);
 int						ht_get_count(const t_ht *map);
 int						ht_enum(const t_ht *map, t_ht_enum_func enum_func,
 								const void *obj);
+void					ht_remove(const t_ht *map, const char *key);
+size_t					hash_string(const char *s);
 
 /*
 ** -------------------------Dynamic strings------------------------

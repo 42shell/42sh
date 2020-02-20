@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 18:46:04 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/20 19:46:31 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/20 20:01:07 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int			ht_enum(const t_ht *map, t_ht_enum_func enum_func, const void *obj)
 	while (i < map->size)
 	{
 		pair = bucket;
-		while (pair)
+		while (pair && pair->key)
 		{
 			enum_func(pair->key, pair->value, obj);
 			pair = pair->next;
@@ -109,4 +109,39 @@ int			ht_enum(const t_ht *map, t_ht_enum_func enum_func, const void *obj)
 		i++;
 	}
 	return (1);
+}
+
+/*
+** Remove a pair from a hash table
+** if there is a pair after the one we want to delete, we copy the contents of
+** the next pair into the pair we want to delete and we free the next pair
+*/
+
+void		ht_remove(const t_ht *map, const char *key)
+{
+	t_pair *prev;
+	t_pair *pair;
+
+	pair = &(map->buckets[hash_string(key) % map->size]);
+	prev = NULL;
+	while (pair)
+	{
+		if (pair->key != NULL && ft_strcmp(pair->key, key) == 0)
+		{
+			ft_memdel((void **)&pair->key);
+			map->free_value(pair->value);
+			if (prev != NULL)
+				prev->next = pair->next;
+			if (prev != NULL)
+				return (free(pair));
+			else if (pair->next != NULL)
+			{
+				pair->value = pair->next->value;
+				pair->key = pair->next->key;
+				return (ft_memdel((void **)&pair->next));
+			}
+		}
+		prev = pair;
+		pair = pair->next;
+	}
 }
