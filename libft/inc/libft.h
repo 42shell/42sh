@@ -6,7 +6,7 @@
 /*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 16:27:46 by nbousset          #+#    #+#             */
-/*   Updated: 2020/02/14 17:23:00 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/20 19:49:18 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,20 +119,15 @@ typedef struct			s_pair
 {
 	char				*key;
 	void				*value;
+	struct s_pair		*next;
 }						t_pair;
-
-typedef struct			s_bucket
-{
-	size_t				size;
-	t_pair				*pairs;
-}						t_bucket;
 
 typedef void(*t_ht_free_func)(void *value);
 
 typedef struct			s_ht
 {
 	size_t				size;
-	t_bucket			*buckets;
+	t_pair				*buckets;
 	t_ht_free_func		free_value;
 }						t_ht;
 
