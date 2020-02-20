@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/19 15:13:13 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/20 19:55:18 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/20 20:17:37 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,36 @@ int		builtin_unset(char **argv)
 		i++;
 	}
 	return (ret);
+}
+
+/*
+** obj points to a t_array, we add key=value to this array for each variable
+*/
+
+static void	add_var_to_arr(const char *key, void *value, void *obj)
+{
+	t_array			*array;
+	t_var			*var;
+
+	var = value;
+	array = obj;
+	if (var->exportstr == NULL)
+		var->exportstr = ft_strjoin_triple((char *)key, "=", var->value);
+	array_append(array, var->exportstr);
+}
+
+int		builtin_set(void)
+{
+	t_array *vars;
+	size_t	i;
+
+	vars = array_new();
+	ht_enum(g_sh_vars, add_var_to_arr, vars);
+	sort_matches((char **)vars->array, vars->size);
+	i = 0;
+	while (i < vars->size)
+		ft_printf("%s\n", vars->array[i++]);
+	free(vars->array);
+	free(vars);
+	return (0);
 }

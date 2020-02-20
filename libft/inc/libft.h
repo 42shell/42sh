@@ -6,7 +6,7 @@
 /*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 16:27:46 by nbousset          #+#    #+#             */
-/*   Updated: 2020/02/20 19:49:34 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/20 20:12:40 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,8 +131,7 @@ typedef struct			s_ht
 	t_ht_free_func		free_value;
 }						t_ht;
 
-typedef void(*t_ht_enum_func)(const char *key, const void *value,
-								const void *obj);
+typedef void(*t_ht_enum_func)(const char *key, void *value, void *obj);
 
 t_ht					*ht_new(size_t size, t_ht_free_func free_value);
 void					ht_delete(t_ht *map);
