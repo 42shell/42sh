@@ -37,13 +37,12 @@ enum					e_parse_error
 	NO_CMD_BEFORE_SEP
 };
 
-int						parse(t_lexer *lexer, t_env *env, t_term *term);
+int						parse(t_lexer *lexer, t_env *env);
 void					print_ast(t_node *ast, int indent_level);
 t_node					*io_redirect(t_lexer *lexer);
 t_node					*pipeline(t_lexer *lexer);
 void					free_ast_nodes(t_node *node, bool is_pattern);
-void					get_all_heredocs(t_input *input,
-						t_node *heredoc_list);
+void					get_all_heredocs(t_node *heredoc_list);
 
 t_token					*node_token(t_node *node);
 

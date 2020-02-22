@@ -132,14 +132,17 @@ typedef struct			s_dstr
 	size_t				len;
 }						t_dstr;
 
-t_dstr					*ft_dstr_new(char *str, size_t len, size_t size);
-void					ft_dstr_del(void **ptr, void *priv);
+t_dstr					*ft_dstr_new(size_t size);
+int						ft_dstr_cat(t_dstr *dstr, char *str);
+t_dstr					*ft_dstr_dup(t_dstr *dstr);
+t_dstr					*ft_dstr_from_str(char *str);
 int						ft_dstr_add(t_dstr *dstr, char c);
 int						ft_dstr_insert(t_dstr *dstr, size_t i, char *str,
 						size_t len);
 int						ft_dstr_append(t_dstr *dstr, char *str);
 int						ft_dstr_remove(t_dstr *dstr, size_t i, size_t len);
 int						ft_dstr_clear(t_dstr *dstr, size_t size);
+void					ft_dstr_del(void **ptr);
 
 /*
 ** -----------------------------Memory-----------------------------
@@ -182,6 +185,12 @@ char					*ft_strcat(char *s1, const char *s2);
 size_t					ft_strnlen(const char *s, size_t maxlen);
 char					*ft_strndup(const char *s1, size_t n);
 
+/*
+** -----------------------------Put-----------------------------
+*/
+
+int						ft_putc(int c);
+int						ft_putstr(const char *str);
 void					ft_putstr_fd(const char *str, int fd);
 void					ft_putendl(char const *s);
 
@@ -239,7 +248,6 @@ char					*ft_utoa(uintmax_t n);
 int						ft_dtoc_36(int d);
 int						ft_islower(int c);
 int						ft_isupper(int c);
-void					ft_putstr(const char *s);
 char					*ft_strpad(char *str, size_t field_width,
 						int side, char c);
 

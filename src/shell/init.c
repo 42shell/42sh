@@ -27,7 +27,7 @@ static void	increase_shlvl(t_env *env)
 	free(shlvl_str);
 }
 
-static int	parse_args(t_sh *shell, int argc, char **argv)
+static int	parse_args(int argc, char **argv)
 {
 	int		fd;
 
@@ -42,7 +42,7 @@ static int	parse_args(t_sh *shell, int argc, char **argv)
 		close(fd);
 		return (0);
 	}
-	shell->input.interactive = true;
+	g_shell_interactive = true;
 	return (0);
 }
 
@@ -56,14 +56,12 @@ int			init(t_sh *shell, int argc, char **argv)
 		exit(1);
 	}
 	ft_bzero(shell, sizeof(*shell));
-	parse_args(shell, argc, argv);
-	if (shell->input.interactive)
+	parse_args(argc, argv);
+	if (g_shell_interactive)
 	{
 		init_sig(shell);
-		init_term(&shell->term);
 	}
-	init_input(&shell->input, &shell->term);
-	init_lexer(&shell->lexer, &shell->input);
+	init_lexer(&shell->lexer);
 	shell->env = env_dup(environ);
 	increase_shlvl(&shell->env);
 	g_env = &shell->env;

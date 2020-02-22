@@ -19,9 +19,8 @@ static int	get_input(t_lexer *lexer)
 	const char	*prompt;
 
 	prompt = (lexer->quote || lexer->and_or) ? "> " : "$> ";
-	lexer->inputp->first_line = (lexer->quote == NONE);
-	str = readline(lexer->inputp, prompt);
-	if (str == NULL && !lexer->inputp->interactive)
+	str = readline(prompt);
+	if (str == NULL && !g_shell_interactive)
 		builtin_exit(NULL);
 	if (lexer->quote)
 	{
@@ -30,7 +29,7 @@ static int	get_input(t_lexer *lexer)
 		lexer->str = tmp;
 	}
 	else
-		lexer->str = ft_strdup(str);
+		lexer->str = ft_strjoin(str, "\n");
 	lexer->state &= ~(START);
 	lexer->len = ft_strlen(lexer->str);
 	return (0);
@@ -94,9 +93,8 @@ int			eat(t_lexer *lexer)
 		return (eat(lexer));
 	lexer->curr_tok = NULL;
 	delete_last_nl(lexer);
-	if (lexer->inputp->interactive
+	if (g_shell_interactive
 	&& lexer->str && lexer->str[0] != 0 && lexer->str[0] != ' ')
-		ft_list_add_tail(ft_dstr_new(lexer->str, ft_strlen(lexer->str), 1),
-		lexer->inputp->head);
+		rl_add_history(lexer->str);
 	return (reset_lexer(lexer));
 }

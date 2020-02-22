@@ -78,7 +78,6 @@ typedef struct		s_token
 */
 typedef struct		s_lexer
 {
-	struct s_input	*inputp;
 	char			*str;
 	size_t			i;
 	size_t			len;
@@ -88,7 +87,7 @@ typedef struct		s_lexer
 	bool			and_or;
 }					t_lexer;
 
-int					init_lexer(t_lexer *lexer, t_input *input);
+int					init_lexer(t_lexer *lexer);
 int					reset_lexer(t_lexer *lexer);
 int					eat(t_lexer *lexer);
 

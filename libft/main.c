@@ -1,18 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   del.c                                              :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/25 16:54:19 by fratajcz         ###   ########.fr       */
+/*   Created: 2019/11/21 23:03:42 by fratajcz          #+#    #+#             */
+/*   Updated: 2019/11/21 23:05:58 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "shell.h"
+#include "inc/libft.h"
+#include "inc/readline.h"
+#include <stdio.h>
 
-void		del()
+int		main(int argc, char **argv)
 {
-	rl_del();
+	char	*line;
+
+	while ((line = readline("$> ")) && !ft_strequ(line, "exit")
+	&& !(g_rl_last_ret_the_last_one_not_the_previous_one == 4))
+	{
+		printf("%s\n", line);
+		rl_add_history(line);
+		free(line);
+	}
+	return (0);
 }

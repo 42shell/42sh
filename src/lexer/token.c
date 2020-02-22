@@ -14,7 +14,7 @@
 
 void	token_del(t_token **tok)
 {
-	ft_dstr_del((void **)&(*tok)->value, NULL);
+	ft_dstr_del((void **)&(*tok)->value);
 	ft_memdel((void **)tok);
 }
 
@@ -24,7 +24,7 @@ t_token	*token_new(int type)
 
 	if (!(token = (t_token *)ft_xmalloc(sizeof(*token))))
 		return (NULL);
-	token->value = ft_dstr_new("", 0, 16);
+	token->value = ft_dstr_new(16);
 	token->type = type;
 	return (token);
 }

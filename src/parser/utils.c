@@ -53,7 +53,7 @@ void	free_ast_nodes(t_node *node, bool par_is_pattern)
 	if (node->data != NULL && !par_is_pattern)
 	{
 		cur_is_pattern = (node_token(node)->type == PATTERN);
-		ft_dstr_del((void **)&node_token(node)->value, NULL);
+		ft_dstr_del((void **)&node_token(node)->value);
 		free(node->data);
 	}
 	else if (par_is_pattern)

@@ -1,18 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   del.c                                              :+:      :+:    :+:   */
+/*   ft_dstr_dup.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/25 16:54:19 by fratajcz         ###   ########.fr       */
+/*   Created: 2019/11/21 23:03:42 by fratajcz          #+#    #+#             */
+/*   Updated: 2019/11/21 23:05:58 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "shell.h"
+#include "libft.h"
 
-void		del()
+t_dstr	*ft_dstr_dup(t_dstr *dstr)
 {
-	rl_del();
+	t_dstr	*dup;
+
+	if (!(dup = ft_dstr_new(dstr->size)))
+		return (NULL);
+	ft_memcpy(dup->str, dstr->str, dstr->len);
+	dup->len = dstr->len;
+	return (dup);
 }

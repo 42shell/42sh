@@ -33,10 +33,9 @@ int			reset_lexer(t_lexer *lexer)
 	return (END_OF_INPUT);
 }
 
-int			init_lexer(t_lexer *lexer, t_input *input)
+int			init_lexer(t_lexer *lexer)
 {
 	reset_lexer(lexer);
-	lexer->inputp = input;
 	lexer->state = 0;
 	lexer->state |= START;
 	lexer->i = 0;

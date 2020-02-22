@@ -13,6 +13,8 @@
 #ifndef SHELL_H
 # define SHELL_H
 
+#include <stdio.h>
+
 # include <unistd.h>
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -24,26 +26,25 @@
 # include <limits.h>
 # include <dirent.h>
 # include "libft.h"
+# include "readline.h"
 # include "ft_printf.h"
 # include "env.h"
-# include "terminal.h"
-# include "input.h"
 # include "lexer.h"
 # include "parser.h"
 # include "exec.h"
 # include "expansion.h"
 # include "builtins.h"
 
+bool				g_shell_interactive;
+
 typedef struct		s_sh
 {
-	struct s_term	term;
-	struct s_input	input;
 	struct s_lexer	lexer;
 	struct s_env	env;
 }					t_sh;
 
 int					init(t_sh *shell, int argc, char **argv);
-void				del(t_sh *shell);
+void				del();
 
 void				init_sig(t_sh *shell);
 void				sig_handle(int sig);

@@ -14,11 +14,11 @@
 
 extern int	g_parse_error;
 
-static void			append_line_to_hist(t_list_head *hist_head, char *line)
+static void			append_line_to_hist(char *line)
 {
 	t_dstr	*hist;
 
-	hist = (t_dstr *)hist_head->prev->data;
+	hist = (t_dstr *)g_rl_hist.head->next->data;
 	ft_dstr_add(hist, '\n');
 	ft_dstr_insert(hist, hist->len, line, ft_strlen(line));
 	if (hist->str[hist->len - 1] == '\n')
@@ -71,26 +71,25 @@ static bool			is_heredoc_end(t_dstr *heredoc, char *delim)
 	return (ft_strequ(last_line, delim));
 }
 
-static char			*get_heredoc(t_input *input, char *delim)
+static char			*get_heredoc(char *delim)
 {
 	char		*str;
 	t_dstr		*heredoc;
 	char		*delim_cmp;
 
 	delim_cmp = ft_strjoin(delim, "\n");
-	heredoc = ft_dstr_new("", 0, 32);
-	input->first_line = false;
-	while ((str = readline(input, "> ")))
+	heredoc = ft_dstr_new(32);
+	while ((str = readline("> ")))
 	{
-		if (input->interactive)
-			append_line_to_hist(input->head, str);
 		ft_dstr_insert(heredoc, heredoc->len, str, ft_strlen(str));
 		remove_bslash_nl(heredoc);
 		if (is_heredoc_end(heredoc, delim_cmp) || g_parse_error == SILENT_ABORT)
 			break ;
 	}
+	if (g_shell_interactive)
+		append_line_to_hist(heredoc->str);
 	if (g_parse_error == SILENT_ABORT)
-		ft_dstr_del((void **)&heredoc, NULL);
+		ft_dstr_del((void **)&heredoc);
 	else if (heredoc->len >= ft_strlen(delim_cmp))
 		ft_dstr_remove(heredoc, heredoc->len - ft_strlen(delim_cmp)
 						, ft_strlen(delim_cmp));
@@ -100,19 +99,18 @@ static char			*get_heredoc(t_input *input, char *delim)
 	return (str);
 }
 
-void				get_all_heredocs(t_input *input, t_node *heredoc_list)
+void				get_all_heredocs(t_node *heredoc_list)
 {
 	int		i;
 	char	*heredoc_str;
 	t_node	*heredoc;
 
 	i = 0;
-	input->complete = false;
+	//input->complete = false;
 	while (i < heredoc_list->nb_children && g_parse_error != SILENT_ABORT)
 	{
 		heredoc = heredoc_list->child[i];
-		heredoc_str = get_heredoc(input,
-				node_token(heredoc->child[1])->value->str);
+		heredoc_str = get_heredoc(node_token(heredoc->child[1])->value->str);
 		free(node_token(heredoc->child[1])->value->str);
 		node_token(heredoc->child[1])->value->str = heredoc_str;
 		node_token(heredoc->child[1])->value->len = ft_strlen(heredoc_str);
@@ -125,5 +123,5 @@ void				get_all_heredocs(t_input *input, t_node *heredoc_list)
 		i++;
 	}
 	heredoc_list->nb_children = 0;
-	input->complete = true;
+	//input->complete = true;
 }

@@ -64,7 +64,7 @@ SRC_EXPANSION   := expand.c\
 				   sort_matches.c
 SRC_EXPANSION   := $(addprefix expansion/,$(SRC_EXPANSION))
 
-SRC_INPUT       := comp_cmd.c\
+#SRC_INPUT       := comp_cmd.c\
                    comp_files.c\
                    comp_line_edit.c\
                    comp_utils.c\
@@ -81,7 +81,7 @@ SRC_INPUT       := comp_cmd.c\
                    move_spec.c\
                    move_utils.c\
                    readline.c
-SRC_INPUT       := $(addprefix input/,$(SRC_INPUT))
+#SRC_INPUT       := $(addprefix input/,$(SRC_INPUT))
 
 SRC_LEXER       := append.c\
                    delim.c\
@@ -115,12 +115,12 @@ SRC_SIGNAL      := init.c\
                    sig_handle.c
 SRC_SIGNAL      := $(addprefix signal/,$(SRC_SIGNAL))
 
-SRC_TERM        := clear.c\
+#SRC_TERM        := clear.c\
                    cursor.c\
                    init.c\
                    print.c\
                    window.c
-SRC_TERM        := $(addprefix term/,$(SRC_TERM))
+#SRC_TERM        := $(addprefix term/,$(SRC_TERM))
 
 SRC_PATH        := src
 SRC_NAME        := $(SRC_BUILTINS)\

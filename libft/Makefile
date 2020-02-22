@@ -35,7 +35,9 @@ SRC =	mem/ft_xmalloc.c \
 		str/ft_strnequ.c \
 		str/ft_putstr_fd.c \
 		str/ft_putendl.c\
-		str/ft_strrchr.c\
+		str/ft_strrchr.c \
+		put/ft_putc.c \
+		put/ft_putstr.c \
 		char/ft_iswhitespace.c \
 		char/ft_isprint.c \
 		char/ft_isalpha.c \
@@ -69,9 +71,12 @@ SRC =	mem/ft_xmalloc.c \
 		struct/list/ft_list_foreach.c \
 		struct/list/ft_list_foreach_rev.c \
 		struct/list/ft_list_sort.c \
-		struct/node/node.c\
+		struct/node/node.c \
 		struct/dstr/ft_dstr_new.c \
 		struct/dstr/ft_dstr_add.c \
+		struct/dstr/ft_dstr_cat.c \
+		struct/dstr/ft_dstr_dup.c \
+		struct/dstr/ft_dstr_from_str.c \
 		struct/dstr/ft_dstr_insert.c \
 		struct/dstr/ft_dstr_remove.c \
 		struct/dstr/ft_dstr_del.c \
@@ -87,9 +92,24 @@ SRC =	mem/ft_xmalloc.c \
 		oldlib/ft_dtoc_36.c \
 		oldlib/ft_islower.c \
 		oldlib/ft_isupper.c \
-		oldlib/ft_putstr.c \
 		oldlib/ft_strpad.c \
 		oldlib/ft_utoa.c \
+		readline/autocomplete.c \
+		readline/basic_features.c \
+		readline/binding.c \
+		readline/copypaste.c \
+		readline/escape.c \
+		readline/history.c \
+		readline/interrupt.c \
+		readline/move_basic.c \
+		readline/move_spec.c \
+		readline/print.c \
+		readline/readline.c \
+		readline/term_cursor.c \
+		readline/term_display.c \
+		readline/term_utils.c \
+		readline/term.c \
+		readline/utils.c \
 		ft_printf/pf_print_int/pf_print_int.c \
 		ft_printf/pf_print_uint/pf_print_uint.c \
 		ft_printf/pf_print_string/pf_print_string.c \
@@ -116,7 +136,7 @@ $(NAME) : $(OBJ)
 
 $(DIR_OBJ)%.o : $(DIR_SRC)%.c
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@ -Iinc
+	$(CC) $(CFLAGS) -c $< -o $@ -Iinc 
 
 clean :
 	rm -rf $(OBJ)

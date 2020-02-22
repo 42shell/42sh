@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   del.c                                              :+:      :+:    :+:   */
+/*   ft_putstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/25 16:54:19 by fratajcz         ###   ########.fr       */
+/*   Created: 2019/04/04 16:43:25 by nbousset          #+#    #+#             */
+/*   Updated: 2019/06/12 21:03:12 by nbousset         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "shell.h"
+#include "libft.h"
 
-void		del()
+int		ft_putstr(const char *str)
 {
-	rl_del();
+	return ((int)write(STDOUT_FILENO, str, ft_strlen(str)));
 }

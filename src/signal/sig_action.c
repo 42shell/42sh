@@ -26,8 +26,7 @@ void	sig_action(t_sh *shell, int sig)
 	else if (sig == SIGWINCH)
 	{
 		signal(sig, SIG_DFL);
-		getwinsize(&sh->term);
-		getcpos(&sh->term);
+		//do something
 		signal(sig, sig_handle);
 	}
 	else if ((1 <= sig && sig <= 15) || sig == 17

@@ -12,23 +12,18 @@
 
 #include "libft.h"
 
-t_dstr		*ft_dstr_new(char *str, size_t len, size_t size)
+t_dstr		*ft_dstr_new(size_t size)
 {
 	t_dstr	*dstr;
-	size_t	cmp;
 
-	if (!str)
+	if (!(dstr = (t_dstr *)ft_memalloc(sizeof(t_dstr))))
 		return (NULL);
-	dstr = (t_dstr *)ft_xmalloc(sizeof(t_dstr));
-	if ((cmp = ft_strlen(str)) < len)
-		len = cmp;
-	if (size - 1 < len)
-		size = ft_next_power_of_two(len + 1);
-	else
-		size = ft_next_power_of_two(size);
-	dstr->str = (char *)ft_xmalloc(size);
-	ft_memcpy(dstr->str, str, len);
+	size = ft_next_power_of_two(size);
+	if (!(dstr->str = (char *)ft_memalloc(size)))
+	{
+		free(dstr);
+		return (NULL);
+	}
 	dstr->size = size;
-	dstr->len = len;
 	return (dstr);
 }

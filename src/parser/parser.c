@@ -122,7 +122,7 @@ t_ast		*get_ast(t_lexer *lexer)
 ** for now, this function actually always stops at the first call.
 */
 
-static int	run(t_lexer *lexer, t_term *term, t_ast *ast, t_env *env)
+static int	run(t_ast *ast, t_env *env)
 {
 	t_ast	*tmp;
 
@@ -130,13 +130,10 @@ static int	run(t_lexer *lexer, t_term *term, t_ast *ast, t_env *env)
 	{
 		if (g_parse_error == NOERR)
 		{
-			get_all_heredocs(lexer->inputp, &g_heredocs);
+			get_all_heredocs(&g_heredocs);
 			if (g_parse_error != SILENT_ABORT)
 			{
-				tcsetattr(STDIN_FILENO, TCSAFLUSH, &term->oldterm);
 				execute(ast->node, env);
-				tcsetattr(STDIN_FILENO, TCSAFLUSH, &term->newterm);
-				tputs(term->caps[C_KS], 1, ft_putc);
 			}
 		}
 		free_ast_nodes(ast->node, false);
@@ -155,7 +152,7 @@ static int	run(t_lexer *lexer, t_term *term, t_ast *ast, t_env *env)
 ** one node can have an infinite number of children.
 */
 
-int			parse(t_lexer *lexer, t_env *env, t_term *term)
+int			parse(t_lexer *lexer, t_env *env)
 {
 	t_ast	*ast;
 
@@ -167,11 +164,12 @@ int			parse(t_lexer *lexer, t_env *env, t_term *term)
 	ast = get_ast(lexer);
 	if (lexer->curr_tok != NULL)
 	{
+		printf("blabla\n");
 		token_del(&lexer->curr_tok);
 		while (eat(lexer) != END_OF_INPUT)
 			token_del(&lexer->curr_tok);
 	}
-	run(lexer, term, ast, env);
+	run(ast, env);
 	if (g_parse_error > 0)
 		ft_dprintf(2, "42sh: parse error near '%s'\n", g_error_near);
 	free(g_error_near);

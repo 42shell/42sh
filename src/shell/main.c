@@ -18,6 +18,6 @@ int			main(int argc, char **argv)
 
 	init(&shell, --argc, ++argv);
 	while (1)
-		parse(&shell.lexer, &shell.env, &shell.term);
+		parse(&shell.lexer, &shell.env);
 	return (0);
 }
