@@ -203,7 +203,7 @@ unsigned int		g_rl_line_size_max;
 ** ret
 */
 
-int					g_rl_last_ret_the_last_one_not_the_previous_one;
+int					g_rl_last_ret;
 
 /*
 ** initialization

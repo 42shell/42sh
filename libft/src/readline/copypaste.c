@@ -98,8 +98,9 @@ int			rl_paste(void)
 	if (g_rl_line.clipboard == NULL)
 		return (0);
 	p_len = g_rl_line.clipboard->len;
-	if (g_rl_line.clipboard->len + p_len > g_rl_line_size_max
-	&& !(p_len = g_rl_line_size_max - g_rl_line.dstr->len))
+	if (g_rl_line_limit
+	&& (g_rl_line.clipboard->len + p_len > g_rl_line_size_max
+	&& !(p_len = g_rl_line_size_max - g_rl_line.dstr->len)))
 		return (0);
 	else if (ft_dstr_insert(g_rl_line.dstr, g_rl_line.i,
 	g_rl_line.clipboard->str, p_len) == -1)

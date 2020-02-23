@@ -53,12 +53,12 @@ static char	*rl_return(int ret)
 	{
 		if (!g_rl_error)
 			g_rl_error = RL_ALLOC_ERROR;
-		g_rl_last_ret_the_last_one_not_the_previous_one = g_rl_error;
+		g_rl_last_ret = g_rl_error;
 		rl_del();
 		return (NULL);
 	}
 	if (ret != 10)
-		g_rl_last_ret_the_last_one_not_the_previous_one = ret;
+		g_rl_last_ret = ret;
 	if (g_rl_line.backup)
 		ft_dstr_del((void **)&g_rl_line.backup);
 	ft_dstr_clear(g_rl_line.dstr, 32);

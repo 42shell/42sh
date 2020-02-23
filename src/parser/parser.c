@@ -164,7 +164,6 @@ int			parse(t_lexer *lexer, t_env *env)
 	ast = get_ast(lexer);
 	if (lexer->curr_tok != NULL)
 	{
-		printf("blabla\n");
 		token_del(&lexer->curr_tok);
 		while (eat(lexer) != END_OF_INPUT)
 			token_del(&lexer->curr_tok);
