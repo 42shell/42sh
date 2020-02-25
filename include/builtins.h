@@ -28,4 +28,6 @@ void	append_curpath_to_pwd(char **curpath, t_env *env);
 void	remove_dots(char *curpath);
 int		remove_dotdots(char *curpath);
 
+bool	is_builtin(char *str);
+
 #endif

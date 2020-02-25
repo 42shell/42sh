@@ -1,40 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sig_action.c                                       :+:      :+:    :+:   */
+/*   env_dup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/25 17:31:24 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/01/29 14:18:16 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void	sig_action(t_sh *shell, int sig)
+t_env		*env_dup(char **environ)
 {
-	static t_sh	*sh;
+	t_env	*env;
+	int		i;
 
-	if (shell)
+	i = 0;
+	while (environ[i])
+		i++;
+	env = ft_xmalloc(sizeof(t_env));
+	env->env = ft_xmalloc(((i + 1) * 1.125 + 6) * sizeof(char *));
+	env->capacity = (i + 1) * 1.125 + 6;
+	env->size = i + 1;
+	i = 0;
+	while (environ[i])
 	{
-		sh = shell;
-		return ;
+		env->env[i] = ft_strdup(environ[i]);
+		i++;
 	}
-	if (sig == SIGINT || sig == SIGTSTP || sig == SIGCONT)
-		;
-	else if (sig == SIGWINCH)
-	{
-		signal(sig, SIG_DFL);
-		//do something
-		signal(sig, sig_handle);
-	}
-	else if ((1 <= sig && sig <= 15) || sig == 17
-			|| (21 <= sig && sig <= 22) || (24 <= sig && sig <= 27))
-	{
-		del(sh);
-		signal(sig, SIG_DFL);
-		kill(0, sig);
-	}
-	return ;
+	env->env[i] = NULL;
+	return (env);
 }

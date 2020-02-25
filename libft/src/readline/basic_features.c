@@ -14,6 +14,8 @@
 
 int		rl_enter(void)
 {
+	if (g_rl_retain_newline)
+		ft_dstr_add(g_rl_line.dstr, '\n');
 	return (10);
 }
 

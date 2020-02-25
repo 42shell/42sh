@@ -1,21 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_utils2.c                                       :+:      :+:    :+:   */
+/*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/14 12:10:43 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/14 12:10:49 by fratajcz         ###   ########.fr       */
+/*   Created: 2019/12/15 09:58:50 by fratajcz          #+#    #+#             */
+/*   Updated: 2020/01/29 18:19:43 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void	set_env_var(char *var, char *value, t_env *env)
+bool	is_builtin(char *str)
 {
-	if (get_env_var(var, env) == NULL)
-		add_env_var(var, value, env);
-	else
-		replace_env_var(var, value, env);
+	return (ft_strcmp(str, "echo") == 0 || ft_strcmp(str, "cd") == 0
+		|| ft_strcmp(str, "setenv") == 0 || ft_strcmp(str, "unsetenv") == 0
+		|| ft_strcmp(str, "env") == 0 || ft_strcmp(str, "exit") == 0);
 }

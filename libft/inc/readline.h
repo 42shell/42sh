@@ -28,6 +28,13 @@
 # define RL_TERM_ERROR		-3
 
 /*
+** ret macros
+*/
+
+# define RL_INT				3
+# define RL_EOF				4
+
+/*
 ** autocomplete macros
 */
 
@@ -189,11 +196,13 @@ int					g_rl_error;
 
 /*
 ** options
+** -retain_newline: if set, the line is returned with a newline.
 ** -cr_prompt: if set, a newline will be output before writing the prompt
 ** -hist_doubl: if set, rl_history_add will store consecutive identical lines
 ** -line_limit: if set, readline will read, at max, line_size_max characters.
 */
 
+bool				g_rl_retain_newline;
 bool				g_rl_cr_prompt;
 bool				g_rl_hist_doubl;
 bool				g_rl_line_limit;

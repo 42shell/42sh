@@ -12,69 +12,57 @@
 
 #include "shell.h"
 
-static int	delim_token(t_lexer *lexer)
+static int	delim_token(void)
 {
-	if (lexer->curr_tok)
+	if (g_lexer.token)
 	{
-		if (is_operator_start(*lexer->curr_tok->value->str))
-			lexer->curr_tok->type =
-			get_operator_type(lexer->curr_tok->value->str);
-		else if ((lexer->str[lexer->i] == '<' || lexer->str[lexer->i] == '>')
-		&& ft_strisnbr(lexer->curr_tok->value->str))
-			lexer->curr_tok->type = IO_NUMBER;
-		lexer->state |= DELIMITED;
+		if (is_operator_start(*g_lexer.token->value->str))
+			g_lexer.token->type =
+			get_operator_type(g_lexer.token->value->str);
+		else if ((g_line[g_lexer.i] == '<' || g_line[g_lexer.i] == '>')
+		&& ft_strisnbr(g_lexer.token->value->str))
+			g_lexer.token->type = IO_NUMBER;
+		g_lexer.token_is_delim = 1;
 	}
 	return (0);
 }
 
-int			end(t_lexer *lexer)
+int			operator_end(void)
 {
-	if (lexer->str[lexer->i] == '\0' || lexer->i == lexer->len - 1)
+	if (g_lexer.token && !g_lexer.quote_st
+	&& (is_operator_start(*g_lexer.token->value->str)
+	&& (g_lexer.i > 0 ? is_operator_part(g_line[g_lexer.i - 1]) : 0))
+	&& (!is_operator_part(g_line[g_lexer.i])
+	|| !is_operator_next(g_lexer.token->value->str, g_line[g_lexer.i])))
 	{
-		if (lexer->curr_tok && !lexer->quote)
-			delim_token(lexer);
-		lexer->state |= END;
+		delim_token();
 		return (1);
 	}
 	return (0);
 }
 
-int			operator_end(t_lexer *lexer)
+int			operator_new(void)
 {
-	if (lexer->curr_tok && !lexer->quote
-	&& (is_operator_start(*lexer->curr_tok->value->str)
-	&& (lexer->i > 0 ? is_operator_part(lexer->str[lexer->i - 1]) : 0))
-	&& (!is_operator_part(lexer->str[lexer->i])
-	|| !is_operator_next(lexer->curr_tok->value->str, lexer->str[lexer->i])))
+	if (g_lexer.token && !g_lexer.quote_st
+	&& is_operator_start(g_line[g_lexer.i]))
 	{
-		delim_token(lexer);
+		if ((g_line[g_lexer.i] == '<' || g_line[g_lexer.i] == '>')
+		&& ft_strisnbr(g_lexer.token->value->str))
+			g_lexer.token->type = IO_NUMBER;
+		delim_token();
 		return (1);
 	}
 	return (0);
 }
 
-int			operator_new(t_lexer *lexer)
+int			blank(void)
 {
-	if (lexer->curr_tok && !lexer->quote
-	&& is_operator_start(lexer->str[lexer->i]))
+	if (!g_lexer.quote_st && ft_iswhitespace(g_line[g_lexer.i]))
 	{
-		if ((lexer->str[lexer->i] == '<' || lexer->str[lexer->i] == '>')
-		&& ft_strisnbr(lexer->curr_tok->value->str))
-			lexer->curr_tok->type = IO_NUMBER;
-		delim_token(lexer);
-		return (1);
-	}
-	return (0);
-}
-
-int			blank(t_lexer *lexer)
-{
-	if (!lexer->quote && ft_iswhitespace(lexer->str[lexer->i]))
-	{
-		if (lexer->curr_tok)
-			delim_token(lexer);
-		while (ft_iswhitespace(lexer->str[lexer->i]))
-			lexer->i++;
+		if (g_lexer.token)
+			delim_token();
+		while (ft_iswhitespace(g_line[g_lexer.i]))
+			g_lexer.i++;
 		return (1);
 	}
 	return (0);

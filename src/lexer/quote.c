@@ -12,28 +12,44 @@
 
 #include "shell.h"
 
-int		quote(t_lexer *lexer)
+int		backslash_newline(void)
 {
-	bool	is_bslash;
-
-	if (quote_start(lexer->str, lexer->i, &lexer->quote))
+	if (!g_lexer.quote_st
+	&& g_line[g_lexer.i] == '\\' && g_line[g_lexer.i + 1] == '\n')
 	{
-		if (lexer->curr_tok == NULL)
-			lexer->curr_tok = token_new(WORD);
-		ft_dstr_add(lexer->curr_tok->value, lexer->str[lexer->i++]);
+		ft_memmove(&g_line[g_lexer.i],
+					&g_line[g_lexer.i + 2],
+					ft_strlen(&g_line[g_lexer.i + 2]) + 1);
+		g_lexer.line_cont = 1;
 		return (1);
 	}
-	is_bslash = (lexer->quote == BSLASH);
-	if (quote_stop(lexer->str, lexer->i, &lexer->quote))
+	return (0);
+}
+
+int		backslash(void)
+{
+	if (g_line[g_lexer.i] == BSLASH && g_lexer.quote_st != SQUOTE)
 	{
-		if (is_bslash && lexer->str[lexer->i] == '\n')
-		{
-			ft_dstr_remove(lexer->curr_tok->value,
-					lexer->curr_tok->value->len - 1, 1);
-			lexer->i++;
-			return (1);
-		}
-		ft_dstr_add(lexer->curr_tok->value, lexer->str[lexer->i++]);
+		if (!g_lexer.token)
+			g_lexer.token = token_new(WORD);
+		ft_dstr_add(g_lexer.token->value, g_line[g_lexer.i++]);
+		ft_dstr_add(g_lexer.token->value, g_line[g_lexer.i++]);
+		return (1);
+	}
+	return (0);
+}
+
+int		quote(void)
+{
+	if (g_line[g_lexer.i] == SQUOTE || g_line[g_lexer.i] == DQUOTE)
+	{
+		if (!g_lexer.token)
+			g_lexer.token = token_new(WORD);
+		if (!g_lexer.quote_st)
+			g_lexer.quote_st = g_line[g_lexer.i];
+		else if (g_lexer.quote_st == g_line[g_lexer.i])
+			g_lexer.quote_st = 0;
+		ft_dstr_add(g_lexer.token->value, g_line[g_lexer.i++]);
 		return (1);
 	}
 	return (0);

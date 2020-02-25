@@ -15,13 +15,20 @@
 
 # include "shell.h"
 
-struct s_env		*g_env;
-
 typedef struct		s_env
 {
 	char			**env;
 	int				size;
 	int				capacity;
 }					t_env;
+
+t_env				*g_env;
+
+t_env				*env_dup(char **env);
+char				*get_env_var(char *var_name, t_env *env);
+void				add_env_var(char *var, char *value, t_env *env);
+void				replace_env_var(char *var, char *value, t_env *env);
+void				remove_env_var(char *name, t_env *env);
+void				set_env_var(char *var, char *value, t_env *env);
 
 #endif

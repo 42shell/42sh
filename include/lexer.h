@@ -26,17 +26,12 @@
 **		   ';'	   '|'     '<'    '>'
 */
 
-# define START		1
-# define DELIMITED	2
-# define END		4
-
-enum				e_toktype
+enum				e_token_type
 {
 	END_OF_INPUT,
 	WORD,
 	ASSIGNMENT_WORD,
 	NAME,
-	TOKEN,
 	IO_NUMBER,
 	LESS,
 	GREAT,
@@ -52,7 +47,7 @@ enum				e_toktype
 	PATTERN
 };
 
-enum				e_qstate
+enum				e_quote_st
 {
 	NONE = 0,
 	BSLASH = '\\',
@@ -66,50 +61,37 @@ typedef struct		s_token
 	int				type;
 }					t_token;
 
-/*
-** -str is a pointer to the input string.
-** -i and len are the index in and len of the input string.
-** -curr_tok is the current token being delimited.
-** -quote is the quote state.
-** -quote len is the number of characters affected by quoting.
-** -state is the lexer state.
-** -and_or is boolean set when line contination is due to a line
-** terminated by && or ||.
-*/
 typedef struct		s_lexer
 {
-	char			*str;
+	t_token			*token;
+	char			token_is_delim;
+	char			line_cont;
+	char			quote_st;
 	size_t			i;
-	size_t			len;
-	t_token			*curr_tok;
-	char			quote;
-	char			state;
-	bool			and_or;
 }					t_lexer;
 
-int					init_lexer(t_lexer *lexer);
-int					reset_lexer(t_lexer *lexer);
-int					eat(t_lexer *lexer);
+t_lexer				g_lexer;
 
-int					end(t_lexer *lexer);
-int					backslash(t_lexer *lexer);
-int					operator_next(t_lexer *lexer);
-int					operator_end(t_lexer *lexer);
-int					quote(t_lexer *lexer);
-int					operator_new(t_lexer *lexer);
-int					blank(t_lexer *lexer);
-int					word_next(t_lexer *lexer);
-int					comment(t_lexer *lexer);
-int					word_start(t_lexer *lexer);
+t_token				*get_next_token(void);
+
+int					backslash_newline(void);
+int					operator_next(void);
+int					operator_end(void);
+int					backslash(void);
+int					quote(void);
+int					operator_new(void);
+int					blank(void);
+int					word_next(void);
+int					comment(void);
+int					word_start(void);
 
 t_token				*token_new(int type);
 void				token_del(t_token **tok);
+
 bool				is_operator_start(char c);
 bool				is_operator_part(char c);
 bool				is_operator_next(char *ope, char c);
 bool				is_redir(t_token *token);
-int					get_token_type(t_lexer *lexer);
 int					get_operator_type(char *ope);
-size_t				get_quote_len(char *str, char quote);
 
 #endif

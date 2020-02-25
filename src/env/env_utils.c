@@ -12,27 +12,12 @@
 
 #include "shell.h"
 
-t_env	env_dup(char **env)
+void	set_env_var(char *var, char *value, t_env *env)
 {
-	char	**new;
-	t_env	new_struct;
-	int		i;
-
-	i = 0;
-	while (env[i])
-		i++;
-	new = ft_xmalloc(((i + 1) * 1.125 + 6) * sizeof(char *));
-	new_struct.size = i + 1;
-	new_struct.capacity = (i + 1) * 1.125 + 6;
-	i = 0;
-	while (env[i])
-	{
-		new[i] = ft_strdup(env[i]);
-		i++;
-	}
-	new[i] = NULL;
-	new_struct.env = new;
-	return (new_struct);
+	if (get_env_var(var, env) == NULL)
+		add_env_var(var, value, env);
+	else
+		replace_env_var(var, value, env);
 }
 
 char	*get_env_var(char *var_name, t_env *env)

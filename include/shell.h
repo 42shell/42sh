@@ -13,8 +13,6 @@
 #ifndef SHELL_H
 # define SHELL_H
 
-#include <stdio.h>
-
 # include <unistd.h>
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -34,41 +32,21 @@
 # include "exec.h"
 # include "expansion.h"
 # include "builtins.h"
+# include "utils.h"
 
-bool				g_shell_interactive;
+# define PS1	"$> "
+# define PS2	"> "
 
-typedef struct		s_sh
-{
-	struct s_lexer	lexer;
-	struct s_env	env;
-}					t_sh;
+bool				g_interactive_mode;
 
-int					init(t_sh *shell, int argc, char **argv);
-void				del();
+char				*g_line;
 
-void				init_sig(t_sh *shell);
+int					init(int argc, char **argv);
+void				del(void);
+
+int					get_input(const char *prompt);
+
+void				init_sig(void);
 void				sig_handle(int sig);
-void				sig_action(t_sh *shell, int sig);
-
-char				*ft_strjoin_triple(char *s1, char *s2, char *s3);
-void				free_arr(char **arr);
-
-t_env				env_dup(char **env);
-char				*get_env_var(char *var_name, t_env *env);
-void				add_env_var(char *var, char *value, t_env *env);
-void				replace_env_var(char *var, char *value, t_env *env);
-void				remove_env_var(char *name, t_env *env);
-void				set_env_var(char *var, char *value, t_env *env);
-
-char				*get_executable_path(char *command, t_env *env);
-char				*append_filename(char *path, char *filename);
-char				**split_path(char const *path);
-
-char				get_opt(int argc, char *argv[]);
-bool				is_builtin(char *str);
-
-bool				is_valid_var_name(char *str);
-
-char				*ft_mktemp(char *template);
 
 #endif

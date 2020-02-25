@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _init.c                                            :+:      :+:    :+:   */
+/*   var_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2019/11/22 00:37:04 by fratajcz         ###   ########.fr       */
+/*   Created: 2019/12/15 09:58:50 by fratajcz          #+#    #+#             */
+/*   Updated: 2020/01/29 18:19:43 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void	init_sig(t_sh *shell)
+bool	is_valid_var_name(char *str)
 {
-	int		i;
-
-	i = 0;
-	sig_action(shell, 0);
-	while (i++ < 32)
+	if (!ft_isalpha(*str))
+		return (false);
+	while (*str)
 	{
-		if (i == 9 || i == 17)
-			continue ;
-		signal(i, sig_handle);
+		if (!ft_isalnum(*str) && *str != '_')
+			return (false);
+		str++;
 	}
+	return (true);
 }

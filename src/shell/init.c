@@ -42,11 +42,11 @@ static int	parse_args(int argc, char **argv)
 		close(fd);
 		return (0);
 	}
-	g_shell_interactive = true;
+	g_interactive_mode = true;
 	return (0);
 }
 
-int			init(t_sh *shell, int argc, char **argv)
+int			init(int argc, char **argv)
 {
 	extern char	**environ;
 
@@ -55,15 +55,14 @@ int			init(t_sh *shell, int argc, char **argv)
 		ft_dprintf(2, "42sh: stdin is not a tty\n");
 		exit(1);
 	}
-	ft_bzero(shell, sizeof(*shell));
-	parse_args(argc, argv);
-	if (g_shell_interactive)
+	else if (parse_args(argc, argv) == 0 && g_interactive_mode)
 	{
-		init_sig(shell);
+		g_rl_retain_newline = true;
+		g_rl_cr_prompt = true;
+		g_rl_hist_doubl = false;
+		init_sig();
 	}
-	init_lexer(&shell->lexer);
-	shell->env = env_dup(environ);
-	increase_shlvl(&shell->env);
-	g_env = &shell->env;
+	g_env = env_dup(environ);
+	increase_shlvl(g_env);
 	return (0);
 }
