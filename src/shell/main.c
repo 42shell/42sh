@@ -52,18 +52,31 @@ int			get_input(const char *prompt)
 
 int			main(int argc, char **argv)
 {
+	t_ast	*ast;
+	t_ast	*ptr;
 	int		ret;
 
 	init(argc - 1, argv + 1);
 	while ((ret = get_input(PS1)) != RL_EOF)
 	{
-		parse();
-		//execute();
+		g_parse_error = NOERR;
+		if ((ast = get_ast()) && !g_parse_error)
+		{
+			ptr = ast;
+			while (ptr)
+			{
+				print_ast(ptr->node, 0);//run(ast, env);
+				printf("\n");
+				ptr = ptr->next;
+			}
+			//run(ast);
+		}
 		g_line[ft_strlen(g_line) - 1] = 0;
 		rl_add_history(g_line);
 		free(g_line);
 		g_line = NULL;
 		reset_lexer();
+		del_ast(&ast);
 	}
 	return (0);
 }

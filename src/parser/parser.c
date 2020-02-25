@@ -65,7 +65,7 @@ static int	run(void)
 **                    ls   cat
 */
 
-static void		del_ast(t_ast **ast)
+void		del_ast(t_ast **ast)
 {
 	if (!ast || !*ast)
 		return ;
@@ -74,7 +74,7 @@ static void		del_ast(t_ast **ast)
 	ft_memdel((void **)ast);
 }
 
-static t_ast	*get_ast(void)
+t_ast		*get_ast(void)
 {
 	t_ast	*ast;
 	t_node	*root;
@@ -104,6 +104,7 @@ static t_ast	*get_ast(void)
 ** one node can have an infinite number of children.
 */
 
+/*
 int				parse(void)
 {
 	t_ast	*ast;
@@ -124,3 +125,4 @@ int				parse(void)
 	del_ast(&ast);
 	return (0);
 }
+*/

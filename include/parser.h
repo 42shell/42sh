@@ -60,10 +60,12 @@ t_node					g_heredocs;
 
 int						g_parse_error;
 
-int						parse(void);
+//int					parse(void);
+t_ast					*get_ast(void);
 t_node					*and_or(void);
 t_node					*pipeline(void);
 t_node					*io_redirect(void);
+void					del_ast(t_ast **ast);
 
 void					get_all_heredocs(t_node *heredoc_list);
 
