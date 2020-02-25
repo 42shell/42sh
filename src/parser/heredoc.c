@@ -12,8 +12,7 @@
 
 #include "shell.h"
 
-extern int	g_parse_error;
-
+/*
 static void			append_line_to_hist(char *line)
 {
 	t_dstr	*hist;
@@ -125,3 +124,4 @@ void				get_all_heredocs(t_node *heredoc_list)
 	heredoc_list->nb_children = 0;
 	//input->complete = true;
 }
+*/

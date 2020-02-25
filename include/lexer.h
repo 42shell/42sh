@@ -73,6 +73,7 @@ typedef struct		s_lexer
 t_lexer				g_lexer;
 
 t_token				*get_next_token(void);
+int					reset_lexer(void);
 
 int					backslash_newline(void);
 int					operator_next(void);

@@ -11,11 +11,11 @@
 /* ************************************************************************** */
 
 #include "shell.h"
-#include <stdio.h>
 
 int			get_input(const char *prompt)
 {
 	char	*line;
+	char	*tmp;
 	//int		ret;
 
 	if (g_interactive_mode)
@@ -26,6 +26,7 @@ int			get_input(const char *prompt)
 		{
 			if (g_rl_last_ret == RL_EOF)
 				exit(0);//builtin_exit()
+			free(line);
 			return (get_input(prompt));
 		}
 	}
@@ -37,28 +38,32 @@ int			get_input(const char *prompt)
 		//	return (EOF);
 		return (0);
 	}
-	g_line = g_line ? ft_strjoin(g_line, line) : ft_strdup(line);
+	if (g_line)
+	{
+		tmp = g_line;
+		g_line = ft_strjoin(g_line, line);
+		free(tmp);
+	}
+	else
+		g_line = ft_strdup(line);
+	free(line);
 	return (0);
 }
 
 int			main(int argc, char **argv)
 {
 	int		ret;
-	t_token	*token;
 
 	init(argc - 1, argv + 1);
 	while ((ret = get_input(PS1)) != RL_EOF)
 	{
-		while ((token = get_next_token()))
-			printf("[%d: %s] -> ", token->type, token->value->str);
-		printf("END\n");
-		/*
-		parse(ast, g_line);
-		execute(ast);
-		*/
+		parse();
+		//execute();
+		g_line[ft_strlen(g_line) - 1] = 0;
 		rl_add_history(g_line);
 		free(g_line);
 		g_line = NULL;
+		reset_lexer();
 	}
 	return (0);
 }

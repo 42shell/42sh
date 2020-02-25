@@ -12,9 +12,6 @@
 
 #include "shell.h"
 
-extern int	g_parse_error;
-extern char	*g_error_near;
-
 /*
 **	returns commands in this format:
 **
@@ -27,25 +24,23 @@ extern char	*g_error_near;
 **                                2   test
 */
 
-static t_node	*command(t_lexer *lexer)
+static t_node	*command(void)
 {
 	t_node		*command;
 	t_node		*redirect;
 	t_node		*word;
 
-	if (lexer->curr_tok == NULL || g_parse_error != NOERR)
-		return (NULL);
 	command = node_new(NULL);
-	while ((redirect = io_redirect(lexer))
-			|| (lexer->curr_tok && lexer->curr_tok->type == WORD))
+	while (g_token
+	&& ((redirect = io_redirect()) || g_token->type == WORD))
 	{
-		if (redirect != NULL)
+		if (redirect)
 			node_add_child(command, redirect);
-		else if (lexer->curr_tok->type == WORD)
+		else if (g_token->type == WORD)
 		{
-			word = node_new(lexer->curr_tok);
+			word = node_new(g_token);
 			node_add_child(command, word);
-			eat(lexer);
+			g_token = get_next_token();
 		}
 	}
 	if (command->nb_children == 0)
@@ -53,28 +48,21 @@ static t_node	*command(t_lexer *lexer)
 	return (command);
 }
 
-static t_node	*pipe_list(t_lexer *lexer, t_node *left_command)
+static t_node	*pipe_list(t_node *left_command)
 {
 	t_node	*left_pipe;
 	t_node	*right_command;
 	t_node	*right_pipe;
 
-	if (lexer->curr_tok == NULL || g_parse_error != NOERR)
-		return (NULL);
 	left_pipe = NULL;
-	if (lexer->curr_tok->type == PIPE)
+	if (g_token && g_token->type == PIPE)
 	{
-		left_pipe = node_new(lexer->curr_tok);
-		eat(lexer);
+		left_pipe = node_new(g_token);
 		node_add_child(left_pipe, left_command);
-		right_command = command(lexer);
-		if (right_command == NULL && g_parse_error == NOERR)
-		{
-			g_parse_error = NO_CMD_AFTER_PIPE;
-			g_error_near = ft_strdup("|");
-		}
-		right_pipe = pipe_list(lexer, right_command);
-		if (right_pipe != NULL)
+		if (!(g_token = get_next_token())
+		|| !(right_command = command()))
+			return (parse_error(NO_CMD_AFTER_PIPE, "|", NULL));
+		else if ((right_pipe = pipe_list(right_command)))
 			node_add_child(left_pipe, right_pipe);
 		else
 			node_add_child(left_pipe, right_command);
@@ -97,22 +85,14 @@ static t_node	*pipe_list(t_lexer *lexer, t_node *left_command)
 **	the words, see above)
 */
 
-t_node			*pipeline(t_lexer *lexer)
+t_node			*pipeline(void)
 {
 	t_node *left_command;
 	t_node *pipe;
 
-	if (g_parse_error != NOERR)
-		return (NULL);
-	left_command = command(lexer);
-	if (left_command == NULL && g_parse_error == NOERR)
-	{
-		g_parse_error = NO_CMD_BEFORE_PIPE;
-		if (lexer->curr_tok)
-			g_error_near = ft_strdup(lexer->curr_tok->value->str);
-	}
-	pipe = pipe_list(lexer, left_command);
-	if (pipe != NULL)
+	if (!(left_command = command()))
+		return (parse_error(NO_CMD_BEFORE_PIPE, g_token->value->str, NULL));
+	else if ((pipe = pipe_list(left_command)))
 		return (pipe);
 	return (left_command);
 }

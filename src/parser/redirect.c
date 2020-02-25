@@ -12,25 +12,19 @@
 
 #include "shell.h"
 
-extern int		g_parse_error;
-extern char		*g_error_near;
-extern t_node	g_heredocs;
-
 /*
 **	filename         : WORD
 */
 
-static t_node	*filename(t_lexer *lexer)
+static t_node	*filename(void)
 {
 	t_node *node;
 
-	if (lexer->curr_tok == NULL || g_parse_error != NOERR)
-		return (NULL);
 	node = NULL;
-	if (lexer->curr_tok->type == WORD)
+	if (g_token && g_token->type == WORD)
 	{
-		node = node_new(lexer->curr_tok);
-		eat(lexer);
+		node = node_new(g_token);
+		g_token = get_next_token();
 	}
 	return (node);
 }
@@ -56,28 +50,20 @@ static t_node	*filename(t_lexer *lexer)
 **	like a command node (not ideal)
 */
 
-static t_node	*io_file(t_lexer *lexer, t_token *io_number)
+static t_node	*io_file(t_token *io_number)
 {
 	t_node		*node;
 	t_node		*filename_node;
 
-	if (lexer->curr_tok == NULL || g_parse_error != NOERR)
-		return (NULL);
 	node = NULL;
-	if (is_redir(lexer->curr_tok) && (node = node_new(lexer->curr_tok)))
+	if (g_token && is_redir(g_token) && (node = node_new(g_token)))
 	{
-		eat(lexer);
-		filename_node = filename(lexer);
-		if (filename_node == NULL)
+		g_token = get_next_token();
+		if (!(filename_node = filename()))
 		{
-			if (g_parse_error == 0)
-			{
-				g_parse_error = NO_REDIR_FILENAME;
-				g_error_near = ft_strdup(node_token(node)->value->str);
-			}
 			token_del(&io_number);
-			free_ast_nodes(node, false);
-			return (NULL);
+			return (parse_error(NO_REDIR_FILENAME,
+					node_token(node)->value->str, node));
 		}
 		node_add_child(node, node_new(io_number));
 		node_add_child(node, filename_node);
@@ -95,44 +81,35 @@ static t_node	*io_file(t_lexer *lexer, t_token *io_number)
 **                            1   EOF
 */
 
-static t_node	*io_here(t_lexer *lexer, t_token *io_number)
+static t_node	*io_here(t_token *io_number)
 {
 	t_node	*node;
 
-	if (g_parse_error != NOERR)
-		return (NULL);
-	node = NULL;
-	node = node_new(lexer->curr_tok);
-	eat(lexer);
-	if (lexer->curr_tok == NULL || lexer->curr_tok->type != WORD)
-	{
-		g_parse_error = HEREDOC_NO_DELIM;
-		g_error_near = ft_strdup(node_token(node)->value->str);
-		free_ast_nodes(node, false);
-		return (NULL);
-	}
+	node = node_new(g_token);
+	g_token = get_next_token();
+	if (g_token == NULL || g_token->type != WORD)
+		return (parse_error(HEREDOC_NO_DELIM,
+				node_token(node)->value->str, node));
 	node_add_child(node, node_new(io_number));
-	node_add_child(node, node_new(lexer->curr_tok));
+	node_add_child(node, node_new(g_token));
 	node_add_child(&g_heredocs, node);
-	eat(lexer);
+	g_token = get_next_token();
 	return (node);
 }
 
-t_node			*io_redirect(t_lexer *lexer)
+t_node			*io_redirect(void)
 {
 	t_token *io_number;
 
-	if (lexer->curr_tok == NULL || g_parse_error != NOERR)
-		return (NULL);
-	if (lexer->curr_tok->type == IO_NUMBER)
+	if (g_token && g_token->type == IO_NUMBER)
 	{
-		io_number = lexer->curr_tok;
-		eat(lexer);
-		if (lexer->curr_tok && (lexer->curr_tok->type == DLESS))
-			return (io_here(lexer, io_number));
-		return (io_file(lexer, io_number));
+		io_number = g_token;
+		g_token = get_next_token();
+		if (g_token && (g_token->type == DLESS))
+			return (io_here(io_number));
+		return (io_file(io_number));
 	}
-	if (lexer->curr_tok && (lexer->curr_tok->type == DLESS))
-		return (io_here(lexer, NULL));
-	return (io_file(lexer, NULL));
+	else if (g_token && (g_token->type == DLESS))
+		return (io_here(NULL));
+	return (io_file(NULL));
 }

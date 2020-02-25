@@ -12,6 +12,21 @@
 
 #include "shell.h"
 
+int				reset_lexer(void)
+{
+	if (g_lexer.token)
+	{
+		token_del(&g_lexer.token);
+		g_lexer.token = NULL;
+	}
+	g_lexer.token = NULL;
+	g_lexer.line_cont = 0;
+	g_lexer.token_is_delim = 0;
+	g_lexer.quote_st = 0;
+	g_lexer.i = 0;
+	return (0);
+}
+
 static t_token	*return_token(void)
 {
 	t_token	*ret;
@@ -27,7 +42,6 @@ static t_token	*return_token(void)
 	|| (g_lexer.quote_st && (g_lexer.line_cont = 1)))
 		return (get_next_token());
 	g_lexer.quote_st = 0;
-	g_lexer.i = 0;
 	return (NULL);
 }
 
