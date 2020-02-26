@@ -47,24 +47,6 @@ static int	run(void)
 ** g_heredocs' children are pointers to the heredoc nodes currently in the AST
 */
 
-/*
-** list			  : and_or_list
-**				  | and_or_list sep list
-**
-** and_or         : pipeline and_or_list
-**
-** returns and_or in this format :
-** ex:           ls && cat || ls && cat:
-**
-**                            "&&"
-**                            /  \
-**                         "||"   cat
-**                         /  \
-**                      "&&"   ls
-**                      /  \
-**                    ls   cat
-*/
-
 void		del_ast(t_ast **ast)
 {
 	if (!ast || !*ast)

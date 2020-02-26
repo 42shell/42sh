@@ -48,6 +48,8 @@ static int	node_realloc(t_node *node)
 
 int			node_add_child(t_node *parent, t_node *child)
 {
+	if (parent == NULL || child == NULL)
+		return (0);
 	if (parent->child == NULL)
 	{
 		parent->child = (t_node **)ft_xmalloc(sizeof(t_node *) * 2);

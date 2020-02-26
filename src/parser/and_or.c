@@ -12,32 +12,41 @@
 
 #include "shell.h"
 
-static t_node	*and_or_list(t_node *left_pipeline)
-{
-	t_node	*and_or;
-	t_node	*right_pipeline;
-
-	and_or = NULL;
-	if (g_token && (g_token->type == AND_IF || g_token->type == OR_IF))
-	{
-		and_or = node_new(g_token);
-		node_add_child(and_or, left_pipeline);
-		while (!(g_token = get_next_token()))
-			g_lexer.line_cont = 1;
-		if (!(right_pipeline = pipeline()))
-			return (NULL);//parse error already set by pipeline
-		node_add_child(and_or, right_pipeline);
-		and_or = and_or_list(and_or);
-	}
-	return (and_or ? and_or : left_pipeline);
-}
+/*
+** and_or			: pipeline AND_IF and_or
+**					| pipeline OR_IF and_or
+**					| pipeline
+**
+** returns and_or in this format :
+** ex:           ls && cat || ls && cat:
+**
+**                            "&&"
+**                            /  \
+**                         "||"   cat
+**                         /  \
+**                      "&&"   ls
+**                      /  \
+**                    ls   cat
+*/
 
 t_node			*and_or(void)
 {
-	t_node	*left_pipeline;
+	t_node	*pipeline_node;
+	t_node	*and_or_node;
+	t_node	*next;
 
-	if (!(left_pipeline = pipeline()))
+	and_or_node = NULL;
+	if (!(pipeline_node = pipeline()))
 		return (NULL);
-		//return (parse_error(NO_CMD_BEFORE_AND_OR, g_token->value->str, NULL));
-	return (and_or_list(left_pipeline));
+	else if (g_token && (g_token->type == AND_IF || g_token->type == OR_IF))
+	{
+		and_or_node = node_new(g_token);
+		node_add_child(and_or_node, pipeline_node);
+		while (!(g_token = get_next_token()))
+			g_lexer.line_cont = 1;
+		if (!(next = and_or()))
+			return (NULL);
+		node_add_child(and_or_node, next);
+	}
+	return (and_or_node ? and_or_node : pipeline_node);
 }
