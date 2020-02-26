@@ -16,7 +16,6 @@ static void		add_process_arg(t_process *process, t_token *arg)
 {
 	t_token		**new;
 	int			size;
-	int			i;
 
 	if (!process->argv)
 	{
@@ -24,9 +23,8 @@ static void		add_process_arg(t_process *process, t_token *arg)
 		process->argv[0] = arg;
 		return ;
 	}
-	i = 0;
 	size = 0;
-	while (process->argv[i++])
+	while (process->argv[size])
 		size++;
 	new = (t_token **)ft_xmalloc(sizeof(t_token *) * (size + 2));
 	ft_memcpy((char *)new, (char *)process->argv, (size * sizeof(t_token *)));
@@ -39,7 +37,6 @@ static void		add_process_redir(t_process *process, t_redir *redir)
 {
 	t_redir		**new;
 	int			size;
-	int			i;
 
 	if (!process->redirs)
 	{
@@ -47,9 +44,8 @@ static void		add_process_redir(t_process *process, t_redir *redir)
 		process->redirs[0] = redir;
 		return ;
 	}
-	i = 0;
 	size = 0;
-	while (process->redirs[i++])
+	while (process->redirs[size])
 		size++;
 	new = (t_redir **)ft_xmalloc(sizeof(t_redir *) * (size + 2));
 	ft_memcpy((char *)new, (char *)process->redirs, (size * sizeof(t_token *)));

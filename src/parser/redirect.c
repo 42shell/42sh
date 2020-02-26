@@ -12,7 +12,26 @@
 
 #include "shell.h"
 
-//add_parser_heredoc()
+static void	add_heredoc(t_token *heredoc)
+{
+	t_token		**new;
+	int			size;
+
+	if (!g_parser.heredocs)
+	{
+		g_parser.heredocs = (t_token **)ft_xmalloc(sizeof(t_token *) * 2);
+		g_parser.heredocs[0] = heredoc;
+		return ;
+	}
+	size = 0;
+	while (g_parser.heredocs[size])
+		size++;
+	new = (t_token **)ft_xmalloc(sizeof(t_token *) * (size + 2));
+	ft_memcpy((char *)new, (char *)g_parser.heredocs, (size * sizeof(t_token *)));
+	new[size] = heredoc;
+	free(g_parser.heredocs);
+	g_parser.heredocs = new;
+}
 
 /*
 **	filename         : WORD
@@ -74,7 +93,7 @@ static t_redir	*io_here(t_token *io_number)
 		return (NULL);
 	}
 	redir->right_op = g_parser.token;
-	//node_add_child(&g_heredocs, node);
+	add_heredoc(redir->right_op);
 	g_parser.token = get_next_token();
 	return (redir);
 }
