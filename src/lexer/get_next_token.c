@@ -19,6 +19,8 @@ int				reset_lexer(void)
 		token_del(&g_lexer.token);
 		g_lexer.token = NULL;
 	}
+	free(g_lexer.line);
+	g_lexer.line = NULL;
 	g_lexer.token = NULL;
 	g_lexer.line_cont = 0;
 	g_lexer.token_is_delim = 0;
@@ -52,7 +54,7 @@ t_token			*get_next_token(void)
 		g_lexer.line_cont = 0;
 		get_input(PS2);
 	}
-	while (!g_lexer.token_is_delim && g_line[g_lexer.i])
+	while (!g_lexer.token_is_delim && g_lexer.line[g_lexer.i])
 	{
 		backslash_newline()
 		|| operator_next()

@@ -42,7 +42,7 @@ static int	parse_args(int argc, char **argv)
 		close(fd);
 		return (0);
 	}
-	g_interactive_mode = true;
+	g_shell.interactive_mode = true;
 	return (0);
 }
 
@@ -55,7 +55,7 @@ int			init(int argc, char **argv)
 		ft_dprintf(2, "42sh: stdin is not a tty\n");
 		exit(1);
 	}
-	else if (parse_args(argc, argv) == 0 && g_interactive_mode)
+	else if (parse_args(argc, argv) == 0 && g_shell.interactive_mode)
 	{
 		g_rl_retain_nl = true;
 		g_rl_prompt_cr = true;

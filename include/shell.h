@@ -39,16 +39,19 @@
 # define PS1	"$> "
 # define PS2	"> "
 
-bool				g_interactive_mode;
+typedef struct	s_shell
+{
+	bool		interactive_mode;
+}				t_shell;
 
-char				*g_line;
+t_shell			g_shell;
 
-int					init(int argc, char **argv);
-void				del(void);
+int				init(int argc, char **argv);
+void			del(void);
 
-int					get_input(const char *prompt);
+int				get_input(const char *prompt);
 
-void				init_sig(void);
-void				sig_handle(int sig);
+void			init_sig(void);
+void			sig_handle(int sig);
 
 #endif

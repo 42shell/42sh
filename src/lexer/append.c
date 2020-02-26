@@ -15,11 +15,11 @@
 int		operator_next(void)
 {
 	if (g_lexer.token && !g_lexer.quote_st
-	&& (g_lexer.i != 0 ? is_operator_part(g_line[g_lexer.i - 1]) : 0)
-	&& is_operator_part(g_line[g_lexer.i])
-	&& is_operator_next(g_lexer.token->value->str, g_line[g_lexer.i]))
+	&& (g_lexer.i != 0 ? is_operator_part(g_lexer.line[g_lexer.i - 1]) : 0)
+	&& is_operator_part(g_lexer.line[g_lexer.i])
+	&& is_operator_next(g_lexer.token->value->str, g_lexer.line[g_lexer.i]))
 	{
-		ft_dstr_add(g_lexer.token->value, g_line[g_lexer.i]);
+		ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i]);
 		g_lexer.i++;
 		return (1);
 	}
@@ -30,7 +30,7 @@ int		word_next(void)
 {
 	if (g_lexer.token)
 	{
-		ft_dstr_add(g_lexer.token->value, g_line[g_lexer.i]);
+		ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i]);
 		if (g_lexer.quote_st == BSLASH)
 			g_lexer.quote_st &= ~BSLASH;
 		g_lexer.i++;
@@ -41,9 +41,9 @@ int		word_next(void)
 
 int		comment(void)
 {
-	if (*g_line == '#')
+	if (*g_lexer.line == '#')
 	{
-		while (g_line[g_lexer.i] && g_line[g_lexer.i] != '\n')
+		while (g_lexer.line[g_lexer.i] && g_lexer.line[g_lexer.i] != '\n')
 			g_lexer.i++;
 		return (1);
 	}
@@ -58,7 +58,7 @@ int		comment(void)
 int		word_start(void)
 {
 	g_lexer.token = token_new(WORD);
-	ft_dstr_add(g_lexer.token->value, g_line[g_lexer.i]);
+	ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i]);
 	g_lexer.i++;
 	return (1);
 }

@@ -18,7 +18,7 @@ int			get_input(const char *prompt)
 	char	*tmp;
 	//int		ret;
 
-	if (g_interactive_mode)
+	if (g_shell.interactive_mode)
 	{
 		if (!(line = readline(prompt)))
 			exit(1);//error()
@@ -38,14 +38,14 @@ int			get_input(const char *prompt)
 		//	return (EOF);
 		return (0);
 	}
-	if (g_line)
+	if (g_lexer.line)
 	{
-		tmp = g_line;
-		g_line = ft_strjoin(g_line, line);
+		tmp = g_lexer.line;
+		g_lexer.line = ft_strjoin(g_lexer.line, line);
 		free(tmp);
 	}
 	else
-		g_line = ft_strdup(line);
+		g_lexer.line = ft_strdup(line);
 	free(line);
 	return (0);
 }
@@ -71,10 +71,8 @@ int			main(int argc, char **argv)
 			}
 			//run(ast);
 		}
-		g_line[ft_strlen(g_line) - 1] = 0;
-		rl_add_history(g_line);
-		free(g_line);
-		g_line = NULL;
+		g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;
+		rl_add_history(g_lexer.line);
 		reset_lexer();
 		del_job(&job);
 	}

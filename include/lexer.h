@@ -63,6 +63,7 @@ typedef struct		s_token
 
 typedef struct		s_lexer
 {
+	char			*line;
 	t_token			*token;
 	char			token_is_delim;
 	char			line_cont;

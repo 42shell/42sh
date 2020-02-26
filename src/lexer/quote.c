@@ -15,11 +15,11 @@
 int		backslash_newline(void)
 {
 	if (!g_lexer.quote_st
-	&& g_line[g_lexer.i] == '\\' && g_line[g_lexer.i + 1] == '\n')
+	&& g_lexer.line[g_lexer.i] == '\\' && g_lexer.line[g_lexer.i + 1] == '\n')
 	{
-		ft_memmove(&g_line[g_lexer.i],
-					&g_line[g_lexer.i + 2],
-					ft_strlen(&g_line[g_lexer.i + 2]) + 1);
+		ft_memmove(&g_lexer.line[g_lexer.i],
+					&g_lexer.line[g_lexer.i + 2],
+					ft_strlen(&g_lexer.line[g_lexer.i + 2]) + 1);
 		g_lexer.line_cont = 1;
 		return (1);
 	}
@@ -28,12 +28,12 @@ int		backslash_newline(void)
 
 int		backslash(void)
 {
-	if (g_line[g_lexer.i] == BSLASH && g_lexer.quote_st != SQUOTE)
+	if (g_lexer.line[g_lexer.i] == BSLASH && g_lexer.quote_st != SQUOTE)
 	{
 		if (!g_lexer.token)
 			g_lexer.token = token_new(WORD);
-		ft_dstr_add(g_lexer.token->value, g_line[g_lexer.i++]);
-		ft_dstr_add(g_lexer.token->value, g_line[g_lexer.i++]);
+		ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i++]);
+		ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i++]);
 		return (1);
 	}
 	return (0);
@@ -41,15 +41,15 @@ int		backslash(void)
 
 int		quote(void)
 {
-	if (g_line[g_lexer.i] == SQUOTE || g_line[g_lexer.i] == DQUOTE)
+	if (g_lexer.line[g_lexer.i] == SQUOTE || g_lexer.line[g_lexer.i] == DQUOTE)
 	{
 		if (!g_lexer.token)
 			g_lexer.token = token_new(WORD);
 		if (!g_lexer.quote_st)
-			g_lexer.quote_st = g_line[g_lexer.i];
-		else if (g_lexer.quote_st == g_line[g_lexer.i])
+			g_lexer.quote_st = g_lexer.line[g_lexer.i];
+		else if (g_lexer.quote_st == g_lexer.line[g_lexer.i])
 			g_lexer.quote_st = 0;
-		ft_dstr_add(g_lexer.token->value, g_line[g_lexer.i++]);
+		ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i++]);
 		return (1);
 	}
 	return (0);

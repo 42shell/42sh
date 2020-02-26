@@ -31,7 +31,7 @@ enum					e_parse_error
 };
 
 /*
-** job struct is and_or()
+** job struct is and_or():
 ** -ast is the root of the tree
 ** -next is the next job
 ** -heredocs are pointers to the heredoc nodes currently in the AST
@@ -49,7 +49,7 @@ typedef struct			s_job
 }						t_job;
 
 /*
-** process struct is command()
+** process struct is command():
 ** -argv is array of tokens (command name + args)
 ** -redirs struct has 3 token fields, from is NULL if no IO_NUMBER
 */
