@@ -88,33 +88,3 @@ t_job		*get_job(void)
 	}
 	return (job);
 }
-
-/*
-** gets the list of ASTs for the input, then executes all of them sequentially.
-** ex: the input "ls ; cat; wc" gets a list of 3 asts
-** asts are trees containing t_tokens in their "data" fields.
-** one node can have an infinite number of children.
-*/
-
-/*
-int				parse(void)
-{
-	t_ast	*ast;
-	t_ast	*ptr;
-
-	g_parse_error = NOERR;
-	if ((ast = get_ast()) && !g_parse_error)
-	{
-		//run();
-		ptr = ast;
-		while (ptr)
-		{
-			print_ast(ptr->node, 0);//run(ast, env);
-			printf("\n");
-			ptr = ptr->next;
-		}
-	}
-	del_ast(&ast);
-	return (0);
-}
-*/

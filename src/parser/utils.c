@@ -44,7 +44,7 @@ void	free_ast_nodes(t_node *node, bool par_is_pattern)
 
 void	print_ast(t_node *ast, size_t indent_level)
 {
-	size_t 		i;
+	size_t		i;
 	size_t		n;
 	t_process	*process;
 	t_redir		*redir;

@@ -35,14 +35,13 @@ enum					e_parse_error
 ** -ast is the root of the tree
 ** -next is the next job
 ** -heredocs are pointers to the heredoc nodes currently in the AST
-** -bg is me
+** -bg is background
 */
 
 typedef struct			s_job
 {
 	t_node				*ast;
 	struct s_job		*next;
-	t_array				*heredocs;
 	bool				bg;
 	/*
 	** job stuff
@@ -60,6 +59,7 @@ typedef struct			s_redir
 	t_token				*from;
 	t_token				*redir_op;
 	t_token				*to;
+	//t_dstr			**heredoc; || global
 }						t_redir;
 
 typedef struct			s_process

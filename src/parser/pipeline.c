@@ -66,7 +66,7 @@ static void		add_process_redir(t_process *process, t_redir *redir)
 ** returns commands in this format:
 **
 ** ls -l 2 > test -a -f
-**  
+**
 ** t_node
 ** {
 ** 		data =		t_process
@@ -119,7 +119,7 @@ static t_node	*command(void)
 ** the words, see above)
 */
 
-t_node			*pipeline()
+t_node			*pipeline(void)
 {
 	t_node	*command_node;
 	t_node	*pipe_node;
