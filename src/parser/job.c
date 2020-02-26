@@ -43,30 +43,35 @@ static int	run(void)
 }
 */
 
-void		*parse_error(int code, char *near, void *to_free)
+static t_job	*parse_error(void)
 {
-	g_parser.parse_error = code;
-	ft_dprintf(2, "42sh: syntax error near unexpected token '%s'\n", near);
-	if (to_free)
-	{
-		if (code == HEREDOC_NO_DELIM || code == NO_REDIR_FILENAME)
-			redir_del((t_redir **)&to_free);
-		else
-			free_ast_nodes((t_node *)&to_free, false);
-	}
+	ft_dprintf(2, "42sh: syntax error near unexpected token '%s'\n",
+												g_parser.error_near);
+	free(g_parser.error_near);
+	g_parser.error_near = NULL;
+	g_parser.error = 0;
 	return (NULL);
 }
 
-void		del_jobs(t_job **jobs)
+void			job_del(t_job **jobs)
 {
 	if (!jobs || !*jobs)
 		return ;
 	free_ast_nodes((*jobs)->ast, false);
-	del_jobs(&((*jobs)->next));
+	job_del(&((*jobs)->next));
 	ft_memdel((void **)jobs);
 }
 
-t_job		*get_jobs(void)
+t_job			*job_new(t_node *ast)
+{
+	t_job	*job;
+
+	job = (t_job *)ft_xmalloc(sizeof(t_job));
+	job->ast = ast;
+	return (job);
+}
+
+t_job			*get_jobs(void)
 {
 	t_job	*job;
 	t_node	*ast;
@@ -74,17 +79,16 @@ t_job		*get_jobs(void)
 	job = NULL;
 	if (!(g_parser.token = get_next_token()))
 		return (NULL);
-	if ((ast = and_or()))
+	else if (!(ast = and_or()))
+		return (parse_error());
+	job = job_new(ast);
+	if (g_parser.token
+	&& (g_parser.token->type == SEMI || g_parser.token->type == AMPERSAND))
 	{
-		job = (t_job *)ft_xmalloc(sizeof(t_job));
-		job->ast = ast;
-		if (g_parser.token
-		&& (g_parser.token->type == SEMI || g_parser.token->type == AMPERSAND))
-		{
-			job->bg = (g_parser.token->type == AMPERSAND);
-			token_del(&g_parser.token);
-			job->next = get_jobs();
-		}
+		job->bg = (g_parser.token->type == AMPERSAND);
+		token_del(&g_parser.token);
+		if (!(job->next = get_jobs()))
+			return (parse_error());
 	}
 	return (job);
 }

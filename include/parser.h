@@ -78,9 +78,9 @@ typedef struct			s_process
 typedef struct			s_parser
 {
 	t_token				*token;
-	int					parse_error;
-	char				*error_near;
 	t_token				**heredocs;
+	int					error;
+	char				*error_near;
 
 }						t_parser;
 
@@ -90,17 +90,17 @@ t_job					*get_jobs(void);
 t_node					*and_or(void);
 t_node					*pipeline(void);
 t_redir					*io_redirect(void);
-void					del_jobs(t_job **job);
-void					*parse_error(int code, char *near, void *to_free);
 
 void					get_all_heredocs(t_node *heredoc_list);
 
+t_job					*job_new(t_node *ast);
+void					job_del(t_job **job);
 t_process				*process_new(void);
 void					process_del(t_process **process);
 t_redir					*redir_new(t_token *left_op, t_token *operator, t_token *right_op);
 void					redir_del(t_redir **redir);
-int						is_process(t_node *node);
 
+int						is_process(t_node *node);
 t_token					*node_token(t_node *node);
 void					free_ast_nodes(t_node *node, bool par_is_pattern);
 void					print_ast(t_node *ast, size_t indent_level);

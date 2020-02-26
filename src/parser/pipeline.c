@@ -123,8 +123,12 @@ t_node			*pipeline(void)
 
 	pipe_node = NULL;
 	if (!(command_node = command()))
-		return ((t_node *)parse_error(NO_CMD_BEFORE_PIPE,
-									g_parser.token->value->str, NULL));
+	{
+		g_parser.error = NO_CMD_BEFORE_PIPE;
+		g_parser.error_near = ft_strdup(g_parser.token->value->str);
+		token_del(&g_parser.token);
+		return (NULL);
+	}
 	else if (g_parser.token && g_parser.token->type == PIPE)
 	{
 		pipe_node = node_new(g_parser.token);

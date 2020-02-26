@@ -59,14 +59,13 @@ int			main(int argc, char **argv)
 	init(argc - 1, argv + 1);
 	while ((ret = get_input(PS1)) != RL_EOF)
 	{
-		g_parser.parse_error = NOERR;
-		if ((jobs = get_jobs()) && !g_parser.parse_error)
+		g_parser.error = NOERR;
+		if ((jobs = get_jobs()))
 		{
 			ptr = jobs;
 			while (ptr)
 			{
-				printf("SF\n");
-				print_ast(ptr->ast, 0);//run(ast, env);
+				print_ast(ptr->ast, 0);
 				printf("\n");
 				ptr = ptr->next;
 			}
@@ -75,7 +74,7 @@ int			main(int argc, char **argv)
 		g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;
 		rl_add_history(g_lexer.line);
 		reset_lexer();
-		del_jobs(&jobs);
+		job_del(&jobs);
 	}
 	return (0);
 }
