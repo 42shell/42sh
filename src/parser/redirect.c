@@ -12,21 +12,32 @@
 
 #include "shell.h"
 
+static t_redir	*redir_new(t_token *from, t_token *redir_op, t_token *to)
+{
+	t_redir	*redir;
+
+	redir = (t_redir *)ft_xmalloc(sizeof(t_redir));
+	redir->from = from;
+	redir->redir_op = redir_op;
+	redir->to = to;
+	return (redir);
+}
+
 /*
 **	filename         : WORD
 */
 
-static t_node	*filename(void)
+static t_token	*filename(void)
 {
-	t_node *node;
+	t_token	*filename;
 
-	node = NULL;
 	if (g_token && g_token->type == WORD)
 	{
-		node = node_new(g_token, 0);
+		filename = g_token;
 		g_token = get_next_token();
+		return (filename);
 	}
-	return (node);
+	return (NULL);
 }
 
 /*
@@ -50,25 +61,20 @@ static t_node	*filename(void)
 **	like a command node (not ideal)
 */
 
-static t_node	*io_file(t_token *io_number)
+static t_redir	*io_file(t_token *io_number)
 {
-	t_node		*node;
-	t_node		*filename_node;
+	t_redir		*redir;
 
-	node = NULL;
-	if (g_token && is_redir(g_token) && (node = node_new(g_token, 0)))
+	redir = NULL;
+	if (g_token && is_redir(g_token)
+	&& (redir = redir_new(io_number, g_token, NULL)))
 	{
 		g_token = get_next_token();
-		if (!(filename_node = filename()))
-		{
-			token_del(&io_number);
-			return (parse_error(NO_REDIR_FILENAME,
-					node_token(node)->value->str, node));
-		}
-		node_add_child(node, node_new(io_number, 0));
-		node_add_child(node, filename_node);
+		if (!(redir->to = filename()))
+			return ((t_redir *)parse_error(NO_REDIR_FILENAME,
+					redir->redir_op->value->str, redir));
 	}
-	return (node);
+	return (redir);
 }
 
 /*
@@ -81,23 +87,21 @@ static t_node	*io_file(t_token *io_number)
 **                            1   EOF
 */
 
-static t_node	*io_here(t_token *io_number)
+static t_redir	*io_here(t_token *io_number)
 {
-	t_node	*node;
+	t_redir	*redir;
 
-	node = node_new(g_token, 0);
-	g_token = get_next_token();
-	if (g_token == NULL || g_token->type != WORD)
-		return (parse_error(HEREDOC_NO_DELIM,
-				node_token(node)->value->str, node));
-	node_add_child(node, node_new(io_number, 0));
-	node_add_child(node, node_new(g_token, 0));
+	redir = redir_new(io_number, g_token, NULL);
+	if ((g_token = get_next_token()) == NULL || g_token->type != WORD)
+		return ((t_redir *)parse_error(HEREDOC_NO_DELIM,
+				redir->redir_op->value->str, redir));
+	redir->to = g_token;
 	//node_add_child(&g_heredocs, node);
 	g_token = get_next_token();
-	return (node);
+	return (redir);
 }
 
-t_node			*io_redirect(void)
+t_redir			*io_redirect(void)
 {
 	t_token *io_number;
 

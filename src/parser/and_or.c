@@ -40,7 +40,7 @@ t_node			*and_or(void)
 		return (NULL);
 	else if (g_token && (g_token->type == AND_IF || g_token->type == OR_IF))
 	{
-		and_or_node = node_new(g_token, 0);
+		and_or_node = node_new(g_token);
 		node_add_child(and_or_node, pipeline_node);
 		while (!(g_token = get_next_token()))
 			g_lexer.line_cont = 1;

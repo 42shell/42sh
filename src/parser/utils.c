@@ -47,7 +47,7 @@ void	print_ast(t_node *ast, size_t indent_level)
 	size_t 		i;
 	size_t		n;
 	t_process	*process;
-	t_node		*node;
+	t_redir		*redir;
 
 	n = 0;
 	while (n++ < indent_level)
@@ -61,11 +61,11 @@ void	print_ast(t_node *ast, size_t indent_level)
 		i = 0;
 		while (process->redirs && process->redirs[i])
 		{
-			node = process->redirs[i++];
-			if (node->child[0]->data)
-				printf("%s", ((t_token *)node->child[0]->data)->value->str);
-			printf("%s", ((t_token *)node->data)->value->str);
-			printf("%s ", ((t_token *)node->child[1]->data)->value->str);
+			redir = process->redirs[i++];
+			if (redir->from)
+				printf("%s", redir->from->value->str);
+			printf("%s", redir->redir_op->value->str);
+			printf("%s ", redir->to->value->str);
 		}
 		printf("\n");
 		return ;

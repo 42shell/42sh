@@ -48,8 +48,7 @@ static char	*rl_return(int ret)
 {
 	char	*line;
 
-	tcsetattr(STDIN_FILENO, TCSAFLUSH, &g_rl_oldterm);
-	tcflush(STDIN_FILENO, TCIOFLUSH);
+	tcsetattr(STDIN_FILENO, TCSADRAIN, &g_rl_oldterm);
 	if (g_rl_error || !(line = ft_strdup(g_rl_line.dstr->str)))
 	{
 		if (!g_rl_error)

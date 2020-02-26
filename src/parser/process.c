@@ -12,9 +12,17 @@
 
 #include "shell.h"
 
+void		redir_del(t_redir **redir)
+{
+	token_del(&(*redir)->from);
+	token_del(&(*redir)->redir_op);
+	token_del(&(*redir)->to);
+	ft_memdel((void **)redir);
+}
+
 int			is_process(t_node *node)
 {
-	return ((node->flags & PROCESS));// ??
+	return (node->nb_children == 0);
 }
 
 void		process_del(t_process **process)
@@ -26,15 +34,12 @@ void		process_del(t_process **process)
 		token_del(&(*process)->argv[i++]);
 	i = 0;
 	while ((*process)->redirs && (*process)->redirs[i])
-		free_ast_nodes((*process)->redirs[i++], false);
+		redir_del(&(*process)->redirs[i++]);
 	free((*process)->argv);
 	free((*process)->redirs);
 }
 
-t_process	*process_new()
+t_process	*process_new(void)
 {
-	t_process	*process;
-
-	process = (t_process *)ft_xmalloc(sizeof(t_process));
-	return (process);
+	return ((t_process *)ft_xmalloc(sizeof(t_process)));
 }

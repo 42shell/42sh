@@ -12,22 +12,6 @@
 
 #include "shell.h"
 
-/*
-**	returns commands in this format:
-**
-**	ls -l 2 > test -a -f
-**
-**                                 NULL
-**                          /   /   |   \   \
-**                         ls  -l   >   -a  -f
-**                                 / \
-**                                2   test
-**
-** 			t_process     { char **argv; t_node *redirs (array or list) }
-**
-
-*/
-
 static void		add_process_arg(t_process *process, t_token *arg)
 {
 	t_token		**new;
@@ -59,15 +43,15 @@ static void		add_process_arg(t_process *process, t_token *arg)
 	process->argv = new;
 }
 
-static void		add_process_redir(t_process *process, t_node *redir)
+static void		add_process_redir(t_process *process, t_redir *redir)
 {
-	t_node		**new;
+	t_redir		**new;
 	int			size;
 	int			i;
 
 	if (!process->redirs)
 	{
-		process->redirs = (t_node **)ft_xmalloc(sizeof(t_node *) * 2);
+		process->redirs = (t_redir **)ft_xmalloc(sizeof(t_redir *) * 2);
 		process->redirs[0] = redir;
 		return ;
 	}
@@ -77,7 +61,7 @@ static void		add_process_redir(t_process *process, t_node *redir)
 		size = 0;
 		while (process->redirs[i++])
 			size++;
-		new = (t_node **)ft_xmalloc(sizeof(t_node *) * (size + 2));
+		new = (t_redir **)ft_xmalloc(sizeof(t_redir *) * (size + 2));
 		i = 0;
 		while (i < size)
 		{
@@ -90,15 +74,30 @@ static void		add_process_redir(t_process *process, t_node *redir)
 	process->redirs = new;
 }
 
+/*
+** returns commands in this format:
+**
+** ls -l 2 > test -a -f
+**  
+** t_node
+** {
+** 		data =		t_process
+** 					{
+** 						t_token **argv		= { ls, -l, -a, -f };
+** 						t_redir **redirs	= { 2> };
+** 					}
+** 		childs = 	NULL;
+** }
+*/
 
 static t_node	*command(void)
 {
 	t_node		*command_node;
 	t_process	*process;
-	t_node		*redirect;
+	t_redir		*redirect;
 
 	process = process_new();
-	command_node = node_new(process, PROCESS);
+	command_node = node_new(process);
 	while (g_token
 	&& ((redirect = io_redirect()) || g_token->type == WORD))
 	{
@@ -110,6 +109,8 @@ static t_node	*command(void)
 			g_token = get_next_token();
 		}
 	}
+	if (!process->argv && !process->redirs)
+		ft_memdel((void **)&command_node);
 	return (command_node);
 }
 
@@ -138,10 +139,11 @@ t_node			*pipeline()
 
 	pipe_node = NULL;
 	if (!(command_node = command()))
-		return (parse_error(NO_CMD_BEFORE_PIPE, g_token->value->str, NULL));
+		return ((t_node *)parse_error(NO_CMD_BEFORE_PIPE,
+									g_token->value->str, NULL));
 	else if (g_token && g_token->type == PIPE)
 	{
-		pipe_node = node_new(g_token, 0);
+		pipe_node = node_new(g_token);
 		node_add_child(pipe_node, command_node);
 		while (!(g_token = get_next_token()))
 			g_lexer.line_cont = 1;

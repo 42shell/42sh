@@ -43,12 +43,17 @@ static int	run(void)
 }
 */
 
-t_node		*parse_error(int code, char *near, t_node *to_free)
+void		*parse_error(int code, char *near, void *to_free)
 {
 	g_parse_error = code;
 	ft_dprintf(2, "42sh: syntax error near unexpected token '%s'\n", near);
 	if (to_free)
-		free_ast_nodes(to_free, false);
+	{
+		if (code == HEREDOC_NO_DELIM || code == NO_REDIR_FILENAME)
+			redir_del((t_redir **)&to_free);
+		else
+			free_ast_nodes((t_node *)&to_free, false);
+	}
 	return (NULL);
 }
 

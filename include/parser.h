@@ -17,12 +17,6 @@
 
 # define PARSE_ERROR	20
 
-/*
-** node flags
-*/
-
-# define PROCESS		1
-
 enum					e_parse_error
 {
 	SILENT_ABORT = -1,
@@ -37,9 +31,11 @@ enum					e_parse_error
 };
 
 /*
-** ast is the root of the tree
-** next is the next job
-** heredocs are pointers to the heredoc nodes currently in the AST
+** job struct is and_or()
+** -ast is the root of the tree
+** -next is the next job
+** -heredocs are pointers to the heredoc nodes currently in the AST
+** -bg is me
 */
 
 typedef struct			s_job
@@ -54,10 +50,9 @@ typedef struct			s_job
 }						t_job;
 
 /*
-** still think that redir structs would be better,
-** currently it forces me to add flags to the struct node,
-** to know if its a process node, instead of just checking if
-** the node is a leaf.
+** process struct is command()
+** -argv is array of tokens (command name + args)
+** -redirs struct has 3 token fields, from is NULL if no IO_NUMBER
 */
 
 typedef struct			s_redir
@@ -65,15 +60,12 @@ typedef struct			s_redir
 	t_token				*from;
 	t_token				*redir_op;
 	t_token				*to;
-	/*
-	** process stuff;
-	*/
 }						t_redir;
 
 typedef struct			s_process
 {
 	t_token				**argv;
-	t_node				**redirs;
+	t_redir				**redirs;
 	/*
 	** process stuff;
 	*/
@@ -94,14 +86,15 @@ int						g_parse_error;
 t_job					*get_job(void);
 t_node					*and_or(void);
 t_node					*pipeline(void);
-t_node					*io_redirect(void);
+t_redir					*io_redirect(void);
 void					del_job(t_job **job);
-t_node					*parse_error(int code, char *near, t_node *to_free);
+void					*parse_error(int code, char *near, void *to_free);
 
 void					get_all_heredocs(t_node *heredoc_list);
 
-t_process				*process_new();
+t_process				*process_new(void);
 void					process_del(t_process **process);
+void					redir_del(t_redir **redir);
 int						is_process(t_node *node);
 
 t_token					*node_token(t_node *node);

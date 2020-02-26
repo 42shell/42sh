@@ -64,7 +64,7 @@ typedef struct			s_node
 	int					flags;
 }						t_node;
 
-t_node					*node_new(void *data, int flags);
+t_node					*node_new(void *data);
 int						node_add_child(t_node *parent, t_node *child);
 
 
