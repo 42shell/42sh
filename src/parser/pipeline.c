@@ -28,7 +28,7 @@
 
 */
 
-static void		add_arg(t_process *process, t_token *arg)
+static void		add_process_arg(t_process *process, t_token *arg)
 {
 	t_token		**new;
 	int			size;
@@ -59,7 +59,7 @@ static void		add_arg(t_process *process, t_token *arg)
 	process->argv = new;
 }
 
-static void		add_redir(t_process *process, t_node *redir)
+static void		add_process_redir(t_process *process, t_node *redir)
 {
 	t_node		**new;
 	int			size;
@@ -103,10 +103,10 @@ static t_node	*command(void)
 	&& ((redirect = io_redirect()) || g_token->type == WORD))
 	{
 		if (redirect)
-			add_redir(process, redirect);
+			add_process_redir(process, redirect);
 		else if (g_token->type == WORD)
 		{
-			add_arg(process, g_token);
+			add_process_arg(process, g_token);
 			g_token = get_next_token();
 		}
 	}
