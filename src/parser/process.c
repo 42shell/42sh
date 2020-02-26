@@ -14,10 +14,21 @@
 
 void		redir_del(t_redir **redir)
 {
-	token_del(&(*redir)->from);
-	token_del(&(*redir)->redir_op);
-	token_del(&(*redir)->to);
+	token_del(&(*redir)->left_op);
+	token_del(&(*redir)->operator);
+	token_del(&(*redir)->right_op);
 	ft_memdel((void **)redir);
+}
+
+t_redir		*redir_new(t_token *left_op, t_token *operator, t_token *right_op)
+{
+	t_redir	*redir;
+
+	redir = (t_redir *)ft_xmalloc(sizeof(t_redir));
+	redir->left_op = left_op;
+	redir->operator = operator;
+	redir->right_op = right_op;
+	return (redir);
 }
 
 int			is_process(t_node *node)
@@ -30,6 +41,8 @@ void		process_del(t_process **process)
 	size_t	i;
 
 	i = 0;
+	if (!process || !*process)
+		return ;
 	while ((*process)->argv && (*process)->argv[i])
 		token_del(&(*process)->argv[i++]);
 	i = 0;

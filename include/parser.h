@@ -56,10 +56,9 @@ typedef struct			s_job
 
 typedef struct			s_redir
 {
-	t_token				*from;
-	t_token				*redir_op;
-	t_token				*to;
-	//t_dstr			**heredoc; || global
+	t_token				*left_op;
+	t_token				*operator;
+	t_token				*right_op;
 }						t_redir;
 
 typedef struct			s_process
@@ -72,28 +71,33 @@ typedef struct			s_process
 }						t_process;
 
 /*
-** the current token being processed.
+** parser:
+** -heredocs are pointers to right operands of '<<' redir structs
 */
 
-t_token					*g_token;
+typedef struct			s_parser
+{
+	t_token				*token;
+	int					parse_error;
+	char				*error_near;
+	t_token				**heredocs;
 
-/*
-** error
-*/
+}						t_parser;
 
-int						g_parse_error;
+t_parser				g_parser;
 
-t_job					*get_job(void);
+t_job					*get_jobs(void);
 t_node					*and_or(void);
 t_node					*pipeline(void);
 t_redir					*io_redirect(void);
-void					del_job(t_job **job);
+void					del_jobs(t_job **job);
 void					*parse_error(int code, char *near, void *to_free);
 
 void					get_all_heredocs(t_node *heredoc_list);
 
 t_process				*process_new(void);
 void					process_del(t_process **process);
+t_redir					*redir_new(t_token *left_op, t_token *operator, t_token *right_op);
 void					redir_del(t_redir **redir);
 int						is_process(t_node *node);
 

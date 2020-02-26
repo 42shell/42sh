@@ -29,10 +29,8 @@ static void		add_process_arg(t_process *process, t_token *arg)
 	while (process->argv[i++])
 		size++;
 	new = (t_token **)ft_xmalloc(sizeof(t_token *) * (size + 2));
-	i = -1;
-	while (++i < size)
-		new[i] = process->argv[i];
-	new[i] = arg;
+	ft_memcpy((char *)new, (char *)process->argv, (size * sizeof(t_token *)));
+	new[size] = arg;
 	free(process->argv);
 	process->argv = new;
 }
@@ -54,10 +52,8 @@ static void		add_process_redir(t_process *process, t_redir *redir)
 	while (process->redirs[i++])
 		size++;
 	new = (t_redir **)ft_xmalloc(sizeof(t_redir *) * (size + 2));
-	i = -1;
-	while (++i < size)
-		new[i] = process->redirs[i];
-	new[i] = redir;
+	ft_memcpy((char *)new, (char *)process->redirs, (size * sizeof(t_token *)));
+	new[size] = redir;
 	free(process->redirs);
 	process->redirs = new;
 }
@@ -86,15 +82,15 @@ static t_node	*command(void)
 
 	process = process_new();
 	command_node = node_new(process);
-	while (g_token
-	&& ((redirect = io_redirect()) || g_token->type == WORD))
+	while (g_parser.token
+	&& ((redirect = io_redirect()) || g_parser.token->type == WORD))
 	{
 		if (redirect)
 			add_process_redir(process, redirect);
-		else if (g_token->type == WORD)
+		else if (g_parser.token->type == WORD)
 		{
-			add_process_arg(process, g_token);
-			g_token = get_next_token();
+			add_process_arg(process, g_parser.token);
+			g_parser.token = get_next_token();
 		}
 	}
 	if (!process->argv && !process->redirs)
@@ -128,12 +124,12 @@ t_node			*pipeline(void)
 	pipe_node = NULL;
 	if (!(command_node = command()))
 		return ((t_node *)parse_error(NO_CMD_BEFORE_PIPE,
-									g_token->value->str, NULL));
-	else if (g_token && g_token->type == PIPE)
+									g_parser.token->value->str, NULL));
+	else if (g_parser.token && g_parser.token->type == PIPE)
 	{
-		pipe_node = node_new(g_token);
+		pipe_node = node_new(g_parser.token);
 		node_add_child(pipe_node, command_node);
-		while (!(g_token = get_next_token()))
+		while (!(g_parser.token = get_next_token()))
 			g_lexer.line_cont = 1;
 		if (!(next = pipeline()))
 			return (NULL);

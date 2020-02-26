@@ -38,11 +38,12 @@ t_node			*and_or(void)
 	and_or_node = NULL;
 	if (!(pipeline_node = pipeline()))
 		return (NULL);
-	else if (g_token && (g_token->type == AND_IF || g_token->type == OR_IF))
+	else if (g_parser.token
+	&& (g_parser.token->type == AND_IF || g_parser.token->type == OR_IF))
 	{
-		and_or_node = node_new(g_token);
+		and_or_node = node_new(g_parser.token);
 		node_add_child(and_or_node, pipeline_node);
-		while (!(g_token = get_next_token()))
+		while (!(g_parser.token = get_next_token()))
 			g_lexer.line_cont = 1;
 		if (!(next = and_or()))
 			return (NULL);

@@ -52,19 +52,20 @@ int			get_input(const char *prompt)
 
 int			main(int argc, char **argv)
 {
-	t_job	*job;
+	t_job	*jobs;
 	t_job	*ptr;
 	int		ret;
 
 	init(argc - 1, argv + 1);
 	while ((ret = get_input(PS1)) != RL_EOF)
 	{
-		g_parse_error = NOERR;
-		if ((job = get_job()) && !g_parse_error)
+		g_parser.parse_error = NOERR;
+		if ((jobs = get_jobs()) && !g_parser.parse_error)
 		{
-			ptr = job;
+			ptr = jobs;
 			while (ptr)
 			{
+				printf("SF\n");
 				print_ast(ptr->ast, 0);//run(ast, env);
 				printf("\n");
 				ptr = ptr->next;
@@ -74,7 +75,7 @@ int			main(int argc, char **argv)
 		g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;
 		rl_add_history(g_lexer.line);
 		reset_lexer();
-		del_job(&job);
+		del_jobs(&jobs);
 	}
 	return (0);
 }
