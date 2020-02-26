@@ -24,21 +24,15 @@ static void		add_process_arg(t_process *process, t_token *arg)
 		process->argv[0] = arg;
 		return ;
 	}
-	else
-	{
-		i = 0;
-		size = 0;
-		while (process->argv[i++])
-			size++;
-		new = (t_token **)ft_xmalloc(sizeof(t_token *) * (size + 2));
-		i = 0;
-		while (i < size)
-		{
-			new[i] = process->argv[i];
-			i++;
-		}
-		new[i] = arg;
-	}
+	i = 0;
+	size = 0;
+	while (process->argv[i++])
+		size++;
+	new = (t_token **)ft_xmalloc(sizeof(t_token *) * (size + 2));
+	i = -1;
+	while (++i < size)
+		new[i] = process->argv[i];
+	new[i] = arg;
 	free(process->argv);
 	process->argv = new;
 }
@@ -55,21 +49,15 @@ static void		add_process_redir(t_process *process, t_redir *redir)
 		process->redirs[0] = redir;
 		return ;
 	}
-	else
-	{
-		i = 0;
-		size = 0;
-		while (process->redirs[i++])
-			size++;
-		new = (t_redir **)ft_xmalloc(sizeof(t_redir *) * (size + 2));
-		i = 0;
-		while (i < size)
-		{
-			new[i] = process->redirs[i];
-			i++;
-		}
-		new[i] = redir;
-	}
+	i = 0;
+	size = 0;
+	while (process->redirs[i++])
+		size++;
+	new = (t_redir **)ft_xmalloc(sizeof(t_redir *) * (size + 2));
+	i = -1;
+	while (++i < size)
+		new[i] = process->redirs[i];
+	new[i] = redir;
 	free(process->redirs);
 	process->redirs = new;
 }
