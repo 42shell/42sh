@@ -61,9 +61,10 @@ typedef struct			s_node
 	int					nb_children;
 	int					capacity;
 	struct s_node		**child;
+	int					flags;
 }						t_node;
 
-t_node					*node_new(void *data);
+t_node					*node_new(void *data, int flags);
 int						node_add_child(t_node *parent, t_node *child);
 
 
@@ -79,7 +80,7 @@ typedef struct			s_array
 }						t_array;
 
 
-t_array					*array_new();
+t_array					*array_new(void);
 void					array_realloc(t_array *array);
 void					array_append(t_array *array, void *data);
 void					array_destroy(t_array *array);

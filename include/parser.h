@@ -17,6 +17,12 @@
 
 # define PARSE_ERROR	20
 
+/*
+** node flags
+*/
+
+# define PROCESS		1
+
 enum					e_parse_error
 {
 	SILENT_ABORT = -1,
@@ -30,14 +36,38 @@ enum					e_parse_error
 	NO_CMD_BEFORE_SEP
 };
 
-typedef struct			s_ast
-{
-	t_node				*node;
-	struct s_ast		*next;
-	bool				run_in_background;
-}						t_ast;
+/*
+** ast is the root of the tree
+** next is the next job
+** heredocs are pointers to the heredoc nodes currently in the AST
+*/
 
-t_ast					*g_ast;
+typedef struct			s_job
+{
+	t_node				*ast;
+	struct s_job		*next;
+	t_array				*heredocs;
+	bool				bg;
+	/*
+	** job stuff
+	*/
+}						t_job;
+
+/*
+** still think that redir structs would be better,
+** currently it forces me to add flags to the struct node,
+** to know if its a process node, instead of just checking if
+** the node is a leaf.
+*/
+
+typedef struct			s_process
+{
+	t_token				**argv;
+	t_node				**redirs;
+	/*
+	** process stuff;
+	*/
+}						t_process;
 
 /*
 ** the current token being processed.
@@ -46,30 +76,26 @@ t_ast					*g_ast;
 t_token					*g_token;
 
 /*
-** g_heredocs' children are pointers to the heredoc nodes currently in the AST
-*/
-
-t_node					g_heredocs;
-
-/*
 ** error
 */
 
 int						g_parse_error;
 
-//int					parse(void);
-t_ast					*get_ast(void);
+t_job					*get_job(void);
 t_node					*and_or(void);
 t_node					*pipeline(void);
 t_node					*io_redirect(void);
-void					del_ast(t_ast **ast);
+void					del_job(t_job **job);
+t_node					*parse_error(int code, char *near, t_node *to_free);
 
 void					get_all_heredocs(t_node *heredoc_list);
 
-void					free_ast_nodes(t_node *node, bool is_pattern);
-t_token					*node_token(t_node *node);
-void					print_ast(t_node *ast, int indent_level);
+t_process				*process_new();
+void					process_del(t_process **process);
+int						is_process(t_node *node);
 
-t_node					*parse_error(int code, char *near, t_node *to_free);
+t_token					*node_token(t_node *node);
+void					free_ast_nodes(t_node *node, bool par_is_pattern);
+void					print_ast(t_node *ast, size_t indent_level);
 
 #endif

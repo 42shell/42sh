@@ -23,7 +23,7 @@ static t_node	*filename(void)
 	node = NULL;
 	if (g_token && g_token->type == WORD)
 	{
-		node = node_new(g_token);
+		node = node_new(g_token, 0);
 		g_token = get_next_token();
 	}
 	return (node);
@@ -56,7 +56,7 @@ static t_node	*io_file(t_token *io_number)
 	t_node		*filename_node;
 
 	node = NULL;
-	if (g_token && is_redir(g_token) && (node = node_new(g_token)))
+	if (g_token && is_redir(g_token) && (node = node_new(g_token, 0)))
 	{
 		g_token = get_next_token();
 		if (!(filename_node = filename()))
@@ -65,7 +65,7 @@ static t_node	*io_file(t_token *io_number)
 			return (parse_error(NO_REDIR_FILENAME,
 					node_token(node)->value->str, node));
 		}
-		node_add_child(node, node_new(io_number));
+		node_add_child(node, node_new(io_number, 0));
 		node_add_child(node, filename_node);
 	}
 	return (node);
@@ -85,14 +85,14 @@ static t_node	*io_here(t_token *io_number)
 {
 	t_node	*node;
 
-	node = node_new(g_token);
+	node = node_new(g_token, 0);
 	g_token = get_next_token();
 	if (g_token == NULL || g_token->type != WORD)
 		return (parse_error(HEREDOC_NO_DELIM,
 				node_token(node)->value->str, node));
-	node_add_child(node, node_new(io_number));
-	node_add_child(node, node_new(g_token));
-	node_add_child(&g_heredocs, node);
+	node_add_child(node, node_new(io_number, 0));
+	node_add_child(node, node_new(g_token, 0));
+	//node_add_child(&g_heredocs, node);
 	g_token = get_next_token();
 	return (node);
 }

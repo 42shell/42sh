@@ -52,7 +52,7 @@ void		array_append(t_array *array, void *data)
 {
 	if (array->size == array->allocated)
 		array_realloc(array);
-	array->array[array->size++] = data; 
+	array->array[array->size++] = data;
 }
 
 void		array_destroy(t_array *array)

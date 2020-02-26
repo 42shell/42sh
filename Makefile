@@ -104,7 +104,8 @@ SRC_LEXER       := append.c\
 SRC_LEXER       := $(addprefix lexer/,$(SRC_LEXER))
 
 SRC_PARSER      := heredoc.c\
-                   parser.c\
+                   job.c\
+				   process.c\
 				   and_or.c\
                    pipeline.c\
                    redirect.c\

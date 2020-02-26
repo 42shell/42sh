@@ -52,20 +52,20 @@ int			get_input(const char *prompt)
 
 int			main(int argc, char **argv)
 {
-	t_ast	*ast;
-	t_ast	*ptr;
+	t_job	*job;
+	t_job	*ptr;
 	int		ret;
 
 	init(argc - 1, argv + 1);
 	while ((ret = get_input(PS1)) != RL_EOF)
 	{
 		g_parse_error = NOERR;
-		if ((ast = get_ast()) && !g_parse_error)
+		if ((job = get_job()) && !g_parse_error)
 		{
-			ptr = ast;
+			ptr = job;
 			while (ptr)
 			{
-				print_ast(ptr->node, 0);//run(ast, env);
+				print_ast(ptr->ast, 0);//run(ast, env);
 				printf("\n");
 				ptr = ptr->next;
 			}
@@ -76,7 +76,7 @@ int			main(int argc, char **argv)
 		free(g_line);
 		g_line = NULL;
 		reset_lexer();
-		del_ast(&ast);
+		del_job(&job);
 	}
 	return (0);
 }

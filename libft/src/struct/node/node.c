@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-t_node		*node_new(void *data)
+t_node		*node_new(void *data, int flags)
 {
 	t_node *node;
 
@@ -23,6 +23,7 @@ t_node		*node_new(void *data)
 	node->nb_children = 0;
 	node->capacity = 0;
 	node->child = NULL;
+	node->flags = flags;
 	return (node);
 }
 

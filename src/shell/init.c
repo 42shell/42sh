@@ -57,8 +57,8 @@ int			init(int argc, char **argv)
 	}
 	else if (parse_args(argc, argv) == 0 && g_interactive_mode)
 	{
-		g_rl_retain_newline = true;
-		g_rl_cr_prompt = true;
+		g_rl_retain_nl = true;
+		g_rl_prompt_cr = true;
 		g_rl_hist_doubl = false;
 		init_sig();
 	}

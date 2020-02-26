@@ -31,8 +31,9 @@ int			rl_del(void)
 	ft_bzero(&g_rl_term, sizeof(g_rl_term));
 	ft_bzero(&g_rl_oldterm, sizeof(g_rl_oldterm));
 	g_rl_is_init = false;
+	g_rl_retain_nl = false;
 	g_rl_line_limit = false;
-	g_rl_cr_prompt = false;
+	g_rl_prompt_cr = false;
 	g_rl_hist_doubl = false;
 	g_rl_prompt = NULL;
 	g_rl_line_size_max = 0;
@@ -62,7 +63,7 @@ static char	*rl_return(int ret)
 	if (g_rl_line.backup)
 		ft_dstr_del((void **)&g_rl_line.backup);
 	ft_dstr_clear(g_rl_line.dstr, 32);
-	rl_carriage_return();
+	rl_carriage_return(false);
 	g_rl_hist.ptr = g_rl_hist.head;
 	g_rl_prompt = NULL;
 	g_rl_oldkey = 0;

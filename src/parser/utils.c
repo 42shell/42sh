@@ -17,38 +17,6 @@ t_token	*node_token(t_node *node)
 	return ((t_token *)(node->data));
 }
 
-t_node	*parse_error(int code, char *near, t_node *to_free)
-{
-	g_parse_error = code;
-	ft_dprintf(2, "42sh: syntax error near unexpected token '%s'\n", near);
-	if (to_free)
-		free_ast_nodes(to_free, false);
-	return (NULL);
-}
-
-void	print_ast(t_node *ast, int indent_level)
-{
-	int i;
-	int	n;
-
-	n = 0;
-	while (n++ < indent_level)
-		write(1, "  ", 2);
-	if (ast == NULL)
-		return ((void)ft_printf("NULL NODE"));
-	if (ast->data != NULL)
-		ft_printf("%s\n", ((t_token *)ast->data)->value->str);
-	else
-		ft_printf("NULL DATA\n");
-	fflush(stdout);
-	if (ast->nb_children > 0)
-	{
-		i = 0;
-		while (i < ast->nb_children)
-			print_ast(ast->child[i++], indent_level + 1);
-	}
-}
-
 void	free_ast_nodes(t_node *node, bool par_is_pattern)
 {
 	int		i;
@@ -57,7 +25,9 @@ void	free_ast_nodes(t_node *node, bool par_is_pattern)
 	cur_is_pattern = false;
 	if (node == NULL)
 		return ;
-	if (node->data != NULL && !par_is_pattern)
+	else if (is_process(node))
+		process_del((t_process **)&node->data);
+	else if (node->data != NULL && !par_is_pattern)
 	{
 		cur_is_pattern = (node_token(node)->type == PATTERN);
 		ft_dstr_del((void **)&node_token(node)->value);
@@ -70,4 +40,45 @@ void	free_ast_nodes(t_node *node, bool par_is_pattern)
 		free_ast_nodes(node->child[i++], cur_is_pattern);
 	free(node->child);
 	free(node);
+}
+
+void	print_ast(t_node *ast, size_t indent_level)
+{
+	size_t 		i;
+	size_t		n;
+	t_process	*process;
+	t_node		*node;
+
+	n = 0;
+	while (n++ < indent_level)
+		write(1, "  ", 2);
+	if (is_process(ast))
+	{
+		i = 0;
+		process = (t_process *)ast->data;
+		while (process->argv && process->argv[i])
+			printf("%s ", process->argv[i++]->value->str);
+		i = 0;
+		while (process->redirs && process->redirs[i])
+		{
+			node = process->redirs[i++];
+			if (node->child[0]->data)
+				printf("%s", ((t_token *)node->child[0]->data)->value->str);
+			printf("%s", ((t_token *)node->data)->value->str);
+			printf("%s ", ((t_token *)node->child[1]->data)->value->str);
+		}
+		printf("\n");
+		return ;
+	}
+	else if (ast->data != NULL)
+		ft_printf("%s\n", ((t_token *)ast->data)->value->str);
+	else
+		ft_printf("NULL DATA\n");
+	fflush(stdout);
+	if (ast->nb_children > 0)
+	{
+		i = 0;
+		while (i < (size_t)ast->nb_children)
+			print_ast(ast->child[i++], indent_level + 1);
+	}
 }

@@ -12,12 +12,19 @@
 
 #include "readline.h"
 
-void		rl_carriage_return(void)
+void		rl_carriage_return(bool echo_missing_nl)
 {
 	size_t	i;
 
 	i = 0;
-	while (i++ < g_rl_sizex - 1)
+	if (echo_missing_nl)
+	{
+		tputs(tgetstr("mr", NULL), 1, ft_putc);
+		tputs("%", 1, ft_putc);
+		tputs(tgetstr("me", NULL), 1, ft_putc);
+		g_rl_posx++;
+	}
+	while (i++ < g_rl_sizex - 2)
 		movcright();
 	tputs(g_rl_caps[C_CR], 1, ft_putc);
 	g_rl_posx = 0;
@@ -25,8 +32,8 @@ void		rl_carriage_return(void)
 
 void		rl_print_prompt(const char *prompt)
 {
-	if (g_rl_cr_prompt)
-		rl_carriage_return();
+	if (g_rl_prompt_cr)
+		rl_carriage_return(true);
 	tputstr(prompt);
 	g_rl_prompt = prompt;
 	g_rl_prompt_len = ft_strlen(prompt);

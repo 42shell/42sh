@@ -202,8 +202,8 @@ int					g_rl_error;
 ** -line_limit: if set, readline will read, at max, line_size_max characters.
 */
 
-bool				g_rl_retain_newline;
-bool				g_rl_cr_prompt;
+bool				g_rl_retain_nl;
+bool				g_rl_prompt_cr;
 bool				g_rl_hist_doubl;
 bool				g_rl_line_limit;
 unsigned int		g_rl_line_size_max;
@@ -237,7 +237,7 @@ int					rl_handle_esc_seq(void);
 void				rl_print_prompt(const char *prompt);
 void				rl_print_line(bool restore_i);
 void				rl_print_line_from_i(bool restore_i);
-void				rl_carriage_return(void);
+void				rl_carriage_return(bool echo_missing_nl);
 
 /*
 ** key functions
