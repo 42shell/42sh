@@ -60,6 +60,16 @@ typedef struct			s_job
 ** the node is a leaf.
 */
 
+typedef struct			s_redir
+{
+	t_token				*from;
+	t_token				*redir_op;
+	t_token				*to;
+	/*
+	** process stuff;
+	*/
+}						t_redir;
+
 typedef struct			s_process
 {
 	t_token				**argv;
