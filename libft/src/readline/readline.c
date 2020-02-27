@@ -48,6 +48,7 @@ static char	*rl_return(int ret)
 {
 	char	*line;
 
+	rl_carriage_return(false);
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &g_rl_oldterm);
 	if (g_rl_error || !(line = ft_strdup(g_rl_line.dstr->str)))
 	{
@@ -62,7 +63,6 @@ static char	*rl_return(int ret)
 	if (g_rl_line.backup)
 		ft_dstr_del((void **)&g_rl_line.backup);
 	ft_dstr_clear(g_rl_line.dstr, 32);
-	rl_carriage_return(false);
 	g_rl_hist.ptr = g_rl_hist.head;
 	g_rl_prompt = NULL;
 	g_rl_oldkey = 0;

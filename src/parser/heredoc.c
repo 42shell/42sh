@@ -13,20 +13,6 @@
 #include "shell.h"
 
 /*
-static void			append_line_to_hist(char *line)
-{
-	t_dstr	*hist;
-
-	hist = (t_dstr *)g_rl_hist.head->next->data;
-	ft_dstr_add(hist, '\n');
-	ft_dstr_insert(hist, hist->len, line, ft_strlen(line));
-	if (hist->str[hist->len - 1] == '\n')
-	{
-		hist->str[hist->len - 1] = '\0';
-		hist->len--;
-	}
-}
-
 static int			remove_bslash_nl(t_dstr *str)
 {
 	int i;
@@ -69,7 +55,6 @@ static bool			is_heredoc_end(t_dstr *heredoc, char *delim)
 		return (false);
 	return (ft_strequ(last_line, delim));
 }
-
 static char			*get_heredoc(char *delim)
 {
 	char		*str;
@@ -97,31 +82,33 @@ static char			*get_heredoc(char *delim)
 	free(heredoc);
 	return (str);
 }
-
-void				get_all_heredocs(t_node *heredoc_list)
-{
-	int		i;
-	char	*heredoc_str;
-	t_node	*heredoc;
-
-	i = 0;
-	//input->complete = false;
-	while (i < heredoc_list->nb_children && g_parse_error != SILENT_ABORT)
-	{
-		heredoc = heredoc_list->child[i];
-		heredoc_str = get_heredoc(node_token(heredoc->child[1])->value->str);
-		free(node_token(heredoc->child[1])->value->str);
-		node_token(heredoc->child[1])->value->str = heredoc_str;
-		node_token(heredoc->child[1])->value->len = ft_strlen(heredoc_str);
-		i++;
-	}
-	i = 0;
-	while (i < heredoc_list->nb_children)
-	{
-		heredoc_list->child[i] = NULL;
-		i++;
-	}
-	heredoc_list->nb_children = 0;
-	//input->complete = true;
-}
 */
+
+char		*get_heredoc(const char *delim)
+{
+	while (get_input(PSH) != EOF /* && !is_heredoc_end(delim)*/)
+	{
+		get_input(PSH);
+
+	}
+	return (0);
+}
+
+void		get_all_heredocs(void)
+{
+	char	*heredoc_str;
+	int		i;
+
+	i = 0;
+	if (!g_parser.heredocs)
+		return ;
+	while (g_parser.heredocs[i])
+	{
+		heredoc_str = get_heredoc(g_parser.heredocs[i]->value->str);
+		ft_dstr_del((void **)&g_parser.heredocs[i]->value);
+		g_parser.heredocs[i]->value = ft_dstr_from_str(heredoc_str);
+		free(heredoc_str);
+		i++;
+	}
+	ft_memdel((void **)&g_parser.heredocs);
+}

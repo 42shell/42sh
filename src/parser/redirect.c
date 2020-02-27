@@ -41,6 +41,8 @@ static t_token	*filename(void)
 {
 	t_token	*filename;
 
+	if (g_parser.error)
+		return (NULL);
 	if (g_parser.token && g_parser.token->type == WORD)
 	{
 		filename = g_parser.token;
@@ -65,6 +67,8 @@ static t_redir	*io_file(t_token *io_number)
 	t_redir		*redir;
 
 	redir = NULL;
+	if (g_parser.error)
+		return (NULL);
 	if (g_parser.token && is_redir(g_parser.token)
 	&& (redir = redir_new(io_number, g_parser.token, NULL)))
 	{
@@ -84,6 +88,8 @@ static t_redir	*io_here(t_token *io_number)
 {
 	t_redir	*redir;
 
+	if (g_parser.error)
+		return (NULL);
 	redir = redir_new(io_number, g_parser.token, NULL);
 	if ((g_parser.token = get_next_token()) == NULL || g_parser.token->type != WORD)
 	{
@@ -102,11 +108,13 @@ t_redir			*io_redirect(void)
 {
 	t_token *io_number;
 
-	if (g_parser.token && g_parser.token->type == IO_NUMBER)
+	if (g_parser.error)
+		return (NULL);
+	else if (g_parser.token && g_parser.token->type == IO_NUMBER)
 	{
 		io_number = g_parser.token;
 		g_parser.token = get_next_token();
-		if (g_parser.token && (g_parser.token->type == DLESS))
+		if (g_parser.token && g_parser.token->type == DLESS)
 			return (io_here(io_number));
 		return (io_file(io_number));
 	}

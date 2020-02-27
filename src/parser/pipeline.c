@@ -54,6 +54,19 @@ static void		add_process_redir(t_process *process, t_redir *redir)
 	process->redirs = new;
 }
 
+static t_token	*word(void)
+{
+	t_token		*word;
+
+	if (g_parser.token && g_parser.token->type == WORD)
+	{
+		word = g_parser.token;
+		g_parser.token = get_next_token();
+		return (word);
+	}
+	return (NULL);
+}
+
 /*
 ** returns commands in this format:
 **
@@ -75,22 +88,26 @@ static t_node	*command(void)
 	t_node		*command_node;
 	t_process	*process;
 	t_redir		*redirect;
+	t_token		*arg;
 
+	if (g_parser.error)
+		return (NULL);
 	process = process_new();
 	command_node = node_new(process);
-	while (g_parser.token
-	&& ((redirect = io_redirect()) || g_parser.token->type == WORD))
+	while (!g_parser.error && g_parser.token
+	&& ((redirect = io_redirect()) || (arg = word())))
 	{
 		if (redirect)
 			add_process_redir(process, redirect);
-		else if (g_parser.token->type == WORD)
-		{
-			add_process_arg(process, g_parser.token);
-			g_parser.token = get_next_token();
-		}
+		else if (arg)
+			add_process_arg(process, arg);
 	}
-	if (!process->argv && !process->redirs)
+	if (g_parser.error
+	|| (!process->argv && !process->redirs))
+	{
+		process_del(&process);
 		ft_memdel((void **)&command_node);
+	}
 	return (command_node);
 }
 
@@ -118,8 +135,12 @@ t_node			*pipeline(void)
 	t_node	*next;
 
 	pipe_node = NULL;
-	if (!(command_node = command()))
+	if (g_parser.error)
+		return (NULL);
+	else if (!(command_node = command()))
 	{
+		if (g_parser.error)
+			return (NULL);
 		g_parser.error = NO_CMD_BEFORE_PIPE;
 		g_parser.error_near = ft_strdup(g_parser.token->value->str);
 		token_del(&g_parser.token);
@@ -129,8 +150,8 @@ t_node			*pipeline(void)
 	{
 		pipe_node = node_new(g_parser.token);
 		node_add_child(pipe_node, command_node);
-		while (!(g_parser.token = get_next_token()))
-			g_lexer.line_cont = 1;
+		while (!g_parser.error && !(g_parser.token = get_next_token()))
+			g_lexer.line_cont = PIPE;
 		if (!(next = pipeline()))
 			return (NULL);
 		node_add_child(pipe_node, next);

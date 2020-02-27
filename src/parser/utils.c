@@ -56,6 +56,8 @@ void	print_ast(t_node *ast, size_t indent_level)
 	{
 		i = 0;
 		process = (t_process *)ast->data;
+		if (!process->argv && !process->redirs)
+			return ;
 		while (process->argv && process->argv[i])
 			printf("%s ", process->argv[i++]->value->str);
 		i = 0;

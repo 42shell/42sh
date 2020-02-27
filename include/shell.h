@@ -38,6 +38,12 @@
 
 # define PS1	"$> "
 # define PS2	"> "
+# define PSQ	"q> "
+# define PSD	"d> "
+# define PSA	"a> "
+# define PSO	"o> "
+# define PSP	"p> "
+# define PSH	"h> "
 
 typedef struct	s_shell
 {

@@ -36,15 +36,16 @@ t_node			*and_or(void)
 	t_node	*next;
 
 	and_or_node = NULL;
-	if (!(pipeline_node = pipeline()))
+	
+	if (g_parser.error || !(pipeline_node = pipeline()))
 		return (NULL);
 	else if (g_parser.token
 	&& (g_parser.token->type == AND_IF || g_parser.token->type == OR_IF))
 	{
 		and_or_node = node_new(g_parser.token);
 		node_add_child(and_or_node, pipeline_node);
-		while (!(g_parser.token = get_next_token()))
-			g_lexer.line_cont = 1;
+		while (!g_parser.error && !(g_parser.token = get_next_token()))
+			g_lexer.line_cont = node_token(and_or_node)->type;
 		if (!(next = and_or()))
 			return (NULL);
 		node_add_child(and_or_node, next);

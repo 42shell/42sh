@@ -20,12 +20,13 @@
 enum					e_parse_error
 {
 	SILENT_ABORT = -1,
-	NOERR = 0,
+	NOERR,
 	TOKENS_LEFT,
 	NULL_AST,
 	NULL_AST_NODE,
 	NO_REDIR_FILENAME,
 	NO_CMD_BEFORE_PIPE,
+	NO_CMD_AFTER_PIPE,
 	HEREDOC_NO_DELIM,
 	NO_CMD_BEFORE_SEP
 };
@@ -42,6 +43,7 @@ typedef struct			s_job
 {
 	t_node				*ast;
 	struct s_job		*next;
+	struct s_job		*prev;
 	bool				bg;
 	/*
 	** job stuff
@@ -81,7 +83,6 @@ typedef struct			s_parser
 	t_token				**heredocs;
 	int					error;
 	char				*error_near;
-
 }						t_parser;
 
 t_parser				g_parser;
@@ -90,10 +91,11 @@ t_job					*get_jobs(void);
 t_node					*and_or(void);
 t_node					*pipeline(void);
 t_redir					*io_redirect(void);
+void		*parse_error(void);
 
-void					get_all_heredocs(t_node *heredoc_list);
+void					get_all_heredocs(void);
 
-t_job					*job_new(t_node *ast);
+t_job					*job_new();
 void					job_del(t_job **job);
 t_process				*process_new(void);
 void					process_del(t_process **process);

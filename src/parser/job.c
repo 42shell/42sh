@@ -43,10 +43,12 @@ static int	run(void)
 }
 */
 
-static t_job	*parse_error(void)
+void			*parse_error(void)
 {
-	ft_dprintf(2, "42sh: syntax error near unexpected token '%s'\n",
-												g_parser.error_near);
+	if (g_parser.error && g_parser.error != SILENT_ABORT)
+		ft_dprintf(2,
+		"42sh: syntax error near unexpected token '%s'\n",
+		g_parser.error_near);
 	free(g_parser.error_near);
 	g_parser.error_near = NULL;
 	g_parser.error = 0;
@@ -62,12 +64,11 @@ void			job_del(t_job **jobs)
 	ft_memdel((void **)jobs);
 }
 
-t_job			*job_new(t_node *ast)
+t_job			*job_new()
 {
 	t_job	*job;
 
 	job = (t_job *)ft_xmalloc(sizeof(t_job));
-	job->ast = ast;
 	return (job);
 }
 
@@ -76,19 +77,38 @@ t_job			*get_jobs(void)
 	t_job	*job;
 	t_node	*ast;
 
-	job = NULL;
+	//job = NULL;
+	job = job_new();
 	if (!(g_parser.token = get_next_token()))
 		return (NULL);
-	else if (!(ast = and_or()))
-		return (parse_error());
-	job = job_new(ast);
+	job->ast = and_or();
+	//job = job_new(ast);
 	if (g_parser.token
 	&& (g_parser.token->type == SEMI || g_parser.token->type == AMPERSAND))
 	{
 		job->bg = (g_parser.token->type == AMPERSAND);
 		token_del(&g_parser.token);
-		if (!(job->next = get_jobs()))
-			return (parse_error());
+		job->next = get_jobs();
 	}
 	return (job);
 }
+
+/*
+while (g_parser.token)
+{
+	if (!(ast = and_or()))
+		return (parse_error());
+	tmp = job_new(ast);
+	if (!jobs)
+		jobs = tmp;
+	else
+		ptr->next = tmp;
+	if (g_parser.token
+	&& (g_parser.token->type == SEMI || g_parser.token->type == AMPERSAND))
+	{
+		tmp->bg = (g_parser.token->type == AMPERSAND);
+		token_del(&g_parser.token);
+		ptr = tmp;
+	}
+}
+*/

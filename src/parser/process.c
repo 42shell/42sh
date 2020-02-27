@@ -33,7 +33,7 @@ t_redir		*redir_new(t_token *left_op, t_token *operator, t_token *right_op)
 
 int			is_process(t_node *node)
 {
-	return (node->nb_children == 0);
+	return (node->data && node->nb_children == 0);
 }
 
 void		process_del(t_process **process)

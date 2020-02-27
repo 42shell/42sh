@@ -14,6 +14,8 @@
 
 void	token_del(t_token **tok)
 {
+	if (!tok || !*tok)
+		return ;
 	ft_dstr_del((void **)&(*tok)->value);
 	ft_memdel((void **)tok);
 }

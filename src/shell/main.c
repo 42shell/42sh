@@ -22,12 +22,19 @@ int			get_input(const char *prompt)
 	{
 		if (!(line = readline(prompt)))
 			exit(1);//error()
-		else if (!*line) //ctrl-C || ctrl-D
+		else if (!*line)//ctrl-C || ctrl-D
 		{
-			if (g_rl_last_ret == RL_EOF)
-				exit(0);//builtin_exit()
 			free(line);
-			return (get_input(prompt));
+			free(g_lexer.line);
+			g_lexer.line = NULL;
+			g_parser.error = SILENT_ABORT;
+			if (g_rl_last_ret == RL_EOF)
+			{
+				if (prompt == PS1)
+					exit(0);//builtin_exit()
+				return (RL_EOF);
+			}
+			return (RL_INT);
 		}
 	}
 	else
@@ -60,21 +67,23 @@ int			main(int argc, char **argv)
 	while ((ret = get_input(PS1)) != RL_EOF)
 	{
 		g_parser.error = NOERR;
-		if ((jobs = get_jobs()))
+		if ((jobs = get_jobs()) && !g_parser.error)
 		{
 			ptr = jobs;
-			while (ptr)
+			while (ptr && ptr->ast)
 			{
 				print_ast(ptr->ast, 0);
-				printf("\n");
+				//printf("\n");
 				ptr = ptr->next;
 			}
 			//run(ast);
+			g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;
+			rl_add_history(g_lexer.line);
+			job_del(&jobs);
 		}
-		g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;
-		rl_add_history(g_lexer.line);
+		if (g_parser.error)
+			parse_error();
 		reset_lexer();
-		job_del(&jobs);
 	}
 	return (0);
 }

@@ -12,6 +12,21 @@
 
 #include "shell.h"
 
+static char		*get_prompt(void)
+{
+	if (g_lexer.quote_st == SQUOTE)
+		return (PSQ);
+	else if (g_lexer.quote_st == DQUOTE)
+		return (PSD);
+	else if (g_lexer.line_cont == PIPE)
+		return (PSP);
+	else if (g_lexer.line_cont == AND_IF)
+		return (PSA);
+	else if (g_lexer.line_cont == OR_IF)
+		return (PSO);
+	return (PS2);
+}
+
 int				reset_lexer(void)
 {
 	if (g_lexer.token)
@@ -40,8 +55,7 @@ static t_token	*return_token(void)
 		g_lexer.token_is_delim = 0;
 		return (ret);
 	}
-	else if (g_lexer.line_cont
-	|| (g_lexer.quote_st && (g_lexer.line_cont = 1)))
+	else if (g_lexer.line_cont || g_lexer.quote_st)
 		return (get_next_token());
 	g_lexer.quote_st = 0;
 	return (NULL);
@@ -49,10 +63,15 @@ static t_token	*return_token(void)
 
 t_token			*get_next_token(void)
 {
-	if (g_lexer.line_cont)
+	if (g_lexer.line_cont || g_lexer.quote_st)
 	{
+		get_input(get_prompt());
 		g_lexer.line_cont = 0;
-		get_input(PS2);
+	}
+	if (g_parser.error || !g_lexer.line)
+	{
+		reset_lexer();
+		return (NULL);
 	}
 	while (!g_lexer.token_is_delim && g_lexer.line[g_lexer.i])
 	{
