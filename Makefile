@@ -31,7 +31,8 @@ LFLAGS          := -ltermcap
 #------------------------------------------------#
 
 CC              := gcc
-CFLAGS          := -Wall -Wextra
+CFLAGS          := -Wall -Wextra #-Werror
+DBG_FLAGS		:= #-fsanitize=address
 ifeq ($(BUILDTYPE), debug)
 	CFLAGS := $(CFLAGS) $(DBG_FLAGS)
 endif
@@ -104,11 +105,13 @@ SRC_LEXER       := append.c\
 SRC_LEXER       := $(addprefix lexer/,$(SRC_LEXER))
 
 SRC_PARSER      := heredoc.c\
-                   job.c\
+                   parser.c\
+				   list.c\
 				   process.c\
 				   and_or.c\
                    pipeline.c\
                    redirect.c\
+				   separator.c\
                    utils.c
 SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
 

@@ -48,6 +48,7 @@
 typedef struct	s_shell
 {
 	bool		interactive_mode;
+	t_job		*jobs;
 }				t_shell;
 
 t_shell			g_shell;

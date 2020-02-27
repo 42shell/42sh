@@ -24,17 +24,16 @@ int			get_input(const char *prompt)
 			exit(1);//error()
 		else if (!*line)//ctrl-C || ctrl-D
 		{
-			free(line);
-			free(g_lexer.line);
-			g_lexer.line = NULL;
 			g_parser.error = SILENT_ABORT;
 			if (g_rl_last_ret == RL_EOF)
 			{
-				if (prompt == PS1)
+				if (!g_lexer.line)
 					exit(0);//builtin_exit()
-				return (RL_EOF);
 			}
-			return (RL_INT);
+			free(line);
+			free(g_lexer.line);
+			g_lexer.line = NULL;
+			return (g_rl_last_ret);
 		}
 	}
 	else
@@ -55,11 +54,11 @@ int			get_input(const char *prompt)
 		g_lexer.line = ft_strdup(line);
 	free(line);
 	return (0);
+
 }
 
 int			main(int argc, char **argv)
 {
-	t_job	*jobs;
 	t_job	*ptr;
 	int		ret;
 
@@ -67,22 +66,24 @@ int			main(int argc, char **argv)
 	while ((ret = get_input(PS1)) != RL_EOF)
 	{
 		g_parser.error = NOERR;
-		if ((jobs = get_jobs()) && !g_parser.error)
+		g_parser.token = get_next_token();
+		if ((g_shell.jobs = list()))
 		{
-			ptr = jobs;
+			ptr = g_shell.jobs;
 			while (ptr && ptr->ast)
 			{
 				print_ast(ptr->ast, 0);
-				//printf("\n");
+				printf("\n");
 				ptr = ptr->next;
 			}
 			//run(ast);
+			job_del(&g_shell.jobs);// if job is complete, job_delone
+		}
+		if (g_lexer.line)
+		{
 			g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;
 			rl_add_history(g_lexer.line);
-			job_del(&jobs);
 		}
-		if (g_parser.error)
-			parse_error();
 		reset_lexer();
 	}
 	return (0);

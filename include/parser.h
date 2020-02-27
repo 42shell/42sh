@@ -43,7 +43,7 @@ typedef struct			s_job
 {
 	t_node				*ast;
 	struct s_job		*next;
-	struct s_job		*prev;
+	t_token				*sep;
 	bool				bg;
 	/*
 	** job stuff
@@ -82,25 +82,26 @@ typedef struct			s_parser
 	t_token				*token;
 	t_token				**heredocs;
 	int					error;
-	char				*error_near;
 }						t_parser;
 
 t_parser				g_parser;
 
-t_job					*get_jobs(void);
+//t_job					*get_jobs(void);
+t_job		*list(void);
 t_node					*and_or(void);
 t_node					*pipeline(void);
 t_redir					*io_redirect(void);
-void		*parse_error(void);
+t_token		*separator_op(void);
+int						parse_error(int code, char *near);
 
 void					get_all_heredocs(void);
 
 t_job					*job_new();
-void					job_del(t_job **job);
+int						job_del(t_job **job);
 t_process				*process_new(void);
-void					process_del(t_process **process);
+int						process_del(t_process **process);
 t_redir					*redir_new(t_token *left_op, t_token *operator, t_token *right_op);
-void					redir_del(t_redir **redir);
+int						redir_del(t_redir **redir);
 
 int						is_process(t_node *node);
 t_token					*node_token(t_node *node);

@@ -12,12 +12,15 @@
 
 #include "shell.h"
 
-void		redir_del(t_redir **redir)
+int			redir_del(t_redir **redir)
 {
+	if (!redir || !*redir)
+		return (0);
 	token_del(&(*redir)->left_op);
 	token_del(&(*redir)->operator);
 	token_del(&(*redir)->right_op);
 	ft_memdel((void **)redir);
+	return (0);
 }
 
 t_redir		*redir_new(t_token *left_op, t_token *operator, t_token *right_op)
@@ -36,13 +39,13 @@ int			is_process(t_node *node)
 	return (node->data && node->nb_children == 0);
 }
 
-void		process_del(t_process **process)
+int			process_del(t_process **process)
 {
 	size_t	i;
 
 	i = 0;
 	if (!process || !*process)
-		return ;
+		return (0);
 	while ((*process)->argv && (*process)->argv[i])
 		token_del(&(*process)->argv[i++]);
 	i = 0;
@@ -50,6 +53,8 @@ void		process_del(t_process **process)
 		redir_del(&(*process)->redirs[i++]);
 	free((*process)->argv);
 	free((*process)->redirs);
+	ft_memdel((void **)process);
+	return (0);
 }
 
 t_process	*process_new(void)

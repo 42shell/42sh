@@ -36,7 +36,6 @@ t_node			*and_or(void)
 	t_node	*next;
 
 	and_or_node = NULL;
-	
 	if (g_parser.error || !(pipeline_node = pipeline()))
 		return (NULL);
 	else if (g_parser.token

@@ -75,8 +75,7 @@ static t_redir	*io_file(t_token *io_number)
 		g_parser.token = get_next_token();
 		if (!(redir->right_op = filename()))
 		{
-			g_parser.error = NO_REDIR_FILENAME;
-			g_parser.error_near = ft_strdup(redir->operator->value->str);
+			parse_error(NO_REDIR_FILENAME, ft_strdup(redir->operator->value->str));
 			redir_del(&redir);
 			return (NULL);
 		}
@@ -93,8 +92,7 @@ static t_redir	*io_here(t_token *io_number)
 	redir = redir_new(io_number, g_parser.token, NULL);
 	if ((g_parser.token = get_next_token()) == NULL || g_parser.token->type != WORD)
 	{
-		g_parser.error = HEREDOC_NO_DELIM;
-		g_parser.error_near = ft_strdup(redir->operator->value->str);
+		parse_error(HEREDOC_NO_DELIM, ft_strdup(redir->operator->value->str));
 		redir_del(&redir);
 		return (NULL);
 	}

@@ -89,7 +89,6 @@ char		*get_heredoc(const char *delim)
 	while (get_input(PSH) != EOF /* && !is_heredoc_end(delim)*/)
 	{
 		get_input(PSH);
-
 	}
 	return (0);
 }
