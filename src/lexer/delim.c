@@ -55,6 +55,21 @@ int			operator_new(void)
 	return (0);
 }
 
+int			new_line(void)
+{
+	if (!g_lexer.quote_st && g_lexer.line[g_lexer.i] == '\n')
+	{
+		if (!g_lexer.token)
+		{
+			g_lexer.token = token_new(NEWLINE);
+			g_lexer.i++;
+		}
+		delim_token();
+		return (1);
+	}
+	return (0);
+}
+
 int			blank(void)
 {
 	if (!g_lexer.quote_st && ft_iswhitespace(g_lexer.line[g_lexer.i]))

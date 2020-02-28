@@ -12,6 +12,42 @@
 
 #include "shell.h"
 
+/*
+int			remove_backslash_newline(char *line)
+{
+	char	quote;
+	int		i;
+
+	i = 0;
+	quote = 0;
+	while (line[i])
+	{
+		if (line[i] == BSLASH)
+		{
+			i += 2;
+			if (line[i] == 0)
+				line[i - 2] = 0;
+		}
+		else if (line[i] == SQUOTE)
+		{
+			if (quote == SQUOTE)
+				quote = 0;
+			else if (quote == 0)
+				quote = SQUOTE;
+		}
+		else if (line[i] == DQUOTE)
+		{
+			if (quote == DQUOTE)
+				quote = 0;
+			else if (quote == 0)
+				quote = DQUOTE;
+		}
+		i++;
+	}
+	return (0);
+}
+*/
+
 int			get_input(const char *prompt)
 {
 	char	*line;
@@ -67,13 +103,13 @@ int			main(int argc, char **argv)
 	{
 		g_parser.error = NOERR;
 		g_parser.token = get_next_token();
-		if ((g_shell.jobs = list()))
+		if ((g_shell.jobs = complete_command()))
 		{
 			ptr = g_shell.jobs;
 			while (ptr && ptr->ast)
 			{
 				print_ast(ptr->ast, 0);
-				printf("\n");
+				//printf("\n");
 				ptr = ptr->next;
 			}
 			//run(ast);

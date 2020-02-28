@@ -29,6 +29,7 @@
 enum				e_token_type
 {
 	END_OF_INPUT,
+	NEWLINE,
 	WORD,
 	ASSIGNMENT_WORD,
 	NAME,
@@ -82,6 +83,7 @@ int					operator_end(void);
 int					backslash(void);
 int					quote(void);
 int					operator_new(void);
+int					new_line(void);
 int					blank(void);
 int					word_next(void);
 int					comment(void);

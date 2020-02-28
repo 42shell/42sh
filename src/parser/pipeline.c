@@ -12,93 +12,6 @@
 
 #include "shell.h"
 
-static void		add_process_arg(t_process *process, t_token *arg)
-{
-	t_token		**new;
-	int			size;
-
-	if (!process->argv)
-	{
-		process->argv = (t_token **)ft_xmalloc(sizeof(t_token *) * 2);
-		process->argv[0] = arg;
-		return ;
-	}
-	size = 0;
-	while (process->argv[size])
-		size++;
-	new = (t_token **)ft_xmalloc(sizeof(t_token *) * (size + 2));
-	ft_memcpy((char *)new, (char *)process->argv, (size * sizeof(t_token *)));
-	new[size] = arg;
-	free(process->argv);
-	process->argv = new;
-}
-
-static void		add_process_redir(t_process *process, t_redir *redir)
-{
-	t_redir		**new;
-	int			size;
-
-	if (!process->redirs)
-	{
-		process->redirs = (t_redir **)ft_xmalloc(sizeof(t_redir *) * 2);
-		process->redirs[0] = redir;
-		return ;
-	}
-	size = 0;
-	while (process->redirs[size])
-		size++;
-	new = (t_redir **)ft_xmalloc(sizeof(t_redir *) * (size + 2));
-	ft_memcpy((char *)new, (char *)process->redirs, (size * sizeof(t_token *)));
-	new[size] = redir;
-	free(process->redirs);
-	process->redirs = new;
-}
-
-/*
-** returns commands in this format:
-**
-** ls -l 2 > test -a -f
-**
-** t_node
-** {
-** 		data =		t_process
-** 					{
-** 						t_token **argv		= { ls, -l, -a, -f };
-** 						t_redir **redirs	= { 2> };
-** 					}
-** 		childs = 	NULL;
-** }
-*/
-
-static t_node	*command(void)
-{
-	t_node		*command_node;
-	t_process	*process;
-	t_redir		*redirect;
-
-	if (g_parser.error)
-		return (NULL);
-	process = process_new();
-	command_node = node_new(process);
-	while (!g_parser.error && g_parser.token
-	&& ((redirect = io_redirect()) || g_parser.token->type == WORD))
-	{
-		if (redirect)
-			add_process_redir(process, redirect);
-		else
-		{
-			add_process_arg(process, g_parser.token);
-			g_parser.token = get_next_token();
-		}
-	}
-	if (g_parser.error || (!process->argv && !process->redirs))
-	{
-		process_del(&process);
-		ft_memdel((void **)&command_node);
-	}
-	return (command_node);
-}
-
 /*
 ** pipeline			: command PIPE pipeline
 ** 					| command
@@ -116,16 +29,24 @@ static t_node	*command(void)
 ** the words, see above)
 */
 
-t_node			*pipeline()
+static void	linebreak_get_input(void)
 {
-	t_node	*command_node;
+	linebreak();
+	while (!g_parser.error && !g_parser.token)
+	{
+		g_lexer.line_cont = PIPE;
+		g_parser.token = get_next_token();
+	}
+}
+
+t_node			*pipeline(void)
+{
+	t_node	*left_command;
+	t_node	*right_pipeline;
 	t_node	*pipe_node;
-	t_node	*next;
 
 	pipe_node = NULL;
-	if (g_parser.error)
-		return (NULL);
-	else if (!(command_node = command()))
+	if (g_parser.error || !(left_command = command()))
 	{
 		parse_error(NO_CMD_BEFORE_PIPE,
 		g_parser.token ? ft_strdup(g_parser.token->value->str) : NULL);
@@ -135,12 +56,12 @@ t_node			*pipeline()
 	else if (g_parser.token && g_parser.token->type == PIPE)
 	{
 		pipe_node = node_new(g_parser.token);
-		node_add_child(pipe_node, command_node);
-		while (!g_parser.error && !(g_parser.token = get_next_token()))
-			g_lexer.line_cont = PIPE;
-		if (!(next = pipeline()))
+		node_add_child(pipe_node, left_command);
+		g_parser.token = get_next_token();
+		linebreak_get_input();
+		if (!(right_pipeline = pipeline()))
 			return (NULL);
-		node_add_child(pipe_node, next);
+		node_add_child(pipe_node, right_pipeline);
 	}
-	return (pipe_node ? pipe_node : command_node);
+	return (pipe_node ? pipe_node : left_command);
 }

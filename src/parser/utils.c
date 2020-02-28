@@ -17,6 +17,69 @@ t_token	*node_token(t_node *node)
 	return ((t_token *)(node->data));
 }
 
+void	add_heredoc(t_token *heredoc)
+{
+	t_token		**new;
+	int			size;
+
+	if (!g_parser.heredocs)
+	{
+		g_parser.heredocs = (t_token **)ft_xmalloc(sizeof(t_token *) * 2);
+		g_parser.heredocs[0] = heredoc;
+		return ;
+	}
+	size = 0;
+	while (g_parser.heredocs[size])
+		size++;
+	new = (t_token **)ft_xmalloc(sizeof(t_token *) * (size + 2));
+	ft_memcpy((char *)new, (char *)g_parser.heredocs, (size * sizeof(t_token *)));
+	new[size] = heredoc;
+	free(g_parser.heredocs);
+	g_parser.heredocs = new;
+}
+
+void	add_process_arg(t_process *process, t_token *arg)
+{
+	t_token		**new;
+	int			size;
+
+	if (!process->argv)
+	{
+		process->argv = (t_token **)ft_xmalloc(sizeof(t_token *) * 2);
+		process->argv[0] = arg;
+		return ;
+	}
+	size = 0;
+	while (process->argv[size])
+		size++;
+	new = (t_token **)ft_xmalloc(sizeof(t_token *) * (size + 2));
+	ft_memcpy((char *)new, (char *)process->argv, (size * sizeof(t_token *)));
+	new[size] = arg;
+	free(process->argv);
+	process->argv = new;
+}
+
+void	add_process_redir(t_process *process, t_redir *redir)
+{
+	t_redir		**new;
+	int			size;
+
+	if (!process->redirs)
+	{
+		process->redirs = (t_redir **)ft_xmalloc(sizeof(t_redir *) * 2);
+		process->redirs[0] = redir;
+		return ;
+	}
+	size = 0;
+	while (process->redirs[size])
+		size++;
+	new = (t_redir **)ft_xmalloc(sizeof(t_redir *) * (size + 2));
+	ft_memcpy((char *)new, (char *)process->redirs, (size * sizeof(t_token *)));
+	new[size] = redir;
+	free(process->redirs);
+	process->redirs = new;
+}
+
 void	free_ast_nodes(t_node *node, bool par_is_pattern)
 {
 	int		i;
@@ -41,6 +104,9 @@ void	free_ast_nodes(t_node *node, bool par_is_pattern)
 	free(node->child);
 	free(node);
 }
+
+/* ************************************************************************** */
+/* ************************************************************************** */
 
 void	print_ast(t_node *ast, size_t indent_level)
 {

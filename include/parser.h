@@ -32,8 +32,8 @@ enum					e_parse_error
 };
 
 /*
-** job struct is and_or():
-** -ast is the root of the tree
+** job struct is list():
+** -ast is the root of the tree (and_or())
 ** -next is the next job
 ** -heredocs are pointers to the heredoc nodes currently in the AST
 ** -bg is background
@@ -81,19 +81,24 @@ typedef struct			s_parser
 {
 	t_token				*token;
 	t_token				**heredocs;
+	char				*heredoc_ptr;
 	int					error;
 }						t_parser;
 
 t_parser				g_parser;
 
-//t_job					*get_jobs(void);
-t_job		*list(void);
-t_node					*and_or(void);
+t_job					*complete_command(void);
+t_job					*list(void);
+t_node					*and_or(t_node *left_pipeline);
 t_node					*pipeline(void);
+t_node					*command(void);
 t_redir					*io_redirect(void);
-t_token		*separator_op(void);
-int						parse_error(int code, char *near);
+t_token					*separator(void);
+t_token					*separator_op(void);
+void					linebreak(void);
+void					newline_list(void);
 
+int						parse_error(int code, char *near);
 void					get_all_heredocs(void);
 
 t_job					*job_new();
@@ -103,6 +108,9 @@ int						process_del(t_process **process);
 t_redir					*redir_new(t_token *left_op, t_token *operator, t_token *right_op);
 int						redir_del(t_redir **redir);
 
+void					add_process_redir(t_process *process, t_redir *redir);
+void					add_process_arg(t_process *process, t_token *arg);
+void					add_heredoc(t_token *heredoc);
 int						is_process(t_node *node);
 t_token					*node_token(t_node *node);
 void					free_ast_nodes(t_node *node, bool par_is_pattern);

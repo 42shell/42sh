@@ -12,85 +12,64 @@
 
 #include "shell.h"
 
-/*
-static int			remove_bslash_nl(t_dstr *str)
+static bool	line_eq(char *s1, char *s2)
 {
-	int i;
-	int	count;
-
-	count = 0;
-	i = str->len - 2;
-	while (i >= 0 && str->str[i] == '\\')
-	{
-		count++;
-		i--;
-	}
-	if (count % 2)
-	{
-		ft_dstr_remove(str, str->len - 2, 2);
-		return (1);
-	}
-	return (0);
-}
-
-static bool			is_heredoc_end(t_dstr *heredoc, char *delim)
-{
-	int		i;
-	char	*last_line;
-
-	i = heredoc->len - 2;
-	last_line = NULL;
-	while (i >= 0)
-	{
-		if (heredoc->str[i] == '\n')
-		{
-			last_line = &heredoc->str[i + 1];
-			break ;
-		}
-		i--;
-	}
-	if (i == -1)
-		last_line = heredoc->str;
-	if (last_line == NULL)
+	if (!s1 || !s2)
 		return (false);
-	return (ft_strequ(last_line, delim));
-}
-static char			*get_heredoc(char *delim)
-{
-	char		*str;
-	t_dstr		*heredoc;
-	char		*delim_cmp;
-
-	delim_cmp = ft_strjoin(delim, "\n");
-	heredoc = ft_dstr_new(32);
-	while ((str = readline("> ")))
+	while (*s1 && *s2 && *s1 != '\n' && *s2 != '\n')
 	{
-		ft_dstr_insert(heredoc, heredoc->len, str, ft_strlen(str));
-		remove_bslash_nl(heredoc);
-		if (is_heredoc_end(heredoc, delim_cmp) || g_parse_error == SILENT_ABORT)
-			break ;
+		if (*s1++ != *s2++)
+			return (false); 
 	}
-	if (g_shell_interactive)
-		append_line_to_hist(heredoc->str);
-	if (g_parse_error == SILENT_ABORT)
-		ft_dstr_del((void **)&heredoc);
-	else if (heredoc->len >= ft_strlen(delim_cmp))
-		ft_dstr_remove(heredoc, heredoc->len - ft_strlen(delim_cmp)
-						, ft_strlen(delim_cmp));
-	free(delim_cmp);
-	str = heredoc ? heredoc->str : NULL;
-	free(heredoc);
-	return (str);
+	return (*s1 == *s2);
 }
-*/
 
-char		*get_heredoc(const char *delim)
+static void	line_add(char **heredoc, char *line)
 {
-	while (get_input(PSH) != EOF /* && !is_heredoc_end(delim)*/)
+	int		heredoc_len;
+	int		line_len;
+	char	*new;
+
+	line_len = 0;
+	heredoc_len = 0;
+	if (!heredoc || !line)
+		return ;
+	while (line[line_len] && line[line_len++] != '\n')
+		;
+	if (*heredoc)
+		heredoc_len = ft_strlen(*heredoc);
+	new = ft_xmalloc(heredoc_len + line_len + 1);
+	ft_memcpy(new, *heredoc, heredoc_len);
+	ft_memcpy(&new[heredoc_len], line, line_len);
+	g_parser.heredoc_ptr = &line[line_len];
+	free(*heredoc);
+	*heredoc = new;
+}
+
+static char	*get_heredoc(char *delim)
+{
+	int		ret;
+	char	*heredoc;
+	int		i;
+
+	ret = 0;
+	heredoc = NULL;
+	while (!line_eq(g_parser.heredoc_ptr, delim))
 	{
-		get_input(PSH);
+		if (!*g_parser.heredoc_ptr)
+		{
+			i = g_parser.heredoc_ptr - g_lexer.line;
+			ret = get_input(PSH);
+			if (ret == RL_EOF || ret == RL_INT)
+				break ;
+			g_parser.heredoc_ptr = &g_lexer.line[i];
+			continue ;
+		}
+		line_add(&heredoc, g_parser.heredoc_ptr);
 	}
-	return (0);
+	if (ret != 0)
+		ft_memdel((void **)&heredoc);
+	return (heredoc);
 }
 
 void		get_all_heredocs(void)
@@ -101,8 +80,11 @@ void		get_all_heredocs(void)
 	i = 0;
 	if (!g_parser.heredocs)
 		return ;
-	while (g_parser.heredocs[i])
+	g_parser.heredoc_ptr = g_lexer.line;
+	while ((g_parser.heredoc_ptr = ft_strchr(g_parser.heredoc_ptr, '\n') + 1)
+	&& g_parser.heredocs[i])
 	{
+		ft_dstr_add(g_parser.heredocs[i]->value, '\n');
 		heredoc_str = get_heredoc(g_parser.heredocs[i]->value->str);
 		ft_dstr_del((void **)&g_parser.heredocs[i]->value);
 		g_parser.heredocs[i]->value = ft_dstr_from_str(heredoc_str);
@@ -110,4 +92,5 @@ void		get_all_heredocs(void)
 		i++;
 	}
 	ft_memdel((void **)&g_parser.heredocs);
+	g_parser.heredoc_ptr = NULL;
 }
