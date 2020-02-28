@@ -12,6 +12,7 @@
 
 #include "shell.h"
 
+/*
 int		backslash_newline(void)
 {
 	if (!g_lexer.quote_st
@@ -25,8 +26,9 @@ int		backslash_newline(void)
 	}
 	return (0);
 }
+*/
 
-int		backslash(void)
+int		lx_backslash(void)
 {
 	if (g_lexer.line[g_lexer.i] == BSLASH && g_lexer.quote_st != SQUOTE)
 	{
@@ -39,7 +41,7 @@ int		backslash(void)
 	return (0);
 }
 
-int		quote(void)
+int		lx_quote(void)
 {
 	if (g_lexer.line[g_lexer.i] == SQUOTE || g_lexer.line[g_lexer.i] == DQUOTE)
 	{

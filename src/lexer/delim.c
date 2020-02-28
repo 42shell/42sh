@@ -27,7 +27,7 @@ static int	delim_token(void)
 	return (0);
 }
 
-int			operator_end(void)
+int			lx_operator_end(void)
 {
 	if (g_lexer.token && !g_lexer.quote_st
 	&& (is_operator_start(*g_lexer.token->value->str)
@@ -41,7 +41,7 @@ int			operator_end(void)
 	return (0);
 }
 
-int			operator_new(void)
+int			lx_operator_new(void)
 {
 	if (g_lexer.token && !g_lexer.quote_st
 	&& is_operator_start(g_lexer.line[g_lexer.i]))
@@ -55,7 +55,7 @@ int			operator_new(void)
 	return (0);
 }
 
-int			new_line(void)
+int			lx_newline(void)
 {
 	if (!g_lexer.quote_st && g_lexer.line[g_lexer.i] == '\n')
 	{
@@ -70,7 +70,7 @@ int			new_line(void)
 	return (0);
 }
 
-int			blank(void)
+int			lx_blank(void)
 {
 	if (!g_lexer.quote_st && ft_iswhitespace(g_lexer.line[g_lexer.i]))
 	{

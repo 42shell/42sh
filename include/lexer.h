@@ -76,18 +76,17 @@ t_lexer				g_lexer;
 
 t_token				*get_next_token(void);
 int					reset_lexer(void);
-
-int					backslash_newline(void);
-int					operator_next(void);
-int					operator_end(void);
-int					backslash(void);
-int					quote(void);
-int					operator_new(void);
-int					new_line(void);
-int					blank(void);
-int					word_next(void);
-int					comment(void);
-int					word_start(void);
+ 
+int					lx_operator_next(void);
+int					lx_operator_end(void);
+int					lx_backslash(void);
+int					lx_quote(void);
+int					lx_operator_new(void);
+int					lx_newline(void);
+int					lx_blank(void);
+int					lx_word_next(void);
+int					lx_comment(void);
+int					lx_word_start(void);
 
 t_token				*token_new(int type);
 void				token_del(t_token **tok);

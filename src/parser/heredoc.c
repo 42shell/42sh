@@ -24,6 +24,17 @@ static bool	line_eq(char *s1, char *s2)
 	return (*s1 == *s2);
 }
 
+/*
+static int	get_heredoc_line()
+{
+	i = g_parser.heredoc_ptr - g_lexer.line;
+	if ((ret = get_input(PSH)) == RL_EOF || ret == RL_INT)
+		break ;
+	g_parser.heredoc_ptr = &g_lexer.line[i];
+	continue ;
+}
+*/
+
 static void	line_add(char **heredoc, char *line)
 {
 	int		heredoc_len;
@@ -48,8 +59,8 @@ static void	line_add(char **heredoc, char *line)
 
 static char	*get_heredoc(char *delim)
 {
-	int		ret;
 	char	*heredoc;
+	int		ret;
 	int		i;
 
 	ret = 0;
@@ -58,18 +69,22 @@ static char	*get_heredoc(char *delim)
 		return (NULL);
 	while (!line_eq(g_parser.heredoc_ptr, delim))
 	{
-		if (!*g_parser.heredoc_ptr)
+		if (!*g_parser.heredoc_ptr && (i = g_parser.heredoc_ptr - g_lexer.line))
 		{
-			i = g_parser.heredoc_ptr - g_lexer.line;
-			if ((ret = get_input(PSH)) == RL_EOF || ret == RL_INT)
-				break ;
-			g_parser.heredoc_ptr = &g_lexer.line[i];
+			while (!ft_strchr(g_parser.heredoc_ptr, '\n'))
+			{
+				if ((ret = get_input(PSH)) == RL_EOF || ret == RL_INT)
+				{
+					ft_memdel((void **)&heredoc);
+					return (NULL);
+				}
+				g_parser.heredoc_ptr = &g_lexer.line[i];
+			}
 			continue ;
 		}
 		line_add(&heredoc, g_parser.heredoc_ptr);
 	}
-	if (ret != 0)
-		ft_memdel((void **)&heredoc);
+	g_lexer.i += ft_strlen(heredoc) + ft_strlen(delim);
 	return (heredoc);
 }
 
@@ -94,10 +109,9 @@ void		get_all_heredocs(void)
 			break ;
 		ft_dstr_del((void **)&g_parser.heredocs[i]->value);
 		g_parser.heredocs[i]->value = ft_dstr_from_str(heredoc_str);
-		free(heredoc_str);
+		ft_memdel((void **)&heredoc_str);
 		i++;
 	}
-	ft_memdel((void **)&g_parser.heredocs);
+	ft_memdel((void **)&heredoc_str);
 	g_parser.heredoc_ptr = NULL;
-	free(heredoc_str);
 }

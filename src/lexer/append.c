@@ -12,7 +12,7 @@
 
 #include "shell.h"
 
-int		operator_next(void)
+int		lx_operator_next(void)
 {
 	if (g_lexer.token && !g_lexer.quote_st
 	&& (g_lexer.i != 0 ? is_operator_part(g_lexer.line[g_lexer.i - 1]) : 0)
@@ -26,7 +26,7 @@ int		operator_next(void)
 	return (0);
 }
 
-int		word_next(void)
+int		lx_word_next(void)
 {
 	if (g_lexer.token)
 	{
@@ -39,7 +39,7 @@ int		word_next(void)
 	return (0);
 }
 
-int		comment(void)
+int		lx_comment(void)
 {
 	if (*g_lexer.line == '#')
 	{
@@ -55,7 +55,7 @@ int		comment(void)
 ** functions will not enter their if statement if curr_tok is set to NULL.
 */
 
-int		word_start(void)
+int		lx_word_start(void)
 {
 	g_lexer.token = token_new(WORD);
 	ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i]);

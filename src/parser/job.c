@@ -84,6 +84,7 @@ t_job		*list(void)
 		if ((jobs->sep = separator_op()))
 			jobs->next = list();
 	}
+	get_all_heredocs();
 	return (jobs);
 }
 
@@ -111,11 +112,9 @@ t_job		*complete_command(void)
 			last_job->next = list();
 		}
 	}
-	get_all_heredocs();
+	ft_memdel((void **)&g_parser.heredocs);
+	g_parser.heredoc_ptr = NULL;
 	if (g_parser.error)
-	{
-		ft_memdel((void **)&g_parser.heredocs);
 		job_del(&jobs);
-	}
 	return (jobs);
 }

@@ -13,7 +13,13 @@
 #include "shell.h"
 
 /*
-int			remove_backslash_newline(char *line)
+** echo blblabla; /!\
+** EOF in batch mode /!\
+** 		cat << EOF
+** 		cat << EOF2 -> EOF no heredoc delim
+*/
+
+int			remove_escaped_newlines(char *line)
 {
 	char	quote;
 	int		i;
@@ -24,9 +30,9 @@ int			remove_backslash_newline(char *line)
 	{
 		if (line[i] == BSLASH)
 		{
-			i += 2;
-			if (line[i] == 0)
-				line[i - 2] = 0;
+			i++;
+			if (line[i] == '\n')
+				ft_memmove(&line[i - 1], &line[i + 1], ft_strlen(&line[i + 1]) + 1);
 		}
 		else if (line[i] == SQUOTE)
 		{
@@ -46,7 +52,6 @@ int			remove_backslash_newline(char *line)
 	}
 	return (0);
 }
-*/
 
 int			get_input(const char *prompt)
 {
@@ -71,6 +76,7 @@ int			get_input(const char *prompt)
 			g_lexer.line = NULL;
 			return (g_rl_last_ret);
 		}
+		remove_escaped_newlines(line);
 	}
 	else
 	{
@@ -93,6 +99,11 @@ int			get_input(const char *prompt)
 
 }
 
+int			loop_interactive(void)
+{
+	return (0);
+}
+
 int			main(int argc, char **argv)
 {
 	t_job	*ptr;
@@ -109,7 +120,7 @@ int			main(int argc, char **argv)
 			while (ptr && ptr->ast)
 			{
 				print_ast(ptr->ast, 0);
-				//printf("\n");
+				printf("\n");
 				ptr = ptr->next;
 			}
 			//run(ast);

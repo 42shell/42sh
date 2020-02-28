@@ -55,7 +55,8 @@ static t_token	*return_token(void)
 		g_lexer.token_is_delim = 0;
 		return (ret);
 	}
-	else if (g_lexer.line_cont || g_lexer.quote_st)
+	else if (g_lexer.line_cont || g_lexer.quote_st
+	|| (!g_lexer.line[g_lexer.i] && g_lexer.token && (g_lexer.line_cont = 1)))
 		return (get_next_token());
 	g_lexer.quote_st = 0;
 	return (NULL);
@@ -63,7 +64,7 @@ static t_token	*return_token(void)
 
 t_token			*get_next_token(void)
 {
-	if (g_lexer.line_cont || g_lexer.quote_st)
+	if (g_lexer.line_cont || g_lexer.quote_st) // || !g_line ??? avoid calling get_input in main like prev main
 	{
 		get_input(get_prompt());
 		g_lexer.line_cont = 0;
@@ -75,17 +76,16 @@ t_token			*get_next_token(void)
 	}
 	while (!g_lexer.token_is_delim && g_lexer.line[g_lexer.i])
 	{
-		backslash_newline()
-		|| operator_next()
-		|| operator_end()
-		|| backslash()
-		|| quote()
-		|| operator_new()
-		|| new_line()
-		|| blank()
-		|| word_next()
-		|| comment()
-		|| word_start();
+		lx_operator_next()
+		|| lx_operator_end()
+		|| lx_backslash()
+		|| lx_quote()
+		|| lx_operator_new()
+		|| lx_newline()
+		|| lx_blank()
+		|| lx_word_next()
+		|| lx_comment()
+		|| lx_word_start();
 	}
 	return (return_token());
 }

@@ -55,12 +55,18 @@ int			init(int argc, char **argv)
 		ft_dprintf(2, "42sh: stdin is not a tty\n");
 		exit(1);
 	}
-	else if (parse_args(argc, argv) == 0 && g_shell.interactive_mode)
+	if (parse_args(argc, argv) == 0)
 	{
-		g_rl_retain_nl = true;
-		g_rl_prompt_cr = true;
-		g_rl_hist_doubl = false;
-		init_sig();
+		if (g_shell.interactive_mode)
+		{
+			//g_shell.loop = &loop_interactive;
+			g_rl_retain_nl = true;
+			g_rl_prompt_cr = true;
+			g_rl_hist_doubl = false;
+			init_sig();
+		}
+		//else
+		//	g_shell.loop = &loop_batch;
 	}
 	g_env = env_dup(environ);
 	increase_shlvl(g_env);

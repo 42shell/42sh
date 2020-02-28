@@ -45,9 +45,12 @@
 # define PSP	"p> "
 # define PSH	"h> "
 
+//typedef int		(*t_loop_func)(void);
+
 typedef struct	s_shell
 {
 	bool		interactive_mode;
+	//t_loop_func	loop;
 	t_job		*jobs;
 }				t_shell;
 
@@ -56,6 +59,7 @@ t_shell			g_shell;
 int				init(int argc, char **argv);
 void			del(void);
 
+int				loop_interactive(void);
 int				get_input(const char *prompt);
 
 void			init_sig(void);
