@@ -54,13 +54,14 @@ static char	*get_heredoc(char *delim)
 
 	ret = 0;
 	heredoc = NULL;
+	if (g_parser.error)
+		return (NULL);
 	while (!line_eq(g_parser.heredoc_ptr, delim))
 	{
 		if (!*g_parser.heredoc_ptr)
 		{
 			i = g_parser.heredoc_ptr - g_lexer.line;
-			ret = get_input(PSH);
-			if (ret == RL_EOF || ret == RL_INT)
+			if ((ret = get_input(PSH)) == RL_EOF || ret == RL_INT)
 				break ;
 			g_parser.heredoc_ptr = &g_lexer.line[i];
 			continue ;
@@ -72,20 +73,25 @@ static char	*get_heredoc(char *delim)
 	return (heredoc);
 }
 
+/*
+** dstr may be more efficient
+*/
+
 void		get_all_heredocs(void)
 {
 	char	*heredoc_str;
 	int		i;
 
 	i = 0;
-	if (!g_parser.heredocs)
+	if (g_parser.error || !g_parser.heredocs
+	|| !(g_parser.heredoc_ptr = g_lexer.line))
 		return ;
-	g_parser.heredoc_ptr = g_lexer.line;
 	while ((g_parser.heredoc_ptr = ft_strchr(g_parser.heredoc_ptr, '\n') + 1)
 	&& g_parser.heredocs[i])
 	{
 		ft_dstr_add(g_parser.heredocs[i]->value, '\n');
-		heredoc_str = get_heredoc(g_parser.heredocs[i]->value->str);
+		if (!(heredoc_str = get_heredoc(g_parser.heredocs[i]->value->str)))
+			break ;
 		ft_dstr_del((void **)&g_parser.heredocs[i]->value);
 		g_parser.heredocs[i]->value = ft_dstr_from_str(heredoc_str);
 		free(heredoc_str);
@@ -93,4 +99,5 @@ void		get_all_heredocs(void)
 	}
 	ft_memdel((void **)&g_parser.heredocs);
 	g_parser.heredoc_ptr = NULL;
+	free(heredoc_str);
 }

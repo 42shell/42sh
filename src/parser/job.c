@@ -12,6 +12,10 @@
 
 #include "shell.h"
 
+/* ************************************************************************** */
+
+//						EXECUTION FOLDER
+
 /*
 ** depth first tree traversal
 ** if we encounter a command or a pipe node, stop traversing and execute it.
@@ -42,19 +46,8 @@ static int	run(void)
 	return (0);
 }
 */
+/* ************************************************************************** */
 
-int			parse_error(int code, char *near)
-{
-	if (g_parser.error)
-		return (0);
-	else if (g_parser.error != SILENT_ABORT && near)
-		ft_dprintf(2,
-		"42sh: syntax error near unexpected token '%s'\n",
-		near);
-	g_parser.error = code;
-	free(near);
-	return (0);
-}
 
 int			job_del(t_job **jobs)
 {
@@ -70,51 +63,3 @@ t_job		*job_new()
 {
 	return ((t_job *)ft_xmalloc(sizeof(t_job)));
 }
-
-/*
-t_job		*get_jobs(void)
-{
-	t_job	*jobs;
-
-	if (!jobs = list();
-	if (!(g_parser.token = get_next_token())
-	|| !(job->ast = and_or()))
-	{
-		job_del(&job);
-		return (NULL);
-	}
-	//else if (g_parser.token
-	//&& (g_parser.token->type == SEMI || g_parser.token->type == AMPERSAND))
-	//{
-	//	job->bg = (g_parser.token->type == AMPERSAND);
-	//	token_del(&g_parser.token);
-	//	job->next = get_jobs();
-	//}
-	//if (g_parser.error)
-	//{
-	//	job_del(&g_shell.jobs);
-	//	return (NULL);
-	//}
-	return (jobs);
-}
-*/
-
-/*
-while (g_parser.token)
-{
-	if (!(ast = and_or()))
-		return (parse_error());
-	tmp = job_new(ast);
-	if (!jobs)
-		jobs = tmp;
-	else
-		ptr->next = tmp;
-	if (g_parser.token
-	&& (g_parser.token->type == SEMI || g_parser.token->type == AMPERSAND))
-	{
-		tmp->bg = (g_parser.token->type == AMPERSAND);
-		token_del(&g_parser.token);
-		ptr = tmp;
-	}
-}
-*/

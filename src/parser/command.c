@@ -104,12 +104,11 @@ t_job		*complete_command(void)
 			last_job->next = list();
 		}
 	}
+	get_all_heredocs();
 	if (g_parser.error)
 	{
 		ft_memdel((void **)&g_parser.heredocs);
 		job_del(&jobs);
 	}
-	else
-		get_all_heredocs();
 	return (jobs);
 }

@@ -105,6 +105,19 @@ void	free_ast_nodes(t_node *node, bool par_is_pattern)
 	free(node);
 }
 
+int		parse_error(int code, char *near)
+{
+	if (g_parser.error)
+		return (0);
+	else if (g_parser.error != SILENT_ABORT && near)
+		ft_dprintf(2,
+		"42sh: syntax error near unexpected token '%s'\n",
+		near);
+	g_parser.error = code;
+	free(near);
+	return (0);
+}
+
 /* ************************************************************************** */
 /* ************************************************************************** */
 
