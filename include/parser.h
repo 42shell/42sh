@@ -32,7 +32,7 @@ enum					e_parse_error
 };
 
 /*
-** job struct is list():
+** job struct is complete_command():
 ** -ast is the root of the tree (and_or())
 ** -next is the next job
 ** -heredocs are pointers to the heredoc nodes currently in the AST

@@ -22,7 +22,10 @@ void		newline_list(void)
 	if (g_parser.error)
 		return ;
 	while (g_parser.token && g_parser.token->type == NEWLINE)
+	{
+		token_del(&g_parser.token);
 		g_parser.token = get_next_token();
+	}
 }
 
 /*
