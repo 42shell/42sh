@@ -108,9 +108,6 @@ int						process_del(t_process **process);
 t_redir					*redir_new(t_token *left_op, t_token *operator, t_token *right_op);
 int						redir_del(t_redir **redir);
 
-void					add_process_redir(t_process *process, t_redir *redir);
-void					add_process_arg(t_process *process, t_token *arg);
-void					add_heredoc(t_token *heredoc);
 int						is_process(t_node *node);
 t_token					*node_token(t_node *node);
 void					free_ast_nodes(t_node *node, bool par_is_pattern);

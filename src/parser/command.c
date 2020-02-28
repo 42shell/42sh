@@ -28,7 +28,49 @@
 ** }
 */
 
-t_node		*command(void)
+static void	add_process_arg(t_process *process, t_token *arg)
+{
+	t_token		**new;
+	int			size;
+
+	if (!process->argv)
+	{
+		process->argv = (t_token **)ft_xmalloc(sizeof(t_token *) * 2);
+		process->argv[0] = arg;
+		return ;
+	}
+	size = 0;
+	while (process->argv[size])
+		size++;
+	new = (t_token **)ft_xmalloc(sizeof(t_token *) * (size + 2));
+	ft_memcpy((char *)new, (char *)process->argv, (size * sizeof(t_token *)));
+	new[size] = arg;
+	free(process->argv);
+	process->argv = new;
+}
+
+static void	add_process_redir(t_process *process, t_redir *redir)
+{
+	t_redir		**new;
+	int			size;
+
+	if (!process->redirs)
+	{
+		process->redirs = (t_redir **)ft_xmalloc(sizeof(t_redir *) * 2);
+		process->redirs[0] = redir;
+		return ;
+	}
+	size = 0;
+	while (process->redirs[size])
+		size++;
+	new = (t_redir **)ft_xmalloc(sizeof(t_redir *) * (size + 2));
+	ft_memcpy((char *)new, (char *)process->redirs, (size * sizeof(t_token *)));
+	new[size] = redir;
+	free(process->redirs);
+	process->redirs = new;
+}
+
+t_node			*command(void)
 {
 	t_node		*command_node;
 	t_process	*process;
@@ -55,60 +97,4 @@ t_node		*command(void)
 		ft_memdel((void **)&command_node);
 	}
 	return (command_node);
-}
-
-/*
-list             : and_or
-                 | and_or separator_op list
-*/
-
-t_job		*list(void)
-{
-	t_job	*jobs;
-	t_node	*ast;
-
-	jobs = NULL;
-	if (g_parser.error || !g_parser.token)
-		return (NULL);
-	if ((ast = and_or(NULL)))
-	{
-		jobs = job_new();
-		jobs->ast = ast;
-		if ((jobs->sep = separator_op()))
-			jobs->next = list();
-	}
-	return (jobs);
-}
-
-/*
-complete_command : list separator
-                 | list
-*/
-
-t_job		*complete_command(void)
-{
-	t_job	*jobs;
-	t_job	*last_job;
-
-	jobs = NULL;
-	if (g_parser.error || !g_parser.token)
-		return (NULL);
-	if ((jobs = list()))
-	{
-		separator();
-		if (g_parser.token)
-		{
-			last_job = jobs;
-			while (last_job->next)
-				last_job = last_job->next;
-			last_job->next = list();
-		}
-	}
-	get_all_heredocs();
-	if (g_parser.error)
-	{
-		ft_memdel((void **)&g_parser.heredocs);
-		job_del(&jobs);
-	}
-	return (jobs);
 }

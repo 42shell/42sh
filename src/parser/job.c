@@ -63,3 +63,59 @@ t_job		*job_new()
 {
 	return ((t_job *)ft_xmalloc(sizeof(t_job)));
 }
+
+/*
+list             : and_or
+                 | and_or separator_op list
+*/
+
+t_job		*list(void)
+{
+	t_job	*jobs;
+	t_node	*ast;
+
+	jobs = NULL;
+	if (g_parser.error || !g_parser.token)
+		return (NULL);
+	if ((ast = and_or(NULL)))
+	{
+		jobs = job_new();
+		jobs->ast = ast;
+		if ((jobs->sep = separator_op()))
+			jobs->next = list();
+	}
+	return (jobs);
+}
+
+/*
+complete_command : list separator
+                 | list
+*/
+
+t_job		*complete_command(void)
+{
+	t_job	*jobs;
+	t_job	*last_job;
+
+	jobs = NULL;
+	if (g_parser.error || !g_parser.token)
+		return (NULL);
+	if ((jobs = list()))
+	{
+		separator();
+		if (g_parser.token)
+		{
+			last_job = jobs;
+			while (last_job->next)
+				last_job = last_job->next;
+			last_job->next = list();
+		}
+	}
+	get_all_heredocs();
+	if (g_parser.error)
+	{
+		ft_memdel((void **)&g_parser.heredocs);
+		job_del(&jobs);
+	}
+	return (jobs);
+}
