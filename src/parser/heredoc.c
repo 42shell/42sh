@@ -24,17 +24,6 @@ static bool	line_eq(char *s1, char *s2)
 	return (*s1 == *s2);
 }
 
-/*
-static int	get_heredoc_line()
-{
-	i = g_parser.heredoc_ptr - g_lexer.line;
-	if ((ret = get_input(PSH)) == RL_EOF || ret == RL_INT)
-		break ;
-	g_parser.heredoc_ptr = &g_lexer.line[i];
-	continue ;
-}
-*/
-
 static void	line_add(char **heredoc, char *line)
 {
 	int		heredoc_len;
@@ -73,7 +62,7 @@ static char	*get_heredoc(char *delim)
 		{
 			while (!ft_strchr(g_parser.heredoc_ptr, '\n'))
 			{
-				if ((ret = get_input(PSH)) == RL_EOF || ret == RL_INT)
+				if ((ret = g_shell.get_input(PSH)) != 0)
 				{
 					ft_memdel((void **)&heredoc);
 					return (NULL);
@@ -113,5 +102,4 @@ void		get_all_heredocs(void)
 		i++;
 	}
 	ft_memdel((void **)&heredoc_str);
-	g_parser.heredoc_ptr = NULL;
 }

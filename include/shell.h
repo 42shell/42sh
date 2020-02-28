@@ -36,33 +36,37 @@
 # include "builtins.h"
 # include "utils.h"
 
-# define PS1	"$> "
-# define PS2	"> "
-# define PSQ	"q> "
-# define PSD	"d> "
-# define PSA	"a> "
-# define PSO	"o> "
-# define PSP	"p> "
-# define PSH	"h> "
+# define BUFF_SIZE	2
+# define INPUT_INT	3
+# define INPUT_EOF	4
 
-//typedef int		(*t_loop_func)(void);
+# define PS1		"$> "
+# define PS2		"> "
+# define PSQ		"q> "
+# define PSD		"d> "
+# define PSA		"a> "
+# define PSO		"o> "
+# define PSP		"p> "
+# define PSH		"h> "
 
-typedef struct	s_shell
+typedef int			(*t_input_func)(const char *);
+
+typedef struct		s_shell
 {
-	bool		interactive_mode;
-	//t_loop_func	loop;
-	t_job		*jobs;
-}				t_shell;
+	bool			interactive_mode;
+	t_input_func	get_input;
+	t_job			*jobs;
+}					t_shell;
 
-t_shell			g_shell;
+t_shell				g_shell;
 
-int				init(int argc, char **argv);
-void			del(void);
+int					init(int argc, char **argv);
+void				del(void);
 
-int				loop_interactive(void);
-int				get_input(const char *prompt);
+int					input_batch(const char *prompt);
+int					input_interactive(const char *prompt);
 
-void			init_sig(void);
-void			sig_handle(int sig);
+void				init_sig(void);
+void				sig_handle(int sig);
 
 #endif

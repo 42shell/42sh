@@ -27,6 +27,10 @@ static void	increase_shlvl(t_env *env)
 	free(shlvl_str);
 }
 
+/*
+** check this, readline write on 2 ? etc...
+*/
+
 static int	parse_args(int argc, char **argv)
 {
 	int		fd;
@@ -59,14 +63,14 @@ int			init(int argc, char **argv)
 	{
 		if (g_shell.interactive_mode)
 		{
-			//g_shell.loop = &loop_interactive;
+			g_shell.get_input = &input_interactive;
 			g_rl_retain_nl = true;
 			g_rl_prompt_cr = true;
 			g_rl_hist_doubl = false;
 			init_sig();
 		}
-		//else
-		//	g_shell.loop = &loop_batch;
+		else
+			g_shell.get_input = &input_batch;
 	}
 	g_env = env_dup(environ);
 	increase_shlvl(g_env);

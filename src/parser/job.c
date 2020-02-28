@@ -81,15 +81,22 @@ t_job		*list(void)
 	{
 		jobs = job_new();
 		jobs->ast = ast;
-		if ((jobs->sep = separator_op()))
+		if ((jobs->sep = separator_op())
+		&& g_parser.token && g_parser.token->type != NEWLINE)
 			jobs->next = list();
+		separator();
 	}
 	get_all_heredocs();
 	return (jobs);
 }
 
 /*
-complete_command : list separator
+
+this rule seems to be only useful in batch mode (or maybe in builtins like function definition ??)
+
+I ve added separator() calls to skip empty lines in batch mode.
+
+complete_command : list separator 
                  | list
 */
 
@@ -99,11 +106,13 @@ t_job		*complete_command(void)
 	t_job	*last_job;
 
 	jobs = NULL;
-	if (g_parser.error || !g_parser.token)
+	if (g_parser.error)
 		return (NULL);
+	else if (!g_parser.token)
+		g_parser.token = get_next_token();
+	separator();
 	if ((jobs = list()))
 	{
-		separator();
 		if (g_parser.token)
 		{
 			last_job = jobs;

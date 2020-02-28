@@ -12,7 +12,7 @@
 
 #include "shell.h"
 
-static int	delim_token(void)
+static int	delim_token(char delim)
 {
 	if (g_lexer.token)
 	{
@@ -22,7 +22,7 @@ static int	delim_token(void)
 		else if ((g_lexer.line[g_lexer.i] == '<' || g_lexer.line[g_lexer.i] == '>')
 		&& ft_strisnbr(g_lexer.token->value->str))
 			g_lexer.token->type = IO_NUMBER;
-		g_lexer.token_is_delim = 1;
+		g_lexer.last_delim = delim;
 	}
 	return (0);
 }
@@ -35,7 +35,7 @@ int			lx_operator_end(void)
 	&& (!is_operator_part(g_lexer.line[g_lexer.i])
 	|| !is_operator_next(g_lexer.token->value->str, g_lexer.line[g_lexer.i])))
 	{
-		delim_token();
+		delim_token(g_lexer.line[g_lexer.i]);
 		return (1);
 	}
 	return (0);
@@ -49,7 +49,7 @@ int			lx_operator_new(void)
 		if ((g_lexer.line[g_lexer.i] == '<' || g_lexer.line[g_lexer.i] == '>')
 		&& ft_strisnbr(g_lexer.token->value->str))
 			g_lexer.token->type = IO_NUMBER;
-		delim_token();
+		delim_token(g_lexer.line[g_lexer.i]);
 		return (1);
 	}
 	return (0);
@@ -59,12 +59,13 @@ int			lx_newline(void)
 {
 	if (!g_lexer.quote_st && g_lexer.line[g_lexer.i] == '\n')
 	{
+		g_lexer.nl_found = 1;
 		if (!g_lexer.token)
 		{
 			g_lexer.token = token_new(NEWLINE);
 			g_lexer.i++;
 		}
-		delim_token();
+		delim_token('\n');
 		return (1);
 	}
 	return (0);
@@ -75,7 +76,7 @@ int			lx_blank(void)
 	if (!g_lexer.quote_st && ft_iswhitespace(g_lexer.line[g_lexer.i]))
 	{
 		if (g_lexer.token)
-			delim_token();
+			delim_token(g_lexer.line[g_lexer.i]);
 		while (ft_iswhitespace(g_lexer.line[g_lexer.i]))
 			g_lexer.i++;
 		return (1);

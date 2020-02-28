@@ -69,7 +69,6 @@ typedef struct		s_lexer
 	char			last_delim;
 	char			line_cont;
 	char			quote_st;
-	char			nl_found;
 	size_t			i;
 }					t_lexer;
 

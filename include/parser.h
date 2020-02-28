@@ -39,6 +39,11 @@ enum					e_parse_error
 ** -bg is background
 */
 
+/*
+** maybe separate jobs and asts,
+** redo list of asts and add then to jobs if needed...
+*/
+
 typedef struct			s_job
 {
 	t_node				*ast;

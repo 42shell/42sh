@@ -30,15 +30,11 @@ static char		*get_prompt(void)
 int				reset_lexer(void)
 {
 	if (g_lexer.token)
-	{
 		token_del(&g_lexer.token);
-		g_lexer.token = NULL;
-	}
 	free(g_lexer.line);
 	g_lexer.line = NULL;
-	g_lexer.token = NULL;
 	g_lexer.line_cont = 0;
-	g_lexer.token_is_delim = 0;
+	g_lexer.last_delim = 0;
 	g_lexer.quote_st = 0;
 	g_lexer.i = 0;
 	return (0);
@@ -48,33 +44,37 @@ static t_token	*return_token(void)
 {
 	t_token	*ret;
 
-	if (g_lexer.token_is_delim)
+	if (g_lexer.last_delim) //a token has been delimited
 	{
 		ret = g_lexer.token;
 		g_lexer.token = NULL;
-		g_lexer.token_is_delim = 0;
+		g_lexer.last_delim = 0;
 		return (ret);
 	}
-	else if (g_lexer.line_cont || g_lexer.quote_st
-	|| (!g_lexer.line[g_lexer.i] && g_lexer.token && (g_lexer.line_cont = 1)))
+	else if (!g_lexer.nl_found) //escaped newlines or consecutives whitespaces in file in batch mode...
+	{
+		g_lexer.line_cont = 1;
 		return (get_next_token());
-	g_lexer.quote_st = 0;
+	}
+	g_lexer.nl_found = 0;
+	g_lexer.quote_st = 0; //normal end of line
 	return (NULL);
 }
 
 t_token			*get_next_token(void)
 {
-	if (g_lexer.line_cont || g_lexer.quote_st) // || !g_line ??? avoid calling get_input in main like prev main
+	if (g_parser.error)
+		return (NULL);
+	if (g_lexer.line_cont || g_lexer.quote_st)
 	{
-		get_input(get_prompt());
+		if (g_shell.get_input(get_prompt()) != 0)
+		{
+			//reset_lexer();
+			return (NULL);
+		}
 		g_lexer.line_cont = 0;
 	}
-	if (g_parser.error || !g_lexer.line)
-	{
-		reset_lexer();
-		return (NULL);
-	}
-	while (!g_lexer.token_is_delim && g_lexer.line[g_lexer.i])
+	while (!g_lexer.last_delim && g_lexer.line[g_lexer.i])
 	{
 		lx_operator_next()
 		|| lx_operator_end()

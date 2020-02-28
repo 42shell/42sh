@@ -81,8 +81,8 @@ void	print_ast(t_node *ast, size_t indent_level)
 		{
 			redir = process->redirs[i++];
 			if (redir->left_op)
-				printf("%s", redir->left_op->value->str);
-			printf("%s", redir->operator->value->str);
+				printf("%s ", redir->left_op->value->str);
+			printf("%s ", redir->operator->value->str);
 			printf("%s ", redir->right_op->value->str);
 		}
 		printf("\n");

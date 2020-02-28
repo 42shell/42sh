@@ -118,6 +118,7 @@ SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
 SRC_SHELL       := del.c\
                    init.c\
 				   signal.c\
+				   input.c\
                    main.c
 SRC_SHELL       := $(addprefix shell/,$(SRC_SHELL))
 
