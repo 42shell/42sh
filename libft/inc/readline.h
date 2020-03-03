@@ -167,7 +167,7 @@ struct s_rl_line	g_rl_line;
 /*
 ** the function used to autocomplete,
 ** takes the current line as a paramater to get the context,
-** return an array of matches which will be displayed.
+** returns an array of matches which will be displayed.
 */
 
 typedef char		**(*t_complete_func)(char *);
