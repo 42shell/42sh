@@ -123,7 +123,7 @@ t_job		*complete_command(void)
 	}
 	ft_memdel((void **)&g_parser.heredocs);
 	g_parser.heredoc_ptr = NULL;
-	if (g_parser.error)
+	if (g_parser.error && g_parser.error != HEREDOC_NO_DELIM)
 		job_del(&jobs);
 	return (jobs);
 }

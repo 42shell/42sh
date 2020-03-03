@@ -94,7 +94,8 @@ int			input_interactive(const char *prompt)
 	else if (!*line)//ctrl-C || ctrl-D
 	{
 		free(line);
-		g_parser.error = SILENT_ABORT;
+		if (!ft_strequ(prompt, PSH))
+			g_parser.error = SILENT_ABORT;
 		if (g_rl_last_ret == RL_EOF)
 		{
 			if (!g_lexer.line)

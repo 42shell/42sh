@@ -46,7 +46,11 @@ int		parse_error(int code, char *near)
 {
 	if (g_parser.error)
 		return (0);
-	else if (g_parser.error != SILENT_ABORT && near)
+	else if (code == HEREDOC_NO_DELIM)
+		ft_dprintf(2,
+		"42sh: warning: here-document delimited by end-of-file (wanted '%s')\n",
+		near);
+	else if (code != SILENT_ABORT && near)
 		ft_dprintf(2,
 		"42sh: syntax error near unexpected token '%s'\n",
 		near);

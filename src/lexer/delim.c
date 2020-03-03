@@ -73,7 +73,9 @@ int			lx_newline(void)
 
 int			lx_blank(void)
 {
-	if (!g_lexer.quote_st && ft_iswhitespace(g_lexer.line[g_lexer.i]))
+	if (!g_lexer.quote_st
+	&& (g_lexer.line[g_lexer.i] == '\t'
+	|| g_lexer.line[g_lexer.i] == ' '))
 	{
 		if (g_lexer.token)
 			delim_token(g_lexer.line[g_lexer.i]);
