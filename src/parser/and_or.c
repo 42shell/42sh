@@ -51,7 +51,7 @@ t_node		*and_or(t_node *left_pipeline)
 	else if (g_parser.token
 	&& (g_parser.token->type == AND_IF || g_parser.token->type == OR_IF))
 	{
-		and_or_node = node_new(g_parser.token);
+		and_or_node = node_new(g_parser.token, g_parser.token->type);
 		node_add_child(and_or_node, left_pipeline);
 		g_parser.token = get_next_token();
 		linebreak_get_input(node_token(and_or_node)->type);

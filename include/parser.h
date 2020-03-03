@@ -111,7 +111,7 @@ int						command_del(t_command **command);
 t_redir					*redir_new(t_token *left_op, t_token *operator, t_token *right_op);
 int						redir_del(t_redir **redir);
 
-t_node					*node_new(void *data);
+t_node					*node_new(void *data, int type);
 int						node_add_child(t_node *parent, t_node *child);
 t_token					*node_token(t_node *node);
 

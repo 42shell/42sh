@@ -17,7 +17,7 @@ t_token		*node_token(t_node *node)
 	return ((t_token *)(node->data));
 }
 
-t_node		*node_new(void *data)
+t_node		*node_new(void *data, int type)
 {
 	t_node *node;
 
@@ -28,6 +28,7 @@ t_node		*node_new(void *data)
 	node->nb_children = 0;
 	node->capacity = 0;
 	node->child = NULL;
+	node->type = type;
 	return (node);
 }
 
