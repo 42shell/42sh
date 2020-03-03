@@ -60,8 +60,9 @@ SRC_ENV		    := env_dup.c\
                    env_utils.c
 SRC_ENV    		:= $(addprefix env/,$(SRC_ENV))
 
-#SRC_EXEC        := argv.c\
-                   exec.c\
+#SRC_EXEC        := exec.c\
+				   argv.c\
+                   #exec.c\
                    open_heredoc.c\
                    pipe.c\
                    redir.c\
@@ -108,11 +109,13 @@ SRC_PARSER      := heredoc.c\
 				   command.c\
 				   command_utils.c\
 				   ast.c\
+				   ast_utils.c\
 				   and_or.c\
                    pipeline.c\
                    redirect.c\
 				   separator.c\
 				   node.c\
+				   parse_error.c\
                    utils.c
 SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
 

@@ -24,14 +24,18 @@ typedef struct	s_fd_backup
 typedef struct	s_argv
 {
 	char		**argv;
-	char		*cmd_path;
+	char		*cmd_path;//char *ft_path_getsuffix()
 }				t_argv;
 
-int				execute(t_node *node, t_env *env);
+int				execute(t_node *node);
+int				exec_command(t_node *command_node);
+char			**get_argv(t_node *command_node);
+
+/*
+
 int				exec_pipe(t_node *ast, t_env *env);
 int				exec_with_io(t_node *cmd, t_env *env, int stdin_fd,
 				int stdout_fd);
-int				exec_command(t_node *cmd, t_env *env);
 int				exec_command_env(char **argv, t_env *env);
 int				exec_builtin(t_argv *argv, t_env *env, t_node *cmd,
 				bool free_argv);
@@ -49,5 +53,6 @@ void			kill_all_forks(void);
 int				set_pipe_redir(int input_fd, int fildes[2]);
 
 int				open_heredoc(t_dstr *heredoc);
+*/
 
 #endif

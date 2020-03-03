@@ -48,22 +48,6 @@ static int	run(void)
 */
 /* ************************************************************************** */
 
-
-int			ast_del(t_ast **ast_list)
-{
-	if (!ast_list || !*ast_list)
-		return (0);
-	free_ast_nodes((*ast_list)->root, false);
-	ast_del(&((*ast_list)->next));
-	ft_memdel((void **)ast_list);
-	return (0);
-}
-
-t_ast		*ast_new()
-{
-	return ((t_ast *)ft_xmalloc(sizeof(t_ast)));
-}
-
 /*
 list             : and_or
                  | and_or separator_op list

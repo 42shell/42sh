@@ -24,7 +24,7 @@ static void	interrupt_fork(int sig)
 	g_last_exit_st = 130;
 }
 
-int			exec_builtin(t_argv *argv, t_env *env, t_node *cmd, bool free_av)
+int			exec_builtin(t_node *command_node, char **argv) //bool free_argv
 {
 	if (set_redir(cmd, true) > 0)
 	{
@@ -72,16 +72,15 @@ int			exec_command_env(char **argv, t_env *env)
 	return (g_last_exit_st);
 }
 
-int			exec_command(t_node *cmd, t_env *env)
+int			exec_command(t_node *command_node)
 {
 	pid_t		pid;
 	int			status;
-	t_argv		*argv;
+	char		**argv;
 
-	if ((argv = get_argv(cmd, env)) == NULL)
-		return (1);
-	if (is_builtin(argv->argv[0]))
-		return (exec_builtin(argv, env, cmd, true));
+	argv = get_argv(command_node);
+	if (is_builtin(argv && argv[0]))
+		return (exec_builtin(command_node, argv));
 	pid = fork();
 	signal(SIGINT, interrupt_fork);
 	if (pid == 0)
@@ -101,15 +100,16 @@ int			exec_command(t_node *cmd, t_env *env)
 	return (g_last_exit_st);
 }
 
-int			execute(t_node *node, t_env *env)
+int			execute(t_node *node)
 {
 	int			i;
 
 	i = 0;
 	if (node == NULL)
 		return (1);
-	else if (node->data == NULL && expand(node, env) == 0)
-		return (exec_command(node, env));
+	else if (node->type == NODE_COMMAND /*&& expand(node, env) == 0*/)
+		return (exec_command(node));
+	/*
 	else if (((t_token *)node->data)->type == PIPE)
 		return (exec_pipe(node, env));
 	else if (((t_token *)node->data)->type == AND_IF)
@@ -126,5 +126,6 @@ int			execute(t_node *node, t_env *env)
 	}
 	while (i < node->nb_children)
 		execute(node->child[i++], env);
+	*/
 	return (1);
 }

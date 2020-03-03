@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   argv.c                                             :+:      :+:    :+:   */
+/*   parse_error.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/14 17:52:18 by fratajcz         ###   ########.fr       */
+/*   Created: 2019/12/15 08:48:18 by fratajcz          #+#    #+#             */
+/*   Updated: 2020/02/14 17:31:49 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-char		**get_argv(t_node *command_node)
+int		parse_error(int code, char *near)
 {
-	char	**argv;
-	int		argc;
-	int		i;
-
-	i = 0;
-	argc = 0;
-	if (!command_node->argv)
-		return (NULL);
-	while (command_node->argv[argc])
-		argc++;
-	array = ft_xmalloc(sizeof(char *) * (argc + 1));
-	while (i < argc)
-	{
-		argv[i] = ft_strdup(command_node->argv[i]->value->str);
-		i++;
-	}
-	return (argv);
+	if (g_parser.error)
+		return (0);
+	else if (code == HEREDOC_NO_DELIM)
+		ft_dprintf(2,
+		"42sh: warning: here-document delimited by end-of-file (wanted '%s')\n",
+		near);
+	else if (code != SILENT_ABORT && near)
+		ft_dprintf(2,
+		"42sh: syntax error near unexpected token '%s'\n",
+		near);
+	g_parser.error = code;
+	free(near);
+	return (0);
 }

@@ -12,48 +12,6 @@
 
 #include "shell.h"
 
-void	free_ast_nodes(t_node *node, bool par_is_pattern)
-{
-	int		i;
-	//bool	cur_is_pattern;
-
-	(void)par_is_pattern;
-	//cur_is_pattern = false;
-	if (node == NULL)
-		return ;
-	else if (node->type == NODE_COMMAND)
-		command_del((t_command **)&node->data);
-	else if (node->data != NULL /*&& !par_is_pattern*/)
-	{
-		token_del((t_token **)&node->data);
-		//cur_is_pattern = (node_token(node)->type == PATTERN);
-	}
-	//else if (par_is_pattern)
-	//	array_destroy(node->data);
-	i = 0;
-	while (i < node->nb_children)
-		free_ast_nodes(node->child[i++], /*cur_is_pattern*/ 0);
-	free(node->child);
-	free(node);
-}
-
-int		parse_error(int code, char *near)
-{
-	if (g_parser.error)
-		return (0);
-	else if (code == HEREDOC_NO_DELIM)
-		ft_dprintf(2,
-		"42sh: warning: here-document delimited by end-of-file (wanted '%s')\n",
-		near);
-	else if (code != SILENT_ABORT && near)
-		ft_dprintf(2,
-		"42sh: syntax error near unexpected token '%s'\n",
-		near);
-	g_parser.error = code;
-	free(near);
-	return (0);
-}
-
 /* ************************************************************************** */
 /* ************************************************************************** */
 
