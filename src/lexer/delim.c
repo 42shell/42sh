@@ -79,7 +79,8 @@ int			lx_blank(void)
 	{
 		if (g_lexer.token)
 			delim_token(g_lexer.line[g_lexer.i]);
-		while (ft_iswhitespace(g_lexer.line[g_lexer.i]))
+		while (g_lexer.line[g_lexer.i] == '\t'
+		|| g_lexer.line[g_lexer.i] == ' ')
 			g_lexer.i++;
 		return (1);
 	}

@@ -34,30 +34,30 @@ t_redir		*redir_new(t_token *left_op, t_token *operator, t_token *right_op)
 	return (redir);
 }
 
-int			is_process(t_node *node)
+int			is_command(t_node *node) //node->type
 {
 	return (node->data && node->nb_children == 0);
 }
 
-int			process_del(t_process **process)
+int			command_del(t_command **command)
 {
 	size_t	i;
 
 	i = 0;
-	if (!process || !*process)
+	if (!command || !*command)
 		return (0);
-	while ((*process)->argv && (*process)->argv[i])
-		token_del(&(*process)->argv[i++]);
+	while ((*command)->argv && (*command)->argv[i])
+		token_del(&(*command)->argv[i++]);
 	i = 0;
-	while ((*process)->redirs && (*process)->redirs[i])
-		redir_del(&(*process)->redirs[i++]);
-	free((*process)->argv);
-	free((*process)->redirs);
-	ft_memdel((void **)process);
+	while ((*command)->redirs && (*command)->redirs[i])
+		redir_del(&(*command)->redirs[i++]);
+	free((*command)->argv);
+	free((*command)->redirs);
+	ft_memdel((void **)command);
 	return (0);
 }
 
-t_process	*process_new(void)
+t_command	*command_new(void)
 {
-	return ((t_process *)ft_xmalloc(sizeof(t_process)));
+	return ((t_command *)ft_xmalloc(sizeof(t_command)));
 }

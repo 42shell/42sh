@@ -44,21 +44,17 @@ enum					e_parse_error
 ** redo list of asts and add then to jobs if needed...
 */
 
-typedef struct			s_job
+typedef struct			s_ast
 {
-	t_node				*ast;
-	struct s_job		*next;
+	t_node				*root;
+	struct s_ast		*next;
 	t_token				*sep;
-	bool				bg;
-	/*
-	** job stuff
-	*/
-}						t_job;
+}						t_ast;
 
 /*
-** process struct is command():
+** command is a leaf of the tree:
 ** -argv is array of tokens (command name + args)
-** -redirs struct has 3 token fields, from is NULL if no IO_NUMBER
+** -redirs struct has 3 token fields, from is NULL if no IO_NUMBER (set default value directly ??)
 */
 
 typedef struct			s_redir
@@ -68,14 +64,11 @@ typedef struct			s_redir
 	t_token				*right_op;
 }						t_redir;
 
-typedef struct			s_process
+typedef struct			s_command
 {
 	t_token				**argv;
 	t_redir				**redirs;
-	/*
-	** process stuff;
-	*/
-}						t_process;
+}						t_command;
 
 /*
 ** parser:
@@ -92,8 +85,8 @@ typedef struct			s_parser
 
 t_parser				g_parser;
 
-t_job					*complete_command(void);
-t_job					*list(void);
+t_ast					*complete_command(void);
+t_ast					*list(void);
 t_node					*and_or(t_node *left_pipeline);
 t_node					*pipeline(void);
 t_node					*command(void);
@@ -106,14 +99,14 @@ void					newline_list(void);
 int						parse_error(int code, char *near);
 void					get_all_heredocs(void);
 
-t_job					*job_new();
-int						job_del(t_job **job);
-t_process				*process_new(void);
-int						process_del(t_process **process);
+t_ast					*ast_new();
+int						ast_del(t_ast **ast);
+t_command				*command_new(void);
+int						command_del(t_command **command);
 t_redir					*redir_new(t_token *left_op, t_token *operator, t_token *right_op);
 int						redir_del(t_redir **redir);
 
-int						is_process(t_node *node);
+int						is_command(t_node *node);
 t_token					*node_token(t_node *node);
 void					free_ast_nodes(t_node *node, bool par_is_pattern);
 void					print_ast(t_node *ast, size_t indent_level);

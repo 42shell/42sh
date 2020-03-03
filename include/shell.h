@@ -55,7 +55,7 @@ typedef struct		s_shell
 {
 	bool			interactive_mode;
 	t_input_func	get_input;
-	t_job			*jobs;
+	t_ast			*ast;
 }					t_shell;
 
 t_shell				g_shell;

@@ -25,8 +25,8 @@ void	free_ast_nodes(t_node *node, bool par_is_pattern)
 	cur_is_pattern = false;
 	if (node == NULL)
 		return ;
-	else if (is_process(node))
-		process_del((t_process **)&node->data);
+	else if (is_command(node))
+		command_del((t_command **)&node->data);
 	else if (node->data != NULL && !par_is_pattern)
 	{
 		cur_is_pattern = (node_token(node)->type == PATTERN);
@@ -66,24 +66,24 @@ void	print_ast(t_node *ast, size_t indent_level)
 {
 	size_t		i;
 	size_t		n;
-	t_process	*process;
+	t_command	*command;
 	t_redir		*redir;
 
 	n = 0;
 	while (n++ < indent_level)
 		write(1, "  ", 2);
-	if (is_process(ast))
+	if (is_command(ast))
 	{
 		i = 0;
-		process = (t_process *)ast->data;
-		if (!process->argv && !process->redirs)
+		command = (t_command *)ast->data;
+		if (!command->argv && !command->redirs)
 			return ;
-		while (process->argv && process->argv[i])
-			printf("%s ", process->argv[i++]->value->str);
+		while (command->argv && command->argv[i])
+			printf("%s ", command->argv[i++]->value->str);
 		i = 0;
-		while (process->redirs && process->redirs[i])
+		while (command->redirs && command->redirs[i])
 		{
-			redir = process->redirs[i++];
+			redir = command->redirs[i++];
 			if (redir->left_op)
 				printf("%s ", redir->left_op->value->str);
 			printf("%s ", redir->operator->value->str);

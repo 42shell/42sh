@@ -28,72 +28,72 @@
 ** }
 */
 
-static void	add_process_arg(t_process *process, t_token *arg)
+static void	add_command_arg(t_command *command, t_token *arg)
 {
 	t_token		**new;
 	int			size;
 
-	if (!process->argv)
+	if (!command->argv)
 	{
-		process->argv = (t_token **)ft_xmalloc(sizeof(t_token *) * 2);
-		process->argv[0] = arg;
+		command->argv = (t_token **)ft_xmalloc(sizeof(t_token *) * 2);
+		command->argv[0] = arg;
 		return ;
 	}
 	size = 0;
-	while (process->argv[size])
+	while (command->argv[size])
 		size++;
 	new = (t_token **)ft_xmalloc(sizeof(t_token *) * (size + 2));
-	ft_memcpy((char *)new, (char *)process->argv, (size * sizeof(t_token *)));
+	ft_memcpy((char *)new, (char *)command->argv, (size * sizeof(t_token *)));
 	new[size] = arg;
-	free(process->argv);
-	process->argv = new;
+	free(command->argv);
+	command->argv = new;
 }
 
-static void	add_process_redir(t_process *process, t_redir *redir)
+static void	add_command_redir(t_command *command, t_redir *redir)
 {
 	t_redir		**new;
 	int			size;
 
-	if (!process->redirs)
+	if (!command->redirs)
 	{
-		process->redirs = (t_redir **)ft_xmalloc(sizeof(t_redir *) * 2);
-		process->redirs[0] = redir;
+		command->redirs = (t_redir **)ft_xmalloc(sizeof(t_redir *) * 2);
+		command->redirs[0] = redir;
 		return ;
 	}
 	size = 0;
-	while (process->redirs[size])
+	while (command->redirs[size])
 		size++;
 	new = (t_redir **)ft_xmalloc(sizeof(t_redir *) * (size + 2));
-	ft_memcpy((char *)new, (char *)process->redirs, (size * sizeof(t_token *)));
+	ft_memcpy((char *)new, (char *)command->redirs, (size * sizeof(t_token *)));
 	new[size] = redir;
-	free(process->redirs);
-	process->redirs = new;
+	free(command->redirs);
+	command->redirs = new;
 }
 
 t_node			*command(void)
 {
 	t_node		*command_node;
-	t_process	*process;
+	t_command	*command;
 	t_redir		*redirect;
 
 	if (g_parser.error)
 		return (NULL);
-	process = process_new();
-	command_node = node_new(process);
+	command = command_new();
+	command_node = node_new(command);
 	while (!g_parser.error && g_parser.token
 	&& ((redirect = io_redirect()) || g_parser.token->type == WORD))
 	{
 		if (redirect)
-			add_process_redir(process, redirect);
+			add_command_redir(command, redirect);
 		else
 		{
-			add_process_arg(process, g_parser.token);
+			add_command_arg(command, g_parser.token);
 			g_parser.token = get_next_token();
 		}
 	}
-	if (g_parser.error || (!process->argv && !process->redirs))
+	if (g_parser.error || (!command->argv && !command->redirs))
 	{
-		process_del(&process);
+		command_del(&command);
 		ft_memdel((void **)&command_node);
 	}
 	return (command_node);

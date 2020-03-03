@@ -14,23 +14,23 @@
 
 int			main_loop()
 {
-	t_job	*job;
+	t_ast	*ast_ptr;
 
 	while (1) //while !g_shell.quit...
 	{
 		g_parser.error = NOERR;
 		g_shell.get_input(PS1);
-		if ((g_shell.jobs = complete_command()))
+		if ((g_shell.ast = complete_command()))
 		{
-			job = g_shell.jobs;
-			while (job && job->ast)
+			ast_ptr = g_shell.ast;
+			while (ast_ptr && ast_ptr->root)
 			{
-				print_ast(job->ast, 0);
+				print_ast(ast_ptr->root, 0);
 				//printf("\n");
-				job = job->next;
+				ast_ptr = ast_ptr->next;
 			}
 			//run(ast);
-			job_del(&g_shell.jobs);
+			ast_del(&g_shell.ast);
 		}
 		if (g_shell.interactive_mode && g_lexer.line)
 		{

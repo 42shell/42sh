@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   job.c                                              :+:      :+:    :+:   */
+/*   complete_command.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -49,19 +49,19 @@ static int	run(void)
 /* ************************************************************************** */
 
 
-int			job_del(t_job **jobs)
+int			ast_del(t_ast **ast_list)
 {
-	if (!jobs || !*jobs)
+	if (!ast_list || !*ast_list)
 		return (0);
-	free_ast_nodes((*jobs)->ast, false);
-	job_del(&((*jobs)->next));
-	ft_memdel((void **)jobs);
+	free_ast_nodes((*ast_list)->root, false);
+	ast_del(&((*ast_list)->next));
+	ft_memdel((void **)ast_list);
 	return (0);
 }
 
-t_job		*job_new()
+t_ast		*ast_new()
 {
-	return ((t_job *)ft_xmalloc(sizeof(t_job)));
+	return ((t_ast *)ft_xmalloc(sizeof(t_ast)));
 }
 
 /*
@@ -69,25 +69,25 @@ list             : and_or
                  | and_or separator_op list
 */
 
-t_job		*list(void)
+t_ast		*list(void)
 {
-	t_job	*jobs;
-	t_node	*ast;
+	t_ast	*ast;
+	t_node	*root;
 
-	jobs = NULL;
+	ast = NULL;
 	if (g_parser.error || !g_parser.token)
 		return (NULL);
-	if ((ast = and_or(NULL)))
+	if ((root = and_or(NULL)))
 	{
-		jobs = job_new();
-		jobs->ast = ast;
-		if ((jobs->sep = separator_op())
+		ast = ast_new();
+		ast->root = root;
+		if ((ast->sep = separator_op())
 		&& g_parser.token && g_parser.token->type != NEWLINE)
-			jobs->next = list();
+			ast->next = list();
 		separator();
 	}
 	get_all_heredocs();
-	return (jobs);
+	return (ast);
 }
 
 /*
@@ -100,30 +100,34 @@ complete_command : list separator
                  | list
 */
 
-t_job		*complete_command(void)
-{
-	t_job	*jobs;
-	t_job	*last_job;
+/*
+** use prev instead of last_ast ?
+*/
 
-	jobs = NULL;
+t_ast		*complete_command(void)
+{
+	t_ast	*ast_list;
+	t_ast	*last_ast;
+
+	ast_list = NULL;
 	if (g_parser.error)
 		return (NULL);
 	else if (!g_parser.token)
 		g_parser.token = get_next_token();
 	separator();
-	if ((jobs = list()))
+	if ((ast_list = list()))
 	{
 		if (g_parser.token)
 		{
-			last_job = jobs;
-			while (last_job->next)
-				last_job = last_job->next;
-			last_job->next = list();
+			last_ast = ast_list;
+			while (last_ast->next)
+				last_ast = last_ast->next;
+			last_ast->next = list();
 		}
 	}
 	ft_memdel((void **)&g_parser.heredocs);
 	g_parser.heredoc_ptr = NULL;
 	if (g_parser.error && g_parser.error != HEREDOC_NO_DELIM)
-		job_del(&jobs);
-	return (jobs);
+		ast_del(&ast_list);
+	return (ast_list);
 }
