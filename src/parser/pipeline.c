@@ -55,7 +55,7 @@ t_node			*pipeline(void)
 	}
 	else if (g_parser.token && g_parser.token->type == PIPE)
 	{
-		pipe_node = node_new(g_parser.token, g_parser.token->type);
+		pipe_node = node_new(g_parser.token, NODE_PIPE);
 		node_add_child(pipe_node, left_command);
 		g_parser.token = get_next_token();
 		linebreak_get_input();

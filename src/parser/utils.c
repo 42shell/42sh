@@ -15,24 +15,24 @@
 void	free_ast_nodes(t_node *node, bool par_is_pattern)
 {
 	int		i;
-	bool	cur_is_pattern;
+	//bool	cur_is_pattern;
 
-	cur_is_pattern = false;
+	(void)par_is_pattern;
+	//cur_is_pattern = false;
 	if (node == NULL)
 		return ;
-	else if (is_command(node))
+	else if (node->type == NODE_COMMAND)
 		command_del((t_command **)&node->data);
-	else if (node->data != NULL && !par_is_pattern)
+	else if (node->data != NULL /*&& !par_is_pattern*/)
 	{
-		cur_is_pattern = (node_token(node)->type == PATTERN);
-		ft_dstr_del((void **)&node_token(node)->value);
-		free(node->data);
+		token_del((t_token **)&node->data);
+		//cur_is_pattern = (node_token(node)->type == PATTERN);
 	}
-	else if (par_is_pattern)
-		array_destroy(node->data);
+	//else if (par_is_pattern)
+	//	array_destroy(node->data);
 	i = 0;
 	while (i < node->nb_children)
-		free_ast_nodes(node->child[i++], cur_is_pattern);
+		free_ast_nodes(node->child[i++], /*cur_is_pattern*/ 0);
 	free(node->child);
 	free(node);
 }
@@ -67,7 +67,7 @@ void	print_ast(t_node *ast, size_t indent_level)
 	n = 0;
 	while (n++ < indent_level)
 		write(1, "  ", 2);
-	if (is_command(ast))
+	if (ast->type == NODE_COMMAND)
 	{
 		i = 0;
 		command = (t_command *)ast->data;

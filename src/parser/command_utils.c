@@ -34,11 +34,6 @@ t_redir		*redir_new(t_token *left_op, t_token *operator, t_token *right_op)
 	return (redir);
 }
 
-int			is_command(t_node *node) //node->type
-{
-	return (node->data && node->nb_children == 0);
-}
-
 int			command_del(t_command **command)
 {
 	size_t	i;

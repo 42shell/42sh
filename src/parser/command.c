@@ -79,7 +79,7 @@ t_node			*command(void)
 	if (g_parser.error)
 		return (NULL);
 	command = command_new();
-	command_node = node_new(command, 0); //type 0 is COMMAND (leaf)
+	command_node = node_new(command, NODE_COMMAND);
 	while (!g_parser.error && g_parser.token
 	&& ((redirect = io_redirect()) || g_parser.token->type == WORD))
 	{
