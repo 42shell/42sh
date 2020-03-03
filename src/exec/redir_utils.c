@@ -14,7 +14,7 @@
 
 static t_list_head *g_backups = NULL;
 
-t_fd_backup	*fd_used_for_backup(int fildes)
+static t_fd_backup	*fd_used_for_backup(int fildes)
 {
 	t_list_head *cur;
 
@@ -39,7 +39,7 @@ bool		is_valid_fd(int fd)
 
 void		move_fd(int *fd)
 {
-	int	new;
+	int		new;
 
 	new = dup(*fd);
 	close(*fd);

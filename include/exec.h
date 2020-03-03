@@ -15,6 +15,9 @@
 
 # include "shell.h"
 
+# define ERROR_REDIR_OPEN	-1
+# define ERROR_REDIR_BAD_FD	-2
+
 typedef struct	s_fd_backup
 {
 	int			backup;
@@ -29,7 +32,15 @@ typedef struct	s_argv
 
 int				execute(t_node *node);
 int				exec_command(t_node *command_node);
-char			**get_argv(t_node *command_node);
+char			**get_argv(t_command *command);
+int				set_redir(t_command *command, bool backup);
+int		redir_error(int code);
+
+
+bool			is_valid_fd(int fd);
+void			move_fd(int *fd);
+int				dup2_and_backup(int fildes1, int fildes2, bool backup);
+int				restore_fds(void);
 
 /*
 

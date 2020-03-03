@@ -11,12 +11,12 @@
 /* ************************************************************************** */
 
 #include "shell.h"
-#include "shell.h"
 
 extern int		g_last_exit_st;
 
 #define ERROR "42sh: an error has occured\n"
 
+/*
 static void	interrupt_fork(int sig)
 {
 	if (sig == SIGINT)
@@ -72,20 +72,20 @@ int			exec_command_env(char **argv, t_env *env)
 	return (g_last_exit_st);
 }
 
-int			exec_command(t_node *command_node)
+int			exec_command(t_command *command)
 {
 	pid_t		pid;
 	int			status;
 	char		**argv;
 
-	argv = get_argv(command_node);
+	argv = get_argv(command);
 	if (is_builtin(argv && argv[0]))
-		return (exec_builtin(command_node, argv));
+		return (exec_builtin(command, argv));
 	pid = fork();
 	signal(SIGINT, interrupt_fork);
 	if (pid == 0)
 	{
-		if (set_redir(cmd, false) > 0)
+		if (set_redir(command, false) > 0)
 			exit(1);
 		if (execve(argv->cmd_path, argv->argv, env->env) == -1)
 		{
@@ -99,7 +99,7 @@ int			exec_command(t_node *command_node)
 	g_last_exit_st = WIFEXITED(status) ? WEXITSTATUS(status) : g_last_exit_st;
 	return (g_last_exit_st);
 }
-
+*/
 int			execute(t_node *node)
 {
 	int			i;
@@ -107,9 +107,9 @@ int			execute(t_node *node)
 	i = 0;
 	if (node == NULL)
 		return (1);
-	else if (node->type == NODE_COMMAND /*&& expand(node, env) == 0*/)
-		return (exec_command(node));
 	/*
+	else if (node->type == NODE_COMMAND && expand(node, env) == 0)
+		return (exec_command(node));
 	else if (((t_token *)node->data)->type == PIPE)
 		return (exec_pipe(node, env));
 	else if (((t_token *)node->data)->type == AND_IF)
