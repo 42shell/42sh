@@ -112,6 +112,7 @@ SRC_PARSER      := heredoc.c\
                    pipeline.c\
                    redirect.c\
 				   separator.c\
+				   node.c\
                    utils.c
 SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
 

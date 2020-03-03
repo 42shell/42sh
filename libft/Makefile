@@ -71,7 +71,6 @@ SRC =	mem/ft_xmalloc.c \
 		struct/list/ft_list_foreach.c \
 		struct/list/ft_list_foreach_rev.c \
 		struct/list/ft_list_sort.c \
-		struct/node/node.c \
 		struct/dstr/ft_dstr_new.c \
 		struct/dstr/ft_dstr_add.c \
 		struct/dstr/ft_dstr_cat.c \

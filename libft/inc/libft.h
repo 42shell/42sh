@@ -51,22 +51,6 @@ void					ft_list_split(t_list_head *head,
 void					ft_list_sort(t_list_head **head,
 						int (*cmp)(void *a, void *b));
 
-/*
-** --------------------------------Struct node-------------------------------
-*/
-
-typedef struct			s_node
-{
-	void				*data;
-	int					nb_children;
-	int					capacity;
-	struct s_node		**child;
-	int					flags;
-}						t_node;
-
-t_node					*node_new(void *data);
-int						node_add_child(t_node *parent, t_node *child);
-
 
 /*
 **--------------------------Struct array----------------------------------

@@ -12,11 +12,6 @@
 
 #include "shell.h"
 
-t_token	*node_token(t_node *node)
-{
-	return ((t_token *)(node->data));
-}
-
 void	free_ast_nodes(t_node *node, bool par_is_pattern)
 {
 	int		i;

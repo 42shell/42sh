@@ -31,17 +31,20 @@ enum					e_parse_error
 	NO_CMD_BEFORE_SEP
 };
 
-/*
-** job struct is complete_command():
-** -ast is the root of the tree (and_or())
-** -next is the next job
-** -heredocs are pointers to the heredoc nodes currently in the AST
-** -bg is background
-*/
+typedef struct			s_node
+{
+	void				*data;
+	int					nb_children;
+	int					capacity;
+	struct s_node		**child;
+	int					type;
+}						t_node;
 
 /*
-** maybe separate jobs and asts,
-** redo list of asts and add then to jobs if needed...
+** ast is complete_command():
+** -root is the root of the tree (and_or())
+** -next is the next complete_command
+** -sep is the token used to separate the complete command, ';' or '&'
 */
 
 typedef struct			s_ast
@@ -73,6 +76,8 @@ typedef struct			s_command
 /*
 ** parser:
 ** -heredocs are pointers to right operands of '<<' redir structs
+** -heredoc_ptr is a pointer to the line, it used by get_heredocs to
+**  get the next lines of the heredoc
 */
 
 typedef struct			s_parser
@@ -106,8 +111,11 @@ int						command_del(t_command **command);
 t_redir					*redir_new(t_token *left_op, t_token *operator, t_token *right_op);
 int						redir_del(t_redir **redir);
 
-int						is_command(t_node *node);
+t_node					*node_new(void *data);
+int						node_add_child(t_node *parent, t_node *child);
 t_token					*node_token(t_node *node);
+
+int						is_command(t_node *node);
 void					free_ast_nodes(t_node *node, bool par_is_pattern);
 void					print_ast(t_node *ast, size_t indent_level);
 

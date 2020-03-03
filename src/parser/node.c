@@ -10,7 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "shell.h"
+
+t_token		*node_token(t_node *node)
+{
+	return ((t_token *)(node->data));
+}
 
 t_node		*node_new(void *data)
 {
