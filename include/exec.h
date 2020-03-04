@@ -31,10 +31,10 @@ typedef struct	s_argv
 }				t_argv;
 
 int				execute(t_node *node);
-int				exec_command(t_node *command_node);
+int				exec_command(t_command *command);
 char			**get_argv(t_command *command);
 int				set_redir(t_command *command, bool backup);
-int		redir_error(int code);
+int				redir_error(int code);
 
 
 bool			is_valid_fd(int fd);

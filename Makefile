@@ -135,11 +135,11 @@ SRC_SHELL       := $(addprefix shell/,$(SRC_SHELL))
                    window.c
 #SRC_TERM        := $(addprefix term/,$(SRC_TERM))
 
-SRC_UTILS      := str_utils.c
-					#array_utils.c\
-                   #ft_mktemp.c\
+SRC_UTILS      := str_utils.c\
+				  array_utils.c\
+				  path_utils.c\
+                  # ft_mktemp.c\
                    get_opt.c\
-				   path_utils.c\
 				   var_utils.c
 SRC_UTILS      := $(addprefix utils/,$(SRC_UTILS))
 

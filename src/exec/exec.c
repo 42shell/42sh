@@ -12,11 +12,9 @@
 
 #include "shell.h"
 
-extern int		g_last_exit_st;
-
 #define ERROR "42sh: an error has occured\n"
 
-/*
+
 static void	interrupt_fork(int sig)
 {
 	if (sig == SIGINT)
@@ -24,6 +22,7 @@ static void	interrupt_fork(int sig)
 	g_last_exit_st = 130;
 }
 
+/*
 int			exec_builtin(t_node *command_node, char **argv) //bool free_argv
 {
 	if (set_redir(cmd, true) > 0)
@@ -71,6 +70,7 @@ int			exec_command_env(char **argv, t_env *env)
 		: g_last_exit_st;
 	return (g_last_exit_st);
 }
+*/
 
 int			exec_command(t_command *command)
 {
@@ -79,27 +79,27 @@ int			exec_command(t_command *command)
 	char		**argv;
 
 	argv = get_argv(command);
-	if (is_builtin(argv && argv[0]))
-		return (exec_builtin(command, argv));
+	//if (is_builtin(argv && argv[0]))
+	//	return (exec_builtin(command, argv));
 	pid = fork();
 	signal(SIGINT, interrupt_fork);
 	if (pid == 0)
 	{
 		if (set_redir(command, false) > 0)
 			exit(1);
-		if (execve(argv->cmd_path, argv->argv, env->env) == -1)
+		if (execve(argv[0], argv, g_env->env) == -1)
 		{
-			ft_dprintf(2, "42sh: %s: cannot execute command\n", argv->argv[0]);
+			ft_dprintf(2, "42sh: %s: cannot execute command\n", argv[0]);
 			exit(g_last_exit_st);
 		}
 		exit(0);
 	}
-	free_argv(argv);
+	free_arr(argv);
 	wait(&status);
 	g_last_exit_st = WIFEXITED(status) ? WEXITSTATUS(status) : g_last_exit_st;
 	return (g_last_exit_st);
 }
-*/
+
 int			execute(t_node *node)
 {
 	int			i;
@@ -107,9 +107,9 @@ int			execute(t_node *node)
 	i = 0;
 	if (node == NULL)
 		return (1);
+	else if (node->type == NODE_COMMAND /*&& expand(node, env) == 0*/)
+		return (exec_command((t_command *)node->data));
 	/*
-	else if (node->type == NODE_COMMAND && expand(node, env) == 0)
-		return (exec_command(node));
 	else if (((t_token *)node->data)->type == PIPE)
 		return (exec_pipe(node, env));
 	else if (((t_token *)node->data)->type == AND_IF)

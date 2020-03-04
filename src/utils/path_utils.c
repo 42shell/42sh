@@ -92,7 +92,7 @@ char		*append_filename(char *path, char *filename)
 	return (ret);
 }
 
-char		*get_executable_path(char *command, t_env *env)
+char		*get_executable_path(char *command)
 {
 	char		**path;
 	char		*ret;
@@ -101,7 +101,7 @@ char		*get_executable_path(char *command, t_env *env)
 
 	if (ft_strchr(command, '/'))
 		return (ft_strdup(command));
-	ret = get_env_var("PATH", env);
+	ret = get_env_var("PATH");
 	path = split_path(ret);
 	i = -1;
 	while (path && path[++i] && (ret = append_filename(path[i], command)))

@@ -110,7 +110,6 @@ t_ast		*complete_command(void)
 		}
 	}
 	ft_memdel((void **)&g_parser.heredocs);
-	g_parser.heredoc_ptr = NULL;
 	if (g_parser.error && g_parser.error != HEREDOC_NO_DELIM)
 		ast_del(&ast_list);
 	return (ast_list);

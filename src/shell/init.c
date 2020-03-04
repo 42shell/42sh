@@ -12,18 +12,18 @@
 
 #include "shell.h"
 
-static void	increase_shlvl(t_env *env)
+static void	increase_shlvl(void)
 {
 	char	*shlvl_str;
 	int		shlvl_int;
 
-	shlvl_str = get_env_var("SHLVL", env);
+	shlvl_str = get_env_var("SHLVL");
 	if (shlvl_str != NULL)
 		shlvl_int = ft_atoi(shlvl_str) + 1;
 	else
 		shlvl_int = 1;
 	shlvl_str = ft_itoa(shlvl_int);
-	set_env_var("SHLVL", shlvl_str, env);
+	set_env_var("SHLVL", shlvl_str);
 	free(shlvl_str);
 }
 
@@ -73,6 +73,6 @@ int			init(int argc, char **argv)
 			g_shell.get_input = &input_batch;
 	}
 	g_env = env_dup(environ);
-	increase_shlvl(g_env);
+	increase_shlvl();
 	return (0);
 }

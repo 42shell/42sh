@@ -12,6 +12,8 @@
 
 #include "shell.h"
 
+static char	*g_heredoc_ptr = NULL;
+
 static bool	line_eq(char *s1, char *s2)
 {
 	if (!s1 || !s2)
@@ -41,7 +43,7 @@ static void	line_add(char **heredoc, char *line)
 	new = ft_xmalloc(heredoc_len + line_len + 1);
 	ft_memcpy(new, *heredoc, heredoc_len);
 	ft_memcpy(&new[heredoc_len], line, line_len);
-	g_parser.heredoc_ptr = &line[line_len];
+	g_heredoc_ptr = &line[line_len];
 	g_lexer.i += line_len;
 	free(*heredoc);
 	*heredoc = new;
@@ -75,20 +77,20 @@ static char	*get_heredoc(char *delim)
 	heredoc = NULL;
 	if (g_parser.error)
 		return (NULL);
-	while (!line_eq(g_parser.heredoc_ptr, delim))
+	while (!line_eq(g_heredoc_ptr, delim))
 	{
-		if (!*g_parser.heredoc_ptr)
+		if (!*g_heredoc_ptr)
 		{
-			i = g_parser.heredoc_ptr - g_lexer.line;
-			while (!ft_strchr(g_parser.heredoc_ptr, '\n'))
+			i = g_heredoc_ptr - g_lexer.line;
+			while (!ft_strchr(g_heredoc_ptr, '\n'))
 			{
 				if (line_get(&heredoc, ft_strdup(delim)) != 0)
 					return (heredoc);
-				g_parser.heredoc_ptr = &g_lexer.line[i];
+				g_heredoc_ptr = &g_lexer.line[i];
 			}
 			continue ;
 		}
-		line_add(&heredoc, g_parser.heredoc_ptr);
+		line_add(&heredoc, g_heredoc_ptr);
 	}
 	g_lexer.i += ft_strlen(delim);
 	return (heredoc);
@@ -105,9 +107,9 @@ void		get_all_heredocs(void)
 
 	i = 0;
 	if (g_parser.error || !g_parser.heredocs
-	|| !(g_parser.heredoc_ptr = g_lexer.line))
+	|| !(g_heredoc_ptr = g_lexer.line))
 		return ;
-	while ((g_parser.heredoc_ptr = ft_strchr(g_parser.heredoc_ptr, '\n') + 1)
+	while ((g_heredoc_ptr = ft_strchr(g_heredoc_ptr, '\n') + 1)
 	&& g_parser.heredocs[i])
 	{
 		ft_dstr_add(g_parser.heredocs[i]->value, '\n');
@@ -119,4 +121,5 @@ void		get_all_heredocs(void)
 		i++;
 	}
 	ft_memdel((void **)&heredoc_str);
+	g_heredoc_ptr = NULL;
 }

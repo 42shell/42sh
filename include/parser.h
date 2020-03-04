@@ -92,7 +92,6 @@ typedef struct			s_parser
 {
 	t_token				*token;
 	t_token				**heredocs;
-	char				*heredoc_ptr;
 	int					error;
 }						t_parser;
 

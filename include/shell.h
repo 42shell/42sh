@@ -51,11 +51,14 @@
 
 typedef int			(*t_input_func)(const char *);
 
+int					g_last_exit_st;
+
 typedef struct		s_shell
 {
 	bool			interactive_mode;
 	t_input_func	get_input;
 	t_ast			*ast;
+	//t_ht			*binaries;
 	//t_jobs		*jobs;
 }					t_shell;
 

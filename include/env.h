@@ -25,10 +25,10 @@ typedef struct		s_env
 t_env				*g_env;
 
 t_env				*env_dup(char **env);
-char				*get_env_var(char *var_name, t_env *env);
-void				add_env_var(char *var, char *value, t_env *env);
-void				replace_env_var(char *var, char *value, t_env *env);
-void				remove_env_var(char *name, t_env *env);
-void				set_env_var(char *var, char *value, t_env *env);
+char				*get_env_var(char *var_name);
+void				add_env_var(char *var, char *value);
+void				replace_env_var(char *var, char *value);
+void				remove_env_var(char *name);
+void				set_env_var(char *var, char *value);
 
 #endif
