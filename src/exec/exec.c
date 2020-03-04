@@ -99,7 +99,7 @@ int			exec_command(t_command *command)
 	g_last_exit_st = WIFEXITED(status) ? WEXITSTATUS(status) : g_last_exit_st;
 	return (g_last_exit_st);
 }
-
+*/
 int			execute(t_node *node)
 {
 	int			i;
@@ -110,6 +110,8 @@ int			execute(t_node *node)
 	else if (node->type == NODE_COMMAND /*&& expand(node, env) == 0*/)
 		return (exec_command((t_command *)node->data));
 	/*
+	else if (node->type == NODE_COMMAND && expand(node, env) == 0)
+		return (exec_command(node));
 	else if (((t_token *)node->data)->type == PIPE)
 		return (exec_pipe(node, env));
 	else if (((t_token *)node->data)->type == AND_IF)
