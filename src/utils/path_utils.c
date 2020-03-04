@@ -91,27 +91,3 @@ char		*append_filename(char *path, char *filename)
 	ret[i] = '\0';
 	return (ret);
 }
-
-char		*get_executable_path(char *command)
-{
-	char		**path;
-	char		*ret;
-	int			i;
-	struct stat b;
-
-	if (ft_strchr(command, '/'))
-		return (ft_strdup(command));
-	ret = get_env_var("PATH");
-	path = split_path(ret);
-	i = -1;
-	while (path && path[++i] && (ret = append_filename(path[i], command)))
-	{
-		if (stat(ret, &b) == 0 && S_IXUSR & b.st_mode && !S_ISDIR(b.st_mode))
-			break ;
-		free(ret);
-	}
-	if ((path == NULL || path[i] == NULL))
-		ret = NULL;
-	free_arr(path);
-	return (ret);
-}

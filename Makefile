@@ -61,6 +61,7 @@ SRC_ENV		    := env_dup.c\
 SRC_ENV    		:= $(addprefix env/,$(SRC_ENV))
 
 SRC_EXEC        := exec.c\
+				   exec_error.c\
 				   argv.c\
 				   redir.c\
 				   redir_utils.c\

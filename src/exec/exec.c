@@ -72,35 +72,44 @@ int			exec_command_env(char **argv, t_env *env)
 }
 */
 
+int			launch_process(t_argv *argv)
+{
+	(void)argv;
+	return (0);
+}
+
 int			exec_command(t_command *command)
 {
 	pid_t		pid;
 	int			status;
-	char		**argv;
+	t_argv		*argv;
 
-	argv = get_argv(command);
-	//if (is_builtin(argv && argv[0]))
+	//if (is_builtin(argv[0])) //is_builtin(t_command *)
 	//	return (exec_builtin(command, argv));
+	if (!(argv = get_argv(command)))
+		return (command_not_found(command->argv[0]->value->str));
+
 	pid = fork();
 	signal(SIGINT, interrupt_fork);
 	if (pid == 0)
 	{
 		if (set_redir(command, false) > 0)
 			exit(1);
-		if (execve(argv[0], argv, g_env->env) == -1)
+		if (execve(argv->path, argv->argv, g_env->env) == -1)
 		{
-			ft_dprintf(2, "42sh: %s: cannot execute command\n", argv[0]);
+			ft_dprintf(2, "42sh: %s: cannot execute command\n", argv->argv[0]);
 			exit(g_last_exit_st);
 		}
 		exit(0);
 	}
-	free_arr(argv);
+	argv_del(&argv);
 	wait(&status);
 	g_last_exit_st = WIFEXITED(status) ? WEXITSTATUS(status) : g_last_exit_st;
+	
 	return (g_last_exit_st);
 }
-*/
-int			execute(t_node *node)
+
+int			execute(t_node *node)  // bool bg || exec_bg
 {
 	int			i;
 

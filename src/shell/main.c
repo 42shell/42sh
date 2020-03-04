@@ -25,7 +25,8 @@ int			main_loop()
 			ast_ptr = g_shell.ast;
 			while (ast_ptr && ast_ptr->root)
 			{
-				print_ast(ast_ptr->root, 0);
+				execute(ast_ptr->root);
+				//print_ast(ast_ptr->root, 0);
 				//printf("\n");
 				ast_ptr = ast_ptr->next;
 			}

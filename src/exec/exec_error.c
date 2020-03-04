@@ -1,31 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   exec_error.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/14 12:28:09 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/14 16:16:00 by fratajcz         ###   ########.fr       */
+/*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
+/*   Updated: 2020/02/14 17:52:18 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#include "shell.h"
 
-# include "shell.h"
-
-char	*ft_strjoin_triple(char *s1, char *s2, char *s3);
-
-void	free_arr(char **arr);
-
-char	*append_filename(char *path, char *filename);
-char	**split_path(char const *path);
-
-char	get_opt(int argc, char *argv[]);
-
-bool	is_valid_var_name(char *str);
-
-char	*ft_mktemp(char *template);
-
-#endif
+int		command_not_found(char *command_name)
+{
+	ft_dprintf(2, "42sh: %s: command not found\n", command_name);
+	//g_last_exit_st ??
+	return (0);
+}
