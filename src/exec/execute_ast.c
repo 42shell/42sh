@@ -44,8 +44,10 @@ int			node_command(t_node *node)
 
 	cmd = (t_command *)node->data;
 	if (is_builtin(cmd->argv[0]))
-		return (exec_builtin(cmd));
-	return (exec_binary(cmd));
+		return (exec_builtin(cmd->argv, cmd->redirs, g_env->env));
+	else if ((cmd->path = get_exec_path(cmd->argv[0])))
+		return (exec_binary(cmd->path, cmd->argv, cmd->redirs, g_env->env));
+	return (command_not_found(cmd->argv[0]));
 }
 
 /* ************************************************************************** */

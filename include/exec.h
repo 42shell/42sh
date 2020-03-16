@@ -37,15 +37,15 @@ t_ht			*g_binaries;
 */
 
 int				execute_ast(t_node *node);
-int				exec_binary(t_command *command);
-int				exec_builtin(t_command *command);
+int				exec_binary(char *path, char **argv, t_redir **redirs, char **env);
+int				exec_builtin(char **argv, t_redir **redirs, char **env);
 char			*get_exec_path(char *command);
 
 /*
 ** redirections
 */
 
-int				set_redir(t_command *command, bool backup);
+int				set_redir(t_redir **redirs, bool backup);
 int				open_heredoc(t_dstr *heredoc);
 bool			is_valid_fd(int fd);
 void			move_fd(int *fd);

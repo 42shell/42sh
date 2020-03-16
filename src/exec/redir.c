@@ -77,21 +77,20 @@ static int	get_redirected_fd(t_redir *redir)
 	return (ft_atoi(redir->left_op->value->str));
 }
 
-int			set_redir(t_command *command, bool backup)
+int			set_redir(t_redir **redirs, bool backup)
 {
-	t_redir	*redir;
 	int		redirected_fd;
 	int		ret;
 	int		i;
 
 	i = 0;
-	if (!command->redirs)
+	if (!redirs)
 		return (0);
-	while ((redir = command->redirs[i]))
+	while (redirs[i])
 	{
-		if ((redirected_fd = get_redirected_fd(redir)) > 255)
+		if ((redirected_fd = get_redirected_fd(redirs[i])) > 255)
 			return (redir_error(ERROR_REDIR_BAD_FD));
-		else if ((ret = redirect(redir, redirected_fd, backup)) < 0)
+		else if ((ret = redirect(redirs[i], redirected_fd, backup)) < 0)
 			return (redir_error(ret));
 		i++;
 	}

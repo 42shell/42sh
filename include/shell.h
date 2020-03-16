@@ -43,7 +43,7 @@
 **		-maybe find better way to handle init and del
 **		-write on 2
 ** -batch_mode:
-** 		-heredocs: no delim EOF currently quit with mo error msg
+** 		-heredocs: no delim EOF currently quit with no error msg
 ** -empty env -> set default values ?
 ** -flush cache table when PATH is modified.
 ** -check leaks everywhere

@@ -95,10 +95,7 @@ int		finish_env(char **argv, int i, t_env *new_env)
 }
 
 /*
-** just
-** -use a t_env *g_env_tmp to save the real env,
-** -set g_env to new_env
-** like this we don t need to pass an env parameter
+** exec_binary(get_exec_path(argv[i]), argv[i], NULL, new_env->env);
 */
 
 int		builtin_env(char **argv, t_env *env)

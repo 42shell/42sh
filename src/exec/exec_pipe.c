@@ -12,7 +12,6 @@
 
 #include "shell.h"
 
-int				g_last_exit_st;
 t_list_head		*g_argv_list;
 
 static int		exec_pipe_cmd(t_node *cmd, t_env *env, int *pid, int input_fd)
