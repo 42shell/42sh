@@ -77,8 +77,9 @@ typedef struct			s_redir
 
 typedef struct			s_command
 {
-	t_token				**argv;
+	char				**argv;
 	t_redir				**redirs;
+	char				*path;
 }						t_command;
 
 /*

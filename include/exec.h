@@ -24,12 +24,6 @@ typedef struct	s_fd_backup
 	int			orig_number;
 }				t_fd_backup;
 
-typedef struct	s_argv
-{
-	char		**argv;
-	char		*path;//char *ft_path_getsuffix()
-}				t_argv;
-
 /*
 ** associative table of command names and binaries paths.
 ** -an entry is added when a command is executed if the command is not the table.
@@ -41,8 +35,7 @@ t_ht			*g_binaries;
 int				execute(t_node *node);
 int				exec_command(t_command *command);
 
-t_argv			*get_argv(t_command *command);
-void			argv_del(t_argv **argv);
+char			*get_exec_path(char *command);
 
 int				set_redir(t_command *command, bool backup);
 bool			is_valid_fd(int fd);

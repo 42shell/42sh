@@ -32,7 +32,7 @@ void	print_ast(t_node *ast, size_t indent_level)
 		if (!command->argv && !command->redirs)
 			return ;
 		while (command->argv && command->argv[i])
-			printf("%s ", command->argv[i++]->value->str);
+			printf("%s ", command->argv[i++]);
 		i = 0;
 		while (command->redirs && command->redirs[i])
 		{

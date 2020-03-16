@@ -19,10 +19,12 @@
 **
 ** t_node
 ** {
-** 		data =		t_process
+**		type = 		NODE_COMMAND
+** 		data =		t_command
 ** 					{
-** 						t_token **argv		= { ls, -l, -a, -f };
-** 						t_redir **redirs	= { 2> };
+** 						char 	**argv		= { ls, -l, -a, -f };
+** 						t_redir **redirs	= { 2, >, test };
+						char	*path		= /bin/ls
 ** 					}
 ** 		childs = 	NULL;
 ** }
@@ -30,23 +32,24 @@
 
 static void	add_command_arg(t_command *command, t_token *arg)
 {
-	t_token		**new;
+	char		**new;
 	int			size;
 
 	if (!command->argv)
 	{
-		command->argv = (t_token **)ft_xmalloc(sizeof(t_token *) * 2);
-		command->argv[0] = arg;
+		command->argv = (char **)ft_xmalloc(sizeof(char *) * 2);
+		command->argv[0] = ft_strdup(arg->value->str);
 		return ;
 	}
 	size = 0;
 	while (command->argv[size])
 		size++;
-	new = (t_token **)ft_xmalloc(sizeof(t_token *) * (size + 2));
-	ft_memcpy((char *)new, (char *)command->argv, (size * sizeof(t_token *)));
-	new[size] = arg;
+	new = (char **)ft_xmalloc(sizeof(char *) * (size + 2));
+	ft_memcpy((char *)new, (char *)command->argv, (size * sizeof(char *)));
+	new[size] = ft_strdup(arg->value->str);
 	free(command->argv);
 	command->argv = new;
+	token_del(&arg);
 }
 
 static void	add_command_redir(t_command *command, t_redir *redir)

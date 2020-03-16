@@ -41,13 +41,11 @@ int			command_del(t_command **command)
 	i = 0;
 	if (!command || !*command)
 		return (0);
-	while ((*command)->argv && (*command)->argv[i])
-		token_del(&(*command)->argv[i++]);
-	i = 0;
+	free_arr((*command)->argv);
 	while ((*command)->redirs && (*command)->redirs[i])
 		redir_del(&(*command)->redirs[i++]);
-	free((*command)->argv);
 	free((*command)->redirs);
+	free((*command)->path);
 	ft_memdel((void **)command);
 	return (0);
 }
