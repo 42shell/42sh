@@ -25,8 +25,8 @@ int		open_heredoc(t_dstr *heredoc)
 	}
 	if (tmp_file == NULL)
 		return (-1);
-	param_expand(heredoc, 0, g_env, true);
-	remove_bslash(heredoc);
+	//param_expand(heredoc, 0, g_env, true);
+	//remove_bslash(heredoc);
 	ft_putstr_fd(heredoc->str, fd);
 	close(fd);
 	fd = open(tmp_file, O_RDONLY);

@@ -85,8 +85,6 @@ typedef struct			s_command
 /*
 ** parser:
 ** -heredocs are pointers to right operands of '<<' redir structs
-** -heredoc_ptr is a pointer to the line, it used by get_heredocs to
-**  get the next lines of the heredoc
 */
 
 typedef struct			s_parser

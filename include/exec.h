@@ -32,19 +32,40 @@ typedef struct	s_fd_backup
 
 t_ht			*g_binaries;
 
-int				execute(t_node *node);
+int				execute_ast(t_node *node);
 int				exec_command(t_command *command);
-
 char			*get_exec_path(char *command);
 
+/*
+** redirections
+*/
+
 int				set_redir(t_command *command, bool backup);
+int				open_heredoc(t_dstr *heredoc);
 bool			is_valid_fd(int fd);
 void			move_fd(int *fd);
 int				dup2_and_backup(int fildes1, int fildes2, bool backup);
 int				restore_fds(void);
-int				redir_error(int code);
 
+/*
+** pipes
+*/
+
+int				set_pipe_redir(int input_fd, int fildes[2]);
+
+/*
+** error handling
+*/
+
+int				redir_error(int code);
 int				command_not_found(char *command_name);
+
+/*
+** fork utils
+*/
+
+void			interrupt_fork(int sig);
+void			kill_all_forks(void);
 
 /*
 
@@ -55,19 +76,6 @@ int				exec_command_env(char **argv, t_env *env);
 int				exec_builtin(t_argv *argv, t_env *env, t_node *cmd,
 				bool free_argv);
 
-int				set_redir(t_node *cmd, bool backup);
-bool			is_valid_fd(int fd);
-void			move_fd(int *fd);
-int				dup2_and_backup(int fildes1, int fildes2, bool backup);
-int				restore_fds(void);
-
-t_argv			*get_argv(t_node *cmd, t_env *env);
-void			free_argv(t_argv *argv);
-
-void			kill_all_forks(void);
-int				set_pipe_redir(int input_fd, int fildes[2]);
-
-int				open_heredoc(t_dstr *heredoc);
 */
 
 #endif
