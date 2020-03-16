@@ -17,8 +17,6 @@
 #define EMPTY_ENV 	1
 #define NEW_PATH	2
 
-extern int	g_last_exit_st;
-
 int		get_env_options(int argc, char **argv, int *options)
 {
 	int		c;

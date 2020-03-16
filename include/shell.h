@@ -48,6 +48,7 @@
 ** -flush cache table when PATH is modified.
 ** -check leaks everywhere
 ** -last exit status, error handling... assert everything is perfect
+** -modify env builtin to use g_env
 */
 
 # define BUFF_SIZE	256
