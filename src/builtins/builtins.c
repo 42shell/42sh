@@ -12,8 +12,6 @@
 
 #include "shell.h"
 
-extern int g_last_exit_st;
-
 int		builtin_echo(char **argv)
 {
 	int i;
@@ -30,29 +28,29 @@ int		builtin_echo(char **argv)
 	return (0);
 }
 
-int		builtin_setenv(char **argv, t_env *env)
+int		builtin_setenv(char **argv)
 {
 	if (argv[1] == NULL)
-		return (builtin_env(argv, env));
-	if (argv[2] && argv[3])
+		return (0);//return (builtin_env(argv, g_env));
+	else if (argv[2] && argv[3])
 		write(2, "setenv: Too many arguments.\n", 28);
 	else if (!is_valid_var_name(argv[1]))
 		write(2, "setenv: Invalid variable name\n", 30);
 	else
 	{
-		set_env_var(argv[1], argv[2], env);
+		set_env_var(argv[1], argv[2]);
 		return (0);
 	}
 	return (1);
 }
 
-int		builtin_unsetenv(char **argv, t_env *env)
+int		builtin_unsetenv(char **argv)
 {
 	int i;
 
 	i = 1;
 	while (argv[i])
-		remove_env_var(argv[i++], env);
+		remove_env_var(argv[i++]);
 	return (0);
 }
 

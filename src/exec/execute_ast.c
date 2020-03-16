@@ -38,6 +38,16 @@ int			node_and_or_if(t_node *node)
 	return (-1);
 }
 
+int			node_command(t_node *node)
+{
+	t_command	*cmd;
+
+	cmd = (t_command *)node->data;
+	if (is_builtin(cmd->argv[0]))
+		return (exec_builtin(cmd));
+	return (exec_binary(cmd));
+}
+
 /* ************************************************************************** */
 
 int			execute_ast(t_node *ast)  // bool bg || exec_bg
@@ -45,7 +55,7 @@ int			execute_ast(t_node *ast)  // bool bg || exec_bg
 	if (ast == NULL)
 		return (-1);
 	else if (ast->type == NODE_COMMAND /*&& expand(node, env) == 0*/)
-		return (exec_command((t_command *)ast->data));
+		return (node_command(ast));
 	else if (ast->type == NODE_AND_IF || ast->type == NODE_OR_IF)
 		return (node_and_or_if(ast));
 	/*

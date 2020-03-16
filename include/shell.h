@@ -47,6 +47,7 @@
 ** -empty env -> set default values ?
 ** -flush cache table when PATH is modified.
 ** -check leaks everywhere
+** -last exit status, error handling... assert everything is perfect
 */
 
 # define BUFF_SIZE	256

@@ -13,32 +13,6 @@
 #include "shell.h"
 
 /*
-int			exec_builtin(t_node *command_node, char **argv) //bool free_argv
-{
-	if (set_redir(cmd, true) > 0)
-	{
-		free_argv(argv);
-		restore_fds();
-		return (1);
-	}
-	if (ft_strequ(argv->argv[0], "env"))
-		builtin_env(argv->argv, env);
-	else if (ft_strequ(argv->argv[0], "exit"))
-		builtin_exit(argv->argv);
-	else if (ft_strequ(argv->argv[0], "unsetenv"))
-		builtin_unsetenv(argv->argv, env);
-	else if (ft_strequ(argv->argv[0], "setenv"))
-		builtin_setenv(argv->argv, env);
-	else if (ft_strequ(argv->argv[0], "echo"))
-		builtin_echo(argv->argv);
-	else if (ft_strequ(argv->argv[0], "cd"))
-		builtin_cd(argv->argv, env);
-	restore_fds();
-	if (free_av)
-		free_argv(argv);
-	return (0);
-}
-
 int			exec_command_env(char **argv, t_env *env)
 {
 	pid_t		pid;
@@ -62,13 +36,32 @@ int			exec_command_env(char **argv, t_env *env)
 }
 */
 
-int			exec_command(t_command *command)
+int			exec_builtin(t_command *command)
+{
+	if (set_redir(command, true) == 0)
+	{
+		//if (ft_strequ(command->argv[0], "env"))
+		//	builtin_env(command->argv, g_env);
+		if (ft_strequ(command->argv[0], "exit"))
+			builtin_exit(command->argv);
+		else if (ft_strequ(command->argv[0], "unsetenv"))
+			builtin_unsetenv(command->argv);
+		else if (ft_strequ(command->argv[0], "setenv"))
+			builtin_setenv(command->argv);
+		else if (ft_strequ(command->argv[0], "echo"))
+			builtin_echo(command->argv);
+		else if (ft_strequ(command->argv[0], "cd"))
+			builtin_cd(command->argv);
+	}
+	restore_fds();
+	return (0);
+}
+
+int			exec_binary(t_command *command)
 {
 	pid_t		pid;
 	int			status;
  
-	//if (is_builtin(argv[0])) //is_builtin(t_command *)
-	//	return (exec_builtin(command, argv));
 	if (!(command->path = get_exec_path(command->argv[0])))
 		return (command_not_found(command->argv[0]));
 	pid = fork();

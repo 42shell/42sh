@@ -32,8 +32,13 @@ typedef struct	s_fd_backup
 
 t_ht			*g_binaries;
 
+/*
+** main functions
+*/
+
 int				execute_ast(t_node *node);
-int				exec_command(t_command *command);
+int				exec_binary(t_command *command);
+int				exec_builtin(t_command *command);
 char			*get_exec_path(char *command);
 
 /*

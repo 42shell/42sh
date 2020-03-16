@@ -42,12 +42,12 @@ PFLAGS          := -Iinclude $(LIB_FT_INC)
 #                    SOURCES                     |
 #------------------------------------------------#
 
-#SRC_BUILTINS    :=	builtins.c\
+SRC_BUILTINS    :=	builtins.c\
 					builtin_utils.c\
 					cd.c\
 					cd_utils.c\
-					env.c
-#SRC_BUILTINS    := $(addprefix builtins/,$(SRC_BUILTINS))
+					#env.c
+SRC_BUILTINS    := $(addprefix builtins/,$(SRC_BUILTINS))
 
 #SRC_COMPLETE    := comp_cmd.c\
                    comp_files.c\
@@ -80,25 +80,6 @@ SRC_EXEC        := $(addprefix exec/,$(SRC_EXEC))
 				   sort_matches.c
 #SRC_EXPANSION   := $(addprefix expansion/,$(SRC_EXPANSION))
 
-#SRC_INPUT       := comp_cmd.c\
-                   comp_files.c\
-                   comp_line_edit.c\
-                   comp_utils.c\
-                   complete.c\
-                   copypaste.c\
-                   ctrl_c_d.c\
-                   delchar.c\
-                   draw.c\
-                   enter.c\
-                   escape.c\
-                   history.c\
-                   init.c\
-                   move_basic.c\
-                   move_spec.c\
-                   move_utils.c\
-                   readline.c
-#SRC_INPUT       := $(addprefix input/,$(SRC_INPUT))
-
 SRC_LEXER       := append.c\
                    delim.c\
                    get_next_token.c\
@@ -128,19 +109,12 @@ SRC_SHELL       := del.c\
                    main.c
 SRC_SHELL       := $(addprefix shell/,$(SRC_SHELL))
 
-#SRC_TERM        := clear.c\
-                   cursor.c\
-                   init.c\
-                   print.c\
-                   window.c
-#SRC_TERM        := $(addprefix term/,$(SRC_TERM))
-
 SRC_UTILS      := str_utils.c\
 				  array_utils.c\
 				  path_utils.c\
                   ft_mktemp.c\
-                   #get_opt.c\
-				   var_utils.c
+                  get_opt.c\
+				  var_utils.c
 SRC_UTILS      := $(addprefix utils/,$(SRC_UTILS))
 
 SRC_PATH        := src
