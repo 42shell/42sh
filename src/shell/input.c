@@ -12,12 +12,6 @@
 
 #include "shell.h"
 
-/*
-** EOF in batch mode /!\ currently quit with mo error msg
-** 		cat << EOF
-** 		cat << EOF2 -> EOF no heredoc delim
-*/
-
 int			remove_escaped_newlines(char *line)
 {
 	char	quote;

@@ -28,7 +28,7 @@ static void	increase_shlvl(void)
 }
 
 /*
-** check this, readline write on 2 ? etc...
+** check this
 */
 
 static int	parse_args(int argc, char **argv)

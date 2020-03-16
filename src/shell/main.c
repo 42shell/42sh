@@ -33,13 +33,15 @@ int			main_loop()
 			//run(ast);
 			ast_del(&g_shell.ast);
 		}
-		if (g_shell.interactive_mode && g_lexer.line)
-		{
-			g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;
-			rl_add_history(g_lexer.line);
-		}
 		if (g_shell.interactive_mode)
+		{
+			if (g_lexer.line)
+			{
+				g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;
+				rl_add_history(g_lexer.line);
+			}
 			reset_lexer();
+		}
 	}
 	return (0);
 }

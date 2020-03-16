@@ -36,7 +36,18 @@
 # include "builtins.h"
 # include "utils.h"
 
-# define BUFF_SIZE	2
+/*
+** -fix readline problems
+** 		-rl_del
+**		-empty env seems to not return NULL
+**		-maybe find better way to handle init and del
+**		-write on 2
+** -batch_mode:
+** 		-heredocs: no delim EOF currently quit with mo error msg
+** -empty env -> set default values ?
+*/
+
+# define BUFF_SIZE	256
 # define INPUT_INT	3
 # define INPUT_EOF	4
 

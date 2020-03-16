@@ -56,8 +56,8 @@ static t_token	*return_token(void)
 		g_lexer.line_cont = 1;
 		return (get_next_token());
 	}
-	g_lexer.nl_found = 0;
-	g_lexer.quote_st = 0; //normal end of line
+	g_lexer.nl_found = 0; //normal end of line
+	g_lexer.quote_st = 0;
 	return (NULL);
 }
 
@@ -68,10 +68,7 @@ t_token			*get_next_token(void)
 	if (g_lexer.line_cont || g_lexer.quote_st)
 	{
 		if (g_shell.get_input(get_prompt()) != 0)
-		{
-			//reset_lexer();
 			return (NULL);
-		}
 		g_lexer.line_cont = 0;
 	}
 	while (!g_lexer.last_delim && g_lexer.line[g_lexer.i])
