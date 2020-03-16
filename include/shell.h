@@ -41,13 +41,14 @@
 ** 		-rl_del
 **		-empty env seems to not return NULL
 **		-maybe find better way to handle init and del
-**		-write on 2
+**		-write on 2 ? sounds weird to do that in readline, maybe dup2 in shell.get_input 
+**		-rigorous testing
 ** -batch_mode:
-** 		-heredocs: no delim EOF currently quit with no error msg
+** 		-heredocs: no delim before EOF currently quit without error msg
 ** -empty env -> set default values ?
 ** -flush cache table when PATH is modified.
 ** -check leaks everywhere
-** -last exit status, error handling... assert everything is perfect
+** -last exit status, close fds, error handling... assert everything is perfect
 ** -modify env builtin to use g_env
 */
 

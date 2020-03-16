@@ -72,7 +72,7 @@ int			exec_binary(char *path, char **argv, t_redir **redirs, char **env)
 	signal(SIGINT, interrupt_fork);
 	if (pid == 0)
 	{
-		if (set_redir(redirs, false) > 0)
+		if (set_redir(redirs, false) != 0)
 			exit(1);
 		if (execve(path, argv, env) == -1)
 		{
