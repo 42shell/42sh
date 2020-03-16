@@ -45,6 +45,8 @@
 ** -batch_mode:
 ** 		-heredocs: no delim EOF currently quit with mo error msg
 ** -empty env -> set default values ?
+** -flush cache table when PATH is modified.
+** -check leaks everywhere
 */
 
 # define BUFF_SIZE	256

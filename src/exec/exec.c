@@ -88,7 +88,6 @@ int			exec_command(t_command *command)
 	//	return (exec_builtin(command, argv));
 	if (!(argv = get_argv(command)))
 		return (command_not_found(command->argv[0]->value->str));
-
 	pid = fork();
 	signal(SIGINT, interrupt_fork);
 	if (pid == 0)
@@ -102,8 +101,8 @@ int			exec_command(t_command *command)
 		}
 		exit(0);
 	}
-	argv_del(&argv);
 	wait(&status);
+	argv_del(&argv);
 	g_last_exit_st = WIFEXITED(status) ? WEXITSTATUS(status) : g_last_exit_st;
 	
 	return (g_last_exit_st);
@@ -118,23 +117,21 @@ int			execute(t_node *node)  // bool bg || exec_bg
 		return (1);
 	else if (node->type == NODE_COMMAND /*&& expand(node, env) == 0*/)
 		return (exec_command((t_command *)node->data));
-	/*
-	else if (node->type == NODE_COMMAND && expand(node, env) == 0)
-		return (exec_command(node));
-	else if (((t_token *)node->data)->type == PIPE)
-		return (exec_pipe(node, env));
-	else if (((t_token *)node->data)->type == AND_IF)
+	else if (node->type == NODE_AND_IF)
 	{
-		if (execute(node->child[0], env) == 0)
-			return (execute(node->child[1], env));
+		if (execute(node->child[0]) == 0)
+			return (execute(node->child[1]));
 		return (1);
 	}
-	else if (((t_token *)node->data)->type == OR_IF)
+	else if (node->type == NODE_OR_IF)
 	{
-		if (execute(node->child[0], env) != 0)
-			return (execute(node->child[1], env));
+		if (execute(node->child[0]) != 0)
+			return (execute(node->child[1]));
 		return (0);
 	}
+	/*
+	else if (((t_token *)node->data)->type == PIPE)
+		return (exec_pipe(node, env));
 	while (i < node->nb_children)
 		execute(node->child[i++], env);
 	*/

@@ -50,7 +50,7 @@ static char	*get_executable_path(char *command)
 	i = 0;
 	path = NULL;
 	if ((ret = cache_search(command)))
-		return (ret);
+		return (ft_strdup(ret));
 	else if (ft_strchr(command, '/')
 	&& (stat(command, &b) == 0 && (S_IXUSR & b.st_mode) && !S_ISDIR(b.st_mode)))
 		ret = ft_strdup(command);
@@ -58,7 +58,7 @@ static char	*get_executable_path(char *command)
 	{
 		while (path && path[i] && (ret = append_filename(path[i++], command)))
 		{
-			if (stat(ret, &b) == 0 && S_IXUSR & b.st_mode && !S_ISDIR(b.st_mode))
+			if (stat(ret, &b) == 0 && (S_IXUSR & b.st_mode) && !S_ISDIR(b.st_mode))
 				break ;
 			ft_memdel((void **)&ret);
 		}
