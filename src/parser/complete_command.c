@@ -53,25 +53,25 @@ list             : and_or
                  | and_or separator_op list
 */
 
-t_ast		*list(void)
+t_job		*list(void)
 {
-	t_ast	*ast;
-	t_node	*root;
+	t_job	*job;
+	t_node	*ast;
 
-	ast = NULL;
+	job = NULL;
 	if (g_parser.error || !g_parser.token)
 		return (NULL);
-	if ((root = and_or(NULL)))
+	if ((ast = and_or(NULL)))
 	{
-		ast = ast_new();
-		ast->root = root;
-		if ((ast->sep = separator_op())
-		&& g_parser.token && g_parser.token->type != NEWLINE)
-			ast->next = list();
-		separator();
+		job = job_new(ast);
+		if ((job->sep = separator_op())
+		&& g_parser.token && g_parser.token->type != NEWLINE
+		&& (job->next = list()))
+			job->next->prev = job;
+		//separator();
 	}
 	get_all_heredocs();
-	return (ast);
+	return (job);
 }
 
 /*
@@ -88,19 +88,20 @@ complete_command : list separator
 ** use prev instead of last_ast ?
 */
 
-t_ast		*complete_command(void)
+t_job		*complete_command(void)
 {
-	t_ast	*ast_list;
-	t_ast	*last_ast;
+	t_job	*jobs;
+	//t_ast	*last_ast;
 
-	ast_list = NULL;
+	jobs = NULL;
 	if (g_parser.error)
 		return (NULL);
 	else if (!g_parser.token)
 		g_parser.token = get_next_token();
-	separator();
-	if ((ast_list = list()))
+	//separator();
+	if ((jobs = list()))
 	{
+		/*
 		if (g_parser.token)
 		{
 			last_ast = ast_list;
@@ -108,9 +109,11 @@ t_ast		*complete_command(void)
 				last_ast = last_ast->next;
 			last_ast->next = list();
 		}
+		*/
 	}
+	separator();
 	ft_memdel((void **)&g_parser.heredocs);
 	if (g_parser.error && g_parser.error != HEREDOC_NO_DELIM)
-		ast_del(&ast_list);
-	return (ast_list);
+		job_del(&jobs);
+	return (jobs);
 }

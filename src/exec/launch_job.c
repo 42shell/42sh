@@ -21,6 +21,7 @@ int			node_while(t_node *node)...
 }
 */
 
+/*
 int			node_and_or_if(t_node *node)
 {
 	if (node->type == NODE_AND_IF)
@@ -37,6 +38,7 @@ int			node_and_or_if(t_node *node)
 	}
 	return (-1);
 }
+*/
 
 /*
 int			node_pipe(t_node *node)
@@ -63,6 +65,7 @@ int			node_pipe(t_node *node)
 }
 */
 
+/*
 int			node_command(t_node *node)
 {
 	t_command	*cmd;
@@ -74,17 +77,24 @@ int			node_command(t_node *node)
 		return (exec_binary(cmd, g_env->env));
 	return (command_not_found(cmd->argv[0]));
 }
+*/
 
 /* ************************************************************************** */
 
-int			execute_ast(t_node *ast)  // bool bg || exec_bg
+int			launch_job(t_job *job)
 {
-	if (ast == NULL)
+	if (job == NULL)
 		return (-1);
-	else if (ast->type == NODE_COMMAND /*&& expand(node, env) == 0*/)
+	/*
+	if (ast->type == NODE_AND_IF || ast->type == NODE_OR_IF)
+		return (node_and_or_if(ast));
+	*/
+	/*
+	if (ast->type == NODE_PROCESS && expand(node, env) == 0)
 		return (node_command(ast));
 	else if (ast->type == NODE_AND_IF || ast->type == NODE_OR_IF)
 		return (node_and_or_if(ast));
+	*/
 	/*
 	else if (ast->type == NODE_PIPE)
 		return (node_pipe(ast));

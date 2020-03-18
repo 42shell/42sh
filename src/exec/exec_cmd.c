@@ -39,6 +39,7 @@ int			exec_command_env(char **argv, t_env *env)
 }
 */
 
+/*
 int			exec_builtin(t_command *cmd, char **env)
 {
 	(void)env;
@@ -84,3 +85,4 @@ int			exec_binary(t_command *cmd, char **env)
 	g_last_exit_st = WIFEXITED(status) ? WEXITSTATUS(status) : g_last_exit_st;
 	return (g_last_exit_st);
 }
+*/

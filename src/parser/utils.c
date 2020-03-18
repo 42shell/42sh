@@ -19,24 +19,24 @@ void	print_ast(t_node *ast, size_t indent_level)
 {
 	size_t		i;
 	size_t		n;
-	t_command	*command;
+	t_process	*process;
 	t_redir		*redir;
 
 	n = 0;
 	while (n++ < indent_level)
 		write(1, "  ", 2);
-	if (ast->type == NODE_COMMAND)
+	if (ast->type == NODE_PROCESS)
 	{
 		i = 0;
-		command = (t_command *)ast->data;
-		if (!command->argv && !command->redirs)
+		process = (t_process *)ast->data;
+		if (!process->argv && !process->redirs)
 			return ;
-		while (command->argv && command->argv[i])
-			printf("%s ", command->argv[i++]);
+		while (process->argv && process->argv[i])
+			printf("%s ", process->argv[i++]);
 		i = 0;
-		while (command->redirs && command->redirs[i])
+		while (process->redirs && process->redirs[i])
 		{
-			redir = command->redirs[i++];
+			redir = process->redirs[i++];
 			if (redir->left_op)
 				printf("%s ", redir->left_op->value->str);
 			printf("%s ", redir->operator->value->str);

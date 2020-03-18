@@ -24,21 +24,24 @@ typedef struct		s_fd_backup
 	int				orig_number;
 }					t_fd_backup;
 
+/*
 typedef struct		s_process
 {
-  pid_t				pid;
-  t_command			*cmd;
-  int				status;
-  bool				stopped;
-  char				done;
+
+	pid_t			pid;
+	int				status;
+	bool			stopped;
+	char			done;
 }					t_process;
 
 typedef struct		s_job
 {
+	t_ast			*ast;
 	pid_t			pgid;
 	t_list_head		*processes;
-	bool			notified;	/* true if user told about stopped job */
+	bool			notified;
 }					t_job;
+*/
 
 /*
 ** associative table of command names and binaries paths.
@@ -52,24 +55,24 @@ t_ht				*g_binaries;
 ** main functions
 */
 
-int					execute_ast(t_node *node);
-int					exec_binary(t_command *cmd, char **env);
-int					exec_builtin(t_command *cmd, char **env);
+int					launch_job(t_job *job);
+//int					exec_binary(t_command *cmd, char **env);
+//int					exec_builtin(t_process *process, char **env);
 char				*get_exec_path(char *command);
 
 /*
 ** node logic
 */
 
-int					node_command(t_node *node);
-int					node_pipe(t_node *node);
-int					node_and_or_if(t_node *node);
+//int					node_command(t_node *node);
+//int					node_pipe(t_node *node);
+//int					node_and_or_if(t_node *node);
 
 /*
 ** redirections
 */
 
-int					set_redir(t_command *cmd, bool backup);
+int					set_redir(t_process *process, bool backup);
 int					open_heredoc(t_dstr *heredoc);
 bool				is_valid_fd(int fd);
 void				move_fd(int *fd);

@@ -33,7 +33,7 @@ enum					e_parse_error
 
 enum					e_node_type
 {
-	NODE_COMMAND, //leaf
+	NODE_PROCESS, //leaf
 	NODE_PIPE,
 	NODE_AND_IF,
 	NODE_OR_IF
@@ -49,21 +49,24 @@ typedef struct			s_node
 }						t_node;
 
 /*
-** ast is complete_command():
+** job is complete_command():
 ** -root is the root of the tree (and_or())
 ** -next is the next complete_command
 ** -sep is the token used to separate the complete command, ';' or '&'
 */
 
-typedef struct			s_ast
+typedef struct			s_job
 {
-	t_node				*root;
-	struct s_ast		*next;
+	struct s_job		*next;
+	struct s_job		*prev;
+	t_node				*ast;
 	t_token				*sep;
-}						t_ast;
+	pid_t				pgid;
+	bool				notified;	/* true if user told about stopped job */
+}						t_job;
 
 /*
-** command is a leaf of the tree:
+** process is simple command, it is a leaf of the tree:
 ** -argv is array of tokens (command name + args)
 ** -redirs struct has 3 token fields, from is NULL if no IO_NUMBER (set default value directly ??)
 */
@@ -75,16 +78,16 @@ typedef struct			s_redir
 	t_token				*right_op;
 }						t_redir;
 
-/*
-** simple command
-*/
-
-typedef struct			s_command
+typedef struct			s_process
 {
 	char				**argv;
 	t_redir				**redirs;
 	char				*path;
-}						t_command;
+	pid_t				pid;
+	int					status;
+	bool				stopped;
+	char				done;
+}						t_process;
 
 /*
 ** parser:
@@ -100,11 +103,11 @@ typedef struct			s_parser
 
 t_parser				g_parser;
 
-t_ast					*complete_command(void);
-t_ast					*list(void);
+t_job					*complete_command(void);
+t_job					*list(void);
 t_node					*and_or(t_node *left_pipeline);
 t_node					*pipeline(void);
-t_node					*command(void);
+t_node					*simple_command(void);
 t_redir					*io_redirect(void);
 t_token					*separator(void);
 t_token					*separator_op(void);
@@ -114,10 +117,10 @@ void					newline_list(void);
 int						parse_error(int code, char *near);
 void					get_all_heredocs(void);
 
-t_ast					*ast_new();
-int						ast_del(t_ast **ast);
-t_command				*command_new(void);
-int						command_del(t_command **command);
+t_job					*job_new();
+int						job_del(t_job **jobs);
+t_process				*process_new(void);
+int						process_del(t_process **command);
 t_redir					*redir_new(t_token *left_op, t_token *operator, t_token *right_op);
 int						redir_del(t_redir **redir);
 

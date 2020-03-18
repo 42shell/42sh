@@ -34,27 +34,27 @@ t_redir		*redir_new(t_token *left_op, t_token *operator, t_token *right_op)
 	return (redir);
 }
 
-int			command_del(t_command **command)
+int			process_del(t_process **process)
 {
 	size_t	i;
 
 	i = 0;
-	if (!command || !*command)
+	if (!process || !*process)
 		return (0);
-	free_arr((*command)->argv);
-	while ((*command)->redirs && (*command)->redirs[i])
-		redir_del(&(*command)->redirs[i++]);
-	free((*command)->redirs);
-	free((*command)->path);
-	ft_memdel((void **)command);
+	free_arr((*process)->argv);
+	while ((*process)->redirs && (*process)->redirs[i])
+		redir_del(&(*process)->redirs[i++]);
+	free((*process)->redirs);
+	free((*process)->path);
+	ft_memdel((void **)process);
 	return (0);
 }
 
-t_command	*command_new(void)
+t_process	*process_new(void)
 {
-	t_command	*cmd;
+	t_process	*cmd;
 
-	cmd = (t_command *)ft_xmalloc(sizeof(t_command));
+	cmd = (t_process *)ft_xmalloc(sizeof(t_process));
 	/*
 	cmd->stdin = STDIN_FILENO;
 	cmd->stdout = STDOUT_FILENO;

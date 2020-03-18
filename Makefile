@@ -60,7 +60,7 @@ SRC_ENV		    := env_dup.c\
                    env_utils.c
 SRC_ENV    		:= $(addprefix env/,$(SRC_ENV))
 
-SRC_EXEC        := execute_ast.c\
+SRC_EXEC        := launch_job.c\
 				   exec_error.c\
 				   exec_cmd.c\
 				   get_exec_path.c\
@@ -91,12 +91,12 @@ SRC_LEXER       := $(addprefix lexer/,$(SRC_LEXER))
 
 SRC_PARSER      := heredoc.c\
 				   complete_command.c\
-				   command.c\
-				   command_utils.c\
+				   simple_command.c\
+				   process.c\
 				   ast.c\
 				   and_or.c\
                    pipeline.c\
-                   redirect.c\
+                   io_redirect.c\
 				   separator.c\
 				   node.c\
 				   parse_error.c\

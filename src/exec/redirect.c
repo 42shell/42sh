@@ -77,7 +77,7 @@ static int	get_redirected_fd(t_redir *redir)
 	return (ft_atoi(redir->left_op->value->str));
 }
 
-int			set_redir(t_command *cmd, bool backup)
+int			set_redir(t_process *process, bool backup)
 {
 	int		redirected_fd;
 	int		ret;
@@ -85,24 +85,24 @@ int			set_redir(t_command *cmd, bool backup)
 
 	i = 0;
 	/*
-	if (cmd->stdin != STDIN_FILENO)
+	if (process->stdin != STDIN_FILENO)
 	{
-		dup2_and_backup(cmd->stdin, STDIN_FILENO, backup);
-		close(cmd->stdin);
+		dup2_and_backup(process->stdin, STDIN_FILENO, backup);
+		close(process->stdin);
 	}
-	if (cmd->stdout != STDOUT_FILENO)
+	if (process->stdout != STDOUT_FILENO)
 	{
-		dup2_and_backup(cmd->stdout, STDOUT_FILENO, backup);
-		close(cmd->stdout);
+		dup2_and_backup(process->stdout, STDOUT_FILENO, backup);
+		close(process->stdout);
 	}
 	*/
-	if (cmd->redirs)
+	if (process->redirs)
 	{
-		while (cmd->redirs[i])
+		while (process->redirs[i])
 		{
-			if ((redirected_fd = get_redirected_fd(cmd->redirs[i])) > 255)
+			if ((redirected_fd = get_redirected_fd(process->redirs[i])) > 255)
 				return (redir_error(ERROR_REDIR_BAD_FD));
-			else if ((ret = redirect(cmd->redirs[i], redirected_fd, backup)) < 0)
+			else if ((ret = redirect(process->redirs[i], redirected_fd, backup)) < 0)
 				return (redir_error(ret));
 			i++;
 		}

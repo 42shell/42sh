@@ -12,19 +12,22 @@
 
 #include "shell.h"
 
-int			ast_del(t_ast **ast_list)
+int			job_del(t_job **jobs)
 {
-	if (!ast_list || !*ast_list)
+	if (!jobs || !*jobs)
 		return (0);
-	free_ast_nodes((*ast_list)->root, false);
-	ast_del(&((*ast_list)->next));
-	ft_memdel((void **)ast_list);
+	free_ast_nodes((*jobs)->ast, false);
+	ft_memdel((void **)jobs);
 	return (0);
 }
 
-t_ast		*ast_new(void)
+t_job		*job_new(t_node *ast)
 {
-	return ((t_ast *)ft_xmalloc(sizeof(t_ast)));
+	t_job	*job;
+
+	job = (t_job *)ft_xmalloc(sizeof(t_job));
+	job->ast = ast;
+	return (job);
 }
 
 void		free_ast_nodes(t_node *node, bool par_is_pattern)
@@ -36,8 +39,8 @@ void		free_ast_nodes(t_node *node, bool par_is_pattern)
 	//cur_is_pattern = false;
 	if (node == NULL)
 		return ;
-	else if (node->type == NODE_COMMAND)
-		command_del((t_command **)&node->data);
+	else if (node->type == NODE_PROCESS)
+		process_del((t_process **)&node->data);
 	else if (node->data != NULL /*&& !par_is_pattern*/)
 	{
 		token_del((t_token **)&node->data);
