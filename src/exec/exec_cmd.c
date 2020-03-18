@@ -39,44 +39,43 @@ int			exec_command_env(char **argv, t_env *env)
 }
 */
 
-int			exec_builtin(char **argv, t_redir **redirs, char **env)
+int			exec_builtin(t_command *cmd, char **env)
 {
 	(void)env;
-	if (set_redir(redirs, true) == 0)
+	if (set_redir(cmd, true) == 0)
 	{
 		//if (ft_strequ(argv[0], "env"))
 		//	builtin_env(argv, env);
-		if (ft_strequ(argv[0], "exit"))
-			builtin_exit(argv);
-		else if (ft_strequ(argv[0], "unsetenv"))
-			builtin_unsetenv(argv);
-		else if (ft_strequ(argv[0], "setenv"))
-			builtin_setenv(argv);
-		else if (ft_strequ(argv[0], "echo"))
-			builtin_echo(argv);
-		else if (ft_strequ(argv[0], "cd"))
-			builtin_cd(argv);
+		if (ft_strequ(cmd->argv[0], "exit"))
+			builtin_exit(cmd->argv);
+		else if (ft_strequ(cmd->argv[0], "unsetenv"))
+			builtin_unsetenv(cmd->argv);
+		else if (ft_strequ(cmd->argv[0], "setenv"))
+			builtin_setenv(cmd->argv);
+		else if (ft_strequ(cmd->argv[0], "echo"))
+			builtin_echo(cmd->argv);
+		else if (ft_strequ(cmd->argv[0], "cd"))
+			builtin_cd(cmd->argv);
 	}
 	restore_fds();
 	return (0);
 }
 
-int			exec_binary(char *path, char **argv, t_redir **redirs, char **env)
+int			exec_binary(t_command *cmd, char **env)
 {
 	pid_t		pid;
 	int			status;
  
-	//if (!(command->path = get_exec_path(command->argv[0])))
-	//	return (command_not_found(command->argv[0]));
-	pid = fork();
+	if ((pid = fork()) == -1)
+		return (-1); // code ?
 	signal(SIGINT, interrupt_fork);
 	if (pid == 0)
 	{
-		if (set_redir(redirs, false) != 0)
-			exit(1);
-		if (execve(path, argv, env) == -1)
+		if (set_redir(cmd, false) != 0)
+			exit(1);//code ?
+		if (execve(cmd->path, cmd->argv, env) == -1)
 		{
-			ft_dprintf(2, "42sh: %s: cannot execute command\n", argv[0]);
+			ft_dprintf(2, "42sh: %s: cannot execute command\n", cmd->argv[0]);
 			exit(g_last_exit_st);
 		}
 		exit(0);

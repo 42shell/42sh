@@ -95,7 +95,7 @@ int		finish_env(char **argv, int i, t_env *new_env)
 }
 
 /*
-** exec_binary(get_exec_path(argv[i]), argv[i], NULL, new_env->env);
+** exec_binary(get_exec_path(argv[i])), argv[i], NULL, new_env->env);
 */
 
 int		builtin_env(char **argv, t_env *env)

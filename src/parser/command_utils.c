@@ -52,5 +52,12 @@ int			command_del(t_command **command)
 
 t_command	*command_new(void)
 {
-	return ((t_command *)ft_xmalloc(sizeof(t_command)));
+	t_command	*cmd;
+
+	cmd = (t_command *)ft_xmalloc(sizeof(t_command));
+	/*
+	cmd->stdin = STDIN_FILENO;
+	cmd->stdout = STDOUT_FILENO;
+	*/
+	return (cmd);
 }

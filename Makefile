@@ -64,9 +64,9 @@ SRC_EXEC        := execute_ast.c\
 				   exec_error.c\
 				   exec_cmd.c\
 				   get_exec_path.c\
-				   redir.c\
-				   redir_utils.c\
-				   redir_error.c\
+				   redirect.c\
+				   redirect_utils.c\
+				   redirect_error.c\
                    open_heredoc.c\
 				   utils.c\
 				   #exec_pipe.c

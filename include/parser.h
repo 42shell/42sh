@@ -75,6 +75,10 @@ typedef struct			s_redir
 	t_token				*right_op;
 }						t_redir;
 
+/*
+** simple command
+*/
+
 typedef struct			s_command
 {
 	char				**argv;
