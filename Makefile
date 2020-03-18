@@ -68,6 +68,7 @@ SRC_EXEC        := execute_ast.c\
 				   redirect_utils.c\
 				   redirect_error.c\
                    open_heredoc.c\
+				   jobs.c\
 				   utils.c\
 				   #exec_pipe.c
 SRC_EXEC        := $(addprefix exec/,$(SRC_EXEC))

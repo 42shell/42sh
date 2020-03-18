@@ -36,7 +36,7 @@ typedef struct		s_process
 typedef struct		s_job
 {
 	pid_t			pgid;
-	t_process		*processes;
+	t_list_head		*processes;
 	bool			notified;	/* true if user told about stopped job */
 }					t_job;
 
@@ -88,6 +88,14 @@ int					set_pipe_redir(int input_fd, int fildes[2]);
 
 int					redir_error(int code);
 int					command_not_found(char *command_name);
+
+/*
+** job control
+*/
+
+t_job				*get_job(pid_t pgid);
+bool				job_is_stopped(t_job *job);
+bool				job_is_done(t_job *job);
 
 /*
 ** fork utils
