@@ -23,7 +23,7 @@ int		parse_error(int code, char *near)
 	else if (code != SILENT_ABORT && near)
 		ft_dprintf(2,
 		"42sh: syntax error near unexpected token '%s'\n",
-		near);
+		near, code);
 	g_parser.error = code;
 	free(near);
 	return (0);

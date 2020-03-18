@@ -46,8 +46,17 @@ int			remove_escaped_newlines(char *line)
 	return (0);
 }
 
+/*
+** this is not correct because of stupid \\n
+** plus is complicated to know when to exit() when read returns 0
+** need get_next_line()
+*/
+
 int			input_batch(const char *prompt)
 {
+	(void)prompt;
+	exit(0);
+	/*
 	char	buff[BUFF_SIZE];
 	char	*tmp;
 	int		ret;
@@ -66,7 +75,7 @@ int			input_batch(const char *prompt)
 		else
 			g_lexer.line = ft_strdup(buff);
 	}
-	else if (ret == 0) //heredoc with no end
+	else if (ret == 0 && !g_lexer.line[g_lexer.i]) //heredoc with no end
 	{
 		free(g_lexer.line);
 		g_lexer.line = NULL;
@@ -75,6 +84,7 @@ int			input_batch(const char *prompt)
 	}
 	else if (ret == -1)
 		exit(1);//error
+	*/
 	return (0);
 }
 

@@ -12,6 +12,10 @@
 
 #include "shell.h"
 
+/*
+** job control folder
+*/
+
 t_job	*get_job(pid_t pgid)
 {
 	(void)pgid;

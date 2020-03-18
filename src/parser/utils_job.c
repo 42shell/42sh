@@ -12,25 +12,7 @@
 
 #include "shell.h"
 
-int			job_del(t_job **jobs)
-{
-	if (!jobs || !*jobs)
-		return (0);
-	free_ast_nodes((*jobs)->ast, false);
-	ft_memdel((void **)jobs);
-	return (0);
-}
-
-t_job		*job_new(t_node *ast)
-{
-	t_job	*job;
-
-	job = (t_job *)ft_xmalloc(sizeof(t_job));
-	job->ast = ast;
-	return (job);
-}
-
-void		free_ast_nodes(t_node *node, bool par_is_pattern)
+static void	free_ast_nodes(t_node *node, bool par_is_pattern)
 {
 	int		i;
 	//bool	cur_is_pattern;
@@ -53,4 +35,22 @@ void		free_ast_nodes(t_node *node, bool par_is_pattern)
 		free_ast_nodes(node->child[i++], /*cur_is_pattern*/ 0);
 	free(node->child);
 	free(node);
+}
+
+int			job_del(t_job **jobs)
+{
+	if (!jobs || !*jobs)
+		return (0);
+	free_ast_nodes((*jobs)->ast, false);
+	ft_memdel((void **)jobs);
+	return (0);
+}
+
+t_job		*job_new(t_node *ast)
+{
+	t_job	*job;
+
+	job = (t_job *)ft_xmalloc(sizeof(t_job));
+	job->ast = ast;
+	return (job);
 }

@@ -12,7 +12,7 @@
 
 #include "shell.h"
 
-static int	delim_token(char delim)
+static int	delim_token()
 {
 	if (g_lexer.token)
 	{
@@ -22,7 +22,22 @@ static int	delim_token(char delim)
 		else if ((g_lexer.line[g_lexer.i] == '<' || g_lexer.line[g_lexer.i] == '>')
 		&& ft_strisnbr(g_lexer.token->value->str))
 			g_lexer.token->type = IO_NUMBER;
-		g_lexer.last_delim = delim;
+		g_lexer.token_delimited = true;
+	}
+	return (0);
+}
+
+int			lx_end(void)
+{
+	if (!g_lexer.line[g_lexer.i])
+	{
+		g_lexer.end_of_input = 1;
+		if (g_lexer.token && !g_lexer.quote_st && g_lexer.nl_found)
+		{
+			delim_token();
+			g_lexer.nl_found = 0;
+		}
+		return (1);
 	}
 	return (0);
 }
@@ -35,7 +50,7 @@ int			lx_operator_end(void)
 	&& (!is_operator_part(g_lexer.line[g_lexer.i])
 	|| !is_operator_next(g_lexer.token->value->str, g_lexer.line[g_lexer.i])))
 	{
-		delim_token(g_lexer.line[g_lexer.i]);
+		delim_token();
 		return (1);
 	}
 	return (0);
@@ -49,23 +64,29 @@ int			lx_operator_new(void)
 		if ((g_lexer.line[g_lexer.i] == '<' || g_lexer.line[g_lexer.i] == '>')
 		&& ft_strisnbr(g_lexer.token->value->str))
 			g_lexer.token->type = IO_NUMBER;
-		delim_token(g_lexer.line[g_lexer.i]);
+		delim_token();
 		return (1);
 	}
 	return (0);
 }
 
+/*
+** the first time we process it, we delim the current token.
+** the second time we create a NEWLINE token, increase index, set nl_found to true
+** and delim the NEWLINE token to return it.
+*/
+
 int			lx_newline(void)
 {
 	if (!g_lexer.quote_st && g_lexer.line[g_lexer.i] == '\n')
 	{
-		g_lexer.nl_found = 1;
 		if (!g_lexer.token)
 		{
+			g_lexer.nl_found = 1;
 			g_lexer.token = token_new(NEWLINE);
 			g_lexer.i++;
 		}
-		delim_token('\n');
+		delim_token();
 		return (1);
 	}
 	return (0);
@@ -78,7 +99,7 @@ int			lx_blank(void)
 	|| g_lexer.line[g_lexer.i] == ' '))
 	{
 		if (g_lexer.token)
-			delim_token(g_lexer.line[g_lexer.i]);
+			delim_token();
 		while (g_lexer.line[g_lexer.i] == '\t'
 		|| g_lexer.line[g_lexer.i] == ' ')
 			g_lexer.i++;

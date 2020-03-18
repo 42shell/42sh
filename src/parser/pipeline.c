@@ -27,7 +27,7 @@
 **
 */
 
-static void	linebreak_get_input(void)
+static void		linebreak_get_input(void)
 {
 	linebreak();
 	while (!g_parser.error && !g_parser.token)

@@ -19,7 +19,8 @@ int			main_loop()
 	while (1) //while !g_shell.quit...
 	{
 		g_parser.error = NOERR;
-		g_shell.get_input(PS1);
+		if (!g_lexer.line || !g_lexer.line[g_lexer.i])
+			g_shell.get_input(PS1);
 		if ((g_shell.jobs = complete_command()))
 		{
 			job = g_shell.jobs;
@@ -28,7 +29,7 @@ int			main_loop()
 				launch_job(job);
 				job = job->next;
 			}
-			//ast_del(&g_shell.ast);
+			job_del(&g_shell.jobs);
 		}
 		if (g_shell.interactive_mode)
 		{

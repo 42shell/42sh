@@ -41,7 +41,7 @@ int		lx_word_next(void)
 
 int		lx_comment(void)
 {
-	if (*g_lexer.line == '#')
+	if (g_lexer.line[g_lexer.i] == '#')
 	{
 		while (g_lexer.line[g_lexer.i] && g_lexer.line[g_lexer.i] != '\n')
 			g_lexer.i++;

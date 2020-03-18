@@ -127,7 +127,6 @@ int						redir_del(t_redir **redir);
 t_node					*node_new(void *data, int type);
 int						node_add_child(t_node *parent, t_node *child);
 
-void					free_ast_nodes(t_node *node, bool par_is_pattern);
 void					print_ast(t_node *ast, size_t indent_level);
 
 #endif

@@ -50,9 +50,13 @@
 ** -check leaks everywhere
 ** -last exit status, close fds, error handling... assert everything is perfect
 ** -modify env builtin to use g_env
+** -use get_next_line in batch mode to be able to remove \\n,
+** 	for the moment it is not correct because of BUFF_SIZE
+**  we may read until \ and not be aware of following \n
+** -empty lines '\n' returns parse error
 */
 
-# define BUFF_SIZE	256
+# define BUFF_SIZE	2
 # define INPUT_INT	3
 # define INPUT_EOF	4
 

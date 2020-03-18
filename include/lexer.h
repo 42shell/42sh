@@ -66,10 +66,11 @@ typedef struct		s_lexer
 {
 	char			*line;
 	t_token			*token;
-	char			last_delim;
+	char			token_delimited;
 	char			line_cont;
 	char			quote_st;
 	char			nl_found;
+	char			end_of_input;
 	size_t			i;
 }					t_lexer;
 
@@ -77,7 +78,8 @@ t_lexer				g_lexer;
 
 t_token				*get_next_token(void);
 int					reset_lexer(void);
- 
+
+int					lx_end(void);
 int					lx_operator_next(void);
 int					lx_operator_end(void);
 int					lx_backslash(void);

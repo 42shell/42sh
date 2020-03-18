@@ -34,7 +34,9 @@ int				reset_lexer(void)
 	free(g_lexer.line);
 	g_lexer.line = NULL;
 	g_lexer.line_cont = 0;
-	g_lexer.last_delim = 0;
+	g_lexer.token_delimited = 0;
+	g_lexer.nl_found = 0;
+	g_lexer.end_of_input = false;
 	g_lexer.quote_st = 0;
 	g_lexer.i = 0;
 	return (0);
@@ -44,26 +46,32 @@ static t_token	*return_token(void)
 {
 	t_token	*ret;
 
-	if (g_lexer.last_delim) //a token has been delimited
+	if (g_lexer.token_delimited) //a token has been delimited
 	{
 		ret = g_lexer.token;
 		g_lexer.token = NULL;
-		g_lexer.last_delim = 0;
+		g_lexer.token_delimited = false;
+		g_lexer.quote_st = 0;
 		return (ret);
 	}
-	else if (!g_lexer.nl_found) //escaped newlines or consecutives whitespaces in file in batch mode...
+	else //end of input has been reached and last delimited token has been returned
 	{
-		g_lexer.line_cont = 1;
-		return (get_next_token());
+		g_lexer.end_of_input = false;
+		if (!g_lexer.nl_found) //escaped newline, quotes... the current token has not been delim
+		{
+			g_lexer.line_cont = 1;
+			return (get_next_token());
+		}
+		g_lexer.nl_found = 0; //normal end of line
+		g_lexer.quote_st = 0;
+		g_lexer.token = NULL;
+		return (NULL);
 	}
-	g_lexer.nl_found = 0; //normal end of line
-	g_lexer.quote_st = 0;
-	return (NULL);
 }
 
 t_token			*get_next_token(void)
 {
-	if (g_parser.error)
+	if (g_parser.error || !g_lexer.line)
 		return (NULL);
 	if (g_lexer.line_cont || g_lexer.quote_st)
 	{
@@ -71,9 +79,10 @@ t_token			*get_next_token(void)
 			return (NULL);
 		g_lexer.line_cont = 0;
 	}
-	while (!g_lexer.last_delim && g_lexer.line[g_lexer.i])
+	while (!g_lexer.end_of_input && !g_lexer.token_delimited)
 	{
-		lx_operator_next()
+		lx_end()
+		|| lx_operator_next()
 		|| lx_operator_end()
 		|| lx_backslash()
 		|| lx_quote()

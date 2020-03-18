@@ -73,7 +73,7 @@ static void	add_process_redir(t_process *process, t_redir *redir)
 	process->redirs = new;
 }
 
-t_node			*simple_command(void)
+t_node		*simple_command(void)
 {
 	t_node		*process_node;
 	t_process	*process;

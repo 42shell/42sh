@@ -85,6 +85,7 @@ int			launch_job(t_job *job)
 {
 	if (job == NULL)
 		return (-1);
+	print_ast(job->ast, 0);
 	/*
 	if (ast->type == NODE_AND_IF || ast->type == NODE_OR_IF)
 		return (node_and_or_if(ast));

@@ -28,6 +28,10 @@ int		backslash_newline(void)
 }
 */
 
+
+/*
+** get_next_line() in batch mode or may fail if line[i+1] = 0
+*/
 int		lx_backslash(void)
 {
 	if (g_lexer.line[g_lexer.i] == BSLASH && g_lexer.quote_st != SQUOTE)
@@ -35,7 +39,8 @@ int		lx_backslash(void)
 		if (!g_lexer.token)
 			g_lexer.token = token_new(WORD);
 		ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i++]);
-		ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i++]);
+		if (g_lexer.line[g_lexer.i])
+			ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i++]);
 		return (1);
 	}
 	return (0);

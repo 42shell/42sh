@@ -68,7 +68,6 @@ t_job		*list(void)
 		&& g_parser.token && g_parser.token->type != NEWLINE
 		&& (job->next = list()))
 			job->next->prev = job;
-		//separator();
 	}
 	get_all_heredocs();
 	return (job);
@@ -78,39 +77,22 @@ t_job		*list(void)
 
 this rule seems to be only useful in batch mode (or maybe in builtins like function definition ??)
 
-I ve added separator() calls to skip empty lines in batch mode.
+need rule with EMPTY somewhere to avoid parse errors for empty lines "\n"
 
 complete_command : list separator 
                  | list
 */
 
-/*
-** use prev instead of last_ast ?
-*/
-
 t_job		*complete_command(void)
 {
 	t_job	*jobs;
-	//t_ast	*last_ast;
 
 	jobs = NULL;
 	if (g_parser.error)
 		return (NULL);
 	else if (!g_parser.token)
 		g_parser.token = get_next_token();
-	//separator();
-	if ((jobs = list()))
-	{
-		/*
-		if (g_parser.token)
-		{
-			last_ast = ast_list;
-			while (last_ast->next)
-				last_ast = last_ast->next;
-			last_ast->next = list();
-		}
-		*/
-	}
+	jobs = list();
 	separator();
 	ft_memdel((void **)&g_parser.heredocs);
 	if (g_parser.error && g_parser.error != HEREDOC_NO_DELIM)
