@@ -42,11 +42,19 @@ static int	parse_args(int argc, char **argv)
 			write(STDERR_FILENO, "42sh: Could not open file\n", 26);
 			exit(1);
 		}
+		g_shell.get_input = &input_batch;
 		dup2(fd, STDIN_FILENO);
 		close(fd);
-		return (0);
 	}
-	g_shell.interactive_mode = true;
+	else
+	{
+		g_shell.get_input = &input_interactive;
+		g_shell.interactive_mode = true;
+		g_rl_retain_nl = true;
+		g_rl_prompt_cr = true;
+		g_rl_hist_doubl = false;
+		init_sig();
+	}
 	return (0);
 }
 
@@ -59,20 +67,19 @@ int			init(int argc, char **argv)
 		ft_dprintf(2, "42sh: stdin is not a tty\n");
 		exit(1);
 	}
-	if (parse_args(argc, argv) == 0)
+	while (tcgetpgrp(STDIN_FILENO) != (g_shell.pgid = getpgrp()))
+        kill(-g_shell.pgid, SIGTTIN); //-pgid, wtf ??
+	/* Put ourselves in our own process group.  */
+	g_shell.pgid = getpid();
+	if (setpgid (g_shell.pgid, g_shell.pgid) < 0)
 	{
-		if (g_shell.interactive_mode)
-		{
-			g_shell.get_input = &input_interactive;
-			g_rl_retain_nl = true;
-			g_rl_prompt_cr = true;
-			g_rl_hist_doubl = false;
-			init_sig();
-		}
-		else
-			g_shell.get_input = &input_batch;
+		ft_dprintf(2, "42sh: Couldn't put the shell in its own process group\n");
+		exit (1);
 	}
+    /* Grab control of the terminal.  */
+	tcsetpgrp(STDIN_FILENO, g_shell.pgid);
 	g_env = env_dup(environ);
+	parse_args(argc, argv);
 	increase_shlvl();
 	return (0);
 }
