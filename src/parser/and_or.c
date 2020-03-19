@@ -13,52 +13,38 @@
 #include "shell.h"
 
 /*
-** and_or			: pipeline AND_IF linebreak and_or
-**					| pipeline OR_IF linebreak and_or
-**					| pipeline
-**
-** returns and_or in this format :
-** ex:           ls && cat || ls && cat:
-**
-**                            "&&"
-**                            /  \
-**                         "||"   cat
-**                         /  \
-**                      "&&"   ls
-**                      /  \
-**                    ls   cat
+** and_or			: pipe_sequence AND_IF linebreak and_or
+**					| pipe_sequence OR_IF linebreak and_or
+**					| pipe_sequence
+** 
+** returns a job struct containing a list of pipelines
+** the separator operator is stored in the job struct
 */
 
-static void	linebreak_get_input(int operator_type)
+t_job			*and_or(void)
 {
-	linebreak();
-	while (!g_parser.error && !g_parser.token)
-	{
-		g_lexer.line_cont = operator_type;
-		g_parser.token = get_next_token();
-	}
-}
+	t_job		*job;
+	t_pipeline	*list;
+	t_pipeline	*pipe_seq;
 
-t_node		*and_or(t_node *left_pipeline)
-{
-	t_node	*right_pipeline;
-	t_node	*and_or_node;
-
-	and_or_node = NULL;
-	if (g_parser.error
-	|| (!left_pipeline && !(left_pipeline = pipeline())))
+	if (g_parser.error || !(pipe_seq = pipe_sequence()))
 		return (NULL);
-	else if (g_parser.token
+	list = pipe_seq;
+	while (g_parser.token
 	&& (g_parser.token->type == AND_IF || g_parser.token->type == OR_IF))
 	{
-		and_or_node = node_new(g_parser.token,
-		g_parser.token->type == AND_IF ? NODE_AND_IF : NODE_OR_IF);
-		node_add_child(and_or_node, left_pipeline);
+		pipe_seq->sep = g_parser.token;
 		g_parser.token = get_next_token();
-		linebreak_get_input(and_or_node->type);
-		right_pipeline = pipeline();
-		node_add_child(and_or_node, right_pipeline);
-		and_or_node = and_or(and_or_node);
+		linebreak(pipe_seq->sep->type);
+		if (!(pipe_seq->next = pipe_sequence()))
+		{
+			g_parser.error = g_parser.error ? g_parser.error : NO_CMD_AFTER_PIPE;
+			free_pipelines(&list);
+			return (NULL);
+		}
+		pipe_seq = pipe_seq->next;
 	}
-	return (and_or_node ? and_or_node : left_pipeline);
+	job = (t_job *)ft_xmalloc(sizeof(t_job));
+	job->pipelines = list;
+	return (job);
 }

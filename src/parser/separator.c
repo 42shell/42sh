@@ -12,9 +12,28 @@
 
 #include "shell.h"
 
+
 /*
-newline_list     :  NEWLINE
-                 |  NEWLINE newline_list
+** linebreak		: newline_list
+** 					| EMPTY
+**
+** get input if empty, last_token_type determine the prompt that
+** readline will display
+*/
+
+void		linebreak(int last_token_type)
+{
+	newline_list();
+	while (!g_parser.error && !g_parser.token)
+	{
+		g_lexer.line_cont = last_token_type;
+		g_parser.token = get_next_token();
+	}
+}
+
+/*
+** newline_list		: NEWLINE
+** 					| NEWLINE newline_list
 */
 
 void		newline_list(void)
@@ -29,21 +48,8 @@ void		newline_list(void)
 }
 
 /*
-linebreak        : newline_list
-                 | empty 
-*/
-
-void		linebreak(void)
-{
-	if (g_parser.error)
-		return ;
-	if (g_parser.token)
-		newline_list();
-}
-
-/*
-separator_op     : '&'
-                 | ';'
+** separator_op		: '&'
+**					| ';'
 */
 
 t_token		*separator_op(void)
@@ -63,8 +69,8 @@ t_token		*separator_op(void)
 }
 
 /*
-separator        : separator_op linebreak
-                 | newline_list
+** separator		: separator_op newline_list
+** 					| newline_list
 */
 
 t_token		*separator(void)
@@ -75,12 +81,8 @@ t_token		*separator(void)
 		return (NULL);
 	if (g_parser.token)
 	{
-		if ((sep = separator_op()))
-		{
-			linebreak();
-			return (sep);
-		}
+		sep = separator_op();
 		newline_list();
 	}
-	return (NULL);
+	return (sep);
 }

@@ -27,10 +27,6 @@ static void	increase_shlvl(void)
 	free(shlvl_str);
 }
 
-/*
-** check this
-*/
-
 static int	parse_args(int argc, char **argv)
 {
 	int		fd;
@@ -69,14 +65,14 @@ int			init(int argc, char **argv)
 	}
 	while (tcgetpgrp(STDIN_FILENO) != (g_shell.pgid = getpgrp()))
         kill(-g_shell.pgid, SIGTTIN); //-pgid, wtf ??
-	/* Put ourselves in our own process group.  */
+	/* Put ourselves in our own process group. */
 	g_shell.pgid = getpid();
 	if (setpgid (g_shell.pgid, g_shell.pgid) < 0)
 	{
 		ft_dprintf(2, "42sh: Couldn't put the shell in its own process group\n");
 		exit (1);
 	}
-    /* Grab control of the terminal.  */
+    /* Grab control of the terminal. */
 	tcsetpgrp(STDIN_FILENO, g_shell.pgid);
 	g_env = env_dup(environ);
 	parse_args(argc, argv);

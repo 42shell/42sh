@@ -93,14 +93,12 @@ SRC_PARSER      := heredoc.c\
 				   complete_command.c\
 				   simple_command.c\
 				   and_or.c\
-                   pipeline.c\
+                   pipe_sequence.c\
                    io_redirect.c\
 				   separator.c\
-				   node.c\
 				   parse_error.c\
-				   utils_debug.c\
-				   utils_job.c\
-                   utils_process.c
+				   debug.c\
+                   free.c
 SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
 
 SRC_SHELL       := del.c\

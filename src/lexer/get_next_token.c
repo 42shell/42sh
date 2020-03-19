@@ -29,14 +29,13 @@ static char		*get_prompt(void)
 
 int				reset_lexer(void)
 {
-	if (g_lexer.token)
-		token_del(&g_lexer.token);
+	token_del(&g_lexer.token);
 	free(g_lexer.line);
 	g_lexer.line = NULL;
 	g_lexer.line_cont = 0;
 	g_lexer.token_delimited = 0;
 	g_lexer.nl_found = 0;
-	g_lexer.end_of_input = false;
+	g_lexer.end_of_input = 0;
 	g_lexer.quote_st = 0;
 	g_lexer.i = 0;
 	return (0);
@@ -50,7 +49,7 @@ static t_token	*return_token(void)
 	{
 		ret = g_lexer.token;
 		g_lexer.token = NULL;
-		g_lexer.token_delimited = false;
+		g_lexer.token_delimited = 0;
 		g_lexer.quote_st = 0;
 		return (ret);
 	}

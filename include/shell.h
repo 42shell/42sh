@@ -39,24 +39,29 @@
 /*
 ** -fix readline problems
 ** 		-rl_del
-**		-empty env seems to not return NULL
-**		-maybe find better way to handle init and del
-**		-write on 2 ? sounds weird to do that in readline, maybe dup2 in shell.get_input 
+**		-env/termcaps...
+**		-better way to handle init and del
+**		-write on 2 ? sounds weird to do that in readline,
+**		 maybe dup2 in shell.get_input 
 **		-rigorous testing
-** -batch_mode:
-** 		-heredocs: no delim before EOF currently quit without error msg
-** -empty env -> set default values ?
-** -flush cache table when PATH is modified.
-** -check leaks everywhere
-** -last exit status, close fds, error handling... assert everything is perfect
-** -modify env builtin to use g_env
-** -use get_next_line in batch mode to be able to remove \\n,
-** 	for the moment it is not correct because of BUFF_SIZE
-**  we may read until \ and not be aware of following \n
-** -empty lines '\n' returns parse error
+** -proper init handling
+**		-tty stuff, empty env, job control...
+** -input
+**		-redo input_interactive() properly, EOF et INT handling...
+** 		-do input_batch, should be easier cause lexer bugs have been fixed,
+**		 use gnl equivalent
+** -error handling
+**		-^C ^D
+**		-improve parse error handling ("near token `newline`")
+**		-last exit status, close fds... assert everything is perfect
+** -others
+** 		-flush cache table when PATH is modified.
+** 		-check comments work properly
+** 		-in case of "ls | \n cat", newline is not removed from line before stored in history
+**		 don t know if it is handled in expand()
+** -leaks
 */
 
-# define BUFF_SIZE	2
 # define INPUT_INT	3
 # define INPUT_EOF	4
 

@@ -79,6 +79,7 @@ static int	get_redirected_fd(t_redir *redir)
 
 int			set_redir(t_process *process, bool backup)
 {
+	t_redir	*redir;
 	int		redirected_fd;
 	int		ret;
 	int		i;
@@ -96,16 +97,15 @@ int			set_redir(t_process *process, bool backup)
 		close(process->stdout);
 	}
 	*/
-	if (process->redirs)
+	redir = process->redirs;
+	while (redir)
 	{
-		while (process->redirs[i])
-		{
-			if ((redirected_fd = get_redirected_fd(process->redirs[i])) > 255)
-				return (redir_error(ERROR_REDIR_BAD_FD));
-			else if ((ret = redirect(process->redirs[i], redirected_fd, backup)) < 0)
-				return (redir_error(ret));
-			i++;
-		}
+		if ((redirected_fd = get_redirected_fd(redir)) > 255)
+			return (redir_error(ERROR_REDIR_BAD_FD));
+		else if ((ret = redirect(redir, redirected_fd, backup)) < 0)
+			return (redir_error(ret));
+		redir = redir->next;
+		i++;
 	}
 	return (0);
 }

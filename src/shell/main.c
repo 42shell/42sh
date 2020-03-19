@@ -14,32 +14,21 @@
 
 int			main_loop()
 {
-	t_job	*job;
-
 	while (1) //while !g_shell.quit...
 	{
 		g_parser.error = NOERR;
-		if (!g_lexer.line || !g_lexer.line[g_lexer.i])
-			g_shell.get_input(PS1);
+		g_shell.get_input(PS1);
 		if ((g_shell.jobs = complete_command()))
 		{
-			job = g_shell.jobs;
-			while (job)
-			{
-				launch_job(job);
-				job = job->next;
-			}
-			job_del(&g_shell.jobs);
-		}
-		if (g_shell.interactive_mode)
-		{
-			if (g_lexer.line)
+			print_jobs(g_shell.jobs);
+			free_jobs(&g_shell.jobs);
+			if (g_shell.interactive_mode)
 			{
 				g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;
 				rl_add_history(g_lexer.line);
 			}
-			reset_lexer();
 		}
+		reset_lexer();
 	}
 	return (0);
 }

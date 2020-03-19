@@ -41,15 +41,12 @@ static t_token	*filename(void)
 {
 	t_token	*filename;
 
-	if (g_parser.error)
+	if (!g_parser.token || g_parser.token->type != WORD)
 		return (NULL);
-	if (g_parser.token && g_parser.token->type == WORD)
-	{
-		filename = g_parser.token;
-		g_parser.token = get_next_token();
-		return (filename);
-	}
-	return (NULL);
+	filename = g_parser.token;
+	g_parser.token = get_next_token();
+	return (filename);
+
 }
 
 /*
@@ -66,19 +63,15 @@ static t_redir	*io_file(t_token *io_number)
 {
 	t_redir		*redir;
 
-	redir = NULL;
-	if (g_parser.error)
-		return (NULL);
-	if (g_parser.token && is_redir(g_parser.token)
-	&& (redir = redir_new(io_number, g_parser.token, NULL)))
+	redir = (t_redir *)ft_xmalloc(sizeof(t_redir));
+	redir->left_op = io_number;
+	redir->operator = g_parser.token;
+	g_parser.token = get_next_token();
+	if (!(redir->right_op = filename()))
 	{
-		g_parser.token = get_next_token();
-		if (!(redir->right_op = filename()))
-		{
-			parse_error(NO_REDIR_FILENAME, ft_strdup(redir->operator->value->str));
-			redir_del(&redir);
-			return (NULL);
-		}
+		g_parser.error = NO_REDIR_FILENAME;
+		free_redirs(&redir);
+		return (NULL);
 	}
 	return (redir);
 }
@@ -87,13 +80,13 @@ static t_redir	*io_here(t_token *io_number)
 {
 	t_redir	*redir;
 
-	if (g_parser.error)
-		return (NULL);
-	redir = redir_new(io_number, g_parser.token, NULL);
-	if ((g_parser.token = get_next_token()) == NULL || g_parser.token->type != WORD)
+	redir = (t_redir *)ft_xmalloc(sizeof(t_redir));
+	redir->left_op = io_number;
+	redir->operator = g_parser.token;
+	if (!(g_parser.token = get_next_token()) || g_parser.token->type != WORD)
 	{
-		parse_error(HEREDOC_NO_DELIM, ft_strdup(redir->operator->value->str));
-		redir_del(&redir);
+		g_parser.error = HEREDOC_NO_DELIM;
+		free_redirs(&redir);
 		return (NULL);
 	}
 	redir->right_op = g_parser.token;
@@ -106,9 +99,7 @@ t_redir			*io_redirect(void)
 {
 	t_token *io_number;
 
-	if (g_parser.error)
-		return (NULL);
-	else if (g_parser.token && g_parser.token->type == IO_NUMBER)
+	if (g_parser.token->type == IO_NUMBER)
 	{
 		io_number = g_parser.token;
 		g_parser.token = get_next_token();
@@ -116,7 +107,7 @@ t_redir			*io_redirect(void)
 			return (io_here(io_number));
 		return (io_file(io_number));
 	}
-	else if (g_parser.token && (g_parser.token->type == DLESS))
+	else if (g_parser.token->type == DLESS)
 		return (io_here(NULL));
 	return (io_file(NULL));
 }

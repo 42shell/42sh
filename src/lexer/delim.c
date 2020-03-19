@@ -84,6 +84,7 @@ int			lx_newline(void)
 		{
 			g_lexer.nl_found = 1;
 			g_lexer.token = token_new(NEWLINE);
+			ft_dstr_add(g_lexer.token->value, '\n');
 			g_lexer.i++;
 		}
 		delim_token();

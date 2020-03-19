@@ -12,90 +12,78 @@
 
 #include "shell.h"
 
-/* ************************************************************************** */
-
-//						EXECUTION FOLDER
-
 /*
-** depth first tree traversal
-** if we encounter a command or a pipe node, stop traversing and execute it.
-** for now, this function actually always stops at the first call.
+** the following rules should be enough to get a fine shell scripting:
+**
+** command			: simple_command
+** 					| compound_command 
+**
+** compound_command : brace_group
+** 					| subshell
+**					| if_clause
+**					| while_clause
+** 
+** and corresponding sub rules
 */
 
-/*
-static int	run(void)
-{
-	t_ast	*tmp;
-
-	while (ast != NULL)
-	{
-		if (g_parse_error == NOERR)
-		{
-			get_all_heredocs(&g_heredocs);
-			if (g_parse_error != SILENT_ABORT)
-			{
-				execute(ast->node, env);
-			}
-		}
-		free_ast_nodes(ast->node, false);
-		tmp = ast;
-		ast = ast->next;
-		free(tmp);
-	}
-	g_heredocs.nb_children = 0;
-	return (0);
-}
-*/
 /* ************************************************************************** */
 
 /*
-list             : and_or
-                 | and_or separator_op list
+** list				: and_or
+** 					| and_or separator_op list 
+** 
+** returns a list of jobs
+** the separator operator is stored in the pipe struct
 */
 
 t_job		*list(void)
 {
+	t_job	*jobs;
 	t_job	*job;
-	t_node	*ast;
 
-	job = NULL;
-	if (g_parser.error || !g_parser.token)
+	if (!(job = and_or()))
 		return (NULL);
-	if ((ast = and_or(NULL)))
+	jobs = job;
+	while (job && (job->sep = separator_op()))
 	{
-		job = job_new(ast);
-		if ((job->sep = separator_op())
-		&& g_parser.token && g_parser.token->type != NEWLINE
-		&& (job->next = list()))
-			job->next->prev = job;
+		if (!(job->next = and_or()))
+			g_parser.error = g_parser.error ? g_parser.error : NO_CMD_AFTER_SEP;
+		job = job->next;
 	}
 	get_all_heredocs();
-	return (job);
+	return (jobs);
 }
 
 /*
+** complete_command : list separator 
+** 					| list
+** 
+** -returns a list of jobs and skip the following newlines
+** -handle parse errors, if a token is still available, there is an error.
+*/
 
-this rule seems to be only useful in batch mode (or maybe in builtins like function definition ??)
-
-need rule with EMPTY somewhere to avoid parse errors for empty lines "\n"
-
-complete_command : list separator 
-                 | list
+/*
+** -the call to newline_list should not be here, but in the grammar,
+** 	the first call to newline_list is in compound_command(). So i m forced to
+**  call it here for the moment, to skip the first token if it is a newline.
 */
 
 t_job		*complete_command(void)
 {
 	t_job	*jobs;
 
-	jobs = NULL;
-	if (g_parser.error)
-		return (NULL);
-	else if (!g_parser.token)
+	if (!g_parser.token)
 		g_parser.token = get_next_token();
-	jobs = list();
-	separator();
-	ft_memdel((void **)&g_parser.heredocs);
-	if (g_parser.error && g_parser.error != HEREDOC_NO_DELIM)
-		job_del(&jobs);
+	newline_list();
+	if ((jobs = list()))
+		separator();
+	if (g_parser.token)
+	{
+		if (g_parser.error != SILENT_ABORT)
+			ft_dprintf(2, "42sh: syntax error near unexpected token '%s'\n",
+			g_parser.token->value->str);
+		token_del(&g_parser.token);
+		free_jobs(&jobs);
+	}
 	return (jobs);
 }

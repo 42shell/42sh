@@ -12,10 +12,21 @@
 
 #include "shell.h"
 
+int		heredoc_eof(char *delim)
+{
+	ft_dprintf(2,
+	"42sh: warning: here-document delimited by end-of-file (wanted '%.*s')\n",
+	(int)(ft_strlen(delim) - 1), delim);
+	return (0);
+}
+
 int		parse_error(int code, char *near)
 {
 	if (g_parser.error)
+	{
+		free(near);
 		return (0);
+	}
 	else if (code == HEREDOC_NO_DELIM)
 		ft_dprintf(2,
 		"42sh: warning: here-document delimited by end-of-file (wanted '%s')\n",
@@ -23,7 +34,7 @@ int		parse_error(int code, char *near)
 	else if (code != SILENT_ABORT && near)
 		ft_dprintf(2,
 		"42sh: syntax error near unexpected token '%s'\n",
-		near, code);
+		near);
 	g_parser.error = code;
 	free(near);
 	return (0);

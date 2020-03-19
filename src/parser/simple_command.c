@@ -12,24 +12,6 @@
 
 #include "shell.h"
 
-/*
-** returns commands in this format:
-**
-** ls -l 2 > test -a -f
-**
-** t_node
-** {
-**		type = 		NODE_COMMAND
-** 		data =		t_command
-** 					{
-** 						char 	**argv		= { ls, -l, -a, -f };
-** 						t_redir **redirs	= { 2, >, test };
-						char	*path		= /bin/ls
-** 					}
-** 		childs = 	NULL;
-** }
-*/
-
 static void	add_process_arg(t_process *process, t_token *arg)
 {
 	char		**new;
@@ -54,50 +36,56 @@ static void	add_process_arg(t_process *process, t_token *arg)
 
 static void	add_process_redir(t_process *process, t_redir *redir)
 {
-	t_redir		**new;
-	int			size;
+	t_redir		*ptr;
 
 	if (!process->redirs)
+		process->redirs = redir;
+	else
 	{
-		process->redirs = (t_redir **)ft_xmalloc(sizeof(t_redir *) * 2);
-		process->redirs[0] = redir;
-		return ;
+		ptr = process->redirs;
+		while (ptr->next)
+			ptr = ptr->next;
+		ptr->next = redir;
 	}
-	size = 0;
-	while (process->redirs[size])
-		size++;
-	new = (t_redir **)ft_xmalloc(sizeof(t_redir *) * (size + 2));
-	ft_memcpy((char *)new, (char *)process->redirs, (size * sizeof(t_token *)));
-	new[size] = redir;
-	free(process->redirs);
-	process->redirs = new;
 }
 
-t_node		*simple_command(void)
+static int	is_valid_argv(t_token *token)
 {
-	t_node		*process_node;
-	t_process	*process;
-	t_redir		*redirect;
+	return (token->type == WORD
+	|| token->type == IO_NUMBER
+	|| is_redir(token));
+}
 
-	if (g_parser.error)
+/*
+** simple_command	: WORD
+** 					| WORD simple_command
+** 					| IO_NUMBER/redir_op
+**					| IO_NUMBER/redir_op simple_command
+*/
+
+t_process	*simple_command(void)
+{
+	t_process	*process;
+	t_redir		*redir;
+
+	if (g_parser.error || !g_parser.token
+	|| !is_valid_argv(g_parser.token))
 		return (NULL);
-	process = process_new();
-	process_node = node_new(process, NODE_PROCESS);
-	while (!g_parser.error && g_parser.token
-	&& ((redirect = io_redirect()) || g_parser.token->type == WORD))
+	process = (t_process *)ft_xmalloc(sizeof(t_process));
+	while (g_parser.token && is_valid_argv(g_parser.token))
 	{
-		if (redirect)
-			add_process_redir(process, redirect);
-		else
+		if (g_parser.token->type == WORD)
 		{
 			add_process_arg(process, g_parser.token);
 			g_parser.token = get_next_token();
 		}
+		else if (!(redir = io_redirect()))
+		{
+			free_processes(&process);
+			return (NULL);
+		}
+		else
+			add_process_redir(process, redir);
 	}
-	if (g_parser.error || (!process->argv && !process->redirs))
-	{
-		process_del(&process);
-		ft_memdel((void **)&process_node);
-	}
-	return (process_node);
+	return (process);
 }

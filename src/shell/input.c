@@ -46,46 +46,10 @@ int			remove_escaped_newlines(char *line)
 	return (0);
 }
 
-/*
-** this is not correct because of stupid \\n
-** plus is complicated to know when to exit() when read returns 0
-** need get_next_line()
-*/
-
 int			input_batch(const char *prompt)
 {
 	(void)prompt;
 	exit(0);
-	/*
-	char	buff[BUFF_SIZE];
-	char	*tmp;
-	int		ret;
-
-	(void)prompt;
-	if ((ret = read(STDIN_FILENO, buff, BUFF_SIZE - 1)) > 0)
-	{
-		buff[ret] = 0;
-		remove_escaped_newlines(buff);
-		if (g_lexer.line)
-		{
-			tmp = g_lexer.line;
-			g_lexer.line = ft_strjoin(g_lexer.line, buff);
-			free(tmp);
-		}
-		else
-			g_lexer.line = ft_strdup(buff);
-	}
-	else if (ret == 0 && !g_lexer.line[g_lexer.i]) //heredoc with no end
-	{
-		free(g_lexer.line);
-		g_lexer.line = NULL;
-		g_parser.error = SILENT_ABORT;
-		exit(0);
-	}
-	else if (ret == -1)
-		exit(1);//error
-	*/
-	return (0);
 }
 
 int			input_interactive(const char *prompt)
@@ -98,14 +62,17 @@ int			input_interactive(const char *prompt)
 	else if (!*line)//ctrl-C || ctrl-D
 	{
 		free(line);
-		if (!ft_strequ(prompt, PSH))
+		if (g_rl_last_ret == RL_INT)
+		{
 			g_parser.error = SILENT_ABORT;
+			ft_memdel((void **)&g_lexer.line);
+		}
 		if (g_rl_last_ret == RL_EOF)
 		{
+			//??
 			if (!g_lexer.line)
 				exit(0);//builtin_exit()
 		}
-		ft_memdel((void **)&g_lexer.line);
 		return (g_rl_last_ret == RL_EOF ? INPUT_EOF : INPUT_INT);
 	}
 	remove_escaped_newlines(line);
