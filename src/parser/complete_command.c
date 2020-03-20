@@ -32,8 +32,14 @@
 ** list				: and_or
 ** 					| and_or separator_op list 
 ** 
-** returns a list of t_job
-** the separator operator is stored in the pipe struct
+** -returns a list of t_job
+** -the separator operator is stored in the pipe struct
+** -again a newline_list() call is necessary.
+**  As compound_command is not implemented, if the token after the separator is a newline,
+**  it will not be skipped in next and_or() call. In simple_command(), we trigger an error
+**  at the very beginning only if there is a token, and its not a valid argv (if there is
+**  no token, it s not an error its just an empty line).
+**  NEWLINE is not valid but we dont want an error so we skip it here.
 */
 
 static t_job		*list(void)
@@ -44,11 +50,12 @@ static t_job		*list(void)
 	if (!(job = and_or()))
 		return (NULL);
 	jobs = job;
-	while ((job->sep = separator_op()))
+	while (job && (job->sep = separator_op()))
 	{
-		if (!(job->next = and_or()))
+		newline_list();
+		job->next = and_or();
+		if (g_parser.error)
 		{
-			g_parser.error = g_parser.error ? g_parser.error : NO_CMD_AFTER_SEP;
 			free_jobs(&jobs);
 			return (NULL);
 		}
@@ -69,8 +76,8 @@ static t_job		*list(void)
 **  compound_command rule, which is not implemented yet, this is why whis call
 **  is neccessary.
 ** -handle parse errors and returns NULL if something went wrong.
-** -returns a t_complete_command containing a list of jobs and skip the following 
-**  separator op and newline.
+** -skip the following separator op and newline if any.
+** -returns a t_complete_command containing a list of jobs.
 */
 
 /*
