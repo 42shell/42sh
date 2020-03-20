@@ -70,7 +70,11 @@ t_process	*simple_command(void)
 
 	if (g_parser.error || !g_parser.token
 	|| !is_valid_argv(g_parser.token))
+	{
+		if (!g_parser.error && g_parser.token)
+			g_parser.error = NO_CMD_BEFORE_PIPE;
 		return (NULL);
+	}
 	process = (t_process *)ft_xmalloc(sizeof(t_process));
 	while (g_parser.token && is_valid_argv(g_parser.token))
 	{

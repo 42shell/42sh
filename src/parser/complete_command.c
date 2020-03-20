@@ -77,7 +77,7 @@ t_job		*complete_command(void)
 	newline_list();
 	if ((jobs = list()))
 		separator();
-	if (g_parser.error || g_parser.token)
+	if (g_parser.error)
 	{
 		if (g_parser.error != SILENT_ABORT)
 			ft_dprintf(2, "42sh: syntax error near unexpected token '%s'\n",
