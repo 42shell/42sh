@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_error.c                                      :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,30 +12,22 @@
 
 #include "shell.h"
 
-int		heredoc_eof(char *delim)
+int		ps_heredoc_eof(char *delim)
 {
 	ft_dprintf(2,
 	"42sh: warning: here-document delimited by end-of-file (wanted '%.*s')\n",
 	(int)(ft_strlen(delim) - 1), delim);
+	g_parser.error = NOERR;
 	return (0);
 }
 
-int		parse_error(int code, char *near)
+int		ps_error(char *near)
 {
-	if (g_parser.error)
-	{
-		free(near);
-		return (0);
-	}
-	else if (code == HEREDOC_NO_DELIM)
-		ft_dprintf(2,
-		"42sh: warning: here-document delimited by end-of-file (wanted '%s')\n",
-		near);
-	else if (code != SILENT_ABORT && near)
+	//g_last_exit_st = g_parser.error?
+	if (g_parser.error != SILENT_ABORT)
 		ft_dprintf(2,
 		"42sh: syntax error near unexpected token '%s'\n",
 		near);
-	g_parser.error = code;
-	free(near);
+	g_parser.error = NOERR;
 	return (0);
 }

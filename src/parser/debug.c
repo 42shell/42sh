@@ -17,7 +17,7 @@ void	print_jobs(t_job *jobs)
 	t_job		*job;
 	t_pipeline	*pipe;
 	t_process	*process;
-	char		**argv;
+	t_token		*word;
 	t_redir		*redir;
 
 	job = jobs;
@@ -29,12 +29,12 @@ void	print_jobs(t_job *jobs)
 			process = pipe->processes;
 			while (process)
 			{
-				argv = process->argv;
+				word = process->words;
 				redir = process->redirs;
-				while (argv && *argv)
+				while (word)
 				{
-					printf("%s ", *argv);
-					argv++;
+					printf("%s ", word->value->str);
+					word = word->next;
 				}
 				while (redir)
 				{

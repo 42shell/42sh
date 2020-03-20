@@ -13,7 +13,7 @@
 #include "shell.h"
 
 static char	*g_heredoc_ptr = NULL;
-char		g_heredoc_eof = false;
+static char	g_heredoc_eof = false;
 
 static bool		line_eq(char *s1, char *s2)
 {
@@ -46,24 +46,18 @@ static int		line_get(void)
 	int		ret;
 	int		i;
 
-	ret = 0;
 	i = g_heredoc_ptr - g_lexer.line;
 	while (!ft_strchr(g_heredoc_ptr, '\n'))
 	{
 		i = g_heredoc_ptr - g_lexer.line;
-		ret = g_shell.get_input(PSH);
+		if ((ret = g_shell.get_input(PSH)))
+			return (ret);
 		g_heredoc_ptr = &g_lexer.line[i];
-		if (ret != 0)
-		{
-			if (ret == INPUT_EOF)
-				g_parser.error = NOERR;
-			break ;
-		}
 	}
-	return (ret);
+	return (0);
 }
 
-static t_dstr	*get_heredoc(char *delim)
+static t_dstr	*ps_get_heredoc(char *delim)
 {
 	t_dstr	*heredoc;
 	int		ret;
@@ -82,7 +76,7 @@ static t_dstr	*get_heredoc(char *delim)
 			}
 			else if (ret == INPUT_EOF)
 			{
-				heredoc_eof(delim);
+				ps_heredoc_eof(delim);
 				g_heredoc_eof = true;
 			}
 		}
@@ -92,29 +86,29 @@ static t_dstr	*get_heredoc(char *delim)
 	return (heredoc);
 }
 
-int				get_all_heredocs(void)
+int				ps_get_all_heredocs(void)
 {
 	t_dstr	*heredoc;
-	int		i;
+	t_token	*curr;
+	t_token	*tmp;
 
-	i = 0;
-	if (g_parser.error || !g_parser.heredocs
+	if (g_parser.error || !(curr = g_parser.heredocs)
 	|| !(g_heredoc_ptr = ft_strchr(g_lexer.line, '\n')))
 		return (0);
 	g_heredoc_ptr++;
-	while (g_parser.heredocs[i])
+	while (curr)
 	{
-		ft_dstr_add(g_parser.heredocs[i]->value, '\n');
-		if (!(heredoc = get_heredoc(g_parser.heredocs[i]->value->str)))
+		ft_dstr_add(curr->value, '\n');
+		if (!(heredoc = ps_get_heredoc(curr->value->str)))
 			break ;
-		g_lexer.i += heredoc->len
-		+ (g_heredoc_eof ? 0 : g_parser.heredocs[i]->value->len);
-		ft_dstr_del((void **)&g_parser.heredocs[i]->value);
-		g_parser.heredocs[i]->value = heredoc;
+		g_lexer.i += heredoc->len + (g_heredoc_eof ? 0 : curr->value->len);
+		ft_dstr_del((void **)&curr->value);
+		curr->value = heredoc;
 		g_heredoc_eof = false;
-		i++;
+		tmp = curr;
+		curr = curr->next;
+		tmp->next = NULL;
 	}
-	ft_memdel((void **)&g_parser.heredocs);
 	g_heredoc_ptr = NULL;
 	return (g_parser.error);
 }

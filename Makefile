@@ -91,13 +91,13 @@ SRC_LEXER       := $(addprefix lexer/,$(SRC_LEXER))
 SRC_PARSER      := heredoc.c\
 				   complete_command.c\
 				   simple_command.c\
-				   and_or.c\
-                   pipe_sequence.c\
+				   job.c\
+                   pipeline.c\
                    io_redirect.c\
 				   separator.c\
-				   parse_error.c\
+				   error.c\
 				   debug.c\
-                   free.c
+                   del.c
 SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
 
 SRC_SHELL       := del.c\

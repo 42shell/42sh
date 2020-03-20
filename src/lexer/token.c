@@ -12,12 +12,13 @@
 
 #include "shell.h"
 
-void	token_del(t_token **tok)
+void	token_del(t_token **token)
 {
-	if (!tok || !*tok)
+	if (!token || !*token)
 		return ;
-	ft_dstr_del((void **)&(*tok)->value);
-	ft_memdel((void **)tok);
+	token_del(&(*token)->next);
+	ft_dstr_del((void **)&(*token)->value);
+	ft_memdel((void **)token);
 }
 
 t_token	*token_new(int type)

@@ -84,13 +84,12 @@ int			main_loop()
 		g_parser.error = NOERR;
 		g_shell.get_input(PS1);
 		if ((g_parser.token = get_next_token())
-		&& (command = complete_command()))
+		&& (command = ps_complete_command()))
 		{
 			//exec_complete_command(complete_command)
 			print_jobs(command->jobs);
-			free_jobs(&command->jobs);
-			free(command);
-			if (g_shell.interactive_mode)
+			complete_command_del(&command);
+			if (g_shell.interactive_mode && g_lexer.line)
 			{
 				g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;
 				rl_add_history(g_lexer.line);

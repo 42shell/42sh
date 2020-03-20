@@ -12,8 +12,24 @@
 
 #include "shell.h"
 
-static void	add_process_arg(t_process *process, t_token *arg)
+/*
+** lol I forgot about expansion
+*/
+
+static void		add_process_word(t_process *process, t_token *word)
 {
+	t_token		*ptr;
+
+	if (!process->words)
+		process->words = word;
+	else
+	{
+		ptr = process->words;
+		while (ptr->next)
+			ptr = ptr->next;
+		ptr->next = word;
+	}
+	/*
 	char		**new;
 	int			size;
 
@@ -32,9 +48,10 @@ static void	add_process_arg(t_process *process, t_token *arg)
 	free(process->argv);
 	process->argv = new;
 	token_del(&arg);
+	*/
 }
 
-static void	add_process_redir(t_process *process, t_redir *redir)
+static void		add_process_redir(t_process *process, t_redir *redir)
 {
 	t_redir		*ptr;
 
@@ -49,7 +66,7 @@ static void	add_process_redir(t_process *process, t_redir *redir)
 	}
 }
 
-static int	is_valid_argv(t_token *token)
+static int		is_valid_argv(t_token *token)
 {
 	return (token
 	&& (token->type == WORD 
@@ -66,7 +83,7 @@ static int	is_valid_argv(t_token *token)
 ** returns a t_process containing argv array and a list of redirections
 */
 
-t_process	*simple_command(void)
+t_process		*ps_simple_command(void)
 {
 	t_process	*process;
 	t_redir		*redir;
@@ -77,16 +94,16 @@ t_process	*simple_command(void)
 		return (NULL);
 	}
 	process = (t_process *)ft_xmalloc(sizeof(t_process));
-	while (g_parser.token && is_valid_argv(g_parser.token))
+	while (is_valid_argv(g_parser.token))
 	{
 		if (g_parser.token->type == WORD)
 		{
-			add_process_arg(process, g_parser.token);
+			add_process_word(process, g_parser.token);
 			g_parser.token = get_next_token();
 		}
-		else if (!(redir = io_redirect()))
+		else if (!(redir = ps_io_redirect()))
 		{
-			free_processes(&process);
+			process_del(&process);
 			return (NULL);
 		}
 		else

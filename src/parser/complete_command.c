@@ -30,74 +30,63 @@
 
 /*
 ** list				: and_or
-** 					| and_or separator_op list 
-** 
-** -returns a list of t_job
+** 					| and_or separator_op list
+**
+** -returns a list of t_job, a list struct may be overkill for the moment...
 ** -the separator operator is stored in the pipe struct
 ** -a newline_list() call is necessary to avoid parse errors
-**  in case of empty command "\n" or ending separators "ls;"
+**  in case of empty command "\n" or ending separators "ls;".
+**  Normally it should be in compound_command rule
 */
 
-static t_job		*list(void)
+t_job					*ps_list(void)
 {
-	t_job	*jobs;
+	t_job				*list;
 
-	newline_list();
-	if (!g_parser.token)
+	ps_newline_list();
+	if (!g_parser.token
+	|| !(list = ps_job()))
 		return (NULL);
-	if (!(jobs = and_or()))
-		return (NULL);
-	else if ((jobs->sep = separator_op()))
+	else if ((list->sep = ps_separator_op()))
 	{
-		jobs->next = list();
+		list->next = ps_list();
 		if (g_parser.error)
 		{
-			free_jobs(&jobs);
+			job_del(&list);
 			return (NULL);
 		}
 	}
-	return (jobs);
+	return (list);
 }
 
 /*
 ** complete_command : list separator 
 ** 					| list
 ** 
-** -get the list of jobs
-** -get the heredocs
+** -get the list of jobs and the heredocs
+** -skip eventual separator and newline and returns a t_complete_command 
+**  containing the list of jobs if there is one and everything went good
 ** -handle parse errors and returns NULL if something went wrong.
-** -skip the following separator op and newline if any
-**  and returns a t_complete_command containing the list of jobs
-**  if there is one. Returns NULL otherwise.
 */
 
-/*
-** -the call to newline_list should not be here, but in the grammar,
-** 	the first call to newline_list is in compound_command(). So i m forced to
-**  call it here for the moment, to skip the first token if it is a newline.
-*/
-
-t_complete_command	*complete_command(void)
+t_complete_command		*ps_complete_command(void)
 {
-	t_complete_command	*command;
+	t_complete_command	*complete_command;
 	t_job				*jobs;
 
-	jobs = list();
-	get_all_heredocs();
-	if (g_parser.error)
+	if ((jobs = ps_list())
+	&& ps_get_all_heredocs() == NOERR)
 	{
-		if (g_parser.error != SILENT_ABORT)
-			ft_dprintf(2, "42sh: syntax error near unexpected token '%s'\n",
-			g_parser.token ? g_parser.token->value->str : "(null)");
-		token_del(&g_parser.token);
-		return (NULL);
+		ps_separator();
+		complete_command =
+		(t_complete_command *)ft_xmalloc(sizeof(t_complete_command));
+		complete_command->jobs = jobs;
+		return (complete_command);
 	}
-	else if (jobs)
+	else if (g_parser.error)
 	{
-		separator();
-		command = (t_complete_command *)ft_xmalloc(sizeof(t_complete_command));
-		command->jobs = jobs;
-		return (command);
+		ps_error(g_parser.token ? g_parser.token->value->str : "(null)");
+		token_del(&g_parser.token);
 	}
 	return (NULL);
 }

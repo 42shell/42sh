@@ -21,9 +21,9 @@
 ** readline will display
 */
 
-void		linebreak(int last_token_type)
+void		ps_linebreak(int last_token_type)
 {
-	newline_list();
+	ps_newline_list();
 	while (!g_parser.error && !g_parser.token)
 	{
 		g_lexer.line_cont = last_token_type;
@@ -36,7 +36,7 @@ void		linebreak(int last_token_type)
 ** 					| NEWLINE newline_list
 */
 
-void		newline_list(void)
+void		ps_newline_list(void)
 {
 	if (g_parser.error)
 		return ;
@@ -52,7 +52,7 @@ void		newline_list(void)
 **					| ';'
 */
 
-t_token		*separator_op(void)
+t_token		*ps_separator_op(void)
 {
 	t_token	*sep;
 
@@ -73,7 +73,7 @@ t_token		*separator_op(void)
 ** 					| newline_list
 */
 
-t_token		*separator(void)
+t_token		*ps_separator(void)
 {
 	t_token	*sep;
 
@@ -81,8 +81,8 @@ t_token		*separator(void)
 		return (NULL);
 	if (g_parser.token)
 	{
-		sep = separator_op();
-		newline_list();
+		sep = ps_separator_op();
+		ps_newline_list();
 	}
 	return (sep);
 }

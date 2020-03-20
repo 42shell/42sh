@@ -12,8 +12,20 @@
 
 #include "shell.h"
 
-static void		add_heredoc(t_token *heredoc)
+static void		ps_add_heredoc(t_token *heredoc)
 {
+	t_token		*ptr;
+
+	if (!g_parser.heredocs)
+		g_parser.heredocs = heredoc;
+	else
+	{
+		ptr = g_parser.heredocs;
+		while (ptr->next)
+			ptr = ptr->next;
+		ptr->next = heredoc;
+	}
+	/*
 	t_token		**new;
 	int			size;
 
@@ -31,13 +43,14 @@ static void		add_heredoc(t_token *heredoc)
 	new[size] = heredoc;
 	free(g_parser.heredocs);
 	g_parser.heredocs = new;
+	*/
 }
 
 /*
 **	filename         : WORD
 */
 
-static t_token	*filename(void)
+static t_token	*ps_filename(void)
 {
 	t_token	*filename;
 
@@ -59,7 +72,7 @@ static t_token	*filename(void)
 **                   ;
 */
 
-static t_redir	*io_file(t_token *io_number)
+static t_redir	*ps_io_file(t_token *io_number)
 {
 	t_redir		*redir;
 
@@ -67,16 +80,16 @@ static t_redir	*io_file(t_token *io_number)
 	redir->left_op = io_number;
 	redir->operator = g_parser.token;
 	g_parser.token = get_next_token();
-	if (!(redir->right_op = filename()))
+	if (!(redir->right_op = ps_filename()))
 	{
 		g_parser.error = NO_REDIR_FILENAME;
-		free_redirs(&redir);
+		redir_del(&redir);
 		return (NULL);
 	}
 	return (redir);
 }
 
-static t_redir	*io_here(t_token *io_number)
+static t_redir	*ps_io_here(t_token *io_number)
 {
 	t_redir	*redir;
 
@@ -86,16 +99,16 @@ static t_redir	*io_here(t_token *io_number)
 	if (!(g_parser.token = get_next_token()) || g_parser.token->type != WORD)
 	{
 		g_parser.error = HEREDOC_NO_DELIM;
-		free_redirs(&redir);
+		redir_del(&redir);
 		return (NULL);
 	}
 	redir->right_op = g_parser.token;
-	add_heredoc(redir->right_op);
+	ps_add_heredoc(redir->right_op);
 	g_parser.token = get_next_token();
 	return (redir);
 }
 
-t_redir			*io_redirect(void)
+t_redir			*ps_io_redirect(void)
 {
 	t_token *io_number;
 
@@ -104,10 +117,10 @@ t_redir			*io_redirect(void)
 		io_number = g_parser.token;
 		g_parser.token = get_next_token();
 		if (g_parser.token && g_parser.token->type == DLESS)
-			return (io_here(io_number));
-		return (io_file(io_number));
+			return (ps_io_here(io_number));
+		return (ps_io_file(io_number));
 	}
 	else if (g_parser.token->type == DLESS)
-		return (io_here(NULL));
-	return (io_file(NULL));
+		return (ps_io_here(NULL));
+	return (ps_io_file(NULL));
 }

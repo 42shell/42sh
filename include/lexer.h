@@ -56,8 +56,14 @@ enum				e_quote_st
 	DQUOTE = '"'
 };
 
+/*
+** -token_del frees the entire list of tokens
+** -the lexer do not chain them.
+*/
+
 typedef struct		s_token
 {
+	struct s_token	*next;
 	t_dstr			*value;
 	int				type;
 }					t_token;

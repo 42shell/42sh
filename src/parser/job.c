@@ -13,38 +13,43 @@
 #include "shell.h"
 
 /*
-** and_or			: pipe_sequence AND_IF linebreak and_or
-**					| pipe_sequence OR_IF linebreak and_or
-**					| pipe_sequence
+** and_or			: pipeline AND_IF linebreak and_or
+**					| pipeline OR_IF linebreak and_or
+**					| pipeline
 ** 
-** returns a t_job containing a list of pipelines
-** the separator operator is stored in the job struct
+** returns a list of pipelines
 */
 
-t_job			*and_or(void)
+static t_pipeline	*ps_and_or(void)
 {
-	t_job		*job;
-	t_pipeline	*list;
-	t_pipeline	*pipe_seq;
+	t_pipeline	*and_or;
 
-	if (g_parser.error || !(pipe_seq = pipe_sequence()))
+	if (g_parser.error
+	|| !(and_or = ps_pipeline()))
 		return (NULL);
-	list = pipe_seq;
-	while (g_parser.token
-	&& (g_parser.token->type == AND_IF || g_parser.token->type == OR_IF))
+	while ((g_parser.token->type == AND_IF || g_parser.token->type == OR_IF))
 	{
-		pipe_seq->sep = g_parser.token;
+		and_or->sep = g_parser.token;
 		g_parser.token = get_next_token();
-		linebreak(pipe_seq->sep->type);
-		if (!(pipe_seq->next = pipe_sequence()))
+		ps_linebreak(and_or->sep->type);
+		if (!(and_or->next = ps_and_or()))
 		{
 			g_parser.error = g_parser.error ? g_parser.error : NO_CMD_AFTER_PIPE;
-			free_pipelines(&list);
+			pipeline_del(&and_or);
 			return (NULL);
 		}
-		pipe_seq = pipe_seq->next;
 	}
+	return (and_or);
+}
+
+t_job				*ps_job()
+{
+	t_job			*job;
+	t_pipeline		*pipelines;
+
+	if (!(pipelines = ps_and_or()))
+		return (NULL);
 	job = (t_job *)ft_xmalloc(sizeof(t_job));
-	job->pipelines = list;
+	job->pipelines = pipelines;
 	return (job);
 }

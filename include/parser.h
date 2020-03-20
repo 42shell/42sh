@@ -47,8 +47,9 @@ typedef struct					s_redir
 typedef struct					s_process
 {
 	struct s_process			*next;
-	char						**argv;
+	t_token						*words;
 	t_redir						*redirs;
+	char						**argv;
 	char						*path;
 	pid_t						pid;
 	int							status;
@@ -58,21 +59,21 @@ typedef struct					s_process
 
 /*
 ** -A single pipeline is returned by pipe_sequence(),
-**	it contains a list of processes created internally in pipe_sequence()
+**	it contains a list of processes created internally
 ** -sep is the token used to separate the pipeline from the next, '&&' or '||'
 */
 
 typedef struct					s_pipeline
 {
 	struct s_pipeline			*next;
-	struct s_process			*processes; //pipeline
+	struct s_process			*processes;
 	//pid_t						pgid; ??
 	t_token						*sep;
 }								t_pipeline;
 
 /*
 ** -A single job is returned by and_or()
-**  it contains a list of pipelines created internally in and_or()
+**  it contains a list of pipelines created internally
 ** -sep is the token used to separate the job from the next, ';' or '&'
 */
 
@@ -87,7 +88,7 @@ typedef struct					s_job
 
 /*
 ** -A complete_command is returned by complete_command(),
-**  it contains a list of jobs, which is returned by static rule list()
+**  it contains a list of jobs created internally
 */
 
 typedef struct					s_complete_command
@@ -104,30 +105,31 @@ typedef struct					s_complete_command
 typedef struct					s_parser
 {
 	t_token						*token;
-	t_token						**heredocs;
+	t_token						*heredocs;
 	int							error;
 }								t_parser;
 
 t_parser						g_parser;
 
-t_complete_command				*complete_command(void);
-t_job							*and_or(void);
-t_pipeline						*pipe_sequence(void);
-t_process						*simple_command(void);
-t_redir							*io_redirect(void);
-t_token							*separator(void);
-t_token							*separator_op(void);
-void							newline_list(void);
-void							linebreak(int last_token_type);
-int								get_all_heredocs(void);
+t_complete_command				*ps_complete_command(void);
+t_job							*ps_job(void);
+t_pipeline						*ps_pipeline(void);
+t_process						*ps_simple_command(void);
+t_redir							*ps_io_redirect(void);
+t_token							*ps_separator(void);
+t_token							*ps_separator_op(void);
+void							ps_newline_list(void);
+void							ps_linebreak(int last_token_type);
+int								ps_get_all_heredocs(void);
 
-int								parse_error(int code, char *near);
-int								heredoc_eof(char *delim);
+int								ps_error(char *near);
+int								ps_heredoc_eof(char *delim);
 
-int								free_pipelines(t_pipeline **pipelines);
-int								free_jobs(t_job **jobs);
-int								free_redirs(t_redir **redirs);
-int								free_processes(t_process **processes);
+int								complete_command_del(t_complete_command **complete_command);
+int								job_del(t_job **job);
+int								pipeline_del(t_pipeline **pipeline);
+int								process_del(t_process **processe);
+int								redir_del(t_redir **redir);
 
 void							print_jobs(t_job *jobs);
 
