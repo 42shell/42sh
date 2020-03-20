@@ -60,8 +60,7 @@ SRC_ENV		    := env_dup.c\
                    env_utils.c
 SRC_ENV    		:= $(addprefix env/,$(SRC_ENV))
 
-SRC_EXEC        := launch_job.c\
-				   exec_error.c\
+SRC_EXEC        := exec_error.c\
 				   exec_cmd.c\
 				   get_exec_path.c\
 				   redirect.c\

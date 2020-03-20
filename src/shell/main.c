@@ -12,16 +12,82 @@
 
 #include "shell.h"
 
+int			launch_process(t_process *process)
+{
+	/*
+	** execve
+	*/
+	(void)process;
+	return (0);
+}
+
+int			launch_pipeline(t_pipeline *pipeline)
+{
+	/*
+	** this is the equivalent of launch_job() int the job control doc
+	**
+	** loop through the processes:
+	** -we fork the process
+	** -we call launch_process()
+	** -we don t wait for processes cause it is a pipeline
+	*/
+	(void)pipeline;
+	return (0);
+}
+
+int			launch_job(t_job *job)
+{
+	/*
+	** loop through the pipelines:
+	** -as the pipelines are executed sequentially, we should not need to fork here
+	** -we call launch_pipeline() and handle the logic (&& ||)
+	*/
+	(void)job;
+	return (0);
+}
+
+int			exec_complete_command(t_job *command)
+{
+	/*
+	** loop through the jobs:
+	** -we fork the job, we need it cause the jobs are not executed sequentially
+	**  in case of background job
+	** -we add the job to g_shell.jobs
+	** -we call launch_job()
+	** -we put the job in foreground or not (wait for it to report or not)
+	*/
+	(void)command;
+	return (0);
+}
+
+static void	add_job(t_job *job)
+{
+	t_job	*ptr;
+
+	if (!g_shell.jobs)
+		g_shell.jobs = job;
+	else
+	{
+		ptr = g_shell.jobs;
+		while (ptr->next)
+			ptr = ptr->next;
+		ptr->next = job;
+	}
+}
+
 int			main_loop()
 {
+	t_job	*command;
+
 	while (1) //while !g_shell.quit...
 	{
 		g_parser.error = NOERR;
 		g_shell.get_input(PS1);
-		if ((g_shell.jobs = complete_command()))
+		if ((command = complete_command()))
 		{
-			print_jobs(g_shell.jobs);
-			free_jobs(&g_shell.jobs);
+			//exec_complete_command(complete_command)
+			print_jobs(command);
+			free_jobs(&command);
 			if (g_shell.interactive_mode)
 			{
 				g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;
