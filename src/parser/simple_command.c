@@ -51,17 +51,18 @@ static void	add_process_redir(t_process *process, t_redir *redir)
 
 static int	is_valid_argv(t_token *token)
 {
-	return (token->type == WORD
+	return (token
+	&& (token->type == WORD 
 	|| token->type == IO_NUMBER
-	|| is_redir(token));
+	|| is_redir(token)));
 }
 
 /*
 ** simple_command	: WORD
 ** 					| WORD simple_command
-** 					| IO_NUMBER/redir_op
-**					| IO_NUMBER/redir_op simple_command
-** 
+**					| io_redir
+**					| io_redir simple_command
+**
 ** returns a t_process containing argv array and a list of redirections
 */
 
@@ -70,11 +71,9 @@ t_process	*simple_command(void)
 	t_process	*process;
 	t_redir		*redir;
 
-	if (g_parser.error || !g_parser.token
-	|| !is_valid_argv(g_parser.token))
+	if (g_parser.error || !is_valid_argv(g_parser.token))
 	{
-		if (!g_parser.error && g_parser.token)
-			g_parser.error = NO_CMD_BEFORE_PIPE;
+		g_parser.error = g_parser.error ? g_parser.error : NO_CMD_BEFORE_PIPE;
 		return (NULL);
 	}
 	process = (t_process *)ft_xmalloc(sizeof(t_process));

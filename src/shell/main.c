@@ -83,7 +83,8 @@ int			main_loop()
 	{
 		g_parser.error = NOERR;
 		g_shell.get_input(PS1);
-		if ((command = complete_command()))
+		if ((g_parser.token = get_next_token())
+		&& (command = complete_command()))
 		{
 			//exec_complete_command(complete_command)
 			print_jobs(command->jobs);
