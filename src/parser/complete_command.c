@@ -32,11 +32,11 @@
 ** list				: and_or
 ** 					| and_or separator_op list 
 ** 
-** returns a list of jobs
+** returns a list of t_job
 ** the separator operator is stored in the pipe struct
 */
 
-t_job		*list(void)
+static t_job		*list(void)
 {
 	t_job	*jobs;
 	t_job	*job;
@@ -44,13 +44,18 @@ t_job		*list(void)
 	if (!(job = and_or()))
 		return (NULL);
 	jobs = job;
-	while (job && (job->sep = separator_op()))
+	while ((job->sep = separator_op()))
 	{
 		if (!(job->next = and_or()))
+		{
 			g_parser.error = g_parser.error ? g_parser.error : NO_CMD_AFTER_SEP;
+			free_jobs(&jobs);
+			return (NULL);
+		}
 		job = job->next;
 	}
-	get_all_heredocs();
+	if (get_all_heredocs() != NOERR)
+		free_jobs(&jobs);
 	return (jobs);
 }
 
@@ -58,8 +63,14 @@ t_job		*list(void)
 ** complete_command : list separator 
 ** 					| list
 ** 
-** -returns a list of jobs and skip the following newlines
-** -handle parse errors, if a token is still available, there is an error.
+** -get the first token
+** -call newline_list to skip the newlines (this allows us to return without error
+**  in case of an empty command ("\n")). According to the grammar, this happens in
+**  compound_command rule, which is not implemented yet, this is why whis call
+**  is neccessary.
+** -handle parse errors and returns NULL if something went wrong.
+** -returns a t_complete_command containing a list of jobs and skip the following 
+**  separator op and newline.
 */
 
 /*
@@ -68,22 +79,23 @@ t_job		*list(void)
 **  call it here for the moment, to skip the first token if it is a newline.
 */
 
-t_job		*complete_command(void)
+t_complete_command	*complete_command(void)
 {
-	t_job	*jobs;
+	t_complete_command	*command;
+	t_job				*jobs;
 
-	if (!g_parser.token)
-		g_parser.token = get_next_token();
+	g_parser.token = get_next_token();
 	newline_list();
-	if ((jobs = list()))
-		separator();
-	if (g_parser.error)
+	if (!(jobs = list()))
 	{
 		if (g_parser.error != SILENT_ABORT)
 			ft_dprintf(2, "42sh: syntax error near unexpected token '%s'\n",
 			g_parser.token ? g_parser.token->value->str : "(null)");
 		token_del(&g_parser.token);
-		free_jobs(&jobs);
+		return (NULL);
 	}
-	return (jobs);
+	separator();
+	command = (t_complete_command *)ft_xmalloc(sizeof(t_complete_command));
+	command->jobs = jobs;
+	return (command);
 }

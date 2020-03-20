@@ -92,7 +92,7 @@ static t_dstr	*get_heredoc(char *delim)
 	return (heredoc);
 }
 
-void			get_all_heredocs(void)
+int				get_all_heredocs(void)
 {
 	t_dstr	*heredoc;
 	int		i;
@@ -100,7 +100,7 @@ void			get_all_heredocs(void)
 	i = 0;
 	if (g_parser.error || !g_parser.heredocs
 	|| !(g_heredoc_ptr = ft_strchr(g_lexer.line, '\n')))
-		return ;
+		return (0);
 	g_heredoc_ptr++;
 	while (g_parser.heredocs[i])
 	{
@@ -108,7 +108,7 @@ void			get_all_heredocs(void)
 		if (!(heredoc = get_heredoc(g_parser.heredocs[i]->value->str)))
 			break ;
 		g_lexer.i += heredoc->len
-					+ (g_heredoc_eof ? 0 : g_parser.heredocs[i]->value->len);
+		+ (g_heredoc_eof ? 0 : g_parser.heredocs[i]->value->len);
 		ft_dstr_del((void **)&g_parser.heredocs[i]->value);
 		g_parser.heredocs[i]->value = heredoc;
 		g_heredoc_eof = false;
@@ -116,4 +116,5 @@ void			get_all_heredocs(void)
 	}
 	ft_memdel((void **)&g_parser.heredocs);
 	g_heredoc_ptr = NULL;
+	return (g_parser.error);
 }

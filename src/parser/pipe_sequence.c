@@ -16,7 +16,7 @@
 ** pipeline			: simple_command PIPE linebreak pipeline
 ** 					| simple_command
 **
-** returns a list of processes
+** returns a t_pipeline containing a list of processes
 ** we don t need to store the pipes
 */
 

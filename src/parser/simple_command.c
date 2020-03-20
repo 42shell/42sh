@@ -61,6 +61,8 @@ static int	is_valid_argv(t_token *token)
 ** 					| WORD simple_command
 ** 					| IO_NUMBER/redir_op
 **					| IO_NUMBER/redir_op simple_command
+** 
+** returns a t_process containing argv array and a list of redirections
 */
 
 t_process	*simple_command(void)

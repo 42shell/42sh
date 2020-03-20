@@ -17,7 +17,7 @@
 **					| pipe_sequence OR_IF linebreak and_or
 **					| pipe_sequence
 ** 
-** returns a job struct containing a list of pipelines
+** returns a t_job containing a list of pipelines
 ** the separator operator is stored in the job struct
 */
 

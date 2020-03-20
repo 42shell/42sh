@@ -62,39 +62,39 @@
 ** -leaks
 */
 
-# define INPUT_INT	3
-# define INPUT_EOF	4
+# define INPUT_INT		3
+# define INPUT_EOF		4
 
-# define PS1		"$> "
-# define PS2		"> "
-# define PSQ		"q> "
-# define PSD		"d> "
-# define PSA		"a> "
-# define PSO		"o> "
-# define PSP		"p> "
-# define PSH		"h> "
+# define PS1			"$> "
+# define PS2			"> "
+# define PSQ			"q> "
+# define PSD			"d> "
+# define PSA			"a> "
+# define PSO			"o> "
+# define PSP			"p> "
+# define PSH			"h> "
 
-typedef int			(*t_input_func)(const char *);
+typedef int				(*t_input_func)(const char *);
 
-int					g_last_exit_st;
+int						g_last_exit_st;
 
-typedef struct		s_shell
+typedef struct			s_shell
 {
-	bool			interactive_mode;
-	t_input_func	get_input;
-	t_job			*jobs;
-	pid_t			pgid;
-}					t_shell;
+	bool				interactive_mode;
+	t_input_func		get_input;
+	t_complete_command	*commands;
+	pid_t				pgid;
+}						t_shell;
 
-t_shell				g_shell;
+t_shell					g_shell;
 
-int					init(int argc, char **argv);
-void				del(void);
+int						init(int argc, char **argv);
+void					del(void);
 
-int					input_batch(const char *prompt);
-int					input_interactive(const char *prompt);
+int						input_batch(const char *prompt);
+int						input_interactive(const char *prompt);
 
-void				init_sig(void);
-void				sig_handle(int sig);
+void					init_sig(void);
+void					sig_handle(int sig);
 
 #endif

@@ -46,7 +46,7 @@ int			launch_job(t_job *job)
 	return (0);
 }
 
-int			exec_complete_command(t_job *command)
+int			exec_complete_command(t_complete_command *command)
 {
 	/*
 	** loop through the jobs:
@@ -60,24 +60,24 @@ int			exec_complete_command(t_job *command)
 	return (0);
 }
 
-static void	add_job(t_job *job)
+static void	add_command(t_complete_command *command)
 {
-	t_job	*ptr;
+	t_complete_command	*ptr;
 
-	if (!g_shell.jobs)
-		g_shell.jobs = job;
+	if (!g_shell.commands)
+		g_shell.commands = command;
 	else
 	{
-		ptr = g_shell.jobs;
+		ptr = g_shell.commands;
 		while (ptr->next)
 			ptr = ptr->next;
-		ptr->next = job;
+		ptr->next = command;
 	}
 }
 
 int			main_loop()
 {
-	t_job	*command;
+	t_complete_command	*command;
 
 	while (1) //while !g_shell.quit...
 	{
@@ -86,8 +86,9 @@ int			main_loop()
 		if ((command = complete_command()))
 		{
 			//exec_complete_command(complete_command)
-			print_jobs(command);
-			free_jobs(&command);
+			print_jobs(command->jobs);
+			free_jobs(&command->jobs);
+			free(command);
 			if (g_shell.interactive_mode)
 			{
 				g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;
