@@ -77,6 +77,7 @@ t_token		*ps_separator(void)
 {
 	t_token	*sep;
 
+	sep = NULL;
 	if (g_parser.error)
 		return (NULL);
 	if (g_parser.token)

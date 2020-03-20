@@ -44,9 +44,9 @@ static t_process	*ps_pipe_sequence(void)
 /*
 ** pipeline			: pipe_sequence
 **
-** returns a t_pipeline containing a pipe_sequence
-** for the moment ! are not handled...
-** if it s a NOT operator it will be mandatory for shell script
+** returns a t_pipeline containing a list of processes
+** for the moment '!' are not handled...
+** if it is a NOT operator it will be mandatory for shell script
 */
 
 t_pipeline			*ps_pipeline(void)

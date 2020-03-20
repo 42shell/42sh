@@ -109,6 +109,7 @@ int				ps_get_all_heredocs(void)
 		curr = curr->next;
 		tmp->next = NULL;
 	}
+	g_parser.heredocs = NULL;
 	g_heredoc_ptr = NULL;
 	return (g_parser.error);
 }

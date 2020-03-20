@@ -17,7 +17,7 @@
 **					| pipeline OR_IF linebreak and_or
 **					| pipeline
 ** 
-** returns a list of pipelines
+** returns a list of t_pipeline.
 */
 
 static t_pipeline	*ps_and_or(void)
@@ -41,6 +41,17 @@ static t_pipeline	*ps_and_or(void)
 	}
 	return (and_or);
 }
+
+/*
+** job				: and_or
+**
+** returns t_job containing a list of pipelines.
+** 
+** -the separator operator is stored in the pipe struct
+** -a newline_list() call is necessary to avoid parse errors
+**  in case of empty command "\n" or ending separators "ls;".
+**  Normally it should be in compound_command rule
+*/
 
 t_job				*ps_job()
 {

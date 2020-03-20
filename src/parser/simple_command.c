@@ -12,10 +12,6 @@
 
 #include "shell.h"
 
-/*
-** lol I forgot about expansion
-*/
-
 static void		add_process_word(t_process *process, t_token *word)
 {
 	t_token		*ptr;
@@ -29,26 +25,6 @@ static void		add_process_word(t_process *process, t_token *word)
 			ptr = ptr->next;
 		ptr->next = word;
 	}
-	/*
-	char		**new;
-	int			size;
-
-	if (!process->argv)
-	{
-		process->argv = (char **)ft_xmalloc(sizeof(char *) * 2);
-		process->argv[0] = ft_strdup(arg->value->str);
-		return ;
-	}
-	size = 0;
-	while (process->argv[size])
-		size++;
-	new = (char **)ft_xmalloc(sizeof(char *) * (size + 2));
-	ft_memcpy((char *)new, (char *)process->argv, (size * sizeof(char *)));
-	new[size] = ft_strdup(arg->value->str);
-	free(process->argv);
-	process->argv = new;
-	token_del(&arg);
-	*/
 }
 
 static void		add_process_redir(t_process *process, t_redir *redir)
@@ -80,7 +56,9 @@ static int		is_valid_argv(t_token *token)
 **					| io_redir
 **					| io_redir simple_command
 **
-** returns a t_process containing argv array and a list of redirections
+** returns a t_process containing argv array and a list of redirections.
+**
+** -is ugly, should implement cmd_prefix/suffix
 */
 
 t_process		*ps_simple_command(void)

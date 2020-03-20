@@ -58,8 +58,8 @@ typedef struct					s_process
 }								t_process;
 
 /*
-** -A single pipeline is returned by pipe_sequence(),
-**	it contains a list of processes created internally
+** -A single pipeline is returned by ps_pipeline(),
+**	it contains a list of processes returned by ps_pipe_sequence()
 ** -sep is the token used to separate the pipeline from the next, '&&' or '||'
 */
 
@@ -67,13 +67,13 @@ typedef struct					s_pipeline
 {
 	struct s_pipeline			*next;
 	struct s_process			*processes;
-	//pid_t						pgid; ??
+	//pid_t						pgid; ?
 	t_token						*sep;
 }								t_pipeline;
 
 /*
-** -A single job is returned by and_or()
-**  it contains a list of pipelines created internally
+** -A single job is returned by ps_job()
+**  it contains a list of pipelines returned by ps_and_or()
 ** -sep is the token used to separate the job from the next, ';' or '&'
 */
 
@@ -99,7 +99,11 @@ typedef struct					s_complete_command
 
 /*
 ** parser:
-** -heredocs are pointers to right operands of '<<' redir structs
+** -heredocs is a pointer to the right operand token of the
+**  first io_here redir struct.
+**  The tokens are chained if there are more than 1 heredocs,
+**  and they are unchained in get_all_heredocs to avoid segfaults in
+**  token_del()
 */
 
 typedef struct					s_parser

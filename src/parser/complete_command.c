@@ -32,7 +32,8 @@
 ** list				: and_or
 ** 					| and_or separator_op list
 **
-** -returns a list of t_job, a list struct may be overkill for the moment...
+** returns a list of t_job.
+**
 ** -the separator operator is stored in the pipe struct
 ** -a newline_list() call is necessary to avoid parse errors
 **  in case of empty command "\n" or ending separators "ls;".
@@ -62,7 +63,7 @@ t_job					*ps_list(void)
 /*
 ** complete_command : list separator 
 ** 					| list
-** 
+**
 ** -get the list of jobs and the heredocs
 ** -skip eventual separator and newline and returns a t_complete_command 
 **  containing the list of jobs if there is one and everything went good
