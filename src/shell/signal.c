@@ -22,6 +22,7 @@ void	sig_handle(int sig)
 	}
 	else if (SIGTSTP <= sig && sig <= SIGTTOU)
 	{
+		//signal(sig, SIG_IGN);
 		;//job control ?
 	}
 	return ;

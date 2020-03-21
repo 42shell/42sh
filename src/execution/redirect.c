@@ -82,22 +82,18 @@ int			set_redir(t_process *process, bool backup)
 	t_redir	*redir;
 	int		redirected_fd;
 	int		ret;
-	int		i;
 
-	i = 0;
-	/*
+	redir = process->redirs;
 	if (process->stdin != STDIN_FILENO)
 	{
-		dup2_and_backup(process->stdin, STDIN_FILENO, backup);
+		dup2(process->stdin, STDIN_FILENO);
 		close(process->stdin);
 	}
 	if (process->stdout != STDOUT_FILENO)
 	{
-		dup2_and_backup(process->stdout, STDOUT_FILENO, backup);
+		dup2(process->stdout, STDOUT_FILENO);
 		close(process->stdout);
 	}
-	*/
-	redir = process->redirs;
 	while (redir)
 	{
 		if ((redirected_fd = get_redirected_fd(redir)) > 255)
@@ -105,7 +101,6 @@ int			set_redir(t_process *process, bool backup)
 		else if ((ret = redirect(redir, redirected_fd, backup)) < 0)
 			return (redir_error(ret));
 		redir = redir->next;
-		i++;
 	}
 	return (0);
 }

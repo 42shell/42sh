@@ -60,17 +60,18 @@ SRC_ENV		    := env_dup.c\
                    env_utils.c
 SRC_ENV    		:= $(addprefix env/,$(SRC_ENV))
 
-SRC_EXEC        := exec_error.c\
-				   exec_cmd.c\
+SRC_EXEC        := error.c\
+				   get_argv.c\
 				   get_exec_path.c\
 				   redirect.c\
 				   redirect_utils.c\
 				   redirect_error.c\
                    open_heredoc.c\
-				   jobs.c\
+				   launch.c\
 				   utils.c\
-				   #exec_pipe.c
-SRC_EXEC        := $(addprefix exec/,$(SRC_EXEC))
+				   #exec_pipe.c\
+				   exec_cmd.c
+SRC_EXEC        := $(addprefix execution/,$(SRC_EXEC))
 
 #SRC_EXPANSION   := expand.c\
                    param_exp.c\

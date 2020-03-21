@@ -72,6 +72,8 @@ t_process		*ps_simple_command(void)
 		return (NULL);
 	}
 	process = (t_process *)ft_xmalloc(sizeof(t_process));
+	process->stdin = STDIN_FILENO;
+	process->stdout = STDOUT_FILENO;
 	while (is_valid_argv(g_parser.token))
 	{
 		if (g_parser.token->type == WORD)

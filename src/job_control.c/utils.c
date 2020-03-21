@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_error.c                                       :+:      :+:    :+:   */
+/*   jobs.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,8 +12,21 @@
 
 #include "shell.h"
 
-int		command_not_found(char *command_name)
+
+t_job	*get_job(pid_t pgid)
 {
-	ft_dprintf(2, "42sh: %s: command not found\n", command_name);
-	return (-1); //g_last_exit_st code for cmd not found?
+	(void)pgid;
+	return (NULL);
+}
+
+bool	job_is_stopped(t_job *job)
+{
+	(void)job;
+	return (false);
+}
+
+bool	job_is_done(t_job *job)
+{
+	(void)job;
+	return (false);
 }

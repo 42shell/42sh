@@ -82,7 +82,7 @@ typedef struct			s_shell
 {
 	bool				interactive_mode;
 	t_input_func		get_input;
-	t_complete_command	*commands;
+	t_job				*jobs;
 	pid_t				pgid;
 }						t_shell;
 

@@ -25,28 +25,9 @@ typedef struct		s_fd_backup
 }					t_fd_backup;
 
 /*
-typedef struct		s_process
-{
-
-	pid_t			pid;
-	int				status;
-	bool			stopped;
-	char			done;
-}					t_process;
-
-typedef struct		s_job
-{
-	t_ast			*ast;
-	pid_t			pgid;
-	t_list_head		*processes;
-	bool			notified;
-}					t_job;
-*/
-
-/*
 ** associative table of command names and binaries paths.
 ** -an entry is added when a command is executed if the command is not the table.
-** -the table is flushed when PATH is modified.
+** -the table is (should be) flushed when PATH is modified.
 */
 
 t_ht				*g_binaries;
@@ -55,18 +36,13 @@ t_ht				*g_binaries;
 ** main functions
 */
 
+int					launch_complete_command(t_complete_command *complete_command);
 int					launch_job(t_job *job);
-//int					exec_binary(t_command *cmd, char **env);
-//int					exec_builtin(t_process *process, char **env);
+int					launch_pipeline(t_pipeline *pipeline, pid_t pgid, bool bg);
+int					launch_process(t_process *process, pid_t pgid, bool bg);
+
+char				**get_argv(t_process *process);
 char				*get_exec_path(char *command);
-
-/*
-** node logic
-*/
-
-//int					node_command(t_node *node);
-//int					node_pipe(t_node *node);
-//int					node_and_or_if(t_node *node);
 
 /*
 ** redirections

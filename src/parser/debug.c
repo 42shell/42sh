@@ -53,7 +53,7 @@ void	print_jobs(t_job *jobs)
 			pipe = pipe->next;
 				
 		}
-		printf("%s\n", job->sep ? job->sep->value->str : "");
+		printf("%s\n", job->bg ? "&" : "");
 		job = job->next;
 	}
 }

@@ -43,13 +43,16 @@
 t_job					*ps_list(void)
 {
 	t_job				*list;
+	t_token				*sep;
 
 	ps_newline_list();
 	if (!g_parser.token
 	|| !(list = ps_job()))
 		return (NULL);
-	else if ((list->sep = ps_separator_op()))
+	else if ((sep = ps_separator_op())
+	&& (list->bg = (sep->type == AMPERSAND)))
 	{
+		token_del(&sep);
 		list->next = ps_list();
 		if (g_parser.error)
 		{

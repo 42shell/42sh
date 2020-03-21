@@ -51,7 +51,6 @@ int			job_del(t_job **job)
 		return (0);
 	job_del(&(*job)->next);
 	pipeline_del(&(*job)->pipelines);
-	token_del(&(*job)->sep);
 	ft_memdel((void **)job);
 	return (0);
 }

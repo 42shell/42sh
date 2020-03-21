@@ -33,7 +33,7 @@ enum							e_parse_error
 };
 
 /*
-** -A single process is returned by simple command()
+** -A single process is returned by simple_command()
 */
 
 typedef struct					s_redir
@@ -51,6 +51,8 @@ typedef struct					s_process
 	t_redir						*redirs;
 	char						**argv;
 	char						*path;
+	int							stdin;
+	int							stdout;
 	pid_t						pid;
 	int							status;
 	bool						stopped;
@@ -74,7 +76,6 @@ typedef struct					s_pipeline
 /*
 ** -A single job is returned by ps_job()
 **  it contains a list of pipelines returned by ps_and_or()
-** -sep is the token used to separate the job from the next, ';' or '&'
 */
 
 typedef struct					s_job
@@ -83,7 +84,7 @@ typedef struct					s_job
 	struct s_pipeline			*pipelines;
 	pid_t						pgid;
 	bool						notified;	/* true if user told about stopped job */
-	t_token						*sep;
+	bool						bg;
 }								t_job;
 
 /*
