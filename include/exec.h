@@ -36,10 +36,19 @@ t_ht				*g_binaries;
 ** main functions
 */
 
-int					launch_complete_command(t_complete_command *complete_command);
+int					launch_list(t_list *list);
 int					launch_job(t_job *job);
-int					launch_pipeline(t_pipeline *pipeline, pid_t pgid, bool bg);
-int					launch_process(t_process *process, pid_t pgid, bool bg);
+int					launch_pipeline(t_pipeline *pipeline);
+int					launch_process(t_process *process);
+
+int					set_pipe(t_process *process);
+int					close_pipe(t_process *process);
+
+int					exec_builtin(char **argv, char **env);
+int					exec_binary(char **argv, char **env);
+
+int					wait_for_job(t_job *job);
+int					wait_for_pipeline(t_pipeline *pipeline);
 
 char				**get_argv(t_process *process);
 char				*get_exec_path(char *command);
@@ -48,7 +57,7 @@ char				*get_exec_path(char *command);
 ** redirections
 */
 
-int					set_redir(t_process *process, bool backup);
+int					set_redir(t_process *process);
 int					open_heredoc(t_dstr *heredoc);
 bool				is_valid_fd(int fd);
 void				move_fd(int *fd);

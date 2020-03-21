@@ -13,52 +13,48 @@
 #include "shell.h"
 
 /*
-** and_or			: pipeline AND_IF linebreak and_or
-**					| pipeline OR_IF linebreak and_or
+** job				: pipeline AND_IF linebreak job
+**					| pipeline OR_IF linebreak job
 **					| pipeline
 ** 
 ** returns a list of t_pipeline.
 */
 
-static t_pipeline	*ps_and_or(void)
+static t_pipeline	*get_pipelines(void)
 {
-	t_pipeline	*and_or;
+	t_pipeline		*pipelines;
 
 	if (g_parser.error
-	|| !(and_or = ps_pipeline()))
+	|| !(pipelines = ps_pipeline()))
 		return (NULL);
 	while ((g_parser.token->type == AND_IF || g_parser.token->type == OR_IF))
 	{
-		and_or->sep = g_parser.token;
+		pipelines->sep = g_parser.token->type;
+		token_del(&g_parser.token);
 		g_parser.token = get_next_token();
-		ps_linebreak(and_or->sep->type);
-		if (!(and_or->next = ps_and_or()))
+		ps_linebreak(pipelines->sep);
+		if (!(pipelines->next = get_pipelines()))
 		{
 			g_parser.error = g_parser.error ? g_parser.error : NO_CMD_AFTER_PIPE;
-			pipeline_del(&and_or);
+			pipeline_del(&pipelines);
 			return (NULL);
 		}
 	}
-	return (and_or);
+	return (pipelines);
 }
 
 /*
-** job				: and_or
-**
-** returns t_job containing a list of pipelines.
+** returns t_job containing a list of pipelines (and_or).
 ** 
-** -the separator operator is stored in the pipe struct
-** -a newline_list() call is necessary to avoid parse errors
-**  in case of empty command "\n" or ending separators "ls;".
-**  Normally it should be in compound_command rule
+** -the separator operator is stored in the pipeline struct
 */
 
-t_job				*ps_job()
+t_job			    *ps_job()
 {
-	t_job			*job;
-	t_pipeline		*pipelines;
+	t_job		    *job;
+	t_pipeline  	*pipelines;
 
-	if (!(pipelines = ps_and_or()))
+	if (!(pipelines = get_pipelines()))
 		return (NULL);
 	job = (t_job *)ft_xmalloc(sizeof(t_job));
 	job->pipelines = pipelines;

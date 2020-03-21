@@ -28,6 +28,9 @@ int		builtin_echo(char **argv)
 	return (0);
 }
 
+/*
+** "42sh: error" its not a binary
+*/
 int		builtin_setenv(char **argv)
 {
 	if (argv[1] == NULL)

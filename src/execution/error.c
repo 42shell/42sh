@@ -12,8 +12,3 @@
 
 #include "shell.h"
 
-int		command_not_found(char *command_name)
-{
-	ft_dprintf(2, "42sh: %s: command not found\n", command_name);
-	return (-1); //g_last_exit_st code for cmd not found?
-}

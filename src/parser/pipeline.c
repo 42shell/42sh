@@ -13,40 +13,38 @@
 #include "shell.h"
 
 /*
-** pipe_sequence	: simple_command PIPE linebreak pipe_sequence
-**					: simple_command
+** pipeline			: process PIPE linebreak pipeline
+**					: process
 **
 ** returns a list of t_process
 */
 
-static t_process	*ps_pipe_sequence(void)
+static t_process	*get_processes(void)
 {
-	t_process		*pipe_sequence;
+	t_process		*processes;
 
 	if (g_parser.error
-	|| !(pipe_sequence = ps_simple_command()))
+	|| !(processes = ps_process()))
 		return (NULL);
 	while (g_parser.token->type == PIPE)
 	{
 		token_del(&g_parser.token);
 		g_parser.token = get_next_token();
 		ps_linebreak(PIPE);
-		if (!(pipe_sequence->next = ps_pipe_sequence()))
+		if (!(processes->next = get_processes()))
 		{
 			g_parser.error = g_parser.error ? g_parser.error : NO_CMD_AFTER_PIPE;
-			process_del(&pipe_sequence);
+			process_del(&processes);
 			return (NULL);
 		}
 	}
-	return (pipe_sequence);
+	return (processes);
 }
 
 /*
 ** pipeline			: pipe_sequence
 **
 ** returns a t_pipeline containing a list of processes
-** for the moment '!' are not handled...
-** if it is a NOT operator it will be mandatory for shell script
 */
 
 t_pipeline			*ps_pipeline(void)
@@ -54,7 +52,7 @@ t_pipeline			*ps_pipeline(void)
 	t_pipeline		*pipeline;
 	t_process		*processes;
 
-	if (!(processes = ps_pipe_sequence()))
+	if (!(processes = get_processes()))
 		return (NULL);
 	pipeline = (t_pipeline *)ft_xmalloc(sizeof(t_pipeline));
 	pipeline->processes = processes;

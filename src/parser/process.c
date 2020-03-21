@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command.c                                          :+:      :+:    :+:   */
+/*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -50,30 +50,10 @@ static int		is_valid_argv(t_token *token)
 	|| is_redir(token)));
 }
 
-/*
-** simple_command	: WORD
-** 					| WORD simple_command
-**					| io_redir
-**					| io_redir simple_command
-**
-** returns a t_process containing argv array and a list of redirections.
-**
-** -is ugly, should implement cmd_prefix/suffix
-*/
-
-t_process		*ps_simple_command(void)
+static int		set_attr(t_process *process)
 {
-	t_process	*process;
 	t_redir		*redir;
 
-	if (g_parser.error || !is_valid_argv(g_parser.token))
-	{
-		g_parser.error = g_parser.error ? g_parser.error : NO_CMD_BEFORE_PIPE;
-		return (NULL);
-	}
-	process = (t_process *)ft_xmalloc(sizeof(t_process));
-	process->stdin = STDIN_FILENO;
-	process->stdout = STDOUT_FILENO;
 	while (is_valid_argv(g_parser.token))
 	{
 		if (g_parser.token->type == WORD)
@@ -81,13 +61,37 @@ t_process		*ps_simple_command(void)
 			add_process_word(process, g_parser.token);
 			g_parser.token = get_next_token();
 		}
-		else if (!(redir = ps_io_redirect()))
-		{
-			process_del(&process);
-			return (NULL);
-		}
-		else
+		else if ((redir = ps_io_redirect()))
 			add_process_redir(process, redir);
+		else
+			return (-1);
 	}
+	return (0);
+}
+
+/*
+** process			: WORD
+** 					| WORD process
+**					| io_redir
+**					| io_redir process
+**
+** returns a t_process containing argv array and a list of redirections.
+*/
+
+t_process		*ps_process(void)
+{
+	t_process	*process;
+	t_redir		*redir;
+
+	if (g_parser.error
+	|| !is_valid_argv(g_parser.token))
+	{
+		g_parser.error = g_parser.error ? g_parser.error : NO_CMD_BEFORE_PIPE;
+		return (NULL);
+	}
+	process = (t_process *)ft_xmalloc(sizeof(t_process));
+	process->stdout = STDOUT_FILENO;
+	if (set_attr(process) == -1)
+		process_del(&process);
 	return (process);
 }

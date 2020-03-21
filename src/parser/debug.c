@@ -49,7 +49,7 @@ void	print_jobs(t_job *jobs)
 				
 			}
 			if (pipe->next)
-				printf("%s ", pipe->sep->value->str);
+				printf("%s ", pipe->sep == AND_IF ? "&&" : "||");
 			pipe = pipe->next;
 				
 		}

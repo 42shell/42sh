@@ -33,7 +33,7 @@ enum							e_parse_error
 };
 
 /*
-** -A single process is returned by simple_command()
+** -A single process is returned by ps_process()
 */
 
 typedef struct					s_redir
@@ -61,21 +61,21 @@ typedef struct					s_process
 
 /*
 ** -A single pipeline is returned by ps_pipeline(),
-**	it contains a list of processes returned by ps_pipe_sequence()
-** -sep is the token used to separate the pipeline from the next, '&&' or '||'
+**	it contains a list of processes
+** -sep is the operator used to separate the pipeline from the next, '&&' or '||'
 */
 
 typedef struct					s_pipeline
 {
 	struct s_pipeline			*next;
 	struct s_process			*processes;
-	//pid_t						pgid; ?
-	t_token						*sep;
+	int							sep;
 }								t_pipeline;
 
 /*
-** -A single job is returned by ps_job()
+** -A single job is returned by get_job(),
 **  it contains a list of pipelines returned by ps_and_or()
+** -A list of jobs is returned by get_jobs_list() via ps_list()
 */
 
 typedef struct					s_job
@@ -83,20 +83,22 @@ typedef struct					s_job
 	struct s_job				*next;
 	struct s_pipeline			*pipelines;
 	pid_t						pgid;
-	bool						notified;	/* true if user told about stopped job */
+	bool						notified;
 	bool						bg;
 }								t_job;
 
-/*
-** -A complete_command is returned by complete_command(),
-**  it contains a list of jobs created internally
-*/
-
-typedef struct					s_complete_command
+typedef struct					s_list
 {
-	struct s_complete_command	*next;
+	struct s_list				*next;
 	struct s_job				*jobs;
-}								t_complete_command;
+}								t_list;
+
+/*
+** typedef struct 				s_compound_command
+** {
+** 								;
+** }
+*/
 
 /*
 ** parser:
@@ -116,10 +118,11 @@ typedef struct					s_parser
 
 t_parser						g_parser;
 
-t_complete_command				*ps_complete_command(void);
+
+t_list							*ps_list(void);
 t_job							*ps_job(void);
 t_pipeline						*ps_pipeline(void);
-t_process						*ps_simple_command(void);
+t_process						*ps_process(void);
 t_redir							*ps_io_redirect(void);
 t_token							*ps_separator(void);
 t_token							*ps_separator_op(void);
@@ -130,7 +133,7 @@ int								ps_get_all_heredocs(void);
 int								ps_error(char *near);
 int								ps_heredoc_eof(char *delim);
 
-int								complete_command_del(t_complete_command **complete_command);
+int								list_del(t_list **list);
 int								job_del(t_job **job);
 int								pipeline_del(t_pipeline **pipeline);
 int								process_del(t_process **processe);

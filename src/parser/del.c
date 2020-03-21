@@ -12,13 +12,13 @@
 
 #include "shell.h"
 
-int			complete_command_del(t_complete_command **complete_command)
+int			list_del(t_list **list)
 {
-	if (!complete_command || !*complete_command)
+	if (!list || !*list)
 		return (0);
-	complete_command_del(&(*complete_command)->next);
-	job_del(&(*complete_command)->jobs);
-	ft_memdel((void **)complete_command);
+	list_del(&(*list)->next);
+	job_del(&(*list)->jobs);
+	ft_memdel((void **)list);
 	return (0);
 }
 
@@ -40,7 +40,6 @@ int			pipeline_del(t_pipeline **pipeline)
 		return (0);
 	pipeline_del(&(*pipeline)->next);
 	process_del(&(*pipeline)->processes);
-	token_del(&(*pipeline)->sep);
 	ft_memdel((void **)pipeline);
 	return (0);
 }

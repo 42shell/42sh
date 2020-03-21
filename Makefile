@@ -68,6 +68,9 @@ SRC_EXEC        := error.c\
 				   redirect_error.c\
                    open_heredoc.c\
 				   launch.c\
+				   pipe.c\
+				   exec.c\
+				   wait.c\
 				   utils.c\
 				   #exec_pipe.c\
 				   exec_cmd.c
@@ -90,8 +93,8 @@ SRC_LEXER       := append.c\
 SRC_LEXER       := $(addprefix lexer/,$(SRC_LEXER))
 
 SRC_PARSER      := heredoc.c\
-				   complete_command.c\
-				   simple_command.c\
+				   list.c\
+				   process.c\
 				   job.c\
                    pipeline.c\
                    io_redirect.c\

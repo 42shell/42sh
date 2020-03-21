@@ -14,7 +14,7 @@
 
 void	kill_all_forks(void)
 {
-	write(2, "42sh: too many processes, aborting\n", 35);
+	ft_dprintf(2, "42sh: too many processes, aborting\n");
 	kill(0, SIGABRT);
 }
 

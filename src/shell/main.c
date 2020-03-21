@@ -12,20 +12,20 @@
 
 #include "shell.h"
 
-int			main_loop()
+int				main_loop()
 {
-	t_complete_command	*complete_command;
+	t_list		*list;
 
 	while (1) //while !g_shell.quit...
 	{
 		g_parser.error = NOERR;
 		g_shell.get_input(PS1);
 		if ((g_parser.token = get_next_token())
-		&& (complete_command = ps_complete_command()))
+		&& (list = ps_list()))
 		{
-			launch_complete_command(complete_command);
-			//print_jobs(complete_command->jobs);
-			free(complete_command);
+			//launch_list(list);
+			print_jobs(list->jobs);
+			//free(list);
 			//complete_command_del(&complete_command); //not del the jobs
 			if (g_shell.interactive_mode && g_lexer.line)
 			{
@@ -38,7 +38,7 @@ int			main_loop()
 	return (0);
 }
 
-int			main(int argc, char **argv)
+int				main(int argc, char **argv)
 {
 	init(argc - 1, argv + 1);
 	main_loop();

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   complete_command.c                                 :+:      :+:    :+:   */
+/*   and_or.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -15,9 +15,6 @@
 /*
 ** the following rules should be enough to get a fine shell scripting:
 **
-** command			: simple_command
-** 					| compound_command 
-**
 ** compound_command : brace_group
 ** 					| subshell
 **					| if_clause
@@ -29,63 +26,55 @@
 /* ************************************************************************** */
 
 /*
-** list				: and_or
-** 					| and_or separator_op list
+** list				: job
+** 					| job separator_op list
 **
-** returns a list of t_job.
+** returns a list of jobs.
 **
-** -the separator operator is stored in the pipe struct
 ** -a newline_list() call is necessary to avoid parse errors
 **  in case of empty command "\n" or ending separators "ls;".
 **  Normally it should be in compound_command rule
 */
 
-t_job					*ps_list(void)
+static t_job	*get_jobs(void)
 {
-	t_job				*list;
-	t_token				*sep;
+	t_job		*jobs;
+	t_token		*sep;
 
 	ps_newline_list();
 	if (!g_parser.token
-	|| !(list = ps_job()))
+	|| !(jobs = ps_job()))
 		return (NULL);
-	else if ((sep = ps_separator_op())
-	&& (list->bg = (sep->type == AMPERSAND)))
+	else if ((sep = ps_separator_op()))
 	{
+		jobs->bg = (sep->type == AMPERSAND);
 		token_del(&sep);
-		list->next = ps_list();
+		jobs->next = get_jobs();
 		if (g_parser.error)
 		{
-			job_del(&list);
+			job_del(&jobs);
 			return (NULL);
 		}
 	}
-	return (list);
+	return (jobs);
 }
 
 /*
-** complete_command : list separator 
-** 					| list
-**
-** -get the list of jobs and the heredocs
-** -skip eventual separator and newline and returns a t_complete_command 
-**  containing the list of jobs if there is one and everything went good
-** -handle parse errors and returns NULL if something went wrong.
+** returns t_list containing a list of t_jobs
+** get heredocs and handle parsing errors
 */
 
-t_complete_command		*ps_complete_command(void)
+t_list			*ps_list(void)
 {
-	t_complete_command	*complete_command;
-	t_job				*jobs;
+	t_list		*list;
+	t_job		*jobs;
 
-	if ((jobs = ps_list())
+	if ((jobs = get_jobs())
 	&& ps_get_all_heredocs() == NOERR)
 	{
-		ps_separator();
-		complete_command =
-		(t_complete_command *)ft_xmalloc(sizeof(t_complete_command));
-		complete_command->jobs = jobs;
-		return (complete_command);
+		list = (t_list *)ft_xmalloc(sizeof(t_list));
+		list->jobs = jobs;
+		return (list);
 	}
 	else if (g_parser.error)
 	{
