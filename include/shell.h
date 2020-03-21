@@ -59,6 +59,7 @@
 ** 		-check comments work properly
 ** 		-in case of "ls | \n cat", newline is not removed from line before stored in history
 **		 don t know if it is handled in expand()
+** -fix redirs
 ** -leaks
 */
 

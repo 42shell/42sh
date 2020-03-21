@@ -23,9 +23,9 @@ int				main_loop()
 		if ((g_parser.token = get_next_token())
 		&& (list = ps_list()))
 		{
-			//launch_list(list);
-			print_jobs(list->jobs);
-			//free(list);
+			launch_list(list);
+			//print_jobs(list->jobs);
+			free(list);
 			//complete_command_del(&complete_command); //not del the jobs
 			if (g_shell.interactive_mode && g_lexer.line)
 			{

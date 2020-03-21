@@ -38,8 +38,8 @@ t_ht				*g_binaries;
 
 int					launch_list(t_list *list);
 int					launch_job(t_job *job);
-int					launch_pipeline(t_pipeline *pipeline);
-int					launch_process(t_process *process);
+int					launch_pipeline(t_pipeline *pipeline, bool bg);
+int					launch_process(t_process *process, bool bg);
 
 int					set_pipe(t_process *process);
 int					close_pipe(t_process *process);
@@ -57,7 +57,7 @@ char				*get_exec_path(char *command);
 ** redirections
 */
 
-int					set_redir(t_process *process);
+int					set_redir(t_process *process, bool backup);
 int					open_heredoc(t_dstr *heredoc);
 bool				is_valid_fd(int fd);
 void				move_fd(int *fd);

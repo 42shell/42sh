@@ -81,7 +81,6 @@ static int		set_attr(t_process *process)
 t_process		*ps_process(void)
 {
 	t_process	*process;
-	t_redir		*redir;
 
 	if (g_parser.error
 	|| !is_valid_argv(g_parser.token))

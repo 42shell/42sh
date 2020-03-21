@@ -42,88 +42,6 @@ static int	get_redirection_fd(t_redir *redir)
 	return (open(filename->str, get_flags(type), RIGHTS));
 }
 
-static int	redirect(t_redir *redir, int redirected_fd)
-{
-	int		redirection_fd;
-
-	if (ft_strequ(redir->right_op->value->str, "-"))
-	{
-		dup2(-1, redirected_fd);
-		close(redirected_fd);
-		return (0);
-	}
-	else if ((redirection_fd = get_redirection_fd(redir)) < 0)
-		return (ERROR_REDIR_OPEN);
-	else if (!is_valid_fd(redirection_fd))
-		return (ERROR_REDIR_BAD_FD);
-	else if (redirected_fd == redirection_fd)
-		move_fd(&redirection_fd);
-	dup2(redirection_fd, redirected_fd);
-	if (redirection_fd > 2)//?
-		close(redirection_fd);
-	//if (redir->operator->type != LESSAND
-	//&& redir->operator->type != GREATAND)
-	return (0);
-}
-
-static int	get_redirected_fd(t_redir *redir)
-{
-	if (!redir->left_op)
-	{
-		if (redir->operator->type == LESS
-		|| redir->operator->type == LESSAND
-		|| redir->operator->type == DLESS)
-			return (0);
-		return (1);
-	}
-	return (ft_atoi(redir->left_op->value->str));
-}
-
-int			set_redir(t_process *process)
-{
-	t_redir	*redir;
-	int		redirected_fd;
-	int		ret;
-
-	redir = process->redirs;
-	if (process->stdin != STDIN_FILENO)
-	{
-		dup2(process->stdin, STDIN_FILENO);
-		close(process->stdin);
-	}
-	if (process->stdout != STDOUT_FILENO)
-	{
-		dup2(process->stdout, STDOUT_FILENO);
-		close(process->stdout);
-	}
-	while (redir)
-	{
-		if ((redirected_fd = get_redirected_fd(redir)) > 255)
-			return (redir_error(ERROR_REDIR_BAD_FD));
-		else if ((ret = redirect(redir, redirected_fd)) < 0)
-			return (redir_error(ret));
-		redir = redir->next;
-	}
-	return (0);
-}
-
-
-/*
-static int	get_redirection_fd(t_redir *redir)
-{
-	t_dstr	*filename;
-	int		type;
-
-	type = redir->operator->type;
-	filename = redir->right_op->value;
-	if (type == DLESS)
-		return (open_heredoc(filename));
-	else if ((type == GREATAND || type == LESSAND)
-	&& ft_strisnbr(filename->str))
-		return (ft_atoi(filename->str));
-	return (open(filename->str, get_flags(type), RIGHTS));
-}
-
 static int	redirect(t_redir *redir, int redirected_fd, bool backup)
 {
 	int		redirection_fd;
@@ -186,4 +104,3 @@ int			set_redir(t_process *process, bool backup)
 	}
 	return (0);
 }
-*/

@@ -118,7 +118,6 @@ typedef struct					s_parser
 
 t_parser						g_parser;
 
-
 t_list							*ps_list(void);
 t_job							*ps_job(void);
 t_pipeline						*ps_pipeline(void);

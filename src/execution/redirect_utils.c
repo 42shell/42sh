@@ -12,7 +12,6 @@
 
 #include "shell.h"
 
-/*
 static t_list_head *g_backups = NULL;
 
 static t_fd_backup	*fd_used_for_backup(int fildes)
@@ -30,13 +29,12 @@ static t_fd_backup	*fd_used_for_backup(int fildes)
 	}
 	return (NULL);
 }
-*/
 
 bool		is_valid_fd(int fd)
 {
 	struct stat	buf;
 
-	return (/*!fd_used_for_backup(fd) &&*/ fstat(fd, &buf) != -1);
+	return (!fd_used_for_backup(fd) && fstat(fd, &buf) != -1);
 }
 
 void		move_fd(int *fd)
@@ -48,7 +46,6 @@ void		move_fd(int *fd)
 	*fd = new;
 }
 
-/*
 int			dup2_and_backup(int fd_from, int fd_to, bool backup)
 {
 	t_fd_backup *backup_store;
@@ -72,7 +69,6 @@ int			dup2_and_backup(int fd_from, int fd_to, bool backup)
 ** so we close it. (ex: ls 5> file opens file at fd 5)
 */
 
-/*
 int			restore_fds(void)
 {
 	t_list_head *cur;
@@ -99,4 +95,3 @@ int			restore_fds(void)
 	}
 	return (0);
 }
-*/
