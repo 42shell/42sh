@@ -23,6 +23,7 @@ int				main_loop()
 		if ((g_parser.token = get_next_token())
 		&& (list = ps_list()))
 		{
+			//list->jobs->curr_pipeline = list->jobs->pipelines;
 			launch_list(list);
 			//print_jobs(list->jobs);
 			free(list); //need del jobs done

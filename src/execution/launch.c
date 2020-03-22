@@ -126,8 +126,7 @@ int				launch_list(t_list *list)
 			return (0);//put_job_bg(job);
 		else
 			put_job_fg(job, false);
-		if (job)
-			job = job->next;
+		job = job->next;
 	}
 	return (0);
 }

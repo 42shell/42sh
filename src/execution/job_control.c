@@ -81,6 +81,8 @@ int		set_process_status(pid_t pid, int status)
 	t_process	*process;
 
 	job = g_shell.jobs;
+	if (!job || !job->curr_pipeline)
+		return (0);
 	while (job)
 	{
 		process = job->curr_pipeline->processes;
@@ -107,7 +109,7 @@ int		set_process_status(pid_t pid, int status)
 	return (-1);
 }
 
-int		launch_next_pipeline(t_job *job, int status)
+void		launch_next_pipeline(t_job *job, int status)
 {
 	if (job->curr_pipeline->sep == AND_IF && status != 0)
 		job->curr_pipeline = job->curr_pipeline->next;
@@ -115,7 +117,6 @@ int		launch_next_pipeline(t_job *job, int status)
 		job->curr_pipeline = job->curr_pipeline->next;
 	if (job->curr_pipeline && (job->curr_pipeline = job->curr_pipeline->next))
 		launch_pipeline(job->curr_pipeline, &job->pgid, job->bg);
-	return (0);
 }
 
 void		wait_for_job(t_job *job)
@@ -135,7 +136,7 @@ void		wait_for_job(t_job *job)
 			g_shell.jobs = g_shell.jobs->next; //del
 			return ;
 		}
-		else if (job->curr_pipeline->next
+		else if (job->curr_pipeline && job->curr_pipeline->next
 		&& pipeline_is_done(job->curr_pipeline))
 			launch_next_pipeline(job, status);
 	}
@@ -145,13 +146,13 @@ void		wait_for_job(t_job *job)
 
 void		put_job_fg(t_job *job, bool cont)
 {
-	//tcsetpgrp(STDIN_FILENO, job->pgid); SF
+	//tcsetpgrp(STDIN_FILENO, job->pgid);
 	if (cont)
 	{
 		tcsetattr (STDIN_FILENO, TCSADRAIN, &job->tmodes);
 		kill(SIGCONT, -job->pgid);
 	}
-	wait_for_job(job); 
-	//tcsetpgrp (STDIN_FILENO, g_shell.pgid); SF
+	wait_for_job(job);
+	//tcsetpgrp (STDIN_FILENO, g_shell.pgid);
 	tcsetattr (STDIN_FILENO, TCSADRAIN, &g_shell.tmodes);
 }
