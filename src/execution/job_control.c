@@ -56,26 +56,33 @@ bool	pipeline_is_done(t_pipeline *pipeline)
 bool	job_is_done(t_job *job)
 {
 	t_pipeline	*pipeline;
-	t_process	*process;
 
 	pipeline = job->pipelines;
 	while (pipeline)
 	{
-		process = pipeline->processes;
-		while (process)
-		{
-			if (!process->done)
-				return (false);
-			process = process->next;
-		}
-		pipeline = pipeline->next;
+		if (!pipeline_is_done(pipeline))
+			return (false);
 	}
 	return (true);
 }
 
 /* ************************************************************************** */
 
-int		set_process_status(pid_t pid, int status)
+void	set_process_status(t_process *process, int status)
+{
+	process->status = status;
+	if (WIFSTOPPED(status))
+		process->stopped = 1;
+	else
+	{
+		process->done = true;
+		if (WIFSIGNALED(status))
+			ft_dprintf(2, "%d: Terminated by signal %d.\n",
+			(int)process->pid, WTERMSIG(process->status));
+	}
+}
+
+int		set_last_status(pid_t pid, int status)
 {
 	t_job		*job;
 	t_process	*process;
@@ -90,16 +97,7 @@ int		set_process_status(pid_t pid, int status)
 		{
 			if (process->pid == pid)
 			{
-				process->status = status;
-				if (WIFSTOPPED(status))
-					process->stopped = 1;
-				else
-				{
-					process->done = true;
-					if (WIFSIGNALED(status))
-						ft_dprintf(2, "%d: Terminated by signal %d.\n",
-						(int)pid, WTERMSIG(process->status));
-				}
+				set_process_status(process, status);
 				return (0);
 			}
 			process = process->next;
@@ -127,7 +125,7 @@ void		wait_for_job(t_job *job)
 	pid = 0;
 	status = 0;
 	while ((pid = waitpid(WAIT_ANY, &status, WUNTRACED)) > 0 //errors
-	&& set_process_status(pid, status) == 0)
+	&& set_last_status(pid, status) == 0)
 	{
 		if (job_is_stopped(job))
 			return ;
@@ -154,5 +152,6 @@ void		put_job_fg(t_job *job, bool cont)
 	}
 	wait_for_job(job);
 	//tcsetpgrp (STDIN_FILENO, g_shell.pgid);
+	tcsetattr (STDIN_FILENO, TCSADRAIN, &job->tmodes);
 	tcsetattr (STDIN_FILENO, TCSADRAIN, &g_shell.tmodes);
 }
