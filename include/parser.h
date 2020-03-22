@@ -65,6 +65,12 @@ typedef struct					s_process
 ** -sep is the operator used to separate the pipeline from the next, '&&' or '||'
 */
 
+/*
+** -A single job is returned by get_job(),
+**  it contains a list of pipelines returned by ps_and_or()
+** -A list of jobs is returned by get_jobs_list() via ps_list()
+*/
+
 typedef struct					s_pipeline
 {
 	struct s_pipeline			*next;
@@ -72,18 +78,14 @@ typedef struct					s_pipeline
 	int							sep;
 }								t_pipeline;
 
-/*
-** -A single job is returned by get_job(),
-**  it contains a list of pipelines returned by ps_and_or()
-** -A list of jobs is returned by get_jobs_list() via ps_list()
-*/
-
 typedef struct					s_job
 {
 	struct s_job				*next;
 	struct s_pipeline			*pipelines;
+	struct s_pipeline			*curr_pipeline;
 	pid_t						pgid;
 	bool						notified;
+	struct termios				tmodes;
 	bool						bg;
 }								t_job;
 

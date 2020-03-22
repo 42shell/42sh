@@ -38,17 +38,14 @@ t_ht				*g_binaries;
 
 int					launch_list(t_list *list);
 int					launch_job(t_job *job);
-int					launch_pipeline(t_pipeline *pipeline, bool bg);
-int					launch_process(t_process *process, bool bg);
+int					launch_pipeline(t_pipeline *pipeline, pid_t *pgid, bool bg);
+int					launch_process(t_process *process, pid_t *pgid, bool bg);
 
 int					set_pipe(t_process *process);
 int					close_pipe(t_process *process);
 
 int					exec_builtin(char **argv, char **env);
 int					exec_binary(char **argv, char **env);
-
-int					wait_for_job(t_job *job);
-int					wait_for_pipeline(t_pipeline *pipeline);
 
 char				**get_argv(t_process *process);
 char				*get_exec_path(char *command);
@@ -84,6 +81,11 @@ int					command_not_found(char *command_name);
 t_job				*get_job(pid_t pgid);
 bool				job_is_stopped(t_job *job);
 bool				job_is_done(t_job *job);
+void				add_job(t_job *job);
+bool				pipeline_is_done(t_pipeline *pipeline);
+
+void				put_job_fg(t_job *job, bool cont);
+void				wait_for_job(t_job *job);
 
 /*
 ** fork utils

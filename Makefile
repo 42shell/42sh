@@ -70,7 +70,7 @@ SRC_EXEC        := error.c\
 				   launch.c\
 				   pipe.c\
 				   exec.c\
-				   wait.c\
+				   job_control.c\
 				   utils.c\
 				   #exec_pipe.c\
 				   exec_cmd.c

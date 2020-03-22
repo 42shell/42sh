@@ -85,6 +85,7 @@ typedef struct			s_shell
 	t_input_func		get_input;
 	t_job				*jobs;
 	pid_t				pgid;
+	struct termios		tmodes;
 }						t_shell;
 
 t_shell					g_shell;

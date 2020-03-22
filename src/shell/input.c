@@ -59,7 +59,8 @@ int			input_interactive(const char *prompt)
 
 	if (!(line = readline(prompt)))
 		exit(1);//error()
-	else if (!*line)//ctrl-C || ctrl-D
+	printf("SF\n");
+	if (!*line)//ctrl-C || ctrl-D
 	{
 		free(line);
 		if (g_rl_last_ret == RL_INT)
@@ -75,7 +76,9 @@ int			input_interactive(const char *prompt)
 		}
 		return (g_rl_last_ret == RL_EOF ? INPUT_EOF : INPUT_INT);
 	}
+	printf("SF\n");
 	remove_escaped_newlines(line);
+	printf("SF\n");
 	if (g_lexer.line)
 	{
 		tmp = g_lexer.line;

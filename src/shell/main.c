@@ -25,8 +25,7 @@ int				main_loop()
 		{
 			launch_list(list);
 			//print_jobs(list->jobs);
-			free(list);
-			//complete_command_del(&complete_command); //not del the jobs
+			free(list); //need del jobs done
 			if (g_shell.interactive_mode && g_lexer.line)
 			{
 				g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;

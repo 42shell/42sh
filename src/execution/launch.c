@@ -13,68 +13,6 @@
 #include "shell.h"
 
 /*
-** job control folder
-*/
-
-void		add_job(t_job *job)
-{
-	t_job	*ptr;
-
-	if (!g_shell.jobs)
-		g_shell.jobs = job;
-	else
-	{
-		ptr = g_shell.jobs;
-		while (ptr->next)
-			ptr = ptr->next;
-		ptr->next = job;
-	}
-}
-
-/* ************************************************************************** */
-
-/*
-** execute the process
-*/
-
-int			exec_builtin(char **argv, char **env)
-{
-	(void)env;
-	//if (ft_strequ(argv[0], "env"))
-	//	builtin_env(argv, env);
-	if (ft_strequ(argv[0], "exit"))
-		builtin_exit(argv);
-	else if (ft_strequ(argv[0], "unsetenv"))
-		builtin_unsetenv(argv);
-	else if (ft_strequ(argv[0], "setenv"))
-		builtin_setenv(argv);
-	else if (ft_strequ(argv[0], "echo"))
-		builtin_echo(argv);
-	else if (ft_strequ(argv[0], "cd"))
-		builtin_cd(argv);
-	restore_fds();
-	return (0); //errors ?
-}
-
-int			exec_binary(char **argv, char **env)
-{
-	char	*path;
-
-	if (!(path = get_exec_path(argv[0])))
-	{
-		ft_dprintf(2, "42sh: %s: command not found\n", argv[0]);
-		return (1); //code?
-	}
-	else if (execve(path, argv, env) == -1)
-	{
-		ft_dprintf(2, "42sh: %s: cannot execute command\n", argv[0]);
-		free(path);
-		return (1); //code ?
-	}
-	free(path);
-	return (0);
-}
-
 static int	launch_builtin(t_process *process, bool bg)
 {
 	if (!bg && !process->next)
@@ -90,18 +28,34 @@ static int	launch_builtin(t_process *process, bool bg)
 	else if (process->pid == 0)
 	{
 		process->pid = getpid();
+		printf("child %d: %d\n", i, process->pid);
 		set_redir(process, true); //always backup and restore
 		exit(exec_builtin(process->argv, g_env->env));
 	}
+	printf("parent %d: %d\n", i, process->pid);
 	return (0);
 }
+*/
 
-int			launch_process(t_process *process, bool bg)
+static void	set_child_pgid(t_process *process, pid_t *pgid, bool bg)
+{
+	process->pid = getpid();
+	*pgid = *pgid ? *pgid : process->pid;
+	setpgid(process->pid, *pgid);
+	if (!bg)
+		tcsetpgrp(STDIN_FILENO, *pgid);
+}
+
+int			launch_process(t_process *process, pid_t *pgid, bool bg)
 {
 	//expand(process);
 	process->argv = get_argv(process);
-	if (is_builtin(process->argv[0]))
-		return (launch_builtin(process, bg));
+	if (!process->next && !bg
+	&& is_builtin(process->argv[0]))
+	{
+		set_redir(process, true); //always backup and restore
+		return (exec_builtin(process->argv, g_env->env));
+	}
 	else if ((process->pid = fork()) == -1)
 	{
 		ft_dprintf(2, "42sh: too many processes\n");
@@ -109,10 +63,14 @@ int			launch_process(t_process *process, bool bg)
 	}
 	else if (process->pid == 0)
 	{
-		process->pid = getpid();
+		set_child_pgid(process, pgid, bg);
 		set_redir(process, true); //always backup and restore
+		if (is_builtin(process->argv[0]))
+			exit(exec_builtin(process->argv, g_env->env));
 		exit(exec_binary(process->argv, g_env->env));//?
 	}
+	*pgid = *pgid ? *pgid : process->pid;
+	setpgid(process->pid, *pgid);
 	return (0);
 }
 
@@ -123,7 +81,7 @@ int			launch_process(t_process *process, bool bg)
 ** we wait for pipeline
 */
 
-int			launch_pipeline(t_pipeline *pipeline, bool bg)
+int			launch_pipeline(t_pipeline *pipeline, pid_t *pgid, bool bg)
 {
 	t_process	*process;
 
@@ -137,43 +95,12 @@ int			launch_pipeline(t_pipeline *pipeline, bool bg)
 				ft_dprintf(2, "42sh: failed to create pipe\n");
 				return (-1); //pipe_error()
 			}
-			launch_process(process, bg);
+			launch_process(process, pgid, bg);
 			close_pipe(process);
 		}
 		else
-			launch_process(process, bg);
+			launch_process(process, pgid, bg);
 		process = process->next;
-	}
-	if (!bg)
-		wait_for_pipeline(pipeline);
-	return (0);
-}
-
-/*
-** loop through the pipelines:
-** -we call launch pipeline
-** -we handle the logic
-** -no fork -_- stupid useless builtins
-** 		if the job is launched in bg, we ll track the pipeline via job control,
-**		and exec the next one if status is good
-*/
-
-int			launch_job(t_job *job)
-{
-	t_pipeline	*pipeline;
-
-	pipeline = job->pipelines;
-	while (pipeline)
-	{
-		if (job->bg || !pipeline->next)
-			return (launch_pipeline(pipeline, job->bg));
-		else if (pipeline->sep == AND_IF
-		&& launch_pipeline(pipeline, job->bg) != 0)
-			pipeline = pipeline->next;
-		else if (pipeline->sep == OR_IF
-		&& launch_pipeline(pipeline, job->bg) == 0)
-			pipeline = pipeline->next;
-		pipeline = pipeline->next;
 	}
 	return (0);
 }
@@ -192,10 +119,15 @@ int				launch_list(t_list *list)
 	job = list->jobs;
 	while (job)
 	{
-		launch_job(job);
+		add_job(job);
+		job->curr_pipeline = job->pipelines;
+		launch_pipeline(job->curr_pipeline, &job->pgid, job->bg);
 		if (job->bg)
-			add_job(job);
-		job = job->next;
+			return (0);//put_job_bg(job);
+		else
+			put_job_fg(job, false);
+		if (job)
+			job = job->next;
 	}
-	return (g_last_exit_st);
+	return (0);
 }
