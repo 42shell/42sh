@@ -13,48 +13,39 @@
 #include "shell.h"
 
 /*
-** pipeline			: process PIPE linebreak pipeline
-**					: process
+** for the moment,
+** pipeline	= pipe_sequence
 **
-** returns a list of t_process
+** pipeline			: command PIPE linebreak pipeline
+**					: command
+**
+**                 |
+**               /   \
+**             |     test
+**           /   \
+**         ls    cat
 */
 
-static t_process	*get_processes(void)
+t_node			*ps_pipeline(void)
 {
-	t_process		*processes;
+	t_node		*pipeline;
+	t_node		*node;
 
-	if (g_parser.error
-	|| !(processes = ps_process()))
-		return (NULL);
-	while (g_parser.token->type == PIPE)
+	pipeline = ps_command();
+	while (pipeline && g_parser.token->type == PIPE)
 	{
+		node = (t_node *)ft_xmalloc(sizeof(t_node));
+		node->type = PIPE;
+		node->left = pipeline;
 		token_del(&g_parser.token);
 		g_parser.token = get_next_token();
 		ps_linebreak(PIPE);
-		if (!(processes->next = get_processes()))
+		if (!(node->right = ps_pipeline()))
 		{
-			g_parser.error = g_parser.error ? g_parser.error : NO_CMD_AFTER_PIPE;
-			process_del(&processes);
-			return (NULL);
+			g_parser.error = g_parser.error ? g_parser.error : NO_CMD_AFTER_OP;
+			ast_del(&node);
 		}
+		pipeline = node;
 	}
-	return (processes);
-}
-
-/*
-** pipeline			: pipe_sequence
-**
-** returns a t_pipeline containing a list of processes
-*/
-
-t_pipeline			*ps_pipeline(void)
-{
-	t_pipeline		*pipeline;
-	t_process		*processes;
-
-	if (!(processes = get_processes()))
-		return (NULL);
-	pipeline = (t_pipeline *)ft_xmalloc(sizeof(t_pipeline));
-	pipeline->processes = processes;
 	return (pipeline);
 }

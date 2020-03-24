@@ -14,19 +14,37 @@
 
 void	add_job(t_job *job)
 {
-	t_job	*ptr;
-
-	if (!g_shell.jobs)
-		g_shell.jobs = job;
-	else
-	{
-		ptr = g_shell.jobs;
-		while (ptr->next)
-			ptr = ptr->next;
-		ptr->next = job;
-	}
+	job->next = g_shell.jobs;
+	g_shell.jobs = job;
 }
 
+void	add_process(t_process *process)
+{
+	process->next = g_shell.jobs->processes;
+	g_shell.jobs->processes = process;
+}
+
+t_process	*process_new(t_node *ast)
+{
+	t_process	*process;
+
+	process = (t_process *)ft_xmalloc(sizeof(t_process));
+	process->ast = ast;
+	return (process);
+}
+
+t_job		*job_new(t_node *ast, int stdin, int stdout)
+{
+	t_job	*job;
+
+	job = (t_job *)ft_xmalloc(sizeof(t_job));
+	job->stdin = 0;
+	job->stdout = 1;
+	job->ast = ast;
+	return (job);
+}
+
+/*
 t_job	*get_job(pid_t pgid)
 {
 	(void)pgid;
@@ -38,30 +56,18 @@ bool	job_is_stopped(t_job *job)
 	(void)job;
 	return (false);
 }
+*/
 
-bool	pipeline_is_done(t_pipeline *pipeline)
+bool	job_is_done(t_job *job)
 {
 	t_process	*process;
 
-	process = pipeline->processes;
+	process = job->processes;
 	while (process)
 	{
 		if (!process->done)
 			return (false);
 		process = process->next;
-	}
-	return (true);
-}
-
-bool	job_is_done(t_job *job)
-{
-	t_pipeline	*pipeline;
-
-	pipeline = job->pipelines;
-	while (pipeline)
-	{
-		if (!pipeline_is_done(pipeline))
-			return (false);
 	}
 	return (true);
 }
@@ -88,11 +94,11 @@ int		set_last_status(pid_t pid, int status)
 	t_process	*process;
 
 	job = g_shell.jobs;
-	if (!job || !job->curr_pipeline)
+	if (!job || !job->processes)
 		return (0);
 	while (job)
 	{
-		process = job->curr_pipeline->processes;
+		process = job->processes;
 		while (process)
 		{
 			if (process->pid == pid)
@@ -102,19 +108,10 @@ int		set_last_status(pid_t pid, int status)
 			}
 			process = process->next;
 		}
+		job = job->next;
 	}
 	ft_dprintf(2, "42sh: process %d not found.\n", pid);
 	return (-1);
-}
-
-void		launch_next_pipeline(t_job *job, int status)
-{
-	if (job->curr_pipeline->sep == AND_IF && status != 0)
-		job->curr_pipeline = job->curr_pipeline->next;
-	else if (job->curr_pipeline->sep == OR_IF && status == 0)
-		job->curr_pipeline = job->curr_pipeline->next;
-	if (job->curr_pipeline && (job->curr_pipeline = job->curr_pipeline->next))
-		launch_pipeline(job->curr_pipeline, &job->pgid, job->bg);
 }
 
 void		wait_for_job(t_job *job)
@@ -124,34 +121,50 @@ void		wait_for_job(t_job *job)
 
 	pid = 0;
 	status = 0;
+	/*
+	t_process *process;
+
+	process = job->processes;
+	while (process)
+	{
+		//printf("%d: !done\n", process->pid);
+		waitpid(process->status, &process->status, 0);
+		process = process->next;
+	}
+	g_last_exit_st = status;
+	*/
+	while (!job_is_done(job))
+	{
+		pid = waitpid(WAIT_ANY, &status, 0);
+		g_last_exit_st = status;
+		if (pid > 0 && 
+		set_last_status(pid, status) < 0)
+		{
+			ft_dprintf(2, "42sh: process %d not found.\n", pid);
+			break ;
+		}
+		if (pid == 0)
+		{
+			ft_dprintf(2, "42sh: no process ready to report.\n", pid);
+			break ;
+		}
+		if (pid < 0)
+		{
+			ft_dprintf(2, "42sh: waitpid: unexpected error.\n", pid);
+			break ;
+		}
+	}
+
+	/*
 	while ((pid = waitpid(WAIT_ANY, &status, WUNTRACED)) > 0 //errors
 	&& set_last_status(pid, status) == 0)
 	{
-		if (job_is_stopped(job))
-			return ;
-		else if (job_is_done(job))
+		if (job_is_done(job))
 		{
 			g_shell.jobs = g_shell.jobs->next; //del
+			g_last_exit_st = status;
 			return ;
 		}
-		else if (job->curr_pipeline && job->curr_pipeline->next
-		&& pipeline_is_done(job->curr_pipeline))
-			launch_next_pipeline(job, status);
 	}
-}
-
-/* ************************************************************************** */
-
-void		put_job_fg(t_job *job, bool cont)
-{
-	//tcsetpgrp(STDIN_FILENO, job->pgid);
-	if (cont)
-	{
-		tcsetattr (STDIN_FILENO, TCSADRAIN, &job->tmodes);
-		kill(SIGCONT, -job->pgid);
-	}
-	wait_for_job(job);
-	//tcsetpgrp (STDIN_FILENO, g_shell.pgid);
-	tcsetattr (STDIN_FILENO, TCSADRAIN, &job->tmodes);
-	tcsetattr (STDIN_FILENO, TCSADRAIN, &g_shell.tmodes);
+	*/
 }

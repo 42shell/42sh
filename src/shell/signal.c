@@ -16,14 +16,11 @@ void	sig_handle(int sig)
 {
 	if (sig == SIGWINCH)
 	{
-		signal(sig, SIG_DFL);
-		//do something
-		signal(sig, sig_handle);
+		;
 	}
 	else if (SIGTSTP <= sig && sig <= SIGTTOU)
 	{
-		//signal(sig, SIG_IGN);
-		;//job control ?
+		;
 	}
 	return ;
 }
@@ -37,10 +34,5 @@ void	init_sig(void)
 	{
 		if (sig == SIGKILL || sig == SIGSTOP || sig == SIGSEGV)
 			continue ;
-		else if (sig == SIGWINCH
-		|| (SIGTSTP <= sig && sig <= SIGTTOU))
-			signal(sig, sig_handle);
-		else
-			signal(sig, SIG_IGN);
 	}
 }

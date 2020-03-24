@@ -14,6 +14,7 @@
 
 #define RIGHTS 0666
 
+/*
 static int	get_flags(int operator_type)
 {
 	if (operator_type == GREAT || operator_type == GREATAND)
@@ -84,16 +85,6 @@ int			set_redir(t_process *process, bool backup)
 	int		ret;
 
 	redir = process->redirs;
-	if (process->stdin != STDIN_FILENO)
-	{
-		dup2(process->stdin, STDIN_FILENO);
-		close(process->stdin);
-	}
-	if (process->stdout != STDOUT_FILENO)
-	{
-		dup2(process->stdout, STDOUT_FILENO);
-		close(process->stdout);
-	}
 	while (redir)
 	{
 		if ((redirected_fd = get_redirected_fd(redir)) > 255)
@@ -104,3 +95,4 @@ int			set_redir(t_process *process, bool backup)
 	}
 	return (0);
 }
+*/

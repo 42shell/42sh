@@ -25,15 +25,24 @@ enum							e_parse_error
 	NULL_AST,
 	NULL_AST_NODE,
 	NO_REDIR_FILENAME,
-	NO_CMD_BEFORE_PIPE,
-	NO_CMD_AFTER_PIPE,
-	NO_CMD_AFTER_AND_OR,
-	NO_CMD_AFTER_SEP,
+	NO_CMD_BEFORE_OP,
+	NO_CMD_AFTER_OP,
 	HEREDOC_NO_DELIM
 };
 
+typedef struct					s_node
+{
+	struct s_node				*left;
+	struct s_node				*right;
+	void						*data;
+	int							type;
+}								t_node;
+
 /*
-** -A single process is returned by ps_process()
+** -A single redir is returned by ps_io_redirect()
+** -it contains 3 tokens corresponding to the operator and
+**  the 2 operands of a redirection (2 >& 1)
+** -the left operand can be NULL
 */
 
 typedef struct					s_redir
@@ -44,61 +53,23 @@ typedef struct					s_redir
 	t_token						*right_op;
 }								t_redir;
 
-typedef struct					s_process
+typedef struct					s_command
 {
-	struct s_process			*next;
 	t_token						*words;
 	t_redir						*redirs;
-	char						**argv;
-	char						*path;
-	int							stdin;
-	int							stdout;
-	pid_t						pid;
-	int							status;
-	bool						stopped;
-	char						done;
-}								t_process;
-
-/*
-** -A single pipeline is returned by ps_pipeline(),
-**	it contains a list of processes
-** -sep is the operator used to separate the pipeline from the next, '&&' or '||'
-*/
-
-/*
-** -A single job is returned by get_job(),
-**  it contains a list of pipelines returned by ps_and_or()
-** -A list of jobs is returned by get_jobs_list() via ps_list()
-*/
-
-typedef struct					s_pipeline
-{
-	struct s_pipeline			*next;
-	struct s_process			*processes;
-	int							sep;
-}								t_pipeline;
-
-typedef struct					s_job
-{
-	struct s_job				*next;
-	struct s_pipeline			*pipelines;
-	struct s_pipeline			*curr_pipeline;
-	pid_t						pgid;
-	bool						notified;
-	struct termios				tmodes;
-	bool						bg;
-}								t_job;
+}								t_command;
 
 typedef struct					s_list
 {
 	struct s_list				*next;
-	struct s_job				*jobs;
+	t_node						*ast;
+	int							bg;
 }								t_list;
 
 /*
 ** typedef struct 				s_compound_command
 ** {
-** 								;
+** 		struct s_compound_command	*next;
 ** }
 */
 
@@ -121,9 +92,9 @@ typedef struct					s_parser
 t_parser						g_parser;
 
 t_list							*ps_list(void);
-t_job							*ps_job(void);
-t_pipeline						*ps_pipeline(void);
-t_process						*ps_process(void);
+t_node							*ps_and_or(void);
+t_node							*ps_pipeline(void);
+t_node							*ps_command(void);
 t_redir							*ps_io_redirect(void);
 t_token							*ps_separator(void);
 t_token							*ps_separator_op(void);
@@ -135,11 +106,12 @@ int								ps_error(char *near);
 int								ps_heredoc_eof(char *delim);
 
 int								list_del(t_list **list);
-int								job_del(t_job **job);
-int								pipeline_del(t_pipeline **pipeline);
-int								process_del(t_process **processe);
+int								ast_del(t_node **ast);
+//int								and_or_del(t_and_or **and_or);
+//int								pipeline_del(t_pipeline **pipeline);
+int								command_del(t_command **command);
 int								redir_del(t_redir **redir);
 
-void							print_jobs(t_job *jobs);
+void							print_ast(t_node *ast, int indent);
 
 #endif

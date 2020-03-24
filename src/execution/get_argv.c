@@ -12,25 +12,21 @@
 
 #include "shell.h"
 
-/*
-** expansion
-*/
-
-char    **get_argv(t_process *process)
+char    **get_argv(t_command *command)
 {
     t_token *word;
     char    **argv;
     int     count;
 
     count = 0;
-    word = process->words;
+    word = command->words;
     while (word)
     {
         count++;
         word = word->next;
     }
     argv = ft_xmalloc(sizeof(char *) * (count + 1));
-    word = process->words;
+    word = command->words;
     count = 0;
     while (word)
     {

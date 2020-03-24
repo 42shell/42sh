@@ -12,48 +12,6 @@
 
 #include "shell.h"
 
-int			list_del(t_list **list)
-{
-	if (!list || !*list)
-		return (0);
-	list_del(&(*list)->next);
-	job_del(&(*list)->jobs);
-	ft_memdel((void **)list);
-	return (0);
-}
-
-int			process_del(t_process **process)
-{
-	if (!process || !*process)
-		return (0);
-	process_del(&(*process)->next);
-	token_del(&(*process)->words);
-	redir_del(&(*process)->redirs);
-	free((*process)->path);
-	ft_memdel((void **)process);
-	return (0);
-}
-
-int			pipeline_del(t_pipeline **pipeline)
-{
-	if (!pipeline || !*pipeline)
-		return (0);
-	pipeline_del(&(*pipeline)->next);
-	process_del(&(*pipeline)->processes);
-	ft_memdel((void **)pipeline);
-	return (0);
-}
-
-int			job_del(t_job **job)
-{
-	if (!job || !*job)
-		return (0);
-	job_del(&(*job)->next);
-	pipeline_del(&(*job)->pipelines);
-	ft_memdel((void **)job);
-	return (0);
-}
-
 int			redir_del(t_redir **redir)
 {
 	if (!redir || !*redir)
@@ -63,5 +21,52 @@ int			redir_del(t_redir **redir)
 	token_del(&(*redir)->operator);
 	token_del(&(*redir)->right_op);
 	ft_memdel((void **)redir);
+	return (0);
+}
+
+int			command_del(t_command **command)
+{
+	if (!command || !*command)
+		return (0);
+	token_del(&(*command)->words);
+	redir_del(&(*command)->redirs);
+	ft_memdel((void **)command);
+	return (0);
+}
+/*
+int			pipeline_del(t_pipeline **pipeline)
+{
+	if (!pipeline || !*pipeline)
+		return (0);
+	pipeline_del(&(*pipeline)->next);
+	command_del(&(*pipeline)->commands);
+	ft_memdel((void **)pipeline);
+	return (0);
+}
+
+int			and_or_del(t_and_or **and_or)
+{
+	if (!and_or || !*and_or)
+		return (0);
+	and_or_del(&(*and_or)->next);
+	pipeline_del(&(*and_or)->pipelines);
+	ft_memdel((void **)and_or);
+	return (0);
+}
+*/
+
+int			ast_del(t_node **ast)
+{
+	*ast = NULL;
+	return (0);
+}
+
+int			list_del(t_list **list)
+{
+	if (!list || !*list)
+		return (0);
+	list_del(&(*list)->next);
+	ast_del(&(*list)->ast);
+	ft_memdel((void **)list);
 	return (0);
 }
