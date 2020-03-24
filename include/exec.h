@@ -29,6 +29,8 @@ typedef struct			s_process
 	struct s_process	*next;
 	t_node				*ast;
 	pid_t				pid;
+	int					stdin;
+	int					stdout;
 	int					status;
 	bool				stopped;
 	bool				done;
@@ -42,7 +44,6 @@ typedef struct			s_job
 	pid_t				pgid;
 	int					stdin;
 	int					stdout;
-	int					stderr;
 	bool				notified;
 	bool				bg;
 }						t_job;
@@ -60,15 +61,15 @@ t_ht					*g_binaries;
 */
 
 
-int					eval_ast(t_node *ast, int in, int out);
-int					eval_and_or(t_node *ast, int in, int out);
+int					eval_ast(t_node *ast);
+int					eval_and_or(t_node *ast);
 int					eval_pipeline(t_node *ast, int in, int out);
 int					eval_command(t_node *ast, int in, int out);
-int					eval_simple_command(t_node *ast, int in, int out);
+int					exec_command(t_node *ast);
 
-t_process			*process_new(t_node *ast);
+t_process			*process_new(t_node *ast, int stdin, int stdout);
 t_job				*job_new(t_node *ast, int stdin, int stdout);
-int					launch_process(t_process *process, int in, int out);
+int					launch_process(t_process *process, int to_close);
 int					launch_job(t_job *job);
 int					exec_builtin(char **argv, char **env);
 int					exec_binary(char **argv, char **env);

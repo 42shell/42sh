@@ -24,11 +24,13 @@ void	add_process(t_process *process)
 	g_shell.jobs->processes = process;
 }
 
-t_process	*process_new(t_node *ast)
+t_process	*process_new(t_node *ast, int stdin, int stdout)
 {
 	t_process	*process;
 
 	process = (t_process *)ft_xmalloc(sizeof(t_process));
+	process->stdin = stdin;
+	process->stdout = stdout;
 	process->ast = ast;
 	return (process);
 }
@@ -38,8 +40,8 @@ t_job		*job_new(t_node *ast, int stdin, int stdout)
 	t_job	*job;
 
 	job = (t_job *)ft_xmalloc(sizeof(t_job));
-	job->stdin = 0;
-	job->stdout = 1;
+	job->stdin = stdin;
+	job->stdout = stdout;
 	job->ast = ast;
 	return (job);
 }
@@ -121,13 +123,12 @@ void		wait_for_job(t_job *job)
 
 	pid = 0;
 	status = 0;
-	/*
 	t_process *process;
 
+	/*
 	process = job->processes;
 	while (process)
 	{
-		//printf("%d: !done\n", process->pid);
 		waitpid(process->status, &process->status, 0);
 		process = process->next;
 	}
@@ -136,7 +137,7 @@ void		wait_for_job(t_job *job)
 	while (!job_is_done(job))
 	{
 		pid = waitpid(WAIT_ANY, &status, 0);
-		g_last_exit_st = status;
+		g_last_exit_st = WEXITSTATUS(status);
 		if (pid > 0 && 
 		set_last_status(pid, status) < 0)
 		{
@@ -154,7 +155,6 @@ void		wait_for_job(t_job *job)
 			break ;
 		}
 	}
-
 	/*
 	while ((pid = waitpid(WAIT_ANY, &status, WUNTRACED)) > 0 //errors
 	&& set_last_status(pid, status) == 0)

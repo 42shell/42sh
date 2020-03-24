@@ -12,8 +12,8 @@
 
 #include "shell.h"
 
-int		g_pipe[2];
-
+int		g_stdin = STDIN_FILENO;
+int		g_stdout = STDOUT_FILENO;
 /*
 static void	set_child_pgid(t_process *process, pid_t *pgid, bool bg)
 {
@@ -51,7 +51,7 @@ int			exec_binary(char **argv, char **env)
 	if (!(path = get_exec_path(argv[0])))
 	{
 		ft_dprintf(2, "42sh: %s: command not found\n", argv[0]);
-		return (1); //code?
+		exit (1); //code?
 	}
 	else if (execve(path, argv, env) == -1)
 	{
@@ -74,13 +74,13 @@ pid_t		fork_child(int in, int out)
 	{
 		if (in != STDIN_FILENO)
 		{
+			g_stdin = in;
 			dup2(in, STDIN_FILENO);
-			close(in);
 		}
 		if (out != STDOUT_FILENO)
 		{
+			g_stdout = out;
 			dup2(out, STDOUT_FILENO);
-			close(out);
 		}
 	}
 	if (in != STDIN_FILENO)
@@ -91,19 +91,17 @@ pid_t		fork_child(int in, int out)
 
 }
 
-int			launch_process(t_process *process, int in, int out)
+int			launch_process(t_process *process, int to_close)
 {
-	if ((process->pid = fork_child(in, out)) == -1)
+	if ((process->pid = fork_child(process->stdin, process->stdout)) == -1)
 		return (-1);
 	else if (process->pid == 0)
 	{
 		process->pid = getpid();
-		if (g_pipe[0])
-			close(g_pipe[0]);
-		if (g_pipe[1])
-			close(g_pipe[1]);
-		eval_ast(process->ast, in, out);
-		exit(0);
+		if (to_close)
+			close(to_close);
+		eval_ast(process->ast);
+		exit(1);
 	}
 	add_process(process);
 	return (0);
@@ -111,7 +109,7 @@ int			launch_process(t_process *process, int in, int out)
 
 int			launch_job(t_job *job)
 {
-	eval_ast(job->ast, job->stdin, job->stdout);
+	eval_ast(job->ast);
 	wait_for_job(job);
 	return (0);
 }
@@ -119,7 +117,7 @@ int			launch_job(t_job *job)
 /* ************************************************************************** */
 /* ************************************************************************** */
 
-int			eval_simple_command(t_node *ast, int in, int out)
+int			exec_command(t_node *ast)
 {
 	t_command	*command;
 	char		**argv;
@@ -138,55 +136,54 @@ int			eval_command(t_node *ast, int in, int out)
 	t_process	*process;
 
 	if (is_builtin(((t_command *)ast->left->data)->words->value->str)
-	&& in == STDIN_FILENO && out == STDOUT_FILENO)
-		return (eval_ast(ast->left, in, out));
-	process = process_new(ast->left);
-	launch_process(process, in, out);
+	|| g_stdin != STDIN_FILENO || g_stdout != STDOUT_FILENO)
+		return (exec_command(ast->left));
+	process = process_new(ast->left, in, out);
+	launch_process(process, 0);
 	return (0);
 }
 
-int			eval_pipeline(t_node *ast, int in, int out) //remove in out
+int			eval_pipeline(t_node *ast, int in, int out)
 {
-	if (pipe(g_pipe) == -1)
+	t_process	*process;
+	int			fd[2];
+
+	if (pipe(fd) == -1)
 		return (-1);
-	eval_ast(ast->left, in, g_pipe[1]);
-	eval_ast(ast->right, g_pipe[0], out);
-	/*
-	process = process_new(ast->right);
-	launch_process(process, fd[0], out);
+	process = process_new(ast->right, fd[0], out);
+	launch_process(process, fd[1]);
 	if (ast->left->type == PIPE)
-		return (eval_ast(ast->left, in, fd[1]));
-	process = process_new(ast->left);
-	launch_process(process, in, fd[1]);
-	*/
+		return (eval_pipeline(ast->left, in, fd[1]));
+	process = process_new(ast->left, in, fd[1]);
+	launch_process(process, fd[0]);
 	return (0);
 }
 
-int			eval_and_or(t_node *ast, int in, int out)
+int			eval_and_or(t_node *ast)
 {
 	t_job	*job;
 
-	eval_ast(ast->left, in, out);
+	eval_ast(ast->left);
 	wait_for_job(g_shell.jobs);
 	if ((ast->type == AND_IF && g_last_exit_st == 0)
-	||(ast->type == OR_IF && g_last_exit_st != 0))
+	|| (ast->type == OR_IF && g_last_exit_st != 0))
 	{
-		job = job_new(ast->right, in, out);
+		job = job_new(ast->right, STDIN_FILENO, STDOUT_FILENO);
 		add_job(job);
 		launch_job(job);
 	}
 	return (0);
 }
 
-int			eval_ast(t_node *ast, int in, int out)
+int			eval_ast(t_node *ast)
 {
 	if (ast->type == AND_IF || ast->type == OR_IF)
-		return (eval_and_or(ast, in, out));
+		return (eval_and_or(ast));
 	if (ast->type == PIPE)
-		return (eval_pipeline(ast, in, out));
+		return (eval_pipeline(ast, g_stdin, g_stdout));
 	if (ast->type == WORD)
-		return (eval_command(ast, in, out));
+		return (eval_command(ast, g_stdin, g_stdout));
 	if (ast->type == NAME)
-		return (eval_simple_command(ast, in, out));
+		return (exec_command(ast));
 	return (0);
 }

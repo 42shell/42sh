@@ -40,7 +40,7 @@ t_node			*ps_pipeline(void)
 		token_del(&g_parser.token);
 		g_parser.token = get_next_token();
 		ps_linebreak(PIPE);
-		if (!(node->right = ps_pipeline()))
+		if (!(node->right = ps_command()))
 		{
 			g_parser.error = g_parser.error ? g_parser.error : NO_CMD_AFTER_OP;
 			ast_del(&node);
