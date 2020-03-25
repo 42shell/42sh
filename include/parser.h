@@ -30,11 +30,22 @@ enum							e_parse_error
 	HEREDOC_NO_DELIM
 };
 
+enum							e_node_type
+{
+	NODE_SIMPLE_COMMAND,
+	NODE_COMMAND,
+	NODE_PIPELINE,
+	NODE_BANG,
+	NODE_AND_IF,
+	NODE_OR_IF,
+	NODE_SEP,
+};
+
 typedef struct					s_node
 {
 	struct s_node				*left;
 	struct s_node				*right;
-	void						*data;
+	void						*data; //just remove this and put everything in nodes
 	int							type;
 }								t_node;
 
@@ -59,19 +70,12 @@ typedef struct					s_command
 	t_redir						*redirs;
 }								t_command;
 
-typedef struct					s_list
+typedef struct					s_list//remove list and command
 {
 	struct s_list				*next;
 	t_node						*ast;
 	int							bg;
 }								t_list;
-
-/*
-** typedef struct 				s_compound_command
-** {
-** 		struct s_compound_command	*next;
-** }
-*/
 
 /*
 ** parser:
@@ -91,10 +95,12 @@ typedef struct					s_parser
 
 t_parser						g_parser;
 
-t_list							*ps_list(void);
+t_list							*ps_list(void); //node *
 t_node							*ps_and_or(void);
 t_node							*ps_pipeline(void);
+t_node							*ps_pipe_sequence(void);
 t_node							*ps_command(void);
+t_node							*ps_simple_command(void);
 t_redir							*ps_io_redirect(void);
 t_token							*ps_separator(void);
 t_token							*ps_separator_op(void);
@@ -107,8 +113,6 @@ int								ps_heredoc_eof(char *delim);
 
 int								list_del(t_list **list);
 int								ast_del(t_node **ast);
-//int								and_or_del(t_and_or **and_or);
-//int								pipeline_del(t_pipeline **pipeline);
 int								command_del(t_command **command);
 int								redir_del(t_redir **redir);
 

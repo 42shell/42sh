@@ -35,7 +35,7 @@ int				main_loop(void)
 	while (1) //while !g_shell.quit...
 	{
 		g_parser.error = NOERR;
-		g_shell.get_input(PS1);
+		g_shell.get_input(PS1);//remove
 		if ((g_parser.token = get_next_token())
 		&& (list = get_list()))
 		{

@@ -26,17 +26,17 @@
 **         ls    cat
 */
 
-t_node			*ps_pipeline(void)
+t_node			*ps_pipe_sequence(void)
 {
-	t_node		*pipeline;
+	t_node		*pipe_seq;
 	t_node		*node;
 
-	pipeline = ps_command();
-	while (pipeline && g_parser.token->type == PIPE)
+	pipe_seq = ps_command();
+	while (pipe_seq && g_parser.token->type == PIPE)
 	{
 		node = (t_node *)ft_xmalloc(sizeof(t_node));
-		node->type = PIPE;
-		node->left = pipeline;
+		node->type = NODE_PIPELINE;
+		node->left = pipe_seq;
 		token_del(&g_parser.token);
 		g_parser.token = get_next_token();
 		ps_linebreak(PIPE);
@@ -45,7 +45,25 @@ t_node			*ps_pipeline(void)
 			g_parser.error = g_parser.error ? g_parser.error : NO_CMD_AFTER_OP;
 			ast_del(&node);
 		}
-		pipeline = node;
+		pipe_seq = node;
 	}
+	return (pipe_seq);
+}
+
+t_node			*ps_pipeline(void)
+{
+	t_node		*pipeline;
+
+	if (g_parser.token->type == BANG)
+	{
+		pipeline = (t_node *)ft_xmalloc(sizeof(t_node));
+		pipeline->type = NODE_BANG;
+		g_parser.token = get_next_token();
+		token_del(&g_parser.token);
+		if (!(pipeline->left = ps_pipe_sequence()))
+			ast_del(&pipeline);
+	}
+	else
+		pipeline = ps_pipe_sequence();
 	return (pipeline);
 }

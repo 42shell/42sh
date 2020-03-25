@@ -45,6 +45,7 @@ enum				e_token_type
 	PIPE,
 	AND_IF,
 	OR_IF,
+	BANG,
 	PATTERN
 };
 

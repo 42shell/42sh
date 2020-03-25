@@ -90,7 +90,7 @@ void	set_process_status(t_process *process, int status)
 	}
 }
 
-int		set_last_status(pid_t pid, int status)
+int		update_status(pid_t pid, int status)
 {
 	t_job		*job;
 	t_process	*process;
@@ -123,9 +123,9 @@ void		wait_for_job(t_job *job)
 
 	pid = 0;
 	status = 0;
+	/*
 	t_process *process;
 
-	/*
 	process = job->processes;
 	while (process)
 	{
@@ -139,7 +139,7 @@ void		wait_for_job(t_job *job)
 		pid = waitpid(WAIT_ANY, &status, 0);
 		g_last_exit_st = WEXITSTATUS(status);
 		if (pid > 0 && 
-		set_last_status(pid, status) < 0)
+		update_status(pid, status) < 0)
 		{
 			ft_dprintf(2, "42sh: process %d not found.\n", pid);
 			break ;
@@ -154,6 +154,15 @@ void		wait_for_job(t_job *job)
 			ft_dprintf(2, "42sh: waitpid: unexpected error.\n", pid);
 			break ;
 		}
+	}
+	t_process	*process;
+
+	process = job->processes;
+	if (process)
+	{
+		while (process->next)
+			process = process->next;
+		g_last_exit_st = WEXITSTATUS(process->status);
 	}
 	/*
 	while ((pid = waitpid(WAIT_ANY, &status, WUNTRACED)) > 0 //errors

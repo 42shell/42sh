@@ -32,9 +32,9 @@ and_or           :                         pipeline
 ** and_or			: pipeline AND_IF/OR_IF linebreak and_or
 **					: pipeline
 **
-**                 ||
+**                 &&
 **               /   \
-**             &&    test
+**             ||    test
 **           /    \
 **         ls     cat
 */
@@ -45,10 +45,11 @@ t_node				*ps_and_or(void)
 	t_node			*node;
 	
 	and_or = ps_pipeline();
-	while (g_parser.token->type == AND_IF || g_parser.token->type == OR_IF)
+	while (and_or
+	&& (g_parser.token->type == AND_IF || g_parser.token->type == OR_IF))
 	{
 		node = (t_node *)ft_xmalloc(sizeof(t_node));
-		node->type = g_parser.token->type;
+		node->type = g_parser.token->type == AND_IF ? NODE_AND_IF : NODE_OR_IF;
 		node->left = and_or;
 		token_del(&g_parser.token);
 		g_parser.token = get_next_token();

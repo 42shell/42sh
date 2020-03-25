@@ -12,8 +12,6 @@
 
 #include "shell.h"
 
-int		g_stdin = STDIN_FILENO;
-int		g_stdout = STDOUT_FILENO;
 /*
 static void	set_child_pgid(t_process *process, pid_t *pgid, bool bg)
 {
@@ -63,8 +61,7 @@ int			exec_binary(char **argv, char **env)
 	return (0);
 }
 
-
-pid_t		fork_child(int in, int out)
+pid_t		fork_child(int in, int out, int to_close)
 {
 	pid_t	pid;
 
@@ -72,39 +69,42 @@ pid_t		fork_child(int in, int out)
 		return (-1);
 	else if (pid == 0)
 	{
+		if (to_close)
+			close(to_close);
 		if (in != STDIN_FILENO)
-		{
-			g_stdin = in;
 			dup2(in, STDIN_FILENO);
-		}
 		if (out != STDOUT_FILENO)
-		{
-			g_stdout = out;
 			dup2(out, STDOUT_FILENO);
-		}
 	}
 	if (in != STDIN_FILENO)
 		close(in);
 	if (out != STDOUT_FILENO)
 		close(out);
 	return (pid);
-
 }
 
 int			launch_process(t_process *process, int to_close)
 {
-	if ((process->pid = fork_child(process->stdin, process->stdout)) == -1)
+	pid_t	pid;
+
+	if ((pid = fork_child(process->stdin, process->stdout, to_close)) == -1)
 		return (-1);
-	else if (process->pid == 0)
+	else if (pid == 0)
 	{
 		process->pid = getpid();
-		if (to_close)
-			close(to_close);
+		if (process->stdin != STDIN_FILENO)
+			g_shell.stdin = process->stdin;
+		if (process->stdout != STDOUT_FILENO)
+			g_shell.stdout = process->stdout;
 		eval_ast(process->ast);
 		exit(1);
 	}
-	add_process(process);
-	return (0);
+	else
+	{
+		process->pid = pid;
+		add_process(process);
+	}
+	return (pid);
 }
 
 int			launch_job(t_job *job)
@@ -115,9 +115,8 @@ int			launch_job(t_job *job)
 }
 
 /* ************************************************************************** */
-/* ************************************************************************** */
 
-int			exec_command(t_node *ast)
+int			eval_simple_command(t_node *ast)
 {
 	t_command	*command;
 	char		**argv;
@@ -131,14 +130,15 @@ int			exec_command(t_node *ast)
 	//restore fds
 }
 
-int			eval_command(t_node *ast, int in, int out)
+int			eval_command(t_node *ast)
 {
 	t_process	*process;
 
-	if (is_builtin(((t_command *)ast->left->data)->words->value->str)
-	|| g_stdin != STDIN_FILENO || g_stdout != STDOUT_FILENO)
-		return (exec_command(ast->left));
-	process = process_new(ast->left, in, out);
+	if (ast->left->type == NODE_SIMPLE_COMMAND
+	&& (is_builtin(((t_command *)ast->left->data)->words->value->str)
+	|| (g_shell.stdin != STDIN_FILENO || g_shell.stdout != STDOUT_FILENO)))
+		return (eval_simple_command(ast->left));
+	process = process_new(ast->left, STDIN_FILENO, STDOUT_FILENO);
 	launch_process(process, 0);
 	return (0);
 }
@@ -152,7 +152,7 @@ int			eval_pipeline(t_node *ast, int in, int out)
 		return (-1);
 	process = process_new(ast->right, fd[0], out);
 	launch_process(process, fd[1]);
-	if (ast->left->type == PIPE)
+	if (ast->left->type == NODE_PIPELINE)
 		return (eval_pipeline(ast->left, in, fd[1]));
 	process = process_new(ast->left, in, fd[1]);
 	launch_process(process, fd[0]);
@@ -165,8 +165,10 @@ int			eval_and_or(t_node *ast)
 
 	eval_ast(ast->left);
 	wait_for_job(g_shell.jobs);
-	if ((ast->type == AND_IF && g_last_exit_st == 0)
-	|| (ast->type == OR_IF && g_last_exit_st != 0))
+	if (ast->left->type == BANG)
+		g_last_exit_st = g_last_exit_st ? 0 : 1;
+	if ((ast->type == NODE_AND_IF && g_last_exit_st == 0)
+	|| (ast->type == NODE_OR_IF && g_last_exit_st != 0))
 	{
 		job = job_new(ast->right, STDIN_FILENO, STDOUT_FILENO);
 		add_job(job);
@@ -177,13 +179,17 @@ int			eval_and_or(t_node *ast)
 
 int			eval_ast(t_node *ast)
 {
-	if (ast->type == AND_IF || ast->type == OR_IF)
+	if (!ast)
+		return (0);
+	if (ast->type == NODE_AND_IF || ast->type == NODE_OR_IF)
 		return (eval_and_or(ast));
-	if (ast->type == PIPE)
-		return (eval_pipeline(ast, g_stdin, g_stdout));
-	if (ast->type == WORD)
-		return (eval_command(ast, g_stdin, g_stdout));
-	if (ast->type == NAME)
-		return (exec_command(ast));
+	if (ast->type == BANG)
+		ast = ast->left;
+	if (ast->type == NODE_PIPELINE)
+		return (eval_pipeline(ast, STDIN_FILENO, STDOUT_FILENO));
+	if (ast->type == NODE_COMMAND)
+		return (eval_command(ast));
+	if (ast->type == NODE_SIMPLE_COMMAND)
+		return (eval_simple_command(ast));
 	return (0);
 }

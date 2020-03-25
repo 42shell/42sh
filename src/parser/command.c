@@ -66,6 +66,7 @@ static int		set_tokens(t_command *command)
 		else
 			return (-1);
 	}
+
 	return (0);
 }
 
@@ -78,36 +79,40 @@ static int		set_tokens(t_command *command)
 **					| io_redir
 **					| io_redir command
 **
-**         CMD
-**          |
-**          ls
-**
 ** returns a t_command containing argv array and a list of redirections.
 */
 
-t_node			*ps_command(void)
+t_node			*ps_simple_command(void)
 {
-	t_node		*command;
 	t_node		*simple_command;
-	t_command	*command_tokens;
+	t_command	*tokens;
 
-	if (g_parser.error
-	|| !is_valid_argv(g_parser.token))
+	if (!is_valid_argv(g_parser.token))
 	{
 		g_parser.error = g_parser.error ? g_parser.error : NO_CMD_BEFORE_OP;
 		return (NULL);
 	}
-	else if ((command_tokens = (t_command *)ft_xmalloc(sizeof(t_command)))
-	&& set_tokens(command_tokens) == -1)
+	else if ((tokens = (t_command *)ft_xmalloc(sizeof(t_command)))
+	&& set_tokens(tokens) == -1)
 	{
-		command_del(&command_tokens);
+		command_del(&tokens);
 		return (NULL);
 	}
 	simple_command = (t_node *)ft_xmalloc(sizeof(t_node));
+	simple_command->data = tokens;
+	simple_command->type = NODE_SIMPLE_COMMAND;
+	return (simple_command);
+}
+
+t_node		*ps_command(void)
+{
+	t_node	*command;
+	t_node	*simple_command;
+
+	if (!(simple_command = ps_simple_command()))
+		return (NULL);
 	command = (t_node *)ft_xmalloc(sizeof(t_node));
-	simple_command->data = command_tokens;
-	simple_command->type = NAME;
 	command->left = simple_command;
-	command->type = WORD;
+	command->type = NODE_COMMAND;
 	return (command);
 }
