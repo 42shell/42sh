@@ -35,16 +35,19 @@ int				main_loop(void)
 	while (1) //while !g_shell.quit...
 	{
 		g_parser.error = NOERR;
+		if (g_shell.jobs)
+			notif_jobs();
 		g_shell.get_input(PS1);//remove
 		if ((g_parser.token = get_next_token())
 		&& (ast = get_ast()))
 		{
-			print_ast(ast, 0);
-			//job = job_new(list->ast, 0, 1);
-			//add_job(job);
-			//slaunch_job(job);
+			//print_ast(ast, 0);
+			//eval_ast(ast);
+			job = job_new(ast, STDIN_FILENO, STDOUT_FILENO);
+			add_job(job);
+			launch_job(job);
 		}
-		ast_del(&ast); //not del asts
+		//ast_del(&ast); //not del asts
 		if (g_shell.interactive_mode && g_lexer.line)
 		{
 			g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;

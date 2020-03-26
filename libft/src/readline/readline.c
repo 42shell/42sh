@@ -94,7 +94,7 @@ static int	rl_init(void)
 ** -term.h ft_term..
 ** -scroll
 */
-
+#include <signal.h>
 char		*readline(const char *prompt)
 {
 	int		ret;
@@ -102,6 +102,8 @@ char		*readline(const char *prompt)
 	if ((ret = rl_init()) != 0)
 		return (rl_return(ret));
 	rl_print_prompt(prompt);
+	signal(SIGTTOU, SIG_IGN);
+	signal(SIGTTIN, SIG_IGN);
 	while ((ret = read(STDIN_FILENO, g_rl_key.bytes, 1)))
 	{
 		if ((ret == -1 && (g_rl_error = RL_SYSCALL_ERROR))

@@ -14,6 +14,7 @@
 # define EXEC_H
 
 # include "shell.h"
+#include <errno.h>
 
 # define ERROR_REDIR_OPEN	-1
 # define ERROR_REDIR_BAD_FD	-2
@@ -44,6 +45,7 @@ typedef struct			s_job
 	pid_t				pgid;
 	int					stdin;
 	int					stdout;
+	struct termios		tmodes;
 	bool				notified;
 	bool				bg;
 }						t_job;
@@ -67,17 +69,21 @@ int					eval_pipeline(t_node *ast, int in, int out);
 int					eval_command(t_node *ast);
 int					eval_simple_command(t_node *ast);
 
+int					exec_builtin(char **argv, char **env);
+int					exec_binary(char **argv, char **env);
+
+
 t_process			*process_new(t_node *ast, int stdin, int stdout);
 t_job				*job_new(t_node *ast, int stdin, int stdout);
 int					launch_process(t_process *process, int to_close);
 int					launch_job(t_job *job);
-int					exec_builtin(char **argv, char **env);
-int					exec_binary(char **argv, char **env);
 
-bool				job_is_done(t_job *job);
 void				add_job(t_job *job);
 void				add_process(t_process *process);
-void				wait_for_job(t_job *job);
+void				put_job_fg(t_job *job, bool cont);
+void				put_job_bg(t_job *job, bool cont);
+void				notif_jobs(void);
+bool				job_is_done(t_job *job);
 
 char				**get_argv(t_command *command);
 char				*get_exec_path(char *command);

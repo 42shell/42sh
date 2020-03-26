@@ -12,14 +12,16 @@
 
 #include "shell.h"
 
-void	add_job(t_job *job)
+void		add_job(t_job *job)
 {
 	job->next = g_shell.jobs;
 	g_shell.jobs = job;
 }
 
-void	add_process(t_process *process)
+void		add_process(t_process *process)
 {
+	if (!g_shell.jobs)
+		return ;
 	process->next = g_shell.jobs->processes;
 	g_shell.jobs->processes = process;
 }
@@ -35,7 +37,7 @@ t_process	*process_new(t_node *ast, int stdin, int stdout)
 	return (process);
 }
 
-t_job		*job_new(t_node *ast, int stdin, int stdout)
+t_job	*job_new(t_node *ast, int stdin, int stdout)
 {
 	t_job	*job;
 
@@ -46,13 +48,67 @@ t_job		*job_new(t_node *ast, int stdin, int stdout)
 	return (job);
 }
 
-/*
+void	process_delone(t_process **process)
+{
+	free(*process);
+	*process = NULL;
+}
+
+void	process_del(t_process **process)
+{
+	t_process	*next;
+
+	while (*process)
+	{
+		next = (*process)->next;
+		free(*process);
+		*process = next;
+	}
+}
+
+void	job_del(t_job **job)
+{
+	t_job	*next;
+
+	while (*job)
+	{
+		process_del(&(*job)->processes);
+		next = (*job)->next;
+		free(*job);
+		*job = next;
+	}
+}
+
+void	remove_job_from_list(pid_t pgid)
+{
+	t_job	*job;
+	t_job	*prev;
+
+	prev = NULL;
+	if (!(job = g_shell.jobs))
+		return ;
+	while (job)
+	{
+		if (job->pgid == pgid)
+		{
+			if (prev)
+				prev->next = job->next;
+			else
+				g_shell.jobs = job->next;
+			return ;
+		}
+		prev = job;
+		job = job->next;
+	}
+}
+
 t_job	*get_job(pid_t pgid)
 {
 	(void)pgid;
 	return (NULL);
 }
 
+/*
 bool	job_is_stopped(t_job *job)
 {
 	(void)job;
@@ -90,14 +146,15 @@ void	set_process_status(t_process *process, int status)
 	}
 }
 
-int		update_status(pid_t pid, int status)
+
+int		mark_status(pid_t pid, int status)
 {
 	t_job		*job;
 	t_process	*process;
 
 	job = g_shell.jobs;
-	if (!job || !job->processes)
-		return (0);
+	//if (!job || !job->processes)
+	//	return (0);
 	while (job)
 	{
 		process = job->processes;
@@ -115,6 +172,7 @@ int		update_status(pid_t pid, int status)
 	return (-1);
 }
 
+
 /*
 static void	set_child_pgid(t_process *process, pid_t *pgid, bool bg)
 {
@@ -126,38 +184,60 @@ static void	set_child_pgid(t_process *process, pid_t *pgid, bool bg)
 }
 */
 
-void		wait_for_job(t_job *job)
+void	update_status(void)
 {
 	pid_t	pid;
 	int		status;
 
 	pid = 0;
-	status = 0;
-	t_process *process;
-	/*
-	process = job->processes;
-	while (process)
+	while ((pid = waitpid(WAIT_ANY, &status, WNOHANG | WUNTRACED)) > 0)
 	{
-		//we should be able to do this instead of wait ANY and loop through all the jobs,
-		//as waitpid will return the statuses of childs already terminated in the function
-		//we call before the prompt to notif bg jobs
-		waitpid(process->status, &process->status, 0);
-		process = process->next;
-	}
-	g_last_exit_st = status;
-	*/
-	while (!job_is_done(job))
-	{
-		pid = waitpid(WAIT_ANY, &status, 0);
-		g_last_exit_st = WEXITSTATUS(status);
-		if (pid > 0 && update_status(pid, status) < 0)
+		if (mark_status(pid, status) < 0)
 		{
 			ft_dprintf(2, "42sh: process %d not found.\n", pid);
 			break ;
 		}
-		else if (pid == 0)
+	}
+	if (pid < 0 && errno != ECHILD)
+		ft_dprintf(2, "42sh: waitpid: unexpected error.\n", pid);
+}
+
+void	notif_jobs(void)
+{
+	t_job	*job;
+	t_job	*next;
+
+	if (!(job = g_shell.jobs))
+		return ;
+	update_status();
+	job = g_shell.jobs;
+	while (job)
+	{
+		next = job->next;
+		if (job->bg && job_is_done(job))
 		{
-			ft_dprintf(2, "42sh: no process ready to report.\n", pid);
+			printf("%d done.\n", job->pgid);
+			remove_job_from_list(job->pgid);
+			process_del(&job->processes);
+			free(job);
+		}
+		job = next;
+	}
+}
+
+void	wait_for_job(t_job *job)
+{
+	pid_t		pid;
+	int			status;
+
+	pid = 0;
+	status = 0;
+	while (!job_is_done(job))
+	{
+		pid = waitpid(WAIT_ANY, &status, WUNTRACED);
+		if (pid > 0 && mark_status(pid, status) < 0)
+		{
+			ft_dprintf(2, "42sh: process %d not found.\n", pid);
 			break ;
 		}
 		else if (pid < 0)
@@ -166,61 +246,33 @@ void		wait_for_job(t_job *job)
 			break ;
 		}
 	}
-	process = job->processes;
-	if (process)
-	{
-		while (process->next)
-			process = process->next;
-		g_last_exit_st = WEXITSTATUS(process->status);
-	}
+	g_last_exit_st = WEXITSTATUS(job->processes->status);
+	remove_job_from_list(job->pgid);
+	process_del(&job->processes);
+	free(job);
 }
 
-pid_t		fork_child(int in, int out, int to_close)
+void	put_job_fg(t_job *job, bool cont)
 {
-	pid_t	pid;
-
-	if ((pid = fork()) == -1)
-		return (-1);
-	else if (pid == 0)
+	tcsetpgrp(STDIN_FILENO, job->pgid);
+	if (cont)
 	{
-		if (to_close)
-			close(to_close);
-		if (in != STDIN_FILENO)
-			dup2(in, STDIN_FILENO);
-		if (out != STDOUT_FILENO)
-			dup2(out, STDOUT_FILENO);
+		job->notified = 0;
+		kill(-job->pgid, SIGCONT);
+		tcsetattr (STDIN_FILENO, TCSADRAIN, &job->tmodes);
 	}
-	if (in != STDIN_FILENO)
-		close(in);
-	if (out != STDOUT_FILENO)
-		close(out);
-	return (pid);
-}
-
-int			launch_process(t_process *process, int to_close)
-{
-	pid_t	pid;
-
-	if ((pid = fork_child(process->stdin, process->stdout, to_close)) == -1)
-		return (-1);
-	else if (pid == 0)
-	{
-		process->pid = getpid();
-		g_shell.is_subshell = true;
-		eval_ast(process->ast);
-		exit(1);
-	}
-	else
-	{
-		process->pid = pid;
-		add_process(process);
-	}
-	return (pid);
-}
-
-int			launch_job(t_job *job)
-{
-	eval_ast(job->ast);
 	wait_for_job(job);
-	return (0);
+	tcsetpgrp(STDIN_FILENO, g_shell.pgid);
+	tcgetattr(STDIN_FILENO, &job->tmodes);
+	tcsetattr(STDIN_FILENO, TCSADRAIN, &g_shell.tmodes);
+}
+
+void	put_job_bg(t_job *job, bool cont)
+{
+	g_rl_prompt_cr = false;
+	if (cont)
+	{
+		job->notified = 0;
+		kill(-job->pgid, SIGCONT);
+	}
 }

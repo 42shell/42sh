@@ -20,7 +20,7 @@ void	sig_handle(int sig)
 	}
 	else if (SIGTSTP <= sig && sig <= SIGTTOU)
 	{
-		;
+		signal(sig, SIG_IGN);;
 	}
 	return ;
 }
@@ -30,8 +30,13 @@ void	init_sig(void)
 	int		sig;
 
 	sig = 0;
+	signal(SIGCHLD, SIG_IGN);
 	while (sig++ < 32)
 	{
+		if (SIGTSTP <= sig && sig <= SIGTTOU)
+		{
+			signal(sig, sig_handle);
+		}
 		if (sig == SIGKILL || sig == SIGSTOP || sig == SIGSEGV)
 			continue ;
 	}

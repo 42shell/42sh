@@ -20,7 +20,7 @@ void		rl_carriage_return(bool echo_missing_nl)
 	if (echo_missing_nl)
 	{
 		tputs(tgetstr("mr", NULL), 1, ft_putc);
-		tputs("*", 1, ft_putc);
+		tputs("%", 1, ft_putc);
 		tputs(tgetstr("me", NULL), 1, ft_putc);
 		g_rl_posx++;
 	}
