@@ -64,7 +64,7 @@ SRC_EXEC        := eval_ast.c\
 				   exec.c\
 				   get_argv.c\
 				   get_exec_path.c\
-				   launch.c\
+				   launch_job.c\
 				   job_control.c\
 				   #error.c\
 				   redirect.c\

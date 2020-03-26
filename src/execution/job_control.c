@@ -95,7 +95,6 @@ void	remove_job_from_list(pid_t pgid)
 				prev->next = job->next;
 			else
 				g_shell.jobs = job->next;
-			return ;
 		}
 		prev = job;
 		job = job->next;
@@ -153,8 +152,6 @@ int		mark_status(pid_t pid, int status)
 	t_process	*process;
 
 	job = g_shell.jobs;
-	//if (!job || !job->processes)
-	//	return (0);
 	while (job)
 	{
 		process = job->processes;
@@ -171,18 +168,6 @@ int		mark_status(pid_t pid, int status)
 	}
 	return (-1);
 }
-
-
-/*
-static void	set_child_pgid(t_process *process, pid_t *pgid, bool bg)
-{
-	process->pid = getpid();
-	*pgid = *pgid ? *pgid : process->pid;
-	setpgid(process->pid, *pgid);
-	//if (!bg)
-	//	tcsetpgrp(STDIN_FILENO, *pgid);
-}
-*/
 
 void	update_status(void)
 {
@@ -269,7 +254,7 @@ void	put_job_fg(t_job *job, bool cont)
 
 void	put_job_bg(t_job *job, bool cont)
 {
-	g_rl_prompt_cr = false;
+	g_rl_prompt_cr = false;//
 	if (cont)
 	{
 		job->notified = 0;

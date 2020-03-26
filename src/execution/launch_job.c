@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   launch.c                                           :+:      :+:    :+:   */
+/*   launch_job.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -11,6 +11,17 @@
 /* ************************************************************************** */
 
 #include "shell.h"
+
+/*
+static void	set_child_pgid(t_process *process, pid_t *pgid, bool bg)
+{
+	process->pid = getpid();
+	*pgid = *pgid ? *pgid : process->pid;
+	setpgid(process->pid, *pgid);
+	//if (!bg)
+	//	tcsetpgrp(STDIN_FILENO, *pgid);
+}
+*/
 
 static pid_t	fork_child(int in, int out, int to_close)
 {
@@ -51,8 +62,8 @@ int				launch_process(t_process *process, int to_close)
 		if (!g_shell.jobs->pgid)
 			g_shell.jobs->pgid = process->pid;
 		setpgid(process->pid, g_shell.jobs->pgid);
-		//if (!g_shell.jobs->bg)
-		//	tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
+		if (!g_shell.jobs->bg)
+			tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
 		g_shell.is_subshell = true;
 		g_shell.jobs = NULL;
 		/*

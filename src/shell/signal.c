@@ -30,7 +30,6 @@ void	init_sig(void)
 	int		sig;
 
 	sig = 0;
-	signal(SIGCHLD, SIG_IGN);
 	while (sig++ < 32)
 	{
 		if (SIGTSTP <= sig && sig <= SIGTTOU)

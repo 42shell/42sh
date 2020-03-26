@@ -80,8 +80,6 @@ int			eval_and_or(t_node *ast)
 
 int			eval_separator_op(t_node *ast)
 {
-	t_process	*process;
-
 	if (ast->type == NODE_AMPER)
 	{
 		//process = process_new(ast->left, STDIN_FILENO, STDOUT_FILENO);
@@ -94,8 +92,6 @@ int			eval_separator_op(t_node *ast)
 
 int			eval_ast(t_node *ast)
 {
-	t_job	*job;
-
 	if (!ast)
 		return (0);
 	if (ast->type == NODE_SEMI || ast->type == NODE_AMPER)
