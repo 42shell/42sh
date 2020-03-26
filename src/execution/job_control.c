@@ -112,9 +112,19 @@ int		update_status(pid_t pid, int status)
 		}
 		job = job->next;
 	}
-	ft_dprintf(2, "42sh: process %d not found.\n", pid);
 	return (-1);
 }
+
+/*
+static void	set_child_pgid(t_process *process, pid_t *pgid, bool bg)
+{
+	process->pid = getpid();
+	*pgid = *pgid ? *pgid : process->pid;
+	setpgid(process->pid, *pgid);
+	//if (!bg)
+	//	tcsetpgrp(STDIN_FILENO, *pgid);
+}
+*/
 
 void		wait_for_job(t_job *job)
 {
@@ -123,12 +133,14 @@ void		wait_for_job(t_job *job)
 
 	pid = 0;
 	status = 0;
-	/*
 	t_process *process;
-
+	/*
 	process = job->processes;
 	while (process)
 	{
+		//we should be able to do this instead of wait ANY and loop through all the jobs,
+		//as waitpid will return the statuses of childs already terminated in the function
+		//we call before the prompt to notif bg jobs
 		waitpid(process->status, &process->status, 0);
 		process = process->next;
 	}
@@ -138,25 +150,22 @@ void		wait_for_job(t_job *job)
 	{
 		pid = waitpid(WAIT_ANY, &status, 0);
 		g_last_exit_st = WEXITSTATUS(status);
-		if (pid > 0 && 
-		update_status(pid, status) < 0)
+		if (pid > 0 && update_status(pid, status) < 0)
 		{
 			ft_dprintf(2, "42sh: process %d not found.\n", pid);
 			break ;
 		}
-		if (pid == 0)
+		else if (pid == 0)
 		{
 			ft_dprintf(2, "42sh: no process ready to report.\n", pid);
 			break ;
 		}
-		if (pid < 0)
+		else if (pid < 0)
 		{
 			ft_dprintf(2, "42sh: waitpid: unexpected error.\n", pid);
 			break ;
 		}
 	}
-	t_process	*process;
-
 	process = job->processes;
 	if (process)
 	{
@@ -164,16 +173,54 @@ void		wait_for_job(t_job *job)
 			process = process->next;
 		g_last_exit_st = WEXITSTATUS(process->status);
 	}
-	/*
-	while ((pid = waitpid(WAIT_ANY, &status, WUNTRACED)) > 0 //errors
-	&& set_last_status(pid, status) == 0)
+}
+
+pid_t		fork_child(int in, int out, int to_close)
+{
+	pid_t	pid;
+
+	if ((pid = fork()) == -1)
+		return (-1);
+	else if (pid == 0)
 	{
-		if (job_is_done(job))
-		{
-			g_shell.jobs = g_shell.jobs->next; //del
-			g_last_exit_st = status;
-			return ;
-		}
+		if (to_close)
+			close(to_close);
+		if (in != STDIN_FILENO)
+			dup2(in, STDIN_FILENO);
+		if (out != STDOUT_FILENO)
+			dup2(out, STDOUT_FILENO);
 	}
-	*/
+	if (in != STDIN_FILENO)
+		close(in);
+	if (out != STDOUT_FILENO)
+		close(out);
+	return (pid);
+}
+
+int			launch_process(t_process *process, int to_close)
+{
+	pid_t	pid;
+
+	if ((pid = fork_child(process->stdin, process->stdout, to_close)) == -1)
+		return (-1);
+	else if (pid == 0)
+	{
+		process->pid = getpid();
+		g_shell.is_subshell = true;
+		eval_ast(process->ast);
+		exit(1);
+	}
+	else
+	{
+		process->pid = pid;
+		add_process(process);
+	}
+	return (pid);
+}
+
+int			launch_job(t_job *job)
+{
+	eval_ast(job->ast);
+	wait_for_job(job);
+	return (0);
 }

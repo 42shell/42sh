@@ -83,11 +83,10 @@ typedef struct			s_shell
 {
 	bool				interactive_mode;
 	t_input_func		get_input;
-	int					stdin;
-	int					stdout;
 	t_job				*jobs;
 	pid_t				pgid;
 	struct termios		tmodes;
+	bool				is_subshell;
 }						t_shell;
 
 t_shell					g_shell;

@@ -100,7 +100,7 @@ t_node			*ps_simple_command(void)
 	}
 	simple_command = (t_node *)ft_xmalloc(sizeof(t_node));
 	simple_command->data = tokens;
-	simple_command->type = NODE_SIMPLE_COMMAND;
+	simple_command->type = NODE_SMPL_CMD;
 	return (simple_command);
 }
 
@@ -113,6 +113,6 @@ t_node		*ps_command(void)
 		return (NULL);
 	command = (t_node *)ft_xmalloc(sizeof(t_node));
 	command->left = simple_command;
-	command->type = NODE_COMMAND;
+	command->type = NODE_CMD;
 	return (command);
 }

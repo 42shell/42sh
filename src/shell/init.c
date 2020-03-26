@@ -63,8 +63,6 @@ int			init(int argc, char **argv)
 		ft_dprintf(2, "42sh: stdin is not a tty\n");
 		exit(1);
 	}
-	g_shell.stdin = STDIN_FILENO;
-	g_shell.stdout = STDOUT_FILENO;
 	//tcgetattr(STDIN_FILENO, &g_shell.tmodes);
 	while (tcgetpgrp(STDIN_FILENO) != (g_shell.pgid = getpgrp()))
         kill(-g_shell.pgid, SIGTTIN);

@@ -12,13 +12,13 @@
 
 #include "shell.h"
 
-t_list			*get_list(void)
+t_node			*get_ast(void)
 {
-	t_list		*list;
+	t_node		*ast;
 
-	if ((list = ps_list())
+	if ((ast = ps_list())
 	&& ps_get_all_heredocs() == NOERR)
-		return (list);
+		return (ast);
 	else if (g_parser.error)
 	{
 		ps_error(g_parser.token ? g_parser.token->value->str : "(null)");
@@ -29,7 +29,7 @@ t_list			*get_list(void)
 
 int				main_loop(void)
 {
-	t_list		*list;
+	t_node		*ast;
 	t_job		*job;
 
 	while (1) //while !g_shell.quit...
@@ -37,22 +37,18 @@ int				main_loop(void)
 		g_parser.error = NOERR;
 		g_shell.get_input(PS1);//remove
 		if ((g_parser.token = get_next_token())
-		&& (list = get_list()))
+		&& (ast = get_ast()))
 		{
-			while (list)
-			{
-				//print_ast(list->ast, 0);
-				job = job_new(list->ast, 0, 1);
-				add_job(job);
-				launch_job(job);
-				list = list->next;
-			}
-			list_del(&list); //not del asts
-			if (g_shell.interactive_mode && g_lexer.line)
-			{
-				g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;
-				rl_add_history(g_lexer.line);
-			}
+			print_ast(ast, 0);
+			//job = job_new(list->ast, 0, 1);
+			//add_job(job);
+			//slaunch_job(job);
+		}
+		ast_del(&ast); //not del asts
+		if (g_shell.interactive_mode && g_lexer.line)
+		{
+			g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;
+			rl_add_history(g_lexer.line);
 		}
 		reset_lexer();
 	}

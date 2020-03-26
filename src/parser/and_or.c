@@ -43,13 +43,13 @@ t_node				*ps_and_or(void)
 {
 	t_node			*and_or;
 	t_node			*node;
-	
+
 	and_or = ps_pipeline();
-	while (and_or
-	&& (g_parser.token->type == AND_IF || g_parser.token->type == OR_IF))
+	while (and_or && (g_parser.token->type == AND_IF
+	|| g_parser.token->type == OR_IF))
 	{
 		node = (t_node *)ft_xmalloc(sizeof(t_node));
-		node->type = g_parser.token->type == AND_IF ? NODE_AND_IF : NODE_OR_IF;
+		node->type = g_parser.token->type == AND_IF ? NODE_AND : NODE_OR;
 		node->left = and_or;
 		token_del(&g_parser.token);
 		g_parser.token = get_next_token();

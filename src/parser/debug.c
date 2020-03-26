@@ -23,9 +23,11 @@ void	print_ast(t_node *ast, int indent)
 	i = 0;
 	if (!ast)
 		return ;
+	if (ast->type == NODE_CMD)
+		return (print_ast(ast->left, indent));
 	while (i++ < indent)
 		printf("    ");
-	if (ast->type == WORD)
+	if (ast->type == NODE_SMPL_CMD)
 	{
 		command = (t_command *)ast->data;
 		word = command->words;
@@ -44,13 +46,27 @@ void	print_ast(t_node *ast, int indent)
 			redir = redir->next;
 		}
 		printf("\n");
+		return ;
 	}
-	else if (ast->type == PIPE
-	|| ast->type == AND_IF || ast->type == OR_IF)
+	if (ast->type == NODE_BANG)
 	{
 		indent++;
-		printf("%s\n", ast->type == PIPE ? "|"
-						: ast->type == AND_IF ? "&&" : "||");
+		printf("%s\n", "!");
+		print_ast(ast->left, indent);
+		return ;
+	}
+	if (ast->type == NODE_PIPE || ast->type == NODE_AND || ast->type == NODE_OR)
+	{
+		indent++;
+		printf("%s\n", ast->type == NODE_PIPE ? "|" : ast->type == AND_IF ? "&&" : "||");
+		print_ast(ast->left, indent);
+		print_ast(ast->right, indent);
+		return ;
+	}
+	if (ast->type == NODE_SEMI || ast->type == NODE_AMPER)
+	{
+		indent++;
+		printf("%s\n", ast->type == NODE_SEMI ? ";" : "&");
 		print_ast(ast->left, indent);
 		print_ast(ast->right, indent);
 		return ;

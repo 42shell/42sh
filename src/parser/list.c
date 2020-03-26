@@ -34,25 +34,23 @@
 **  Normally it should be in compound_command rule
 */
 
-t_list			*ps_list(void)
+t_node			*ps_list(void)
 {
-	t_list		*list;
-	t_node		*and_or;
-	t_token		*sep;
+	t_node		*list;
+	t_node		*node;
 
 	ps_newline_list();
 	if (!g_parser.token
-	|| !(and_or = ps_and_or()))
+	|| !(list = ps_and_or()))
 		return (NULL);
-	list = (t_list *)ft_xmalloc(sizeof(t_list));
-	list->ast = and_or;
-	if ((sep = ps_separator_op()))
+	while (list && (node = ps_separator_op()))
 	{
-		list->bg = (sep->type == AMPERSAND);
-		token_del(&sep);
-		list->next = ps_list();
+		node->left = list;
+		ps_newline_list();
+		node->right = ps_and_or();
 		if (g_parser.error)
-			list_del(&list);
+			ast_del(&node);
+		list = node;
 	}
 	return (list);
 }

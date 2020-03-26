@@ -52,18 +52,20 @@ void		ps_newline_list(void)
 **					| ';'
 */
 
-t_token		*ps_separator_op(void)
+t_node		*ps_separator_op(void)
 {
-	t_token	*sep;
+	t_node	*sep_op;
 
 	if (g_parser.error)
 		return (NULL);
 	if (g_parser.token
 	&& (g_parser.token->type == SEMI || g_parser.token->type == AMPERSAND))
 	{
-		sep = g_parser.token;
+		sep_op = (t_node *)ft_xmalloc(sizeof(t_node));
+		sep_op->type = g_parser.token->type == SEMI ? NODE_SEMI : NODE_AMPER;
+		token_del(&g_parser.token);
 		g_parser.token = get_next_token();
-		return (sep);
+		return (sep_op);
 	}
 	return (NULL);
 }
@@ -73,17 +75,17 @@ t_token		*ps_separator_op(void)
 ** 					| newline_list
 */
 
-t_token		*ps_separator(void)
+t_node		*ps_separator(void)
 {
-	t_token	*sep;
+	t_node	*sep_op;
 
-	sep = NULL;
+	sep_op = NULL;
 	if (g_parser.error)
 		return (NULL);
 	if (g_parser.token)
 	{
-		sep = ps_separator_op();
+		sep_op = ps_separator_op();
 		ps_newline_list();
 	}
-	return (sep);
+	return (sep_op);
 }

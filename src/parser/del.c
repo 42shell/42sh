@@ -60,7 +60,7 @@ int			ast_del(t_node **ast)
 	*ast = NULL;
 	return (0);
 }
-
+/*
 int			list_del(t_list **list)
 {
 	if (!list || !*list)
@@ -69,4 +69,4 @@ int			list_del(t_list **list)
 	ast_del(&(*list)->ast);
 	ft_memdel((void **)list);
 	return (0);
-}
+}*/

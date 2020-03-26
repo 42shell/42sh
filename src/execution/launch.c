@@ -12,17 +12,6 @@
 
 #include "shell.h"
 
-/*
-static void	set_child_pgid(t_process *process, pid_t *pgid, bool bg)
-{
-	process->pid = getpid();
-	*pgid = *pgid ? *pgid : process->pid;
-	setpgid(process->pid, *pgid);
-	//if (!bg)
-	//	tcsetpgrp(STDIN_FILENO, *pgid);
-}
-*/
-
 int			exec_builtin(char **argv, char **env)
 {
 	(void)env;
@@ -61,59 +50,6 @@ int			exec_binary(char **argv, char **env)
 	return (0);
 }
 
-pid_t		fork_child(int in, int out, int to_close)
-{
-	pid_t	pid;
-
-	if ((pid = fork()) == -1)
-		return (-1);
-	else if (pid == 0)
-	{
-		if (to_close)
-			close(to_close);
-		if (in != STDIN_FILENO)
-			dup2(in, STDIN_FILENO);
-		if (out != STDOUT_FILENO)
-			dup2(out, STDOUT_FILENO);
-	}
-	if (in != STDIN_FILENO)
-		close(in);
-	if (out != STDOUT_FILENO)
-		close(out);
-	return (pid);
-}
-
-int			launch_process(t_process *process, int to_close)
-{
-	pid_t	pid;
-
-	if ((pid = fork_child(process->stdin, process->stdout, to_close)) == -1)
-		return (-1);
-	else if (pid == 0)
-	{
-		process->pid = getpid();
-		if (process->stdin != STDIN_FILENO)
-			g_shell.stdin = process->stdin;
-		if (process->stdout != STDOUT_FILENO)
-			g_shell.stdout = process->stdout;
-		eval_ast(process->ast);
-		exit(1);
-	}
-	else
-	{
-		process->pid = pid;
-		add_process(process);
-	}
-	return (pid);
-}
-
-int			launch_job(t_job *job)
-{
-	eval_ast(job->ast);
-	wait_for_job(job);
-	return (0);
-}
-
 /* ************************************************************************** */
 
 int			eval_simple_command(t_node *ast)
@@ -134,12 +70,14 @@ int			eval_command(t_node *ast)
 {
 	t_process	*process;
 
-	if (ast->left->type == NODE_SIMPLE_COMMAND
-	&& (is_builtin(((t_command *)ast->left->data)->words->value->str)
-	|| (g_shell.stdin != STDIN_FILENO || g_shell.stdout != STDOUT_FILENO)))
-		return (eval_simple_command(ast->left));
-	process = process_new(ast->left, STDIN_FILENO, STDOUT_FILENO);
-	launch_process(process, 0);
+	if (ast->left->type == NODE_SMPL_CMD)
+	{
+		if (g_shell.is_subshell
+		|| is_builtin(((t_command *)ast->left->data)->words->value->str))
+			return (eval_simple_command(ast->left));
+		process = process_new(ast->left, STDIN_FILENO, STDOUT_FILENO);
+		launch_process(process, 0);
+	}
 	return (0);
 }
 
@@ -152,10 +90,21 @@ int			eval_pipeline(t_node *ast, int in, int out)
 		return (-1);
 	process = process_new(ast->right, fd[0], out);
 	launch_process(process, fd[1]);
-	if (ast->left->type == NODE_PIPELINE)
+	if (ast->left->type == NODE_PIPE)
 		return (eval_pipeline(ast->left, in, fd[1]));
 	process = process_new(ast->left, in, fd[1]);
 	launch_process(process, fd[0]);
+	/* or
+	if (ast->left->type == NODE_PIPELINE)
+		eval_pipeline(ast->left, in, fd[1]);
+	else
+	{
+		process = process_new(ast->left, in, fd[1]);
+		launch_process(process, fd[0]);
+	}
+	process = process_new(ast->right, fd[0], out);
+	launch_process(process, fd[1]);
+	*/
 	return (0);
 }
 
@@ -163,12 +112,13 @@ int			eval_and_or(t_node *ast)
 {
 	t_job	*job;
 
+	//addnewjob here?
 	eval_ast(ast->left);
 	wait_for_job(g_shell.jobs);
 	if (ast->left->type == BANG)
 		g_last_exit_st = g_last_exit_st ? 0 : 1;
-	if ((ast->type == NODE_AND_IF && g_last_exit_st == 0)
-	|| (ast->type == NODE_OR_IF && g_last_exit_st != 0))
+	if ((ast->type == NODE_AND && g_last_exit_st == 0)
+	|| (ast->type == NODE_OR && g_last_exit_st != 0))
 	{
 		job = job_new(ast->right, STDIN_FILENO, STDOUT_FILENO);
 		add_job(job);
@@ -179,17 +129,18 @@ int			eval_and_or(t_node *ast)
 
 int			eval_ast(t_node *ast)
 {
+	//addnewjob here?
 	if (!ast)
 		return (0);
-	if (ast->type == NODE_AND_IF || ast->type == NODE_OR_IF)
+	if (ast->type == NODE_AND || ast->type == NODE_OR)
 		return (eval_and_or(ast));
 	if (ast->type == BANG)
 		ast = ast->left;
-	if (ast->type == NODE_PIPELINE)
+	if (ast->type == NODE_PIPE)
 		return (eval_pipeline(ast, STDIN_FILENO, STDOUT_FILENO));
-	if (ast->type == NODE_COMMAND)
+	if (ast->type == NODE_CMD)
 		return (eval_command(ast));
-	if (ast->type == NODE_SIMPLE_COMMAND)
+	if (ast->type == NODE_SMPL_CMD)
 		return (eval_simple_command(ast));
 	return (0);
 }

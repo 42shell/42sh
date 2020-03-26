@@ -32,20 +32,21 @@ enum							e_parse_error
 
 enum							e_node_type
 {
-	NODE_SIMPLE_COMMAND,
-	NODE_COMMAND,
-	NODE_PIPELINE,
+	NODE_SMPL_CMD,
+	NODE_CMD,
+	NODE_PIPE,
 	NODE_BANG,
-	NODE_AND_IF,
-	NODE_OR_IF,
-	NODE_SEP,
+	NODE_AND,
+	NODE_OR,
+	NODE_SEMI,
+	NODE_AMPER
 };
 
 typedef struct					s_node
 {
 	struct s_node				*left;
 	struct s_node				*right;
-	void						*data; //just remove this and put everything in nodes
+	void						*data;
 	int							type;
 }								t_node;
 
@@ -70,13 +71,6 @@ typedef struct					s_command
 	t_redir						*redirs;
 }								t_command;
 
-typedef struct					s_list//remove list and command
-{
-	struct s_list				*next;
-	t_node						*ast;
-	int							bg;
-}								t_list;
-
 /*
 ** parser:
 ** -heredocs is a pointer to the right operand token of the
@@ -95,15 +89,15 @@ typedef struct					s_parser
 
 t_parser						g_parser;
 
-t_list							*ps_list(void); //node *
+t_node							*ps_list(void); //node *
 t_node							*ps_and_or(void);
 t_node							*ps_pipeline(void);
 t_node							*ps_pipe_sequence(void);
 t_node							*ps_command(void);
 t_node							*ps_simple_command(void);
 t_redir							*ps_io_redirect(void);
-t_token							*ps_separator(void);
-t_token							*ps_separator_op(void);
+t_node							*ps_separator(void);
+t_node							*ps_separator_op(void);
 void							ps_newline_list(void);
 void							ps_linebreak(int last_token_type);
 int								ps_get_all_heredocs(void);
@@ -111,7 +105,6 @@ int								ps_get_all_heredocs(void);
 int								ps_error(char *near);
 int								ps_heredoc_eof(char *delim);
 
-int								list_del(t_list **list);
 int								ast_del(t_node **ast);
 int								command_del(t_command **command);
 int								redir_del(t_redir **redir);

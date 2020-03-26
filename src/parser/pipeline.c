@@ -35,7 +35,7 @@ t_node			*ps_pipe_sequence(void)
 	while (pipe_seq && g_parser.token->type == PIPE)
 	{
 		node = (t_node *)ft_xmalloc(sizeof(t_node));
-		node->type = NODE_PIPELINE;
+		node->type = NODE_PIPE;
 		node->left = pipe_seq;
 		token_del(&g_parser.token);
 		g_parser.token = get_next_token();
@@ -54,6 +54,8 @@ t_node			*ps_pipeline(void)
 {
 	t_node		*pipeline;
 
+	if (!g_parser.token)
+		return (NULL);
 	if (g_parser.token->type == BANG)
 	{
 		pipeline = (t_node *)ft_xmalloc(sizeof(t_node));
