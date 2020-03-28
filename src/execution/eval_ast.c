@@ -40,6 +40,7 @@ int			eval_simple_command(t_node *ast)
 ** "ls && ls &" will create 1 child, which will fork 2 more childs.
 ** it allows us to wait for the first 'ls' to finish in the background.
 */
+
 int			eval_command(t_node *ast)
 {
 	t_process	*process;

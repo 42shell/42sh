@@ -125,14 +125,14 @@ void	mark_job_as_running(t_job *job)
 	job->notified = false;
 }
 
-bool	job_is_stopped(t_job *job)
+bool	job_is_stopped(t_job *job) //
 {
 	t_process	*process;
 
 	process = job->processes;
 	while (process)
 	{
-		if (!process->stopped)
+		if (!process->done && !process->stopped)
 			return (false);
 		process = process->next;
 	}

@@ -19,9 +19,9 @@
 # define ERROR_REDIR_OPEN	-1
 # define ERROR_REDIR_BAD_FD	-2
 
-# define EXEC_ASYNC		1			
-# define EXEC_AND_OR	2
-# define EXEC_PIPELINE	4
+# define EXEC_ASYNC			1			
+# define EXEC_AND_OR		2
+# define EXEC_PIPELINE		4
 
 typedef struct			s_fd_backup
 {

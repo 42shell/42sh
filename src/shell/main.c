@@ -23,6 +23,7 @@ t_node			*get_ast(void)
 	{
 		ps_error(g_parser.token ? g_parser.token->value->str : "(null)");
 		token_del(&g_parser.token);
+		g_parser.error = NOERR;
 	}
 	return (NULL);
 }
@@ -31,12 +32,11 @@ int				main_loop(void)
 {
 	t_node		*ast;
 
-	while (1) //while !g_shell.quit...
+	while (1)
 	{
-		g_parser.error = NOERR;
 		if (g_shell.jobs)
 			notif_jobs();
-		g_shell.get_input(PS1);//remove
+		g_shell.get_input(PS1);
 		if ((g_parser.token = get_next_token())
 		&& (ast = get_ast()))
 		{
