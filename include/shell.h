@@ -86,7 +86,6 @@ typedef struct			s_shell
 	t_job				*jobs;
 	pid_t				pgid;
 	struct termios		tmodes;
-	bool				is_subshell;
 }						t_shell;
 
 t_shell					g_shell;

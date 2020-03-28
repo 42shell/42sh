@@ -12,16 +12,6 @@
 
 #include "shell.h"
 
-/*
-static void	set_child_pgid(t_process *process, pid_t *pgid, bool bg)
-{
-	process->pid = getpid();
-	*pgid = *pgid ? *pgid : process->pid;
-	setpgid(process->pid, *pgid);
-	//if (!bg)
-	//	tcsetpgrp(STDIN_FILENO, *pgid);
-}
-*/
 static void		reset_signals(void)
 {
 	signal(SIGINT, SIG_DFL);
@@ -69,8 +59,6 @@ int				launch_process(t_process *process, int to_close)
 		if (!g_shell.jobs->bg)
 			tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
 		reset_signals();
-		//printf("fork\n");
-		//g_shell.is_subshell = true;
 		eval_ast(process->ast);
 		exit(0);
 	}
@@ -94,11 +82,7 @@ int				launch_job(t_job *job)
 		if (job->ast->type == NODE_AND || job->ast->type == NODE_OR)
 		{
 			process = process_new(job->ast, STDIN_FILENO, STDOUT_FILENO);
-			if (launch_process(process, 0) == 0)
-			{
-				eval_ast(process->ast);
-				exit(0);
-			}
+			launch_process(process, 0);
 		}
 		else
 			eval_ast(job->ast);
