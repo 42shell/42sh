@@ -66,7 +66,7 @@ t_ht					*g_binaries;
 int					eval_ast(t_node *ast);
 int					eval_and_or(t_node *ast);
 int					eval_pipeline(t_node *ast, int in, int out);
-int					eval_command(t_node *ast);
+int					eval_command(t_node *ast, bool fork_bin);
 int					eval_simple_command(t_node *ast);
 
 int					exec_builtin(char **argv, char **env);

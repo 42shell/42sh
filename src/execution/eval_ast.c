@@ -27,17 +27,25 @@ int			eval_simple_command(t_node *ast)
 	//restore fds
 }
 
-int			eval_command(t_node *ast)
+int			eval_command(t_node *ast, bool fork_bin)
 {
 	t_process	*process;
+	bool		builtin;
 
 	if (ast->left->type == NODE_SMPL_CMD)
 	{
-		if (!g_shell.jobs->bg && (g_shell.is_subshell // do some thing
-		|| is_builtin(((t_command *)ast->left->data)->words->value->str)))
+		builtin = is_builtin(((t_command *)ast->left->data)->words->value->str);
+		if ((builtin && g_shell.jobs->bg) || (!builtin && fork_bin))
+		{
+			process = process_new(ast->left, STDIN_FILENO, STDOUT_FILENO);
+			if (launch_process(process, 0) == 0)
+			{
+				eval_simple_command(process->ast);
+				exit(0);
+			}
+		}
+		else
 			return (eval_simple_command(ast->left));
-		process = process_new(ast->left, STDIN_FILENO, STDOUT_FILENO);
-		launch_process(process, 0);
 	}
 	return (0);
 }
@@ -54,10 +62,18 @@ int			eval_pipeline(t_node *ast, int in, int out)
 	else
 	{
 		process = process_new(ast->left, in, fd[1]);
-		launch_process(process, fd[0]);
+		if (launch_process(process, fd[0]) == 0)
+		{
+			eval_command(process->ast, false);
+			exit(0);
+		}
 	}
 	process = process_new(ast->right, fd[0], out);
-	launch_process(process, fd[1]);
+	if (launch_process(process, fd[1]) == 0)
+	{
+		eval_command(process->ast, false);
+		exit(0);
+	}
 	return (0);
 }
 
@@ -102,7 +118,7 @@ int			eval_ast(t_node *ast)
 	if (ast->type == NODE_PIPE)
 		return (eval_pipeline(ast, STDIN_FILENO, STDOUT_FILENO));
 	if (ast->type == NODE_CMD)
-		return (eval_command(ast));
+		return (eval_command(ast, true));
 	if (ast->type == NODE_SMPL_CMD)
 		return (eval_simple_command(ast));
 	return (0);

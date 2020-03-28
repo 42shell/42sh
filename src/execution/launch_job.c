@@ -69,9 +69,10 @@ int				launch_process(t_process *process, int to_close)
 		if (!g_shell.jobs->bg)
 			tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
 		reset_signals();
-		g_shell.is_subshell = true;
-		eval_ast(process->ast);
-		exit(0);
+		//printf("fork\n");
+		//g_shell.is_subshell = true;
+		//eval_ast(process->ast);
+		//exit(0);
 	}
 	else
 	{
@@ -93,7 +94,11 @@ int				launch_job(t_job *job)
 		if (job->ast->type == NODE_AND || job->ast->type == NODE_OR)
 		{
 			process = process_new(job->ast, STDIN_FILENO, STDOUT_FILENO);
-			launch_process(process, 0);
+			if (launch_process(process, 0) == 0)
+			{
+				eval_ast(process->ast);
+				exit(0);
+			}
 		}
 		else
 			eval_ast(job->ast);
