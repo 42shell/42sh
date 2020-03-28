@@ -48,12 +48,6 @@ t_job	*job_new(t_node *ast, int stdin, int stdout)
 	return (job);
 }
 
-void	process_delone(t_process **process)
-{
-	free(*process);
-	*process = NULL;
-}
-
 void	process_del(t_process **process)
 {
 	t_process	*next;
@@ -199,9 +193,10 @@ void	notif_jobs(void)
 	while (job)
 	{
 		next = job->next;
-		if (job->bg && job_is_done(job))
+		if (job_is_done(job))
 		{
-			printf("%d done.\n", job->pgid);
+			if (job->bg)
+				printf("%d done.\n", job->pgid);
 			remove_job_from_list(job->pgid);
 			process_del(&job->processes);
 			free(job);
@@ -217,6 +212,8 @@ void	wait_for_job(t_job *job)
 
 	pid = 0;
 	status = 0;
+	if (!job->processes)
+		return ;
 	while (!job_is_done(job))
 	{
 		pid = waitpid(WAIT_ANY, &status, WUNTRACED);
@@ -232,9 +229,6 @@ void	wait_for_job(t_job *job)
 		}
 	}
 	g_last_exit_st = WEXITSTATUS(job->processes->status);
-	remove_job_from_list(job->pgid);
-	process_del(&job->processes);
-	free(job);
 }
 
 void	put_job_fg(t_job *job, bool cont)
@@ -242,7 +236,6 @@ void	put_job_fg(t_job *job, bool cont)
 	tcsetpgrp(STDIN_FILENO, job->pgid);
 	if (cont)
 	{
-		job->notified = 0;
 		kill(-job->pgid, SIGCONT);
 		tcsetattr (STDIN_FILENO, TCSADRAIN, &job->tmodes);
 	}
@@ -256,8 +249,5 @@ void	put_job_bg(t_job *job, bool cont)
 {
 	g_rl_prompt_cr = false;//
 	if (cont)
-	{
-		job->notified = 0;
 		kill(-job->pgid, SIGCONT);
-	}
 }

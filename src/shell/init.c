@@ -49,8 +49,8 @@ static int	parse_args(int argc, char **argv)
 		g_rl_retain_nl = true;
 		g_rl_prompt_cr = true;
 		g_rl_hist_doubl = false;
-		init_sig();
 	}
+	init_sig();
 	return (0);
 }
 

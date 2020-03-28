@@ -39,7 +39,8 @@ enum							e_node_type
 	NODE_AND,
 	NODE_OR,
 	NODE_SEMI,
-	NODE_AMPER
+	NODE_AMPER,
+	NODE_ROOT
 };
 
 typedef struct					s_node

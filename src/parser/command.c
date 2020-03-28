@@ -82,7 +82,7 @@ static int		set_tokens(t_command *command)
 ** returns a t_command containing argv array and a list of redirections.
 */
 
-t_node			*ps_simple_command(void)
+t_node		*ps_simple_command(void)
 {
 	t_node		*simple_command;
 	t_command	*tokens;

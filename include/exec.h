@@ -80,6 +80,7 @@ int					launch_job(t_job *job);
 
 void				add_job(t_job *job);
 void				add_process(t_process *process);
+void				wait_for_job(t_job *job);
 void				put_job_fg(t_job *job, bool cont);
 void				put_job_bg(t_job *job, bool cont);
 void				notif_jobs(void);

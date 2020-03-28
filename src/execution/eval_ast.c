@@ -12,6 +12,7 @@
 
 #include "shell.h"
 
+
 int			eval_simple_command(t_node *ast)
 {
 	t_command	*command;
@@ -32,8 +33,8 @@ int			eval_command(t_node *ast)
 
 	if (ast->left->type == NODE_SMPL_CMD)
 	{
-		if (g_shell.is_subshell
-		|| is_builtin(((t_command *)ast->left->data)->words->value->str))
+		if (!g_shell.jobs->bg && (g_shell.is_subshell // do some thing
+		|| is_builtin(((t_command *)ast->left->data)->words->value->str)))
 			return (eval_simple_command(ast->left));
 		process = process_new(ast->left, STDIN_FILENO, STDOUT_FILENO);
 		launch_process(process, 0);
@@ -62,39 +63,37 @@ int			eval_pipeline(t_node *ast, int in, int out)
 
 int			eval_and_or(t_node *ast)
 {
-	t_job	*job;
-
 	eval_ast(ast->left);
-	put_job_fg(g_shell.jobs, false);
+	if (g_shell.jobs->bg)
+		wait_for_job(g_shell.jobs);
+	else
+		put_job_fg(g_shell.jobs, false);
 	if (ast->left->type == BANG)
 		g_last_exit_st = g_last_exit_st ? 0 : 1;
 	if ((ast->type == NODE_AND && g_last_exit_st == 0)
 	|| (ast->type == NODE_OR && g_last_exit_st != 0))
-	{
-		job = job_new(ast->right, STDIN_FILENO, STDOUT_FILENO);
-		add_job(job); //because i m not deleting processes when they re done
-		launch_job(job);
-	}
+		eval_ast(ast->right);
 	return (0);
 }
 
 int			eval_separator_op(t_node *ast)
 {
+	t_job		*job;
+
+	job = job_new(ast->left, STDIN_FILENO, STDOUT_FILENO);
+	add_job(job);
 	if (ast->type == NODE_AMPER)
-	{
-		//process = process_new(ast->left, STDIN_FILENO, STDOUT_FILENO);
-		//add_process(process);
-		g_shell.jobs->bg = true;//?
-		//return (launch_process(process, 0));
-	}
-	return (eval_ast(ast->left));
+		job->bg = true;
+	launch_job(job);
+	eval_ast(ast->right);
+	return (0);
 }
 
 int			eval_ast(t_node *ast)
 {
 	if (!ast)
 		return (0);
-	if (ast->type == NODE_SEMI || ast->type == NODE_AMPER)
+	if (ast->type == NODE_SEMI || ast->type == NODE_AMPER || ast->type == NODE_ROOT)
 		return (eval_separator_op(ast));
 	if (ast->type == NODE_AND || ast->type == NODE_OR)
 		return (eval_and_or(ast));

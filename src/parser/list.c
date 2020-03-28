@@ -43,14 +43,15 @@ t_node			*ps_list(void)
 	if (!g_parser.token
 	|| !(list = ps_and_or()))
 		return (NULL);
-	while (list && (node = ps_separator_op()))
+	if (!(node = ps_separator_op()))
 	{
-		node->left = list;
-		ps_newline_list();
-		node->right = ps_and_or();
-		if (g_parser.error)
-			ast_del(&node);
-		list = node;
+		node = (t_node *)ft_xmalloc(sizeof(t_node));
+		node->type = NODE_ROOT;
 	}
+	node->left = list;
+	node->right = ps_list();
+	if (g_parser.error)
+		ast_del(&node);
+	list = node;
 	return (list);
 }

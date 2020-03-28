@@ -18,25 +18,15 @@ void	sig_handle(int sig)
 	{
 		;
 	}
-	else if (SIGTSTP <= sig && sig <= SIGTTOU)
-	{
-		signal(sig, SIG_IGN);;
-	}
 	return ;
 }
 
 void	init_sig(void)
 {
-	int		sig;
-
-	sig = 0;
-	while (sig++ < 32)
-	{
-		if (SIGTSTP <= sig && sig <= SIGTTOU)
-		{
-			signal(sig, sig_handle);
-		}
-		if (sig == SIGKILL || sig == SIGSTOP || sig == SIGSEGV)
-			continue ;
-	}
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTTIN, SIG_IGN);
+	signal(SIGTTOU, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
+	//signal(SIGCHLD, SIG_IGN);
 }
