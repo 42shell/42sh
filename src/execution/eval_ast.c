@@ -12,6 +12,7 @@
 
 #include "shell.h"
 
+int			g_exec_status;
 
 int			eval_simple_command(t_node *ast)
 {
@@ -27,7 +28,7 @@ int			eval_simple_command(t_node *ast)
 	//restore fds
 }
 
-int			eval_command(t_node *ast, bool fork_bin)
+int			eval_command(t_node *ast)
 {
 	t_process	*process;
 	bool		builtin;
@@ -35,18 +36,13 @@ int			eval_command(t_node *ast, bool fork_bin)
 	if (ast->left->type == NODE_SMPL_CMD)
 	{
 		builtin = is_builtin(((t_command *)ast->left->data)->words->value->str);
-		if ((builtin && !g_shell.is_subshell && g_shell.jobs->bg)
-		|| (!builtin && fork_bin))
+		if (!(g_exec_status & EXEC_ST_PIPELINE)
+		&& (!builtin || (g_exec_status & EXEC_ST_ASYNC)))
 		{
 			process = process_new(ast->left, STDIN_FILENO, STDOUT_FILENO);
-			if (launch_process(process, 0) == 0)
-			{
-				eval_simple_command(process->ast);
-				exit(0);
-			}
+			return (launch_process(process, 0));
 		}
-		else
-			return (eval_simple_command(ast->left));
+		return (eval_simple_command(ast->left));
 	}
 	return (0);
 }
@@ -56,6 +52,7 @@ int			eval_pipeline(t_node *ast, int in, int out)
 	t_process	*process;
 	int			fd[2];
 
+	g_exec_status |= EXEC_ST_PIPELINE;
 	if (pipe(fd) == -1)
 		return (-1);
 	if (ast->left->type == NODE_PIPE)
@@ -63,23 +60,16 @@ int			eval_pipeline(t_node *ast, int in, int out)
 	else
 	{
 		process = process_new(ast->left, in, fd[1]);
-		if (launch_process(process, fd[0]) == 0)
-		{
-			eval_command(process->ast, false);
-			exit(0);
-		}
+		launch_process(process, fd[0]);
 	}
 	process = process_new(ast->right, fd[0], out);
-	if (launch_process(process, fd[1]) == 0)
-	{
-		eval_command(process->ast, false);
-		exit(0);
-	}
+	launch_process(process, fd[1]);
 	return (0);
 }
 
 int			eval_and_or(t_node *ast)
 {
+	g_exec_status |= EXEC_ST_AND_OR;
 	eval_ast(ast->left);
 	if (g_shell.jobs->bg)
 		wait_for_job(g_shell.jobs);
@@ -97,10 +87,14 @@ int			eval_separator_op(t_node *ast)
 {
 	t_job		*job;
 
+	g_exec_status = 0;
 	job = job_new(ast->left, STDIN_FILENO, STDOUT_FILENO);
 	add_job(job);
 	if (ast->type == NODE_AMPER)
+	{
+		g_exec_status |= EXEC_ST_ASYNC;
 		job->bg = true;
+	}
 	launch_job(job);
 	eval_ast(ast->right);
 	return (0);
@@ -119,7 +113,7 @@ int			eval_ast(t_node *ast)
 	if (ast->type == NODE_PIPE)
 		return (eval_pipeline(ast, STDIN_FILENO, STDOUT_FILENO));
 	if (ast->type == NODE_CMD)
-		return (eval_command(ast, true));
+		return (eval_command(ast));
 	if (ast->type == NODE_SMPL_CMD)
 		return (eval_simple_command(ast));
 	return (0);

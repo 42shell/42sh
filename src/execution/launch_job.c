@@ -71,8 +71,8 @@ int				launch_process(t_process *process, int to_close)
 		reset_signals();
 		//printf("fork\n");
 		//g_shell.is_subshell = true;
-		//eval_ast(process->ast);
-		//exit(0);
+		eval_ast(process->ast);
+		exit(0);
 	}
 	else
 	{

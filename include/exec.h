@@ -19,6 +19,10 @@
 # define ERROR_REDIR_OPEN	-1
 # define ERROR_REDIR_BAD_FD	-2
 
+# define EXEC_ST_ASYNC		1			
+# define EXEC_ST_AND_OR		2
+# define EXEC_ST_PIPELINE	4
+
 typedef struct			s_fd_backup
 {
 	int					backup;
@@ -66,7 +70,7 @@ t_ht					*g_binaries;
 int					eval_ast(t_node *ast);
 int					eval_and_or(t_node *ast);
 int					eval_pipeline(t_node *ast, int in, int out);
-int					eval_command(t_node *ast, bool fork_bin);
+int					eval_command(t_node *ast);
 int					eval_simple_command(t_node *ast);
 
 int					exec_builtin(char **argv, char **env);
