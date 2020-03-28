@@ -69,6 +69,8 @@ void	job_del(t_job **job)
 void		add_job(t_job *job)
 {
 	job->next = g_shell.jobs;
+	if (job->next)
+		job->id = job->next->id + 1;
 	g_shell.jobs = job;
 }
 
@@ -108,6 +110,50 @@ t_job	*get_job(pid_t pgid)
 	return (NULL);
 }
 
+static void	format_command(t_node *node, t_dstr *buf)
+{
+	t_command	*command;
+	t_token		*word;
+	t_redir		*redir;
+
+	command = (t_command *)node->data; 
+	word = command->words;
+	redir = command->redirs;
+	while (word)
+	{
+		ft_dstr_append(buf, word->value->str);
+		if ((word = word->next) || redir)
+			ft_dstr_append(buf, " ");
+	}
+	while (redir)
+	{
+		ft_dstr_append(buf, redir->left_op->value->str);
+		ft_dstr_append(buf, redir->operator->value->str);
+		ft_dstr_append(buf, redir->right_op->value->str);
+		if ((redir = redir->next))
+			ft_dstr_append(buf, " ");
+	}
+}
+
+t_dstr		*format_job(t_node *node, t_dstr *buf)
+{
+	if (!node)
+		return (NULL);
+	if (!buf)
+		buf = ft_dstr_new(36);
+	format_job(node->left, buf);
+	if (node->type == NODE_AND)
+		ft_dstr_append(buf, " && ");
+	else if (node->type == NODE_OR)
+		ft_dstr_append(buf, " || ");
+	else if (node->type == NODE_PIPE)
+		ft_dstr_append(buf, " | ");
+	else if (node->type == NODE_SMPL_CMD)
+		format_command(node, buf);
+	format_job(node->right, buf);
+	return (buf);
+}
+
 /* ************************************************************************** */
 
 //job_status.c
@@ -125,7 +171,7 @@ void	mark_job_as_running(t_job *job)
 	job->notified = false;
 }
 
-bool	job_is_stopped(t_job *job) //
+bool	job_is_stopped(t_job *job)
 {
 	t_process	*process;
 
@@ -225,6 +271,7 @@ void	notif_jobs(void)
 {
 	t_job	*job;
 	t_job	*next;
+	t_dstr	*format;
 
 	update_status();
 	job = g_shell.jobs;
@@ -234,7 +281,11 @@ void	notif_jobs(void)
 		if (job_is_done(job))
 		{
 			if (job->bg)
-				printf("%d done.\n", job->pgid);
+			{
+				format = format_job(job->ast, NULL);
+				ft_printf("[%d]+  Done    %s\n", job->id + 1, format->str);
+				ft_dstr_del((void **)&format);
+			}
 			remove_job_from_list(job->pgid);
 			process_del(&job->processes);
 			ast_del(&job->ast);
@@ -242,7 +293,9 @@ void	notif_jobs(void)
 		}
 		else if (job_is_stopped(job) && !job->notified)
 		{
-			printf("%d stopped.\n", job->pgid);
+			format = format_job(job->ast, NULL);
+			ft_printf("[%d]+  Stopped    %s\n", job->id + 1, format->str);
+			ft_dstr_del((void **)&format);
 			job->notified = true;
 		}
 		job = next;

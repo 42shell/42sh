@@ -52,6 +52,7 @@ typedef struct			s_job
 	struct termios		tmodes;
 	bool				notified;
 	bool				bg;
+	int					id;
 }						t_job;
 
 /*

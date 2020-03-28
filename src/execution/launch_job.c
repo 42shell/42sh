@@ -87,6 +87,7 @@ int				launch_job(t_job *job)
 		else
 			eval_ast(job->ast);
 		put_job_bg(job, false);
+		ft_printf("[%d] %d\n", job->id + 1, job->pgid);
 	}
 	else
 	{
