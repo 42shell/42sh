@@ -35,7 +35,8 @@ int			eval_command(t_node *ast, bool fork_bin)
 	if (ast->left->type == NODE_SMPL_CMD)
 	{
 		builtin = is_builtin(((t_command *)ast->left->data)->words->value->str);
-		if ((builtin && g_shell.jobs->bg) || (!builtin && fork_bin))
+		if ((builtin && !g_shell.is_subshell && g_shell.jobs->bg)
+		|| (!builtin && fork_bin))
 		{
 			process = process_new(ast->left, STDIN_FILENO, STDOUT_FILENO);
 			if (launch_process(process, 0) == 0)
