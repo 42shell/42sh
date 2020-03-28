@@ -30,17 +30,10 @@ t_node			*get_ast(void)
 int				main_loop(void)
 {
 	t_node		*ast;
-	t_job		*job;
 
 	while (1) //while !g_shell.quit...
 	{
 		g_parser.error = NOERR;
-		job = g_shell.jobs;
-		//while (job)
-		//{
-		//	printf("job %d: bg=%d\n", job->pgid, job->bg);
-		//	job = job->next;
-		//}
 		if (g_shell.jobs)
 			notif_jobs();
 		g_shell.get_input(PS1);//remove
@@ -49,11 +42,8 @@ int				main_loop(void)
 		{
 			//print_ast(ast, 0);
 			eval_ast(ast);
-			//job = job_new(ast, STDIN_FILENO, STDOUT_FILENO);
-			//add_job(job);
-			//launch_job(job);
+			ast_del(&ast);
 		}
-		//ast_del(&ast); //not del asts
 		if (g_shell.interactive_mode && g_lexer.line)
 		{
 			g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;

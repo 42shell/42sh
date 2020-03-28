@@ -47,7 +47,7 @@ static int	parse_args(int argc, char **argv)
 		g_shell.get_input = &input_interactive;
 		g_shell.interactive_mode = true;
 		g_rl_retain_nl = true;
-		g_rl_prompt_cr = true;
+		//g_rl_prompt_cr = true;
 		g_rl_hist_doubl = false;
 	}
 	init_sig();

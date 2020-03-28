@@ -19,9 +19,9 @@
 # define ERROR_REDIR_OPEN	-1
 # define ERROR_REDIR_BAD_FD	-2
 
-# define EXEC_ST_ASYNC		1			
-# define EXEC_ST_AND_OR		2
-# define EXEC_ST_PIPELINE	4
+# define EXEC_ASYNC		1			
+# define EXEC_AND_OR	2
+# define EXEC_PIPELINE	4
 
 typedef struct			s_fd_backup
 {
@@ -73,25 +73,59 @@ int					eval_pipeline(t_node *ast, int in, int out);
 int					eval_command(t_node *ast);
 int					eval_simple_command(t_node *ast);
 
-int					exec_builtin(char **argv, char **env);
-int					exec_binary(char **argv, char **env);
+/*
+** launch job/process
+*/
 
-
-t_process			*process_new(t_node *ast, int stdin, int stdout);
-t_job				*job_new(t_node *ast, int stdin, int stdout);
 int					launch_process(t_process *process, int to_close);
 int					launch_job(t_job *job);
 
-void				add_job(t_job *job);
-void				add_process(t_process *process);
-void				wait_for_job(t_job *job);
-void				put_job_fg(t_job *job, bool cont);
-void				put_job_bg(t_job *job, bool cont);
-void				notif_jobs(void);
-bool				job_is_done(t_job *job);
+/*
+** exec
+*/
 
 char				**get_argv(t_command *command);
 char				*get_exec_path(char *command);
+int					exec_builtin(char **argv, char **env);
+int					exec_binary(char **argv, char **env);
+
+/*
+** job control
+*/
+
+void				put_job_fg(t_job *job, bool cont);
+void				put_job_bg(t_job *job, bool cont);
+void				wait_for_job(t_job *job);
+void				continue_job(t_job *job, bool bg);
+void				notif_jobs(void);
+
+/*
+** job status
+*/
+
+void				update_status(void);
+int					mark_status(pid_t pid, int status);
+void				set_process_status(t_process *process, int status);
+void				mark_job_as_running (t_job *job);
+bool				job_is_done(t_job *job);
+bool				job_is_stopped(t_job *job);
+
+/*
+** job utils
+*/
+
+t_job				*get_job(pid_t pgid);
+void				add_job(t_job *job);
+void				add_process(t_process *process);
+void				remove_job_from_list(pid_t pgid);
+
+/*
+** job new/del
+*/
+t_process			*process_new(t_node *ast, int stdin, int stdout);
+t_job				*job_new(t_node *ast, int stdin, int stdout);
+void				process_del(t_process **process);
+void				job_del(t_job **job);
 
 /*
 ** redirections
@@ -108,7 +142,7 @@ int					restore_fds(void);
 ** pipes
 */
 
-int					set_pipe_redir(int input_fd, int fildes[2]);
+//int					set_pipe_redir(int input_fd, int fildes[2]);
 
 /*
 ** error handling
@@ -116,15 +150,6 @@ int					set_pipe_redir(int input_fd, int fildes[2]);
 
 int					redir_error(int code);
 int					command_not_found(char *command_name);
-
-/*
-** job control
-*/
-
-t_job				*get_job(pid_t pgid);
-bool				job_is_stopped(t_job *job);
-//bool				pipeline_is_done(t_pipeline *pipeline);
-void				put_job_fg(t_job *job, bool cont);
 
 /*
 ** fork utils

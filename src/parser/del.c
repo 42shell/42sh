@@ -57,6 +57,13 @@ int			and_or_del(t_and_or **and_or)
 
 int			ast_del(t_node **ast)
 {
+	if (!ast || !*ast)
+		return (0);
+	if ((*ast)->type == NODE_SMPL_CMD)
+		command_del((t_command **)&(*ast)->data);
+	ast_del(&(*ast)->left);
+	ast_del(&(*ast)->right);
+	free(*ast);
 	*ast = NULL;
 	return (0);
 }

@@ -27,6 +27,7 @@ int			exec_builtin(char **argv, char **env)
 		builtin_echo(argv);
 	else if (ft_strequ(argv[0], "cd"))
 		builtin_cd(argv);
+	//g_last_exit_st = 0; //STATUS
 	//restore_fds(); this should be called even in forks
 	return (0); //errors ?
 }

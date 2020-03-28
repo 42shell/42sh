@@ -12,19 +12,7 @@
 
 #include "shell.h"
 
-void		add_job(t_job *job)
-{
-	job->next = g_shell.jobs;
-	g_shell.jobs = job;
-}
-
-void		add_process(t_process *process)
-{
-	if (!g_shell.jobs)
-		return ;
-	process->next = g_shell.jobs->processes;
-	g_shell.jobs->processes = process;
-}
+//job.c
 
 t_process	*process_new(t_node *ast, int stdin, int stdout)
 {
@@ -67,13 +55,32 @@ void	job_del(t_job **job)
 	while (*job)
 	{
 		process_del(&(*job)->processes);
+		ast_del(&(*job)->ast);
 		next = (*job)->next;
 		free(*job);
 		*job = next;
 	}
 }
 
-void	remove_job_from_list(pid_t pgid)
+/* ************************************************************************** */
+
+//job_utils.c
+
+void		add_job(t_job *job)
+{
+	job->next = g_shell.jobs;
+	g_shell.jobs = job;
+}
+
+void		add_process(t_process *process)
+{
+	if (!g_shell.jobs)
+		return ;
+	process->next = g_shell.jobs->processes;
+	g_shell.jobs->processes = process;
+}
+
+void		remove_job_from_list(pid_t pgid)
 {
 	t_job	*job;
 	t_job	*prev;
@@ -101,13 +108,36 @@ t_job	*get_job(pid_t pgid)
 	return (NULL);
 }
 
-/*
+/* ************************************************************************** */
+
+//job_status.c
+
+void	mark_job_as_running(t_job *job)
+{
+	t_process *process;
+
+ 	process = job->processes;
+	while (process)
+	{
+		process->stopped = false;
+		process = process->next;
+	}
+	job->notified = false;
+}
+
 bool	job_is_stopped(t_job *job)
 {
-	(void)job;
-	return (false);
+	t_process	*process;
+
+	process = job->processes;
+	while (process)
+	{
+		if (!process->stopped)
+			return (false);
+		process = process->next;
+	}
+	return (true);
 }
-*/
 
 bool	job_is_done(t_job *job)
 {
@@ -123,8 +153,6 @@ bool	job_is_done(t_job *job)
 	return (true);
 }
 
-/* ************************************************************************** */
-
 void	set_process_status(t_process *process, int status)
 {
 	process->status = status;
@@ -138,7 +166,6 @@ void	set_process_status(t_process *process, int status)
 			(int)process->pid, WTERMSIG(process->status));
 	}
 }
-
 
 int		mark_status(pid_t pid, int status)
 {
@@ -181,13 +208,24 @@ void	update_status(void)
 		ft_dprintf(2, "42sh: waitpid: unexpected error.\n", pid);
 }
 
+/* ************************************************************************** */
+
+//job_control.c
+
+void	continue_job(t_job *job, bool bg)
+{
+	mark_job_as_running(job);
+	if (bg)
+		put_job_bg(job, true);
+	else
+    	put_job_fg(job, true);
+}
+
 void	notif_jobs(void)
 {
 	t_job	*job;
 	t_job	*next;
 
-	if (!(job = g_shell.jobs))
-		return ;
 	update_status();
 	job = g_shell.jobs;
 	while (job)
@@ -199,7 +237,13 @@ void	notif_jobs(void)
 				printf("%d done.\n", job->pgid);
 			remove_job_from_list(job->pgid);
 			process_del(&job->processes);
+			ast_del(&job->ast);
 			free(job);
+		}
+		else if (job_is_stopped(job) && !job->notified)
+		{
+			printf("%d stopped.\n", job->pgid);
+			job->notified = true;
 		}
 		job = next;
 	}
@@ -233,6 +277,7 @@ void	wait_for_job(t_job *job)
 
 void	put_job_fg(t_job *job, bool cont)
 {
+	job->bg = false;
 	tcsetpgrp(STDIN_FILENO, job->pgid);
 	if (cont)
 	{
@@ -247,7 +292,7 @@ void	put_job_fg(t_job *job, bool cont)
 
 void	put_job_bg(t_job *job, bool cont)
 {
-	g_rl_prompt_cr = false;//
+	job->bg = true;
 	if (cont)
 		kill(-job->pgid, SIGCONT);
 }

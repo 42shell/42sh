@@ -63,10 +63,10 @@ void	print_ast(t_node *ast, int indent)
 		print_ast(ast->right, indent);
 		return ;
 	}
-	if (ast->type == NODE_SEMI || ast->type == NODE_AMPER)
+	if (ast->type == NODE_SEMI || ast->type == NODE_AMPER || NODE_ROOT)
 	{
 		indent++;
-		printf("%s\n", ast->type == NODE_SEMI ? ";" : "&");
+		printf("%s\n", ast->type == NODE_SEMI ? ";" : ast->type == NODE_AMPER ? "&" : "\\n");
 		print_ast(ast->left, indent);
 		print_ast(ast->right, indent);
 		return ;
