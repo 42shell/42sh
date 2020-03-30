@@ -67,7 +67,6 @@ t_ht					*g_binaries;
 ** main functions
 */
 
-
 int					eval_ast(t_node *ast);
 int					eval_and_or(t_node *ast);
 int					eval_pipeline(t_node *ast, int in, int out);
@@ -78,7 +77,7 @@ int					eval_simple_command(t_node *ast);
 ** launch job/process
 */
 
-int					launch_process(t_process *process, int to_close);
+int					launch_process(t_process *process, int to_close, bool subshell);
 int					launch_job(t_job *job);
 
 /*
@@ -119,10 +118,12 @@ t_job				*get_job(pid_t pgid);
 void				add_job(t_job *job);
 void				add_process(t_process *process);
 void				remove_job_from_list(pid_t pgid);
+t_dstr				*format_job(t_node *node, t_dstr *buf);
 
 /*
 ** job new/del
 */
+
 t_process			*process_new(t_node *ast, int stdin, int stdout);
 t_job				*job_new(t_node *ast, int stdin, int stdout);
 void				process_del(t_process **process);

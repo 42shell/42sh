@@ -14,11 +14,7 @@
 
 void	sig_handle(int sig)
 {
-	if (sig == SIGWINCH)
-	{
-		;
-	}
-	return ;
+	(void)sig;
 }
 
 void	init_sig(void)

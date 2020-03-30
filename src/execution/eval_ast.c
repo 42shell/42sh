@@ -53,7 +53,7 @@ int			eval_command(t_node *ast)
 		&& (!builtin || (g_exec_status & EXEC_ASYNC)))
 		{
 			process = process_new(ast->left, STDIN_FILENO, STDOUT_FILENO);
-			return (launch_process(process, 0));
+			return (launch_process(process, 0, false));
 		}
 		return (eval_simple_command(ast->left));
 	}
@@ -73,10 +73,10 @@ int			eval_pipeline(t_node *ast, int in, int out)
 	else
 	{
 		process = process_new(ast->left, in, fd[1]);
-		launch_process(process, fd[0]);
+		launch_process(process, fd[0], false);
 	}
 	process = process_new(ast->right, fd[0], out);
-	launch_process(process, fd[1]);
+	launch_process(process, fd[1], false);
 	return (0);
 }
 

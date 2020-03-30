@@ -44,7 +44,7 @@ static pid_t	fork_child(int in, int out, int to_close)
 	return (pid);
 }
 
-int				launch_process(t_process *process, int to_close)
+int				launch_process(t_process *process, int to_close, bool subshell)
 {
 	pid_t	pid;
 
@@ -60,6 +60,8 @@ int				launch_process(t_process *process, int to_close)
 			tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
 		reset_signals();
 		eval_ast(process->ast);
+		if (subshell)
+			wait_for_job(g_shell.jobs);
 		exit(0);
 	}
 	else
@@ -79,13 +81,8 @@ int				launch_job(t_job *job)
 
 	if (job->bg)
 	{
-		if (job->ast->type == NODE_AND || job->ast->type == NODE_OR)
-		{
-			process = process_new(job->ast, STDIN_FILENO, STDOUT_FILENO);
-			launch_process(process, 0);
-		}
-		else
-			eval_ast(job->ast);
+		process = process_new(job->ast, STDIN_FILENO, STDOUT_FILENO);
+		launch_process(process, 0, true);
 		put_job_bg(job, false);
 		ft_printf("[%d] %d\n", job->id + 1, job->pgid);
 	}
