@@ -20,8 +20,9 @@
 # include <sys/wait.h>
 # include <sys/uio.h>
 # include <sys/stat.h>
-# include <signal.h>
+# include <sys/prctl.h>
 # include <sys/ioctl.h>
+# include <signal.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <dirent.h>
@@ -52,7 +53,6 @@
 **		 use gnl equivalent
 ** -error handling
 **		-^C ^D
-**		-improve parse error handling ("near token `newline`")
 **		-last exit status, close fds... assert everything is perfect
 ** -others
 ** 		-flush cache table when PATH is modified.
@@ -97,6 +97,5 @@ int						input_batch(const char *prompt);
 int						input_interactive(const char *prompt);
 
 void					init_sig(void);
-void					sig_handle(int sig);
 
 #endif

@@ -119,7 +119,8 @@ int			eval_ast(t_node *ast)
 {
 	if (!ast)
 		return (0);
-	if (ast->type == NODE_SEMI || ast->type == NODE_AMPER || ast->type == NODE_ROOT)
+	if (ast->type == NODE_SEMI || ast->type == NODE_AMPER
+	|| ast->type == NODE_ROOT)
 		return (eval_separator_op(ast));
 	if (ast->type == NODE_AND || ast->type == NODE_OR)
 		return (eval_and_or(ast));

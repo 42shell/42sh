@@ -288,7 +288,6 @@ void	notif_jobs(void)
 			}
 			remove_job_from_list(job->pgid);
 			process_del(&job->processes);
-			kill(-job->pgid, SIGQUIT);
 			ast_del(&job->ast);
 			free(job);
 		}

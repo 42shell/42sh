@@ -14,12 +14,12 @@
 
 static void		reset_signals(void)
 {
+	prctl(PR_SET_PDEATHSIG, SIGHUP);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGTTIN, SIG_DFL);
 	signal(SIGTTOU, SIG_DFL);
 	signal(SIGTSTP, SIG_DFL);
-	//signal(SIGCHLD, SIG_DFL);
 }
 
 static pid_t	fork_child(int in, int out, int to_close)
@@ -60,7 +60,7 @@ int				launch_process(t_process *process, int to_close, bool subshell)
 			tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
 		reset_signals();
 		eval_ast(process->ast);
-		if (subshell)
+		if (subshell)//job_new(), launch_job(); for real subshells
 			wait_for_job(g_shell.jobs);
 		exit(0);
 	}

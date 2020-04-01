@@ -12,11 +12,6 @@
 
 #include "shell.h"
 
-void	sig_handle(int sig)
-{
-	(void)sig;
-}
-
 void	init_sig(void)
 {
 	signal(SIGINT, SIG_IGN);
@@ -24,5 +19,4 @@ void	init_sig(void)
 	signal(SIGTTIN, SIG_IGN);
 	signal(SIGTTOU, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);
-	//signal(SIGCHLD, SIG_IGN);
 }
