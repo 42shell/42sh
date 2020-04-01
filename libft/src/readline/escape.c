@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/16 15:39:06 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/02 00:41:14 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	rl_get_esc_seq(void)
 			break ;
 		g_rl_key.i++;
 	}
-	return (0);
+	return (RL_CONTINUE);
 }
 
 int			rl_handle_esc_seq(void)
@@ -47,5 +47,5 @@ int			rl_handle_esc_seq(void)
 		return (rl_move_end());
 	else if (*(unsigned long *)g_rl_key.bytes == g_rl_keys[K_DEL])
 		return (rl_delete());
-	return (0);
+	return (RL_CONTINUE);
 }

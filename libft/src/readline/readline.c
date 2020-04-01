@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/02 00:28:41 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/02 00:43:54 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static char	*rl_return(int ret)
 		rl_del();
 		return (NULL);
 	}
-	if (ret != 10)
+	if (ret != RL_ENTER)
 		g_rl_last_ret = ret;
 	if (g_rl_line.backup)
 		ft_dstr_del((void **)&g_rl_line.backup);
@@ -104,8 +104,12 @@ char		*readline(const char *prompt)
 	rl_print_prompt(prompt);
 	while ((ret = readc(STDIN_FILENO, g_rl_key.bytes)))
 	{
-		if ((ret == -1 && (g_rl_error = RL_SYSCALL_ERROR))
-		|| (ret = g_rl_keymap[*g_rl_key.bytes]()) != 0)
+		if (ret == -1)
+		{
+			g_rl_error = RL_SYSCALL_ERROR;
+			break ;
+		}
+		if ((ret = g_rl_keymap[*g_rl_key.bytes]()) != RL_CONTINUE)
 			break ;
 		g_rl_oldkey = *(long *)g_rl_key.bytes;
 		*(long *)g_rl_key.bytes = 0;

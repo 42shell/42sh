@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/06 11:10:04 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/02 00:38:13 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void	bind_controls(void)
 
 static int	rl_ignore_key(void)
 {
-	return (0);
+	return (RL_CONTINUE);
 }
 
 int			rl_bind_keys(void)

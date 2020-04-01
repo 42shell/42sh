@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/19 19:40:01 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/02 00:41:53 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,10 @@
 ** ret macros
 */
 
-# define RL_INT				3
+# define RL_CONTINUE		0
+# define RL_INTERRUPT		3
 # define RL_EOF				4
+# define RL_ENTER			10
 
 /*
 ** autocomplete macros

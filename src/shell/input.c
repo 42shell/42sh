@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 19:37:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/23 10:55:57 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/02 00:46:45 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int			input_interactive(const char *prompt)
 	if (!*line)//ctrl-C || ctrl-D
 	{
 		free(line);
-		if (g_rl_last_ret == RL_INT)
+		if (g_rl_last_ret == RL_INTERRUPT)
 		{
 			g_parser.error = SILENT_ABORT;
 			ft_memdel((void **)&g_lexer.line);

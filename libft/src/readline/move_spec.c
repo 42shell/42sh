@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 01:18:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2019/12/06 01:18:56 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/02 00:41:03 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ int			rl_move_home(void)
 {
 	while (g_rl_line.i > 0)
 		rl_move_left();
-	return (0);
+	return (RL_CONTINUE);
 }
 
 int			rl_move_end(void)
 {
 	while (g_rl_line.i < g_rl_line.dstr->len)
 		rl_move_right();
-	return (0);
+	return (RL_CONTINUE);
 }
 
 int			rl_move_prevw(void)
@@ -39,7 +39,7 @@ int			rl_move_prevw(void)
 	while (g_rl_line.i > 0
 	&& !is_word_sep(g_rl_line.dstr->str[g_rl_line.i - 1]))
 		rl_move_left();
-	return (0);
+	return (RL_CONTINUE);
 }
 
 int			rl_move_nextw(void)
@@ -50,5 +50,5 @@ int			rl_move_nextw(void)
 	while (g_rl_line.i < g_rl_line.dstr->len
 	&& !is_word_sep(g_rl_line.dstr->str[g_rl_line.i]))
 		rl_move_right();
-	return (0);
+	return (RL_CONTINUE);
 }
