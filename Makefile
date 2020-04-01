@@ -32,7 +32,6 @@ LFLAGS          := -ltermcap
 
 CC              := gcc
 CFLAGS          := -Wall -Wextra #-Werror
-DBG_FLAGS		:= #-fsanitize=address
 ifeq ($(BUILDTYPE), debug)
 	CFLAGS := $(CFLAGS) $(DBG_FLAGS)
 endif
