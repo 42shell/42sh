@@ -66,6 +66,11 @@ SRC_EXEC        := eval_ast.c\
 				   get_exec_path.c\
 				   launch_job.c\
 				   job_control.c\
+				   job_get_status.c\
+				   job_set_status.c\
+				   job_print.c\
+				   job_utils.c\
+				   job.c
 				   #error.c\
 				   redirect.c\
 				   redirect_utils.c\

@@ -23,6 +23,9 @@
 # define EXEC_AND_OR		2
 # define EXEC_PIPELINE		4
 
+# define JOB_DONE			1		
+# define JOB_STOPPED		2		
+
 typedef struct			s_fd_backup
 {
 	int					backup;
@@ -100,13 +103,18 @@ void				continue_job(t_job *job, bool bg);
 void				notif_jobs(void);
 
 /*
-** job status
+** job set status
 */
 
 void				update_status(void);
 int					mark_status(pid_t pid, int status);
 void				set_process_status(t_process *process, int status);
 void				mark_job_as_running (t_job *job);
+
+/*
+** job get status
+*/
+
 bool				job_is_done(t_job *job);
 bool				job_is_stopped(t_job *job);
 
@@ -118,7 +126,13 @@ t_job				*get_job(pid_t pgid);
 void				add_job(t_job *job);
 void				add_process(t_process *process);
 void				remove_job_from_list(pid_t pgid);
+
+/*
+** job display
+*/
+
 t_dstr				*format_job(t_node *node, t_dstr *buf);
+void				print_job(t_job *job, int status);
 
 /*
 ** job new/del
