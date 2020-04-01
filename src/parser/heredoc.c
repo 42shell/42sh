@@ -71,7 +71,7 @@ static t_dstr	*parse_get_heredoc(char *delim)
 				continue ;
 			else if (ret == INPUT_INT)
 			{
-				ft_dstr_del((void **)&heredoc);
+				ft_dstr_del(&heredoc);
 				return (NULL);
 			}
 			else if (ret == INPUT_EOF)
@@ -102,7 +102,7 @@ int				parse_get_all_heredocs(void)
 		if (!(heredoc = parse_get_heredoc(curr->value->str)))
 			break ;
 		g_lexer.i += heredoc->len + (g_heredoc_eof ? 0 : curr->value->len);
-		ft_dstr_del((void **)&curr->value);
+		ft_dstr_del(&curr->value);
 		curr->value = heredoc;
 		g_heredoc_eof = false;
 		tmp = curr;

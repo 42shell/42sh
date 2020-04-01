@@ -17,7 +17,7 @@ int		rl_history_down(void)
 	if (!g_rl_hist.ptr || g_rl_hist.ptr == g_rl_hist.head)
 		return (0);
 	rl_move_home();
-	ft_dstr_del((void **)&g_rl_line.dstr);
+	ft_dstr_del(&g_rl_line.dstr);
 	if ((g_rl_hist.ptr = g_rl_hist.ptr->prev) == g_rl_hist.head)
 	{
 		g_rl_line.dstr = g_rl_line.backup;
@@ -40,7 +40,7 @@ int		rl_history_up(void)
 	if (g_rl_hist.ptr == g_rl_hist.head)
 		g_rl_line.backup = g_rl_line.dstr;
 	else
-		ft_dstr_del((void **)&g_rl_line.dstr);
+		ft_dstr_del(&g_rl_line.dstr);
 	g_rl_hist.ptr = g_rl_hist.ptr->next;
 	if (!(g_rl_line.dstr = ft_dstr_from_str((char *)g_rl_hist.ptr->data)))
 	{

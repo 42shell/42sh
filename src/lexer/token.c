@@ -17,7 +17,7 @@ void	token_del(t_token **token)
 	if (!token || !*token)
 		return ;
 	token_del(&(*token)->next);
-	ft_dstr_del((void **)&(*token)->value);
+	ft_dstr_del(&(*token)->value);
 	ft_memdel((void **)token);
 }
 

@@ -19,9 +19,9 @@ int			rl_del(void)
 		ft_list_del(g_rl_hist.head->next);
 	ft_list_del(g_rl_hist.head);
 	if (g_rl_line.backup)
-		ft_dstr_del((void **)&g_rl_line.backup);
-	ft_dstr_del((void **)&g_rl_line.clipboard);
-	ft_dstr_del((void **)&g_rl_line.dstr);
+		ft_dstr_del(&g_rl_line.backup);
+	ft_dstr_del(&g_rl_line.clipboard);
+	ft_dstr_del(&g_rl_line.dstr);
 	ft_bzero(&g_rl_hist, sizeof(g_rl_hist));
 	ft_bzero(&g_rl_line, sizeof(g_rl_line));
 	ft_bzero(g_rl_keymap, sizeof(g_rl_keymap));
@@ -61,7 +61,7 @@ static char	*rl_return(int ret)
 	if (ret != RL_ENTER)
 		g_rl_last_ret = ret;
 	if (g_rl_line.backup)
-		ft_dstr_del((void **)&g_rl_line.backup);
+		ft_dstr_del(&g_rl_line.backup);
 	ft_dstr_clear(g_rl_line.dstr, 32);
 	g_rl_hist.ptr = g_rl_hist.head;
 	g_rl_prompt = NULL;

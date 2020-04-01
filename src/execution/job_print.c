@@ -68,5 +68,5 @@ void		print_job(t_job *job, int status)
 		status_str = "Stopped";
 	format = format_job(job->ast, NULL);
 	ft_printf("[%d]+  %s    %s\n", job->id + 1, status_str, format->str);
-	ft_dstr_del((void **)&format);
+	ft_dstr_del(&format);
 }

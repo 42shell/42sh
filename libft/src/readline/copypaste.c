@@ -35,7 +35,7 @@ int			rl_cut_word(void)
 	if (g_rl_oldkey == g_rl_keys[K_CUTW] && g_rl_line.clipboard != NULL)
 		return (rl_append_word(len));
 	else if (g_rl_line.clipboard != NULL)
-		ft_dstr_del((void **)&g_rl_line.clipboard);
+		ft_dstr_del(&g_rl_line.clipboard);
 	if (!(g_rl_line.clipboard = ft_dstr_new(len)))
 	{
 		g_rl_error = RL_ALLOC_ERROR;
@@ -55,7 +55,7 @@ int			rl_cut_after(void)
 	if ((len = g_rl_line.dstr->len - g_rl_line.i) == 0)
 		return (RL_CONTINUE);
 	if (g_rl_line.clipboard != NULL)
-		ft_dstr_del((void **)&g_rl_line.clipboard);
+		ft_dstr_del(&g_rl_line.clipboard);
 	if (!(g_rl_line.clipboard = ft_dstr_new(len)))
 	{
 		g_rl_error = RL_ALLOC_ERROR;
@@ -75,7 +75,7 @@ int			rl_cut_before(void)
 	if ((len = g_rl_line.i) == 0)
 		return (RL_CONTINUE);
 	if (g_rl_line.clipboard != NULL)
-		ft_dstr_del((void **)&g_rl_line.clipboard);
+		ft_dstr_del(&g_rl_line.clipboard);
 	if (!(g_rl_line.clipboard = ft_dstr_new(len)))
 	{
 		g_rl_error = RL_ALLOC_ERROR;
