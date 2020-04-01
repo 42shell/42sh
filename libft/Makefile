@@ -125,6 +125,7 @@ SRC =	mem/ft_xmalloc.c \
 		ft_printf/pf_handlers/pf_handle_color.c \
 		ft_printf/pf_parser/pf_parser.c \
 		ft_printf/ft_printf.c \
+		readc.c
 
 OBJ = $(addprefix $(DIR_OBJ), $(SRC:.c=.o))
 
