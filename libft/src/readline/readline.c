@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/02 00:27:52 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/02 00:28:41 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ static int	rl_init(void)
 ** -term.h ft_term..
 ** -scroll
 */
-#include <signal.h>
+
 char		*readline(const char *prompt)
 {
 	int		ret;
@@ -102,8 +102,6 @@ char		*readline(const char *prompt)
 	if ((ret = rl_init()) != 0)
 		return (rl_return(ret));
 	rl_print_prompt(prompt);
-	signal(SIGTTOU, SIG_IGN);
-	signal(SIGTTIN, SIG_IGN);
 	while ((ret = readc(STDIN_FILENO, g_rl_key.bytes)))
 	{
 		if ((ret == -1 && (g_rl_error = RL_SYSCALL_ERROR))
