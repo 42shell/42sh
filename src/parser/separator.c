@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 04:37:16 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/19 17:21:29 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/01 16:08:26 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 ** readline will display
 */
 
-void		ps_linebreak(int last_token_type)
+void		parse_linebreak(int last_token_type)
 {
-	ps_newline_list();
+	parse_newline_list();
 	while (!g_parser.error && !g_parser.token)
 	{
 		g_lexer.line_cont = last_token_type;
@@ -36,7 +36,7 @@ void		ps_linebreak(int last_token_type)
 ** 					| NEWLINE newline_list
 */
 
-void		ps_newline_list(void)
+void		parse_newline_list(void)
 {
 	if (g_parser.error)
 		return ;
@@ -52,7 +52,7 @@ void		ps_newline_list(void)
 **					| ';'
 */
 
-t_node		*ps_separator_op(void)
+t_node		*parse_separator_op(void)
 {
 	t_node	*sep_op;
 
@@ -75,7 +75,7 @@ t_node		*ps_separator_op(void)
 ** 					| newline_list
 */
 
-t_node		*ps_separator(void)
+t_node		*parse_separator(void)
 {
 	t_node	*sep_op;
 
@@ -84,8 +84,8 @@ t_node		*ps_separator(void)
 		return (NULL);
 	if (g_parser.token)
 	{
-		sep_op = ps_separator_op();
-		ps_newline_list();
+		sep_op = parse_separator_op();
+		parse_newline_list();
 	}
 	return (sep_op);
 }

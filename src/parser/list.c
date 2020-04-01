@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   and_or.c                                           :+:      :+:    :+:   */
+/*   list.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 19:46:45 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/13 18:32:06 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/01 16:08:01 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,22 @@
 **  Normally it should be in compound_command rule
 */
 
-t_node			*ps_list(void)
+t_node			*parse_list(void)
 {
 	t_node		*list;
 	t_node		*node;
 
-	ps_newline_list();
+	parse_newline_list();
 	if (!g_parser.token
-	|| !(list = ps_and_or()))
+	|| !(list = parse_and_or()))
 		return (NULL);
-	if (!(node = ps_separator_op()))
+	if (!(node = parse_separator_op()))
 	{
 		node = (t_node *)ft_xmalloc(sizeof(t_node));
 		node->type = NODE_ROOT;
 	}
 	node->left = list;
-	node->right = ps_list();
+	node->right = parse_list();
 	if (g_parser.error)
 		ast_del(&node);
 	list = node;

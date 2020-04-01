@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirect.c                                         :+:      :+:    :+:   */
+/*   io_redirect.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 04:05:12 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/13 18:32:33 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/01 16:07:48 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static void		ps_add_heredoc(t_token *heredoc)
+static void		parse_add_heredoc(t_token *heredoc)
 {
 	t_token		*ptr;
 
@@ -31,7 +31,7 @@ static void		ps_add_heredoc(t_token *heredoc)
 **	filename         : WORD
 */
 
-static t_token	*ps_filename(void)
+static t_token	*parse_filename(void)
 {
 	t_token	*filename;
 
@@ -53,7 +53,7 @@ static t_token	*ps_filename(void)
 **                   ;
 */
 
-static t_redir	*ps_io_file(t_token *io_number)
+static t_redir	*parse_io_file(t_token *io_number)
 {
 	t_redir		*redir;
 
@@ -61,7 +61,7 @@ static t_redir	*ps_io_file(t_token *io_number)
 	redir->left_op = io_number;
 	redir->operator = g_parser.token;
 	g_parser.token = get_next_token();
-	if (!(redir->right_op = ps_filename()))
+	if (!(redir->right_op = parse_filename()))
 	{
 		g_parser.error = NO_REDIR_FILENAME;
 		redir_del(&redir);
@@ -70,7 +70,7 @@ static t_redir	*ps_io_file(t_token *io_number)
 	return (redir);
 }
 
-static t_redir	*ps_io_here(t_token *io_number)
+static t_redir	*parse_io_here(t_token *io_number)
 {
 	t_redir	*redir;
 
@@ -84,12 +84,12 @@ static t_redir	*ps_io_here(t_token *io_number)
 		return (NULL);
 	}
 	redir->right_op = g_parser.token;
-	ps_add_heredoc(redir->right_op);
+	parse_add_heredoc(redir->right_op);
 	g_parser.token = get_next_token();
 	return (redir);
 }
 
-t_redir			*ps_io_redirect(void)
+t_redir			*parse_io_redirect(void)
 {
 	t_token *io_number;
 
@@ -98,10 +98,10 @@ t_redir			*ps_io_redirect(void)
 		io_number = g_parser.token;
 		g_parser.token = get_next_token();
 		if (g_parser.token && g_parser.token->type == DLESS)
-			return (ps_io_here(io_number));
-		return (ps_io_file(io_number));
+			return (parse_io_here(io_number));
+		return (parse_io_file(io_number));
 	}
 	else if (g_parser.token->type == DLESS)
-		return (ps_io_here(NULL));
-	return (ps_io_file(NULL));
+		return (parse_io_here(NULL));
+	return (parse_io_file(NULL));
 }

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 23:49:26 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/13 18:27:54 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/01 16:05:43 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct					s_node
 }								t_node;
 
 /*
-** -A single redir is returned by ps_io_redirect()
+** -A single redir is returned by parse_io_redirect()
 ** -it contains 3 tokens corresponding to the operator and
 **  the 2 operands of a redirection (2 >& 1)
 ** -the left operand can be NULL
@@ -90,21 +90,21 @@ typedef struct					s_parser
 
 t_parser						g_parser;
 
-t_node							*ps_list(void); //node *
-t_node							*ps_and_or(void);
-t_node							*ps_pipeline(void);
-t_node							*ps_pipe_sequence(void);
-t_node							*ps_command(void);
-t_node							*ps_simple_command(void);
-t_redir							*ps_io_redirect(void);
-t_node							*ps_separator(void);
-t_node							*ps_separator_op(void);
-void							ps_newline_list(void);
-void							ps_linebreak(int last_token_type);
-int								ps_get_all_heredocs(void);
+t_node							*parse_list(void); //node *
+t_node							*parse_and_or(void);
+t_node							*parse_pipeline(void);
+t_node							*parse_pipe_sequence(void);
+t_node							*parse_command(void);
+t_node							*parse_simple_command(void);
+t_redir							*parse_io_redirect(void);
+t_node							*parse_separator(void);
+t_node							*parse_separator_op(void);
+void							parse_newline_list(void);
+void							parse_linebreak(int last_token_type);
+int								parse_get_all_heredocs(void);
 
-int								ps_error(char *near);
-int								ps_heredoc_eof(char *delim);
+int								parse_error(char *near);
+int								parse_heredoc_eof(char *delim);
 
 int								ast_del(t_node **ast);
 int								command_del(t_command **command);

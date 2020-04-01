@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 04:37:16 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/19 17:21:29 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/01 16:08:12 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@
 **         ls    cat
 */
 
-t_node			*ps_pipe_sequence(void)
+t_node			*parse_pipe_sequence(void)
 {
 	t_node		*pipe_seq;
 	t_node		*node;
 
-	pipe_seq = ps_command();
+	pipe_seq = parse_command();
 	while (pipe_seq && g_parser.token->type == PIPE)
 	{
 		node = (t_node *)ft_xmalloc(sizeof(t_node));
@@ -39,8 +39,8 @@ t_node			*ps_pipe_sequence(void)
 		node->left = pipe_seq;
 		token_del(&g_parser.token);
 		g_parser.token = get_next_token();
-		ps_linebreak(PIPE);
-		if (!(node->right = ps_command()))
+		parse_linebreak(PIPE);
+		if (!(node->right = parse_command()))
 		{
 			g_parser.error = g_parser.error ? g_parser.error : NO_CMD_AFTER_OP;
 			ast_del(&node);
@@ -50,7 +50,7 @@ t_node			*ps_pipe_sequence(void)
 	return (pipe_seq);
 }
 
-t_node			*ps_pipeline(void)
+t_node			*parse_pipeline(void)
 {
 	t_node		*pipeline;
 
@@ -62,10 +62,10 @@ t_node			*ps_pipeline(void)
 		pipeline->type = NODE_BANG;
 		g_parser.token = get_next_token();
 		token_del(&g_parser.token);
-		if (!(pipeline->left = ps_pipe_sequence()))
+		if (!(pipeline->left = parse_pipe_sequence()))
 			ast_del(&pipeline);
 	}
 	else
-		pipeline = ps_pipe_sequence();
+		pipeline = parse_pipe_sequence();
 	return (pipeline);
 }

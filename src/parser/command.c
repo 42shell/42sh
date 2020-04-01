@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 19:46:45 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/13 18:32:06 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/01 16:06:10 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int		set_tokens(t_command *command)
 			add_command_word(command, g_parser.token);
 			g_parser.token = get_next_token();
 		}
-		else if ((redir = ps_io_redirect()))
+		else if ((redir = parse_io_redirect()))
 			add_command_redir(command, redir);
 		else
 			return (-1);
@@ -82,7 +82,7 @@ static int		set_tokens(t_command *command)
 ** returns a t_command containing argv array and a list of redirections.
 */
 
-t_node		*ps_simple_command(void)
+t_node		*parse_simple_command(void)
 {
 	t_node		*simple_command;
 	t_command	*tokens;
@@ -104,12 +104,12 @@ t_node		*ps_simple_command(void)
 	return (simple_command);
 }
 
-t_node		*ps_command(void)
+t_node		*parse_command(void)
 {
 	t_node	*command;
 	t_node	*simple_command;
 
-	if (!(simple_command = ps_simple_command()))
+	if (!(simple_command = parse_simple_command()))
 		return (NULL);
 	command = (t_node *)ft_xmalloc(sizeof(t_node));
 	command->left = simple_command;

@@ -6,13 +6,13 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 08:48:18 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/14 17:31:49 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/01 16:06:38 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-int		ps_heredoc_eof(char *delim)
+int		parse_heredoc_eof(char *delim)
 {
 	ft_dprintf(2,
 	"42sh: warning: here-document delimited by end-of-file (wanted '%.*s')\n",
@@ -21,7 +21,7 @@ int		ps_heredoc_eof(char *delim)
 	return (0);
 }
 
-int		ps_error(char *near)
+int		parse_error(char *near)
 {
 	//g_last_exit_st = g_parser.error?
 	if (g_parser.error != SILENT_ABORT)

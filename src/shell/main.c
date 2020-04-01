@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 19:37:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/23 10:55:57 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/01 16:38:37 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@ t_node			*get_ast(void)
 {
 	t_node		*ast;
 
-	if ((ast = ps_list())
-	&& ps_get_all_heredocs() == NOERR)
+	if ((ast = parse_list())
+	&& parse_get_all_heredocs() == NOERR)
 		return (ast);
 	else if (g_parser.error)
 	{
-		ps_error(g_parser.token ? g_parser.token->value->str : "(null)");
+		parse_error(g_parser.token ? g_parser.token->value->str : "(null)");
 		token_del(&g_parser.token);
 		g_parser.error = NOERR;
 	}
