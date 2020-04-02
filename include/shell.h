@@ -48,7 +48,7 @@
 ** -proper init handling
 **		-tty stuff, empty env, job control...
 ** -input
-**		-redo input_interactive() properly, EOF et INT handling...
+**		-redo input_interactive() properly, EOF and INT handling...
 ** 		-do input_batch, should be easier cause lexer bugs have been fixed,
 **		 use gnl equivalent
 ** -error handling
@@ -59,7 +59,6 @@
 ** 		-check comments work properly
 ** 		-in case of "ls | \n cat", newline is not removed from line before stored in history
 **		 don t know if it is handled in expand()
-** -fix redirs
 ** -leaks
 */
 

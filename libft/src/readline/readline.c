@@ -15,11 +15,13 @@
 int			rl_del(void)
 {
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &g_rl_oldterm);
-	while (g_rl_hist.head->next)
-		ft_list_del(g_rl_hist.head->next);
-	ft_list_del(g_rl_hist.head);
-	if (g_rl_line.backup)
-		ft_dstr_del(&g_rl_line.backup);
+	if (g_rl_hist.head)
+	{
+		while (g_rl_hist.head->next)
+			ft_list_del(g_rl_hist.head->next);
+		ft_list_del(g_rl_hist.head);
+	}
+	ft_dstr_del(&g_rl_line.backup);
 	ft_dstr_del(&g_rl_line.clipboard);
 	ft_dstr_del(&g_rl_line.dstr);
 	ft_bzero(&g_rl_hist, sizeof(g_rl_hist));
