@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 19:37:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/02 00:46:45 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/02 01:21:41 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,58 @@ int			remove_escaped_newlines(char *line)
 	return (0);
 }
 
+char		*get_line()
+{
+	char	c;
+	int		ret;
+	char	*str;
+	t_dstr	*line;
+
+	line = ft_dstr_new(64);
+	while (1)
+	{
+		if ((ret = readc(STDIN_FILENO, &c)) == -1)
+		{
+			ft_dstr_del(&line);
+			return (NULL);
+		}
+		if (ret > 0)
+			ft_dstr_add(line, c);
+		if (c == '\n' || ret == 0)
+		{
+			str = line->str;
+			free(line);
+			return (str);
+		}
+	}
+}
+
 int			input_batch(const char *prompt)
 {
+	char	*line;
+	char	*tmp;
+
 	(void)prompt;
-	exit(0);
+	if (!(line = get_line()))
+		exit(1);
+	if (!*line)//ctrl-C || ctrl-D
+	{
+		free(line);
+		if (!g_lexer.line)
+			exit(0);//builtin_exit()
+		return (INPUT_EOF);
+	}
+	remove_escaped_newlines(line);
+	if (g_lexer.line)
+	{
+		tmp = g_lexer.line;
+		g_lexer.line = ft_strjoin(g_lexer.line, line);
+		free(tmp);
+	}
+	else
+		g_lexer.line = ft_strdup(line);
+	free(line);
+	return (0);
 }
 
 int			input_interactive(const char *prompt)

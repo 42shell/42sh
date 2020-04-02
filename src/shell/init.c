@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/29 14:18:16 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/02 02:05:26 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int			init(int argc, char **argv)
 		exit (1);
 	}
     /* Grab control of the terminal. */
+	signal(SIGTTOU, SIG_IGN);
 	tcsetpgrp(STDIN_FILENO, g_shell.pgid);
 	g_env = env_dup(environ);
 	parse_args(argc, argv);
