@@ -20,12 +20,13 @@ int			eval_simple_command(t_node *ast)
 	char		**argv;
 
 	command = (t_command *)ast->data;
-	//fix and set redirs
-	argv = get_argv(command);
+	set_redir(command, true);
+	if (!(argv = get_argv(command)))
+		return (0);
 	if (is_builtin(argv[0]))
 		return (exec_builtin(argv, g_env->env));
 	return (exec_binary(argv, g_env->env));
-	//restore fds
+	restore_fds();
 }
 
 /*
@@ -43,12 +44,14 @@ int			eval_simple_command(t_node *ast)
 
 int			eval_command(t_node *ast)
 {
+	t_command	*command;
 	t_process	*process;
 	bool		builtin;
 
+	command = (t_command *)ast->left->data;
 	if (ast->left->type == NODE_SMPL_CMD)
 	{
-		builtin = is_builtin(((t_command *)ast->left->data)->words->value->str);
+		builtin = (command->words && is_builtin(command->words->value->str));
 		if (!(g_exec_status & EXEC_PIPELINE)
 		&& (!builtin || (g_exec_status & EXEC_ASYNC)))
 		{

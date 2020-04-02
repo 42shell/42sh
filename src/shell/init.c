@@ -50,7 +50,6 @@ static int	parse_args(int argc, char **argv)
 		//g_rl_prompt_cr = true;
 		g_rl_hist_doubl = false;
 	}
-	init_sig();
 	return (0);
 }
 
@@ -63,21 +62,24 @@ int			init(int argc, char **argv)
 		ft_dprintf(2, "42sh: stdin is not a tty\n");
 		exit(1);
 	}
-	while (tcgetpgrp(STDIN_FILENO) != (g_shell.pgid = getpgrp()))
-        kill(-g_shell.pgid, SIGTTIN);
-	/* Put ourselves in our own process group. */
-	g_shell.pgid = getpid();
-	tcgetattr(STDIN_FILENO, &g_shell.tmodes);
-	if (setpgid (g_shell.pgid, g_shell.pgid) < 0)
-	{
-		ft_dprintf(2, "42sh: Couldn't put the shell in its own process group\n");
-		exit (1);
-	}
-    /* Grab control of the terminal. */
-	signal(SIGTTOU, SIG_IGN);
-	tcsetpgrp(STDIN_FILENO, g_shell.pgid);
 	g_env = env_dup(environ);
-	parse_args(argc, argv);
 	increase_shlvl();
+	parse_args(argc, argv);
+	if (g_shell.interactive_mode)
+	{
+		while (tcgetpgrp(STDIN_FILENO) != (g_shell.pgid = getpgrp()))
+    		kill(-g_shell.pgid, SIGTTIN);
+		init_sig();
+		/* Put ourselves in our own process group. */
+		g_shell.pgid = getpid();
+		if (setpgid (g_shell.pgid, g_shell.pgid) < 0)
+		{
+			ft_dprintf(2, "42sh: Couldn't put the shell in its own process group\n");
+			exit (1);
+		}
+    	/* Grab control of the terminal. */
+		tcgetattr(STDIN_FILENO, &g_shell.tmodes);
+		tcsetpgrp(STDIN_FILENO, g_shell.pgid);
+	}
 	return (0);
 }

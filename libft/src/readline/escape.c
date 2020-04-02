@@ -17,7 +17,7 @@ static int	rl_get_esc_seq(void)
 	g_rl_key.i++;
 	while (g_rl_key.i < 8)
 	{
-		if (read(STDIN_FILENO, &g_rl_key.bytes[g_rl_key.i], 1) == -1)
+		if (readc(STDIN_FILENO, &g_rl_key.bytes[g_rl_key.i]) == -1)
 		{
 			g_rl_error = RL_SYSCALL_ERROR;
 			return (-1);

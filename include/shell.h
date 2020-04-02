@@ -43,7 +43,7 @@
 **		-env/termcaps...
 **		-better way to handle init and del
 **		-write on 2 ? sounds weird to do that in readline,
-**		 maybe dup2 in shell.get_input 
+**		 maybe dup2 in shell.get_input
 **		-rigorous testing
 ** -proper init handling
 **		-tty stuff, empty env, job control...

@@ -69,15 +69,12 @@ SRC_EXEC        := eval_ast.c\
 				   job_set_status.c\
 				   job_print.c\
 				   job_utils.c\
-				   job.c
-				   #error.c\
+				   job.c\
 				   redirect.c\
 				   redirect_utils.c\
 				   redirect_error.c\
-                   open_heredoc.c\
-				   utils.c\
-				   #exec_pipe.c\
-				   exec_cmd.c
+                   open_heredoc.c
+				   #utils.c
 SRC_EXEC        := $(addprefix execution/,$(SRC_EXEC))
 
 #SRC_EXPANSION   := expand.c\

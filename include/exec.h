@@ -147,18 +147,12 @@ void				job_del(t_job **job);
 ** redirections
 */
 
-int					set_redir(t_process *process, bool backup);
+int					set_redir(t_command *command, bool backup);
 int					open_heredoc(t_dstr *heredoc);
 bool				is_valid_fd(int fd);
 void				move_fd(int *fd);
 int					dup2_and_backup(int fildes1, int fildes2, bool backup);
 int					restore_fds(void);
-
-/*
-** pipes
-*/
-
-//int					set_pipe_redir(int input_fd, int fildes[2]);
 
 /*
 ** error handling

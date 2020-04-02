@@ -20,6 +20,8 @@ char    **get_argv(t_command *command)
 
     count = 0;
     word = command->words;
+    if (!word)
+        return (NULL);
     while (word)
     {
         count++;

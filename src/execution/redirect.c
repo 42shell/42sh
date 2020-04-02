@@ -14,7 +14,6 @@
 
 #define RIGHTS 0666
 
-/*
 static int	get_flags(int operator_type)
 {
 	if (operator_type == GREAT || operator_type == GREATAND)
@@ -78,13 +77,13 @@ static int	get_redirected_fd(t_redir *redir)
 	return (ft_atoi(redir->left_op->value->str));
 }
 
-int			set_redir(t_process *process, bool backup)
+int			set_redir(t_command *command, bool backup)
 {
 	t_redir	*redir;
 	int		redirected_fd;
 	int		ret;
 
-	redir = process->redirs;
+	redir = command->redirs;
 	while (redir)
 	{
 		if ((redirected_fd = get_redirected_fd(redir)) > 255)
@@ -95,4 +94,3 @@ int			set_redir(t_process *process, bool backup)
 	}
 	return (0);
 }
-*/
