@@ -16,16 +16,11 @@
 # include "shell.h"
 
 char	*ft_strjoin_triple(char *s1, char *s2, char *s3);
-
 void	free_arr(char **arr);
-
 char	*append_filename(char *path, char *filename);
 char	**split_path(char const *path);
-
 char	get_opt(int argc, char *argv[]);
-
 bool	is_valid_var_name(char *str);
-
 char	*ft_mktemp(char *template);
 
 #endif

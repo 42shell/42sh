@@ -35,6 +35,7 @@
 # include "exec.h"
 # include "expansion.h"
 # include "builtins.h"
+# include "autocomplete.h"
 # include "utils.h"
 
 /*
@@ -49,8 +50,6 @@
 **		-tty stuff, empty env, job control...
 ** -input
 **		-redo input_interactive() properly, EOF and INT handling...
-** 		-do input_batch, should be easier cause lexer bugs have been fixed,
-**		 use gnl equivalent
 ** -error handling
 **		-^C ^D
 **		-last exit status, close fds... assert everything is perfect

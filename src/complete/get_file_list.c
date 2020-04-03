@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   comp_files.c                                       :+:      :+:    :+:   */
+/*   get_file_list.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,9 +12,7 @@
 
 #include "shell.h"
 
-extern int	g_nb_comp_match;
-
-char		*get_dir_to_search(char *partial)
+static char			*get_dir_to_search(char *partial)
 {
 	int		i;
 
@@ -28,8 +26,7 @@ char		*get_dir_to_search(char *partial)
 	return (ft_strndup(partial, i));
 }
 
-t_list_head	*get_matches_in_cwd(DIR *dirp, char *partial,
-		int flags)
+static t_list_head	*get_matches_in_cwd(DIR *dirp, char *partial, int flags)
 {
 	struct dirent	*dp;
 	t_list_head		*comp_list;
@@ -40,23 +37,19 @@ t_list_head	*get_matches_in_cwd(DIR *dirp, char *partial,
 		if (ft_strstr(dp->d_name, partial) == dp->d_name
 				&& !ft_strequ(dp->d_name, ".") && !ft_strequ(dp->d_name, ".."))
 		{
-			if (is_dir(dp->d_name))
-			{
+			if (is_dir(dp->d_name)
+			&& ++(*g_comp_list_count))
 				ft_list_add_tail(ft_strjoin(dp->d_name, "/"), comp_list);
-				g_nb_comp_match++;
-			}
-			else if (!(flags & DIRONLY) && ((flags & EXECONLY)
-											? is_exec(dp->d_name) : 1))
-			{
+			else if (!(flags & DIRONLY)
+			&& (!(flags & EXECONLY) || is_exec(dp->d_name))
+			&& ++(*g_comp_list_count))
 				ft_list_add_tail(ft_strdup(dp->d_name), comp_list);
-				g_nb_comp_match++;
-			}
 		}
 	}
 	return (comp_list);
 }
 
-t_list_head	*get_matches_in_dir(DIR *dirp, char *dir, char *partial, int flags)
+static t_list_head	*get_matches_in_dir(DIR *dirp, char *dir, char *partial, int flags)
 {
 	struct dirent	*dp;
 	char			*path;
@@ -69,10 +62,12 @@ t_list_head	*get_matches_in_dir(DIR *dirp, char *dir, char *partial, int flags)
 		if (ft_strstr(path, partial) == path
 		&& !ft_strequ(dp->d_name, ".") && !ft_strequ(dp->d_name, ".."))
 		{
-			if (is_dir(path) && ++g_nb_comp_match)
+			if (is_dir(path)
+			&& ++(*g_comp_list_count))
 				ft_list_add_tail(ft_strjoin(path, "/"), comp_list);
 			else if (!(flags & DIRONLY)
-			&& ((flags & EXECONLY) ? is_exec(path) : 1) && ++g_nb_comp_match)
+			&& (!(flags & EXECONLY) || is_exec(dp->d_name))
+			&& ++(*g_comp_list_count))
 				ft_list_add_tail(ft_strdup(path), comp_list);
 		}
 		free(path);
@@ -80,13 +75,12 @@ t_list_head	*get_matches_in_dir(DIR *dirp, char *dir, char *partial, int flags)
 	return (comp_list);
 }
 
-t_list_head	*comp_get_file_list(char *partial, int flags)
+t_list_head			*get_file_list(char *partial, int flags)
 {
 	char			*dir;
 	DIR				*dirp;
 	t_list_head		*comp_list;
 
-	g_nb_comp_match = 0;
 	dir = get_dir_to_search(partial);
 	if ((dirp = opendir(dir)) == NULL)
 	{

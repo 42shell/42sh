@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   comp_cmd.c                                         :+:      :+:    :+:   */
+/*   get_command_list.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,10 +12,8 @@
 
 #include "shell.h"
 
-extern int	g_nb_comp_match;
-
 static void	add_exec_matches_from_dir(t_list_head *comp_list, char *dirname,
-		char *partial)
+			char *partial)
 {
 	DIR				*dirp;
 	struct dirent	*dp;
@@ -28,11 +26,11 @@ static void	add_exec_matches_from_dir(t_list_head *comp_list, char *dirname,
 		{
 			cmd_path = append_filename(dirname, dp->d_name);
 			if (ft_strstr(dp->d_name, partial) == dp->d_name
-					&& stat(cmd_path, &b) == 0 && S_IXUSR & b.st_mode
-					&& !S_ISDIR(b.st_mode))
+			&& stat(cmd_path, &b) == 0 && S_IXUSR & b.st_mode
+			&& !S_ISDIR(b.st_mode))
 			{
 				ft_list_add_tail(ft_strdup(dp->d_name), comp_list);
-				g_nb_comp_match++;
+				(*g_comp_list_count)++;
 			}
 			free(cmd_path);
 		}
@@ -40,15 +38,14 @@ static void	add_exec_matches_from_dir(t_list_head *comp_list, char *dirname,
 	}
 }
 
-t_list_head	*comp_get_command_list(char *partial, t_env *env)
+t_list_head	*get_command_list(char *partial)
 {
 	t_list_head		*comp_list;
 	char			**path_dirs;
 	char			*path;
 	int				i;
 
-	g_nb_comp_match = 0;
-	path = get_env_var("PATH", env);
+	path = get_env_var("PATH");
 	if (path == NULL)
 		return (NULL);
 	path_dirs = split_path(path);

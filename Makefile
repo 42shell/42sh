@@ -48,12 +48,11 @@ SRC_BUILTINS    :=	builtins.c\
 					#env.c
 SRC_BUILTINS    := $(addprefix builtins/,$(SRC_BUILTINS))
 
-#SRC_COMPLETE    := comp_cmd.c\
-                   comp_files.c\
-                   comp_line_edits.c\
-                   comp_utils.c\
-                   complete.c
-#SRC_COMPLETE    := $(addprefix exec/,$(SRC_COMPLETE))
+SRC_COMPLETE    := get_autocomplete_list.c\
+                   get_command_list.c\
+                   get_file_list.c\
+                   utils.c
+SRC_COMPLETE    := $(addprefix complete/,$(SRC_COMPLETE))
 
 SRC_ENV		    := env_dup.c\
                    env_utils.c
