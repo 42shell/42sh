@@ -41,14 +41,11 @@ void		rl_print_prompt(const char *prompt)
 
 void		rl_print_line(bool restore_i)
 {
-	size_t	old_i;
-
-	old_i = g_rl_line.i;
 	tputs(g_rl_caps[C_CD], 1, ft_putc);
-	g_rl_line.i += tputstr(g_rl_line.dstr->str);
+	g_rl_line.i = tputstr(g_rl_line.dstr->str);
 	if (restore_i)
 	{
-		while (g_rl_line.i > old_i)
+		while (g_rl_line.i > 0)
 			rl_move_left();
 	}
 }
