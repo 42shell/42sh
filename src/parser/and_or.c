@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 19:46:45 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 22:08:06 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 23:57:07 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_command	*parse_and_or_list(t_command *left_operand)
 	right_operand = parse_pipeline();
 	if (right_operand == NULL)
 	{
-		if (g_parser.status != NOERR)
+		if (g_parser.status == NOERR)
 			g_parser.status = UNEXPECTED_TOKEN;
 		command_del(&left_operand);
 		return (NULL);
