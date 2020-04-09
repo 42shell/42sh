@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 23:49:26 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 17:38:48 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 21:33:26 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ enum							e_parse_error
 	NO_REDIR_FILENAME,
 	NO_CMD_BEFORE_OP,
 	NO_CMD_AFTER_OP,
-	HEREDOC_NO_DELIM
+	HEREDOC_NO_DELIM,
+	UNEXPECTED_TOKEN
 };
 
 enum							e_node_type
@@ -145,9 +146,8 @@ t_command						*parse_pipe_sequence(void);
 t_command						*parse_command(void);
 t_command						*parse_simple_command(void);
 t_redir							*parse_io_redirect(void);
-t_node							*parse_separator(void);
-t_node							*parse_separator_op(void);
-void							parse_newline_list(void);
+int								parse_separator(void);
+bool							parse_newline_list(void);
 void							parse_linebreak(int last_token_type);
 int								parse_get_all_heredocs(void);
 
