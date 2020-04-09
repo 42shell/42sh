@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 20:03:18 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 21:42:10 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 00:30:01 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int		line_get(void)
 	return (0);
 }
 
-static t_dstr	*parse_get_heredoc(char *delim)
+static t_dstr	*get_heredoc(char *delim)
 {
 	t_dstr	*heredoc;
 	int		ret;
@@ -86,7 +86,7 @@ static t_dstr	*parse_get_heredoc(char *delim)
 	return (heredoc);
 }
 
-int				parse_get_all_heredocs(void)
+int				get_all_heredocs(void)
 {
 	t_dstr	*heredoc;
 	t_token	*curr;
@@ -99,7 +99,7 @@ int				parse_get_all_heredocs(void)
 	while (curr)
 	{
 		ft_dstr_add(curr->value, '\n');
-		if (!(heredoc = parse_get_heredoc(curr->value->str)))
+		if (!(heredoc = get_heredoc(curr->value->str)))
 			break ;
 		g_lexer.i += heredoc->len + (g_heredoc_eof ? 0 : curr->value->len);
 		ft_dstr_del(&curr->value);

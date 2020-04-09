@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 23:49:26 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 23:24:11 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 00:30:22 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ t_redir							*parse_io_redirect(void);
 int								parse_separator(void);
 bool							parse_newline_list(void);
 void							parse_linebreak(int last_token_type);
-int								parse_get_all_heredocs(void);
+int								get_all_heredocs(void);
 
 int								parse_error(char *near);
 int								parse_heredoc_eof(char *delim);

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 19:37:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 00:02:53 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 00:30:32 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_command		*get_command_list(void)
 		command_list_del(&command_list);
 		return (NULL);
 	}
-	if (command_list != NULL && parse_get_all_heredocs() == NOERR)
+	if (command_list != NULL && get_all_heredocs() == NOERR)
 		return (command_list);
 	command_list_del(&command_list);
 	return (NULL);
