@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/13 18:01:19 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 18:15:44 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ enum				e_quote_st
 
 typedef struct		s_token
 {
-	struct s_token	*next;
-	t_dstr			*value;
-	int				type;
+	struct s_token		*next;
+	t_dstr				*value;
+	enum e_token_type	type;
 }					t_token;
 
 typedef struct		s_lexer
