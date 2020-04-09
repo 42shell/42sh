@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 23:03:00 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 23:18:23 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 00:03:52 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_command	*parse_command_list(void)
 
 	first_cmd = parse_and_or();
 	command = first_cmd;
-	while (g_parser.status == NOERR)
+	while (command != NULL && g_parser.status == NOERR)
 	{
 		if (g_parser.token == NULL || g_parser.token->type == NEWLINE)
 			break ;

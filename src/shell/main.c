@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 19:37:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 23:30:03 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 00:02:53 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,23 @@ t_command		*get_command_list(void)
 {
 	t_command *command_list;
 
-	if ((command_list = parse_command_list())
-	&& parse_get_all_heredocs() == NOERR)
-		return (command_list);
+	command_list = parse_command_list();
 	parse_newline_list();
 	if (g_parser.status || g_parser.token != NULL)
 	{
 		parse_error(g_parser.token ? g_parser.token->value->str : "(null)");
-		token_del(&g_parser.token);
+		while (g_parser.token != NULL)
+		{
+			token_del(&g_parser.token);
+			g_parser.token = get_next_token();
+		}
 		g_parser.status = NOERR;
+		command_list_del(&command_list);
+		return (NULL);
 	}
+	if (command_list != NULL && parse_get_all_heredocs() == NOERR)
+		return (command_list);
+	command_list_del(&command_list);
 	return (NULL);
 }
 

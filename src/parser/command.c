@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 19:46:45 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 21:55:07 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 23:49:01 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void		add_word(t_simple_cmd *simple, t_token *word, bool assignment)
 		}
 	}
 	else
-		array_append(simple->argv, word->value->str);
+		array_append(simple->argv, ft_strdup(word->value->str));
 }
 
 static void		add_redir(t_simple_cmd *simple, t_redir *redir)
@@ -78,6 +78,7 @@ static int		set_tokens(t_simple_cmd *simple)
 					prefix = false;
 			}
 			add_word(simple, g_parser.token, assignment);
+			token_del(&g_parser.token);
 			g_parser.token = get_next_token();
 		}
 		else if ((redir = parse_io_redirect()))
