@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 19:27:22 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 23:29:30 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,26 @@ int			eval_command(t_command *command, int in, int out)
 	}
 	if (command->type == SIMPLE)
 		return (eval_simple_command(command));
+	return (0);
+}
+
+int			eval_command_list(t_command *command_list)
+{
+	t_command	*command;
+	t_job		*job;
+
+	command = command_list;
+	while (command != NULL)
+	{
+		job = job_new(command, STDIN_FILENO, STDOUT_FILENO);
+		add_job(job);
+		if (command->flags & CMD_AMPERSAND)
+		{
+			g_exec_status |= EXEC_ASYNC;
+			job->bg = true;
+		}
+		launch_job(g_shell.jobs);
+		command = command->next;
+	}
 	return (0);
 }

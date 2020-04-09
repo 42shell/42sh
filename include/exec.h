@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:00:39 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 19:01:36 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 23:23:21 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int					eval_command(t_command *command, int in, int out);
 int					eval_and_or(t_connection *and_or, int in, int out);
 int					eval_pipeline(t_connection *pipeline, int in, int out);
 int					eval_simple_command(t_command *command);
-
+int					eval_command_list(t_command *command_list);
 /*
 ** launch job/process
 */

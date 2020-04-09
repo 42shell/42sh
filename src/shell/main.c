@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 19:37:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 22:17:25 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 23:30:03 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,15 @@
 
 extern int g_exec_status;
 
-t_command		*get_command(void)
+t_command		*get_command_list(void)
 {
-	t_command *command;
+	t_command *command_list;
 
-	if ((command = parse_and_or())
+	if ((command_list = parse_command_list())
 	&& parse_get_all_heredocs() == NOERR)
-		return (command);
-	else if (g_parser.status || g_parser.token != NULL)
+		return (command_list);
+	parse_newline_list();
+	if (g_parser.status || g_parser.token != NULL)
 	{
 		parse_error(g_parser.token ? g_parser.token->value->str : "(null)");
 		token_del(&g_parser.token);
@@ -32,7 +33,7 @@ t_command		*get_command(void)
 
 int				main_loop(void)
 {
-	t_command *command;
+	t_command *command_list;
 
 	while (1)
 	{
@@ -40,12 +41,10 @@ int				main_loop(void)
 			notif_jobs();
 		g_shell.get_input(PS1);
 		if ((g_parser.token = get_next_token())
-		&& (command = get_command()))
+		&& (command_list = get_command_list()))
 		{
-			//print_command(command, 0);
 			g_exec_status = 0;
-			add_job(job_new(command, STDIN_FILENO, STDOUT_FILENO));
-			launch_job(g_shell.jobs);
+			eval_command_list(command_list);
 		}
 		if (g_shell.interactive_mode && g_lexer.line)
 		{

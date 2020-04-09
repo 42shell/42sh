@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 23:49:26 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 21:37:50 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 23:24:11 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ typedef struct					s_command
 	enum e_cmd_type				type;
 	int							flags;
 	union u_cmd_value			value;
+	struct s_command			*next;
 }								t_command;
 
 /*
@@ -138,6 +139,7 @@ t_command						*parse_pipeline(void);
 t_command						*parse_pipe_sequence(void);
 t_command						*parse_command(void);
 t_command						*parse_simple_command(void);
+t_command						*parse_command_list(void);
 t_redir							*parse_io_redirect(void);
 int								parse_separator(void);
 bool							parse_newline_list(void);
@@ -151,6 +153,7 @@ t_command						*command_new(enum e_cmd_type type);
 int								ast_del(t_node **ast);
 int								command_del(t_command **command);
 int								redir_del(t_redir **redir);
+void							command_list_del(t_command **command_list);
 
 void							print_ast(t_node *ast, int indent);
 
