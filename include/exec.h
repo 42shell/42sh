@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:00:39 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/07 00:39:57 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 19:01:36 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct			s_fd_backup
 typedef struct			s_process
 {
 	struct s_process	*next;
-	t_node				*ast;
+	t_command			*command;
 	pid_t				pid;
 	int					stdin;
 	int					stdout;
@@ -47,7 +47,7 @@ typedef struct			s_process
 typedef struct			s_job
 {
 	struct s_job		*next;
-	t_node				*ast;
+	t_command			*command;
 	t_process			*processes;
 	pid_t				pgid;
 	int					stdin;
@@ -70,11 +70,10 @@ t_ht					*g_binaries;
 ** main functions
 */
 
-int					eval_ast(t_node *ast);
-int					eval_and_or(t_node *ast);
-int					eval_pipeline(t_node *ast, int in, int out);
-int					eval_command(t_node *ast);
-int					eval_simple_command(t_node *ast);
+int					eval_command(t_command *command, int in, int out);
+int					eval_and_or(t_connection *and_or, int in, int out);
+int					eval_pipeline(t_connection *pipeline, int in, int out);
+int					eval_simple_command(t_command *command);
 
 /*
 ** launch job/process
@@ -87,7 +86,7 @@ int					launch_job(t_job *job);
 ** exec
 */
 
-char				**get_argv(t_command *command);
+char    			**get_argv(t_simple_cmd *command);
 char				*get_exec_path(char *command);
 int					exec_builtin(char **argv, char **env);
 int					exec_binary(char **argv, char **env);
@@ -131,15 +130,15 @@ void				remove_job_from_list(pid_t pgid);
 ** job display
 */
 
-t_dstr				*format_job(t_node *node, t_dstr *buf);
+t_dstr				*format_job(t_command *command, t_dstr *buf);
 void				print_job(t_job *job, int status);
 
 /*
 ** job new/del
 */
 
-t_process			*process_new(t_node *ast, int stdin, int stdout);
-t_job				*job_new(t_node *ast, int stdin, int stdout);
+t_process			*process_new(t_command *cmd, int stdin, int stdout);
+t_job				*job_new(t_command *cmd, int stdin, int stdout);
 void				process_del(t_process **process);
 void				job_del(t_job **job);
 
@@ -147,7 +146,7 @@ void				job_del(t_job **job);
 ** redirections
 */
 
-int					set_redir(t_command *command, bool backup);
+int					set_redir(t_simple_cmd *command, bool backup);
 int					open_heredoc(t_dstr *heredoc);
 bool				is_valid_fd(int fd);
 void				move_fd(int *fd);

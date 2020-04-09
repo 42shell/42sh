@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 04:05:12 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/01 16:07:48 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/03 19:35:44 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,9 @@ t_redir			*parse_io_redirect(void)
 			return (parse_io_here(io_number));
 		return (parse_io_file(io_number));
 	}
-	else if (g_parser.token->type == DLESS)
+	else if (!is_redir(g_parser.token))
+		return (NULL);
+	if (g_parser.token->type == DLESS)
 		return (parse_io_here(NULL));
 	return (parse_io_file(NULL));
 }

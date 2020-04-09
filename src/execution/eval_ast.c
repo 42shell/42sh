@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/14 17:52:18 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 19:27:22 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,26 @@
 
 int			g_exec_status;
 
-int			eval_simple_command(t_node *ast)
+int			eval_simple_command(t_command *command)
 {
-	t_command	*command;
-	char		**argv;
+	t_process		*process;
+	t_simple_cmd	*simple;
+	char			**argv;
+	bool			builtin;
 
-	command = (t_command *)ast->data;
-	set_redir(command, true);
-	if (!(argv = get_argv(command)))
-		return (0);
+	simple = command->value.simple;
+	argv = (char **)simple->argv->array;
+	builtin = is_builtin(simple->argv->array[0]);
+	if (!(g_exec_status & EXEC_PIPELINE)
+			&& (!builtin || (g_exec_status & EXEC_ASYNC)))
+	{
+		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
+		return (launch_process(process, 0, false));
+	}
+	set_redir(simple, true);
 	if (is_builtin(argv[0]))
 		return (exec_builtin(argv, g_env->env));
 	return (exec_binary(argv, g_env->env));
-	restore_fds();
 }
 
 /*
@@ -42,28 +49,7 @@ int			eval_simple_command(t_node *ast)
 ** it allows us to wait for the first 'ls' to finish in the background.
 */
 
-int			eval_command(t_node *ast)
-{
-	t_command	*command;
-	t_process	*process;
-	bool		builtin;
-
-	command = (t_command *)ast->left->data;
-	if (ast->left->type == NODE_SMPL_CMD)
-	{
-		builtin = (command->words && is_builtin(command->words->value->str));
-		if (!(g_exec_status & EXEC_PIPELINE)
-		&& (!builtin || (g_exec_status & EXEC_ASYNC)))
-		{
-			process = process_new(ast->left, STDIN_FILENO, STDOUT_FILENO);
-			return (launch_process(process, 0, false));
-		}
-		return (eval_simple_command(ast->left));
-	}
-	return (0);
-}
-
-int			eval_pipeline(t_node *ast, int in, int out)
+int			eval_pipeline(t_connection *pipeline, int in, int out)
 {
 	t_process	*process;
 	int			fd[2];
@@ -71,69 +57,43 @@ int			eval_pipeline(t_node *ast, int in, int out)
 	g_exec_status |= EXEC_PIPELINE;
 	if (pipe(fd) == -1)
 		return (-1);
-	if (ast->left->type == NODE_PIPE)
-		eval_pipeline(ast->left, in, fd[1]);
+	if (pipeline->left->type == CONNECTION)
+		eval_command(pipeline->left, in, fd[1]);
 	else
 	{
-		process = process_new(ast->left, in, fd[1]);
+		process = process_new(pipeline->left, in, fd[1]);
 		launch_process(process, fd[0], false);
 	}
-	process = process_new(ast->right, fd[0], out);
+	process = process_new(pipeline->right, fd[0], out);
 	launch_process(process, fd[1], false);
 	return (0);
 }
 
-int			eval_and_or(t_node *ast)
+int			eval_and_or(t_connection *and_or, int in, int out)
 {
 	g_exec_status |= EXEC_AND_OR;
-	eval_ast(ast->left);
+	eval_command(and_or->left, in, out);
 	if (g_shell.jobs->bg)
 		wait_for_job(g_shell.jobs);
 	else
 		put_job_fg(g_shell.jobs, false);
-	if (ast->left->type == BANG)
-		g_last_exit_st = g_last_exit_st ? 0 : 1;
-	if ((ast->type == NODE_AND && g_last_exit_st == 0)
-	|| (ast->type == NODE_OR && g_last_exit_st != 0))
-		eval_ast(ast->right);
+	if ((and_or->connector == AND_IF && g_last_exit_st == 0)
+			|| (and_or->connector == OR_IF && g_last_exit_st != 0))
+		eval_command(and_or->right, in, out);
 	return (0);
 }
 
-int			eval_separator_op(t_node *ast)
+int			eval_command(t_command *command, int in, int out)
 {
-	t_job		*job;
-
-	g_exec_status = 0;
-	g_last_exit_st = 0;
-	job = job_new(ast->left, STDIN_FILENO, STDOUT_FILENO);
-	ast->left = NULL; //to avoid SF when deleting asts
-	add_job(job);
-	if (ast->type == NODE_AMPER)
+	if (command->type == CONNECTION)
 	{
-		g_exec_status |= EXEC_ASYNC;
-		job->bg = true;
+		if (command->value.connection->connector == OR_IF
+				|| command->value.connection->connector == AND_IF)
+			return (eval_and_or(command->value.connection, in, out));
+		if (command->value.connection->connector == PIPE)
+			return (eval_pipeline(command->value.connection, in, out));
 	}
-	launch_job(job);
-	eval_ast(ast->right);
-	return (0);
-}
-
-int			eval_ast(t_node *ast)
-{
-	if (!ast)
-		return (0);
-	if (ast->type == NODE_SEMI || ast->type == NODE_AMPER
-	|| ast->type == NODE_ROOT)
-		return (eval_separator_op(ast));
-	if (ast->type == NODE_AND || ast->type == NODE_OR)
-		return (eval_and_or(ast));
-	if (ast->type == BANG)
-		ast = ast->left;
-	if (ast->type == NODE_PIPE)
-		return (eval_pipeline(ast, STDIN_FILENO, STDOUT_FILENO));
-	if (ast->type == NODE_CMD)
-		return (eval_command(ast));
-	if (ast->type == NODE_SMPL_CMD)
-		return (eval_simple_command(ast));
+	if (command->type == SIMPLE)
+		return (eval_simple_command(command));
 	return (0);
 }

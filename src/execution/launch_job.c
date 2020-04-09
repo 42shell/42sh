@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/14 17:52:18 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 19:27:08 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,17 @@ static pid_t	fork_child(int in, int out, int to_close)
 	return (pid);
 }
 
+static int		exec_simple_cmd(t_simple_cmd *simple)
+{
+	char			**argv;
+
+	set_redir(simple, true);
+	argv = (char **)simple->argv->array;
+	if (is_builtin(argv[0]))
+		return (exec_builtin(argv, g_env->env));
+	return (exec_binary(argv, g_env->env));
+}
+
 int				launch_process(t_process *process, int to_close, bool subshell)
 {
 	pid_t	pid;
@@ -59,7 +70,10 @@ int				launch_process(t_process *process, int to_close, bool subshell)
 		if (!g_shell.jobs->bg)
 			tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
 		reset_signals();
-		eval_ast(process->ast);
+		if (process->command->type == SIMPLE)
+			exec_simple_cmd(process->command->value.simple);
+		else
+			eval_command(process->command, STDIN_FILENO, STDOUT_FILENO);
 		if (subshell)//job_new(), launch_job(); for real subshells
 			wait_for_job(g_shell.jobs);
 		exit(0);
@@ -81,14 +95,14 @@ int				launch_job(t_job *job)
 
 	if (job->bg)
 	{
-		process = process_new(job->ast, STDIN_FILENO, STDOUT_FILENO);
+		process = process_new(job->command, STDIN_FILENO, STDOUT_FILENO);
 		launch_process(process, 0, true);
 		put_job_bg(job, false);
 		ft_printf("[%d] %d\n", job->id + 1, job->pgid);
 	}
 	else
 	{
-		eval_ast(job->ast);
+		eval_command(job->command, STDIN_FILENO, STDOUT_FILENO);
 		put_job_fg(job, false);
 	}
 	return (0);

@@ -6,19 +6,21 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 19:37:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/01 16:38:37 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 19:07:02 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-t_node			*get_ast(void)
-{
-	t_node		*ast;
+extern int g_exec_status;
 
-	if ((ast = parse_list())
+t_command		*get_command(void)
+{
+	t_command *command;
+
+	if ((command = parse_and_or())
 	&& parse_get_all_heredocs() == NOERR)
-		return (ast);
+		return (command);
 	else if (g_parser.error)
 	{
 		parse_error(g_parser.token ? g_parser.token->value->str : "(null)");
@@ -30,7 +32,7 @@ t_node			*get_ast(void)
 
 int				main_loop(void)
 {
-	t_node		*ast;
+	t_command *command;
 
 	while (1)
 	{
@@ -38,11 +40,12 @@ int				main_loop(void)
 			notif_jobs();
 		g_shell.get_input(PS1);
 		if ((g_parser.token = get_next_token())
-		&& (ast = get_ast()))
+		&& (command = get_command()))
 		{
-			//print_ast(ast, 0);
-			eval_ast(ast);
-			ast_del(&ast);
+			//print_command(command, 0);
+			g_exec_status = 0;
+			add_job(job_new(command, STDIN_FILENO, STDOUT_FILENO));
+			launch_job(g_shell.jobs);
 		}
 		if (g_shell.interactive_mode && g_lexer.line)
 		{

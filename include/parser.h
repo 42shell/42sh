@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 23:49:26 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/01 16:05:43 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 17:38:48 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,58 @@ typedef struct					s_redir
 	t_token						*right_op;
 }								t_redir;
 
+enum							e_cmd_type
+{
+	CONNECTION,
+	SIMPLE,
+	SUBSHELL
+};
+
+typedef struct					s_connection
+{
+	struct s_command			*left;
+	struct s_command			*right;
+	enum e_token_type			connector;
+}								t_connection;
+
+typedef struct					s_simple_cmd
+{
+	t_redir						*redirs;
+	t_array						*argv;
+	t_token						*assign_list;
+}								t_simple_cmd;
+
+/*
+** maybe useless
+*/
+
+typedef struct					s_subshell
+{
+	int							flags;
+	struct s_command			*command;
+}								t_subshell;
+
+union							u_cmd_value
+{
+	struct s_connection			*connection;
+	struct s_simple_cmd			*simple;
+	struct s_subshell			*subshell;
+};
+
+
+/*
+** values for s_command->flags
+*/
+
+# define CMD_INVERT_RETURN		0x01
+# define CMD_AMPERSAND			0x02
+# define CMD_LASTPIPE			0x04
+
 typedef struct					s_command
 {
-	t_token						*words;
-	t_redir						*redirs;
+	enum e_cmd_type				type;
+	int							flags;
+	union u_cmd_value			value;
 }								t_command;
 
 /*
@@ -91,11 +139,11 @@ typedef struct					s_parser
 t_parser						g_parser;
 
 t_node							*parse_list(void); //node *
-t_node							*parse_and_or(void);
-t_node							*parse_pipeline(void);
-t_node							*parse_pipe_sequence(void);
-t_node							*parse_command(void);
-t_node							*parse_simple_command(void);
+t_command						*parse_and_or(void);
+t_command						*parse_pipeline(void);
+t_command						*parse_pipe_sequence(void);
+t_command						*parse_command(void);
+t_command						*parse_simple_command(void);
 t_redir							*parse_io_redirect(void);
 t_node							*parse_separator(void);
 t_node							*parse_separator_op(void);
@@ -106,6 +154,7 @@ int								parse_get_all_heredocs(void);
 int								parse_error(char *near);
 int								parse_heredoc_eof(char *delim);
 
+t_command						*command_new(enum e_cmd_type type);
 int								ast_del(t_node **ast);
 int								command_del(t_command **command);
 int								redir_del(t_redir **redir);
