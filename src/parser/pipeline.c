@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 04:37:16 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 23:56:55 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 00:09:03 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ t_command	*parse_pipe_list(t_command *left_operand)
 	t_command	*right_operand;
 	int			type;
 
-	if (g_parser.token == NULL || (type = g_parser.token->type) != PIPE)
+	if (g_parser.token == NULL || (type = g_parser.token->type) != PIPE
+			|| left_operand == NULL)
 		return (left_operand);
 	token_del(&g_parser.token);
 	g_parser.token = get_next_token();

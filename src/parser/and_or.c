@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 19:46:45 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 23:57:07 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 00:08:46 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ t_command	*parse_and_or_list(t_command *left_operand)
 	int			type;
 
 	if (g_parser.token == NULL
+			|| left_operand == NULL
 			|| ((type = g_parser.token->type) != AND_IF && type != OR_IF))
 		return (left_operand);
 	token_del(&g_parser.token);
