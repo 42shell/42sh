@@ -1,6 +1,6 @@
 NAME = libft.a
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror $(DBG_FLAGS)
 DIR_SRC = src/
 DIR_OBJ = obj/
 DIR_INC = inc/
@@ -94,6 +94,7 @@ SRC =	mem/ft_xmalloc.c \
 		oldlib/ft_strpad.c \
 		oldlib/ft_utoa.c \
 		readline/autocomplete.c \
+		readline/autocomplete_display.c \
 		readline/basic_features.c \
 		readline/binding.c \
 		readline/copypaste.c \

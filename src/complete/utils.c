@@ -12,23 +12,6 @@
 
 #include "shell.h"
 
-void	free_comp_list(t_list_head **comp_list)
-{
-	t_list_head *cur;
-	t_list_head *tmp;
-
-	cur = (*comp_list)->next;
-	while (cur != *comp_list)
-	{
-		tmp = cur;
-		cur = cur->next;
-		free(tmp->data);
-		ft_list_del(tmp);
-	}
-	free(*comp_list);
-	*comp_list = NULL;
-}
-
 bool	is_cd(char *str, int i)
 {
 	if (i == 0)
