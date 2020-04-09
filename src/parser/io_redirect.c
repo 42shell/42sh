@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 04:05:12 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/03 19:35:44 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 21:40:22 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static t_redir	*parse_io_file(t_token *io_number)
 	g_parser.token = get_next_token();
 	if (!(redir->right_op = parse_filename()))
 	{
-		g_parser.error = NO_REDIR_FILENAME;
+		g_parser.status = UNEXPECTED_TOKEN;
 		redir_del(&redir);
 		return (NULL);
 	}
@@ -79,7 +79,7 @@ static t_redir	*parse_io_here(t_token *io_number)
 	redir->operator = g_parser.token;
 	if (!(g_parser.token = get_next_token()) || g_parser.token->type != WORD)
 	{
-		g_parser.error = HEREDOC_NO_DELIM;
+		g_parser.status = UNEXPECTED_TOKEN;
 		redir_del(&redir);
 		return (NULL);
 	}

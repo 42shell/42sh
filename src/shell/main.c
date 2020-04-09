@@ -21,11 +21,11 @@ t_command		*get_command(void)
 	if ((command = parse_and_or())
 	&& parse_get_all_heredocs() == NOERR)
 		return (command);
-	else if (g_parser.error)
+	else if (g_parser.status)
 	{
 		parse_error(g_parser.token ? g_parser.token->value->str : "(null)");
 		token_del(&g_parser.token);
-		g_parser.error = NOERR;
+		g_parser.status = NOERR;
 	}
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 20:03:18 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/01 16:07:33 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 21:42:10 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int				parse_get_all_heredocs(void)
 	t_token	*curr;
 	t_token	*tmp;
 
-	if (g_parser.error || !(curr = g_parser.heredocs)
+	if (g_parser.status != NOERR || !(curr = g_parser.heredocs)
 	|| !(g_heredoc_ptr = ft_strchr(g_lexer.line, '\n')))
 		return (0);
 	g_heredoc_ptr++;
@@ -111,5 +111,5 @@ int				parse_get_all_heredocs(void)
 	}
 	g_parser.heredocs = NULL;
 	g_heredoc_ptr = NULL;
-	return (g_parser.error);
+	return (g_parser.status);
 }

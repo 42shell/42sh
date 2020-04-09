@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 19:37:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/02 01:21:41 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 21:38:48 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ int			input_interactive(const char *prompt)
 		free(line);
 		if (g_rl_last_ret == RL_INTERRUPT)
 		{
-			g_parser.error = SILENT_ABORT;
+			g_parser.status = USER_ABORT;
 			ft_memdel((void **)&g_lexer.line);
 		}
 		if (g_rl_last_ret == RL_EOF)

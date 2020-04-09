@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 19:22:51 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/07 02:46:58 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 21:39:09 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int			comp_multiple_match(t_input *input, t_list_head *comp_list,
 		rl_print_match_list(comp_list, partial, input);
 	input->first_tab_press = (lcp == NULL) ? !input->first_tab_press : true;
 	free(lcp);
-	if (g_parse_error == SILENT_ABORT)
+	if (g_parse_error == USER_ABORT)
 	{
 		g_parse_error = NOERR;
 		return (EOL);

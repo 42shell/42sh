@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 23:49:26 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 21:33:26 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 21:37:50 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,10 @@
 
 # define PARSE_ERROR			20 //?
 
-enum							e_parse_error
+enum							e_parser_status
 {
-	SILENT_ABORT = -1,
-	NOERR,
-	TOKENS_LEFT,
-	NULL_AST,
-	NULL_AST_NODE,
-	NO_REDIR_FILENAME,
-	NO_CMD_BEFORE_OP,
-	NO_CMD_AFTER_OP,
-	HEREDOC_NO_DELIM,
+	USER_ABORT = -1,
+	NOERR = 0,
 	UNEXPECTED_TOKEN
 };
 
@@ -134,7 +127,7 @@ typedef struct					s_parser
 {
 	t_token						*token;
 	t_token						*heredocs;
-	int							error;
+	enum e_parser_status		status;
 }								t_parser;
 
 t_parser						g_parser;

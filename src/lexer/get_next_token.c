@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   eat.c                                              :+:      :+:    :+:   */
+/*   get_next_token.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/24 18:51:32 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 21:41:54 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static t_token	*return_token(void)
 
 t_token			*get_next_token(void)
 {
-	if (g_parser.error || !g_lexer.line)
+	if (g_parser.status != NOERR || !g_lexer.line)
 		return (NULL);
 	if (g_lexer.line_cont || g_lexer.quote_st)
 	{
