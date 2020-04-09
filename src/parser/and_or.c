@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 19:46:45 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 17:41:40 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 22:08:06 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,20 @@ t_command	*parse_and_or_list(t_command *left_operand)
 	t_command	*right_operand;
 	int			type;
 
-	type = g_parser.token->type;
-	if (type != AND_IF && type != OR_IF)
+	if (g_parser.token == NULL
+			|| ((type = g_parser.token->type) != AND_IF && type != OR_IF))
 		return (left_operand);
 	token_del(&g_parser.token);
 	g_parser.token = get_next_token();
 	parse_linebreak(type);
 	right_operand = parse_pipeline();
+	if (right_operand == NULL)
+	{
+		if (g_parser.status != NOERR)
+			g_parser.status = UNEXPECTED_TOKEN;
+		command_del(&left_operand);
+		return (NULL);
+	}
 	and_or = command_new(CONNECTION);
 	and_or->value.connection->connector = type;
 	and_or->value.connection->left = left_operand;

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 19:37:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 19:07:02 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 22:17:25 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_command		*get_command(void)
 	if ((command = parse_and_or())
 	&& parse_get_all_heredocs() == NOERR)
 		return (command);
-	else if (g_parser.status)
+	else if (g_parser.status || g_parser.token != NULL)
 	{
 		parse_error(g_parser.token ? g_parser.token->value->str : "(null)");
 		token_del(&g_parser.token);

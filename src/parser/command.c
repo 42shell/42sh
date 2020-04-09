@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 19:46:45 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 18:17:08 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/09 21:55:07 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,9 @@ t_command		*parse_simple_command(void)
 {
 	t_command		*cmd;
 
-	if (g_parser.token->type != WORD && g_parser.token->type != IO_NUMBER
-			&& !is_redir(g_parser.token))
+	if (g_parser.token == NULL
+		|| (g_parser.token->type != WORD && g_parser.token->type != IO_NUMBER
+			&& !is_redir(g_parser.token)))
 		return (NULL);
 	cmd = command_new(SIMPLE);
 	if (set_tokens(cmd->value.simple) == -1)
