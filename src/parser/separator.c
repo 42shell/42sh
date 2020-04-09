@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 04:37:16 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 23:53:16 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 00:13:35 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void		parse_linebreak(int last_token_type)
 
 bool		parse_newline_list(void)
 {
-	if (g_parser.token == NULL)
+	if (g_parser.status != NOERR || g_parser.token == NULL)
 		return (false);
 	while (g_parser.token && g_parser.token->type == NEWLINE)
 	{

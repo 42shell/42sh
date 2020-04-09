@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/13 19:15:17 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 00:14:55 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int			lx_newline(void)
 		{
 			g_lexer.nl_found = 1;
 			g_lexer.token = token_new(NEWLINE);
-			ft_dstr_append(g_lexer.token->value, "\\n");
+			ft_dstr_append(g_lexer.token->value, "newline");
 			g_lexer.i++;
 		}
 		delim_token();
