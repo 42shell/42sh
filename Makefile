@@ -58,7 +58,7 @@ SRC_ENV		    := env_dup.c\
                    env_utils.c
 SRC_ENV    		:= $(addprefix env/,$(SRC_ENV))
 
-SRC_EXEC        := eval_ast.c\
+SRC_EXEC        := eval_command.c\
 				   exec.c\
 				   get_argv.c\
 				   get_exec_path.c\
