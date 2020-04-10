@@ -76,13 +76,13 @@ SRC_EXEC        := eval_command.c\
 				   #utils.c
 SRC_EXEC        := $(addprefix execution/,$(SRC_EXEC))
 
-#SRC_EXPANSION   := expand.c\
+SRC_EXPANSION   := expand.c\
                    param_exp.c\
                    quotes.c\
-				   path_exp.c\
 				   is_match.c\
 				   sort_matches.c
-#SRC_EXPANSION   := $(addprefix expansion/,$(SRC_EXPANSION))
+				   #path_exp.c
+SRC_EXPANSION   := $(addprefix expansion/,$(SRC_EXPANSION))
 
 SRC_LEXER       := append.c\
                    delim.c\

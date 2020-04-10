@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:08:22 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/13 18:07:31 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 16:54:56 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,24 +47,26 @@ int		tilde_expand(t_dstr *str, char *home_dir)
 ** any case ? would be easier to implement.
 */
 
-int		expand(t_node *command, t_env *env)
+int		expand(t_simple_cmd *command, t_env *env)
 {
 	int		i;
 	int		pos;
 	char	*home_dir;
+	t_token	*cur;
 
 	i = 0;
-	home_dir = get_env_var("HOME", env);
-	while (i < command->nb_children)
+	home_dir = get_env_var("HOME");
+	cur = command->args;
+	while (cur != NULL)
 	{
-		if (node_token(command->child[i])->type == WORD)
+		if (cur->type == WORD)
 		{
-			pos = tilde_expand(node_token(command->child[i])->value, home_dir);
-			param_expand(node_token(command->child[i])->value, pos, env, false);
-			path_expand(command->child[i]);
-			remove_quotes(node_token(command->child[i])->value);
+			pos = tilde_expand(cur->value, home_dir);
+			param_expand(cur->value, pos, env, false);
+			//path_expand(command->child[i]);
+			remove_quotes(cur->value);
 		}
-		i++;
+		cur = cur->next;
 	}
 	return (0);
 }
