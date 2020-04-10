@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 23:49:26 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 00:30:22 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 14:33:06 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,35 +15,12 @@
 
 # include "shell.h"
 
-# define PARSE_ERROR			20 //?
-
 enum							e_parser_status
 {
 	USER_ABORT = -1,
 	NOERR = 0,
 	UNEXPECTED_TOKEN
 };
-
-enum							e_node_type
-{
-	NODE_SMPL_CMD,
-	NODE_CMD,
-	NODE_PIPE,
-	NODE_BANG,
-	NODE_AND,
-	NODE_OR,
-	NODE_SEMI,
-	NODE_AMPER,
-	NODE_ROOT
-};
-
-typedef struct					s_node
-{
-	struct s_node				*left;
-	struct s_node				*right;
-	void						*data;
-	int							type;
-}								t_node;
 
 /*
 ** -A single redir is returned by parse_io_redirect()
@@ -133,7 +110,6 @@ typedef struct					s_parser
 
 t_parser						g_parser;
 
-t_node							*parse_list(void); //node *
 t_command						*parse_and_or(void);
 t_command						*parse_pipeline(void);
 t_command						*parse_pipe_sequence(void);
@@ -150,11 +126,8 @@ int								parse_error(char *near);
 int								parse_heredoc_eof(char *delim);
 
 t_command						*command_new(enum e_cmd_type type);
-int								ast_del(t_node **ast);
 int								command_del(t_command **command);
 int								redir_del(t_redir **redir);
 void							command_list_del(t_command **command_list);
-
-void							print_ast(t_node *ast, int indent);
 
 #endif

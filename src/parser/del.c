@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 19:46:45 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 23:17:06 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 14:33:17 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,19 +62,6 @@ int			command_del(t_command **command)
 	else if ((*command)->type == SUBSHELL)
 		ft_memdel((void **)&(*command)->value.subshell);
 	ft_memdel((void **)command);
-	return (0);
-}
-
-int			ast_del(t_node **ast)
-{
-	if (!ast || !*ast)
-		return (0);
-	if ((*ast)->type == NODE_SMPL_CMD)
-		command_del((t_command **)&(*ast)->data);
-	ast_del(&(*ast)->left);
-	ast_del(&(*ast)->right);
-	free(*ast);
-	*ast = NULL;
 	return (0);
 }
 
