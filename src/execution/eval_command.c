@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   eval_ast.c                                         :+:      :+:    :+:   */
+/*   eval_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 16:19:17 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 17:03:59 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ int			eval_simple_command(t_command *command, int in, int out,
 	simple = command->value.simple;
 	simple->argv = get_argv(simple);
 	builtin = is_builtin(simple->argv[0]);
-	if (!builtin || (g_exec_status & EXEC_ASYNC))
+	if (!builtin || (g_exec_status & EXEC_ASYNC)
+		|| (g_exec_status & EXEC_PIPELINE))
 	{
 		process = process_new(command, in, out);
 		return (launch_process(process, fd_to_close, false));
