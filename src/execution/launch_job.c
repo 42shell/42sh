@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 14:24:57 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 16:45:41 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int				launch_process(t_process *process, int to_close, bool subshell)
 		if (process->command->type == SIMPLE)
 			exec_simple_cmd(process->command->value.simple);
 		else
-			eval_command(process->command, STDIN_FILENO, STDOUT_FILENO);
+			eval_command(process->command);
 		if (subshell)//job_new(), launch_job(); for real subshells
 			wait_for_job(g_shell.jobs);
 		exit(0);
@@ -102,7 +102,7 @@ int				launch_job(t_job *job)
 	}
 	else
 	{
-		eval_command(job->command, STDIN_FILENO, STDOUT_FILENO);
+		eval_command(job->command);
 		put_job_fg(job, false);
 	}
 	return (0);

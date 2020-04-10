@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:00:39 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 23:23:21 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 15:46:32 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@
 # define ERROR_REDIR_OPEN	-1
 # define ERROR_REDIR_BAD_FD	-2
 
-# define EXEC_ASYNC			1			
-# define EXEC_AND_OR		2
-# define EXEC_PIPELINE		4
+# define EXEC_ASYNC				1			
+# define EXEC_AND_OR			2
+# define EXEC_PIPELINE			4
+# define EXEC_ALREADY_FORKED	8
 
 # define JOB_DONE			1		
 # define JOB_STOPPED		2		
@@ -70,10 +71,11 @@ t_ht					*g_binaries;
 ** main functions
 */
 
-int					eval_command(t_command *command, int in, int out);
-int					eval_and_or(t_connection *and_or, int in, int out);
+int					eval_command(t_command *command);
+int					eval_and_or(t_connection *and_or);
 int					eval_pipeline(t_connection *pipeline, int in, int out);
-int					eval_simple_command(t_command *command);
+int					eval_simple_command(t_command *command, int in, int out,
+					int fd_to_close);
 int					eval_command_list(t_command *command_list);
 /*
 ** launch job/process
