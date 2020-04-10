@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:08:22 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 16:54:56 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 17:20:54 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int		expand(t_simple_cmd *command, t_env *env)
 		{
 			pos = tilde_expand(cur->value, home_dir);
 			param_expand(cur->value, pos, env, false);
-			//path_expand(command->child[i]);
+			path_expand(cur);
 			remove_quotes(cur->value);
 		}
 		cur = cur->next;

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 16:11:34 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 16:53:08 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 17:21:32 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 int		expand(t_simple_cmd *command, t_env *env);
 int		param_expand(t_dstr *str, int start, t_env *env, bool heredoc);
-//void	path_expand(t_node *pattern_node);
+void	path_expand(t_token *token);
 t_array	*get_matches(char *path);
 bool	is_match(char *str, char *pat, char quote, bool is_first_char);
 

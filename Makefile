@@ -80,8 +80,8 @@ SRC_EXPANSION   := expand.c\
                    param_exp.c\
                    quotes.c\
 				   is_match.c\
-				   sort_matches.c
-				   #path_exp.c
+				   sort_matches.c\
+				   path_exp.c
 SRC_EXPANSION   := $(addprefix expansion/,$(SRC_EXPANSION))
 
 SRC_LEXER       := append.c\
