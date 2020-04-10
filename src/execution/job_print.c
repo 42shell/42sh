@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 23:51:43 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 14:34:10 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_dstr		*format_job(t_command *command, t_dstr *buf)
 		connector = command->value.connection->connector;
 		if (connector == AND_IF)
 			ft_dstr_append(buf, " && ");
-		else if (connector == AND_IF)
+		else if (connector == OR_IF)
 			ft_dstr_append(buf, " || ");
 		else if (connector == PIPE)
 			ft_dstr_append(buf, " | ");
