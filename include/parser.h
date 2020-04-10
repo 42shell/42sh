@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 23:49:26 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 14:33:06 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 14:45:40 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,9 @@ typedef struct					s_connection
 typedef struct					s_simple_cmd
 {
 	t_redir						*redirs;
-	t_array						*argv;
-	t_token						*assign_list;
+	t_token						*args;
+	t_token						*assigns;
+	char						**argv;
 }								t_simple_cmd;
 
 /*

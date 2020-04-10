@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 23:29:30 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 14:24:09 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,11 @@ int			eval_simple_command(t_command *command)
 {
 	t_process		*process;
 	t_simple_cmd	*simple;
-	char			**argv;
 	bool			builtin;
 
 	simple = command->value.simple;
-	argv = (char **)simple->argv->array;
-	builtin = is_builtin(simple->argv->array[0]);
+	simple->argv = get_argv(simple);
+	builtin = is_builtin(simple->argv[0]);
 	if (!(g_exec_status & EXEC_PIPELINE)
 			&& (!builtin || (g_exec_status & EXEC_ASYNC)))
 	{
@@ -31,9 +30,9 @@ int			eval_simple_command(t_command *command)
 		return (launch_process(process, 0, false));
 	}
 	set_redir(simple, true);
-	if (is_builtin(argv[0]))
-		return (exec_builtin(argv, g_env->env));
-	return (exec_binary(argv, g_env->env));
+	if (is_builtin(simple->argv[0]))
+		return (exec_builtin(simple->argv, g_env->env));
+	return (exec_binary(simple->argv, g_env->env));
 }
 
 /*

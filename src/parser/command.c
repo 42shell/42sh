@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 19:46:45 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 23:49:01 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 14:21:14 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,24 +25,19 @@ static bool		is_assignment(char *str)
 	return (*str == '=');
 }
 
-static void		add_word(t_simple_cmd *simple, t_token *word, bool assignment)
+static void		add_word(t_token **token_list, t_token *word)
 {
 	t_token		*ptr;
 
-	if (assignment)
-	{
-		if (simple->assign_list == NULL)
-			simple->assign_list = word;
-		else
-		{
-			ptr = simple->assign_list;
-			while (ptr->next)
-				ptr = ptr->next;
-			ptr->next = word;
-		}
-	}
+	if (*token_list == NULL)
+		*token_list = word;
 	else
-		array_append(simple->argv, ft_strdup(word->value->str));
+	{
+		ptr = (*token_list);
+		while (ptr->next)
+			ptr = ptr->next;
+		ptr->next = word;
+	}
 }
 
 static void		add_redir(t_simple_cmd *simple, t_redir *redir)
@@ -64,7 +59,7 @@ static int		set_tokens(t_simple_cmd *simple)
 {
 	t_redir		*redir;
 	bool		prefix;
-	bool		assignment;
+	bool		assign;
 
 	prefix = true;
 	while (g_parser.token)
@@ -73,12 +68,11 @@ static int		set_tokens(t_simple_cmd *simple)
 		{
 			if (prefix)
 			{
-				assignment = is_assignment(g_parser.token->value->str);
-				if (!assignment)
+				assign = is_assignment(g_parser.token->value->str);
+				if (!assign)
 					prefix = false;
 			}
-			add_word(simple, g_parser.token, assignment);
-			token_del(&g_parser.token);
+			add_word(assign ? &simple->assigns : &simple->args, g_parser.token);
 			g_parser.token = get_next_token();
 		}
 		else if ((redir = parse_io_redirect()))

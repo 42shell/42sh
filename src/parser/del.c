@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 19:46:45 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 14:33:17 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 14:46:00 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,7 @@ t_command	*command_new(enum e_cmd_type type)
 	command = ft_xmalloc(sizeof(t_command));
 	command->type = type;
 	if (type == SIMPLE)
-	{
 		command->value.simple = ft_xmalloc(sizeof(t_simple_cmd));
-		command->value.simple->argv = array_new();
-	}
 	else if (type == CONNECTION)
 		command->value.connection = ft_xmalloc(sizeof(t_connection));
 	else if (type == SUBSHELL)
@@ -49,8 +46,9 @@ int			command_del(t_command **command)
 	if ((*command)->type == SIMPLE)
 	{
 		redir_del(&(*command)->value.simple->redirs);
-		token_del(&(*command)->value.simple->assign_list);
-		array_destroy((*command)->value.simple->argv);
+		token_del(&(*command)->value.simple->assigns);
+		token_del(&(*command)->value.simple->args);
+		free_arr((*command)->value.simple->argv);
 		ft_memdel((void **)&(*command)->value.simple);
 	}
 	else if ((*command)->type == CONNECTION)

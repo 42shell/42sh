@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 14:34:10 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 14:45:52 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 static void	format_simple_command(t_simple_cmd *command, t_dstr *buf)
 {
 	t_redir		*redir;
-	int			i;
+	t_token		*arg;
 
 	redir = command->redirs;
-	i = 0;
-	while (command->argv->array[i])
+	arg = command->args;
+	while (arg != NULL)
 	{
-		ft_dstr_append(buf, command->argv->array[i]);
-		if (command->argv->array[++i] || redir)
+		ft_dstr_append(buf, arg->value->str);
+		if ((arg = arg->next) != NULL || redir)
 			ft_dstr_append(buf, " ");
 	}
 	while (redir)

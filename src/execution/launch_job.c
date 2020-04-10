@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 19:27:08 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 14:24:57 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int		exec_simple_cmd(t_simple_cmd *simple)
 	char			**argv;
 
 	set_redir(simple, true);
-	argv = (char **)simple->argv->array;
+	argv = simple->argv == NULL ? get_argv(simple) : simple->argv;
 	if (is_builtin(argv[0]))
 		return (exec_builtin(argv, g_env->env));
 	return (exec_binary(argv, g_env->env));
