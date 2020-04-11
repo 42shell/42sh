@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:08:22 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/11 13:44:30 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/11 17:58:31 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@ int		tilde_expand(t_dstr *str, char *home_dir)
 ** completely expanded command, unless the original word contained single-quote
 ** or double-quote characters. -> bash does not seem to keep the empty field in
 ** any case ? would be easier to implement.
+** ^ disregard that
+** we store the next token before expanding because we may add new tokens after
+** the token we expand, and we don't want to expand them
 */
 
 int		expand(t_simple_cmd *command, t_env *env)
@@ -53,12 +56,14 @@ int		expand(t_simple_cmd *command, t_env *env)
 	int		pos;
 	char	*home_dir;
 	t_token	*cur;
+	t_token *next;
 
 	i = 0;
 	home_dir = get_env_var("HOME", env);
 	cur = command->args;
 	while (cur != NULL)
 	{
+		next = cur->next;
 		if (cur->type == WORD)
 		{
 			pos = tilde_expand(cur->value, home_dir);
@@ -66,7 +71,7 @@ int		expand(t_simple_cmd *command, t_env *env)
 			path_expand(cur);
 			remove_quotes(cur->value);
 		}
-		cur = cur->next;
+		cur = next;
 	}
 	return (0);
 }
