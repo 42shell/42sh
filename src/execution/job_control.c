@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 17:27:58 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/11 13:26:44 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ void	wait_for_job(t_job *job)
 			ft_dprintf(2, "42sh: waitpid: unexpected error.\n", pid);
 			break ;
 		}
+		g_last_exit_st = WEXITSTATUS(job->processes->status);
 	}
-	g_last_exit_st = WEXITSTATUS(job->processes->status);
 }
 
 void	continue_job(t_job *job, bool bg)

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 14:27:06 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/11 13:17:05 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,20 @@
 int			exec_builtin(char **argv, char **env)
 {
 	(void)env;
+	int		ret;
 	//if (ft_strequ(argv[0], "env"))
 	//	builtin_env(argv, env);
 	if (ft_strequ(argv[0], "exit"))
 		builtin_exit(argv);
 	else if (ft_strequ(argv[0], "unsetenv"))
-		builtin_unsetenv(argv);
+		ret = builtin_unsetenv(argv);
 	else if (ft_strequ(argv[0], "setenv"))
-		builtin_setenv(argv);
+		ret = builtin_setenv(argv);
 	else if (ft_strequ(argv[0], "echo"))
-		builtin_echo(argv);
+		ret = builtin_echo(argv);
 	else if (ft_strequ(argv[0], "cd"))
-		builtin_cd(argv);
-	//g_last_exit_st = 0; //STATUS
+		ret = builtin_cd(argv);
+	g_last_exit_st = ret;
 	//restore_fds(); this should be called even in forks
 	return (0); //errors ?
 }
