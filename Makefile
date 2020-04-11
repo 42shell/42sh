@@ -45,7 +45,7 @@ SRC_BUILTINS    :=	builtins.c\
 					builtin_utils.c\
 					cd.c\
 					cd_utils.c\
-					#env.c
+					env.c
 SRC_BUILTINS    := $(addprefix builtins/,$(SRC_BUILTINS))
 
 SRC_COMPLETE    := get_autocomplete_list.c\
