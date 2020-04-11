@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 16:36:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 16:55:09 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/11 13:44:12 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int			param_expand(t_dstr *str, int start, t_env *env, bool heredoc)
 		if (should_expand(str->str, i, quote_status, heredoc)
 				&& (var_name = get_var_name(str->str + i + 1)))
 		{
-			var_value = get_env_var(var_name);
+			var_value = get_env_var(var_name, env);
 			ft_dstr_remove(str, i, ft_strlen(var_name) + 1);
 			ft_dstr_insert(str, i, var_value, ft_strlen(var_value));
 			i += ft_strlen(var_value) - 1;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   argv.c                                             :+:      :+:    :+:   */
+/*   get_exec_path.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/14 17:52:18 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/11 13:51:04 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static char	*cache_search(char *command)
 	return (ret);
 }
 
-char		*get_exec_path(char *command)
+char		*get_exec_path(char *command, t_env *env)
 {
 	char		**path;
 	char		*ret;
@@ -47,7 +47,7 @@ char		*get_exec_path(char *command)
 	else if (ft_strchr(command, '/')
 	&& (stat(command, &b) == 0 && (S_IXUSR & b.st_mode) && !S_ISDIR(b.st_mode)))
 		ret = ft_strdup(command);
-	else if ((path = split_path(get_env_var("PATH"))))
+	else if ((path = split_path(get_env_var("PATH", env))))
 	{
 		while (path && path[i] && (ret = append_filename(path[i++], command)))
 		{
@@ -57,7 +57,7 @@ char		*get_exec_path(char *command)
 		}
 	}
 	if (ret)
-		cache_add(ft_strdup(command), ft_strdup(ret));
+		cache_add(command, ft_strdup(ret));
 	free_arr(path);
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/11 13:17:05 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/11 13:43:48 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ int			exec_builtin(char **argv, char **env)
 {
 	(void)env;
 	int		ret;
-	//if (ft_strequ(argv[0], "env"))
-	//	builtin_env(argv, env);
+	if (ft_strequ(argv[0], "env"))
+		builtin_env(argv, g_env);
 	if (ft_strequ(argv[0], "exit"))
 		builtin_exit(argv);
 	else if (ft_strequ(argv[0], "unsetenv"))
@@ -37,7 +37,7 @@ int			exec_binary(char **argv, char **env)
 {
 	char	*path;
 
-	if (!(path = get_exec_path(argv[0])))
+	if (!(path = get_exec_path(argv[0], g_env)))
 	{
 		ft_dprintf(2, "42sh: %s: command not found\n", argv[0]);
 		exit (1); //code?

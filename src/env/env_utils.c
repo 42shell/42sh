@@ -6,21 +6,21 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:58:15 by fratajcz          #+#    #+#             */
-/*   Updated: 2019/12/15 09:58:21 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/11 13:33:36 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void	set_env_var(char *var, char *value)
+void	set_env_var(char *var, char *value, t_env *env)
 {
-	if (get_env_var(var) == NULL)
-		add_env_var(var, value);
+	if (get_env_var(var, env) == NULL)
+		add_env_var(var, value, env);
 	else
-		replace_env_var(var, value);
+		replace_env_var(var, value, env);
 }
 
-char	*get_env_var(char *var_name)
+char	*get_env_var(char *var_name, t_env *env)
 {
 	int				i;
 	char			*match;
@@ -28,16 +28,16 @@ char	*get_env_var(char *var_name)
 
 	i = 0;
 	var_equals = ft_strjoin(var_name, "=");
-	while (g_env->env[i] && ((match = ft_strstr(g_env->env[i], var_equals)) == NULL
-			|| match != g_env->env[i]))
+	while (env->env[i] && ((match = ft_strstr(env->env[i], var_equals)) == NULL
+			|| match != env->env[i]))
 		i++;
 	free(var_equals);
-	if (g_env->env[i] == NULL)
+	if (env->env[i] == NULL)
 		return (NULL);
-	return (g_env->env[i] + ft_strlen(var_name) + 1);
+	return (env->env[i] + ft_strlen(var_name) + 1);
 }
 
-void	add_env_var(char *var, char *value)
+void	add_env_var(char *var, char *value, t_env *env)
 {
 	int		i;
 	char	**new;
@@ -45,28 +45,28 @@ void	add_env_var(char *var, char *value)
 	i = 0;
 	if (value == NULL)
 		value = "";
-	if (g_env->size < g_env->capacity)
+	if (env->size < env->capacity)
 	{
-		g_env->env[g_env->size - 1] = ft_strjoin_triple(var, "=", value);
-		g_env->env[g_env->size] = NULL;
-		g_env->size++;
+		env->env[env->size - 1] = ft_strjoin_triple(var, "=", value);
+		env->env[env->size] = NULL;
+		env->size++;
 	}
 	else
 	{
 		i = -1;
-		new = ft_xmalloc((g_env->capacity * 1.125 + 6) * sizeof(char *));
-		g_env->capacity = g_env->capacity * 1.125 + 6;
-		while (++i < g_env->size - 1)
-			new[i] = g_env->env[i];
+		new = ft_xmalloc((env->capacity * 1.125 + 6) * sizeof(char *));
+		env->capacity = env->capacity * 1.125 + 6;
+		while (++i < env->size - 1)
+			new[i] = env->env[i];
 		new[i] = ft_strjoin_triple(var, "=", value);
 		new[i + 1] = NULL;
-		g_env->size++;
-		free(g_env->env);
-		g_env->env = new;
+		env->size++;
+		free(env->env);
+		env->env = new;
 	}
 }
 
-void	replace_env_var(char *var, char *value)
+void	replace_env_var(char *var, char *value, t_env *env)
 {
 	int		i;
 	char	*match;
@@ -74,17 +74,17 @@ void	replace_env_var(char *var, char *value)
 	if (value == NULL)
 		value = "";
 	i = 0;
-	while (g_env->env[i] && ((match = ft_strstr(g_env->env[i], var)) == NULL
-					|| match != g_env->env[i]))
+	while (env->env[i] && ((match = ft_strstr(env->env[i], var)) == NULL
+					|| match != env->env[i]))
 		i++;
-	if (g_env->env[i] != NULL)
+	if (env->env[i] != NULL)
 	{
-		free(g_env->env[i]);
-		g_env->env[i] = ft_strjoin_triple(var, "=", value);
+		free(env->env[i]);
+		env->env[i] = ft_strjoin_triple(var, "=", value);
 	}
 }
 
-void	remove_env_var(char *name)
+void	remove_env_var(char *name, t_env *env)
 {
 	int		i;
 	void	*ptr_to_free;
@@ -93,18 +93,18 @@ void	remove_env_var(char *name)
 
 	i = 0;
 	search = ft_strjoin(name, "=");
-	while (g_env->env[i]
-		&& (!(match = ft_strstr(g_env->env[i], search)) || match != g_env->env[i]))
+	while (env->env[i]
+		&& (!(match = ft_strstr(env->env[i], search)) || match != env->env[i]))
 		i++;
-	if (g_env->env[i] != NULL)
+	if (env->env[i] != NULL)
 	{
-		ptr_to_free = g_env->env[i];
-		while (g_env->env[i])
+		ptr_to_free = env->env[i];
+		while (env->env[i])
 		{
-			g_env->env[i] = g_env->env[i + 1];
+			env->env[i] = env->env[i + 1];
 			i++;
 		}
-		g_env->size--;
+		env->size--;
 		free(ptr_to_free);
 	}
 	free(search);

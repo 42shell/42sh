@@ -41,7 +41,7 @@ int		builtin_setenv(char **argv)
 		write(2, "setenv: Invalid variable name\n", 30);
 	else
 	{
-		set_env_var(argv[1], argv[2]);
+		set_env_var(argv[1], argv[2], g_env);
 		return (0);
 	}
 	return (1);
@@ -53,7 +53,7 @@ int		builtin_unsetenv(char **argv)
 
 	i = 1;
 	while (argv[i])
-		remove_env_var(argv[i++]);
+		remove_env_var(argv[i++], g_env);
 	return (0);
 }
 
