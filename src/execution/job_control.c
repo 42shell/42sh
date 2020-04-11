@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/11 13:26:44 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/11 17:07:33 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	notif_jobs(void)
 		{
 			if (job->bg)
 				print_job(job, JOB_DONE);
-			remove_job_from_list(job->pgid);
+			remove_job_from_list(job->id);
 			process_del(&job->processes);
 			command_del(&job->command);
 			free(job);
