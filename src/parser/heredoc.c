@@ -50,7 +50,7 @@ static int		line_get(void)
 	while (!ft_strchr(g_heredoc_ptr, '\n'))
 	{
 		i = g_heredoc_ptr - g_lexer.line;
-		if ((ret = g_shell.get_input(PSH)))
+		if ((ret = g_shell.get_input(PSH, true)))
 			return (ret);
 		g_heredoc_ptr = &g_lexer.line[i];
 	}

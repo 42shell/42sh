@@ -47,11 +47,12 @@ int				main_loop(void)
 		if (g_shell.jobs)
 			notif_jobs();
 		g_parser.status = NOERR;
-		g_shell.get_input(PS1);
+		g_shell.get_input(PS1, false);
 		if ((g_parser.token = get_next_token())
 		&& (command_list = get_command_list()))
 		{
 			g_exec_status = 0;
+			g_last_exit_st = 0;
 			eval_command_list(command_list);
 		}
 		if (g_shell.interactive_mode && g_lexer.line)

@@ -12,7 +12,7 @@
 
 #include "shell.h"
 
-int			remove_escaped_newlines(char *line)
+int			remove_escaped_newlines(char *line, bool ignore_quotes)
 {
 	char	quote;
 	int		i;
@@ -21,20 +21,20 @@ int			remove_escaped_newlines(char *line)
 	quote = 0;
 	while (line[i])
 	{
-		if (line[i] == BSLASH)
+		if (line[i] == BSLASH && (ignore_quotes ? 1 : !quote))
 		{
 			i++;
 			if (line[i] == '\n')
 				ft_memmove(&line[i - 1], &line[i + 1], ft_strlen(&line[i + 1]) + 1);
 		}
-		else if (line[i] == SQUOTE)
+		else if (!ignore_quotes && line[i] == SQUOTE)
 		{
 			if (quote == SQUOTE)
 				quote = 0;
 			else if (quote == 0)
 				quote = SQUOTE;
 		}
-		else if (line[i] == DQUOTE)
+		else if (!ignore_quotes && line[i] == DQUOTE)
 		{
 			if (quote == DQUOTE)
 				quote = 0;
@@ -72,7 +72,7 @@ char		*get_line()
 	}
 }
 
-int			input_batch(const char *prompt)
+int			input_batch(const char *prompt, bool heredoc)
 {
 	char	*line;
 	char	*tmp;
@@ -87,7 +87,6 @@ int			input_batch(const char *prompt)
 			exit(0);//builtin_exit()
 		return (INPUT_EOF);
 	}
-	remove_escaped_newlines(line);
 	if (g_lexer.line)
 	{
 		tmp = g_lexer.line;
@@ -96,11 +95,12 @@ int			input_batch(const char *prompt)
 	}
 	else
 		g_lexer.line = ft_strdup(line);
+	remove_escaped_newlines(g_lexer.line, heredoc);
 	free(line);
 	return (0);
 }
 
-int			input_interactive(const char *prompt)
+int			input_interactive(const char *prompt, bool heredoc)
 {
 	char	*line;
 	char	*tmp;
@@ -123,7 +123,6 @@ int			input_interactive(const char *prompt)
 		}
 		return (g_rl_last_ret == RL_EOF ? INPUT_EOF : INPUT_INT);
 	}
-	remove_escaped_newlines(line);
 	if (g_lexer.line)
 	{
 		tmp = g_lexer.line;
@@ -132,6 +131,7 @@ int			input_interactive(const char *prompt)
 	}
 	else
 		g_lexer.line = ft_strdup(line);
+	remove_escaped_newlines(g_lexer.line, heredoc);
 	free(line);
 	return (0);
 }
