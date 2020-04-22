@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:07:29 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/24 15:29:16 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/22 18:13:39 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int		builtin_echo(char **argv)
 int		builtin_setenv(char **argv)
 {
 	if (argv[1] == NULL)
-		return (0);//return (builtin_env(argv, g_env));
+		return (builtin_env(argv, g_env));
 	else if (argv[2] && argv[3])
 		write(2, "setenv: Too many arguments.\n", 28);
 	else if (!is_valid_var_name(argv[1]))
