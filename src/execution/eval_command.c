@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 17:04:39 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/22 18:08:42 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@ int			eval_simple_command(t_command *command, int in, int out,
 	simple = command->value.simple;
 	expand(simple, g_env);
 	simple->argv = get_argv(simple);
+	if (!simple->argv)
+	{
+		set_redir(simple, true);
+		restore_fds();
+		return (0);
+	}
 	builtin = is_builtin(simple->argv[0]);
 	if (!builtin || (g_exec_status & EXEC_ASYNC)
 		|| (g_exec_status & EXEC_PIPELINE))
@@ -31,7 +37,8 @@ int			eval_simple_command(t_command *command, int in, int out,
 		process = process_new(command, in, out);
 		return (launch_process(process, fd_to_close, false));
 	}
-	set_redir(simple, true);
+	if (set_redir(simple, true) != 0)
+		return (1);
 	if (is_builtin(simple->argv[0]))
 		return (exec_builtin(simple->argv, g_env->env));
 	return (exec_binary(simple->argv, g_env->env));

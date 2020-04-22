@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/11 13:43:48 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/22 18:07:49 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int			exec_builtin(char **argv, char **env)
 	else if (ft_strequ(argv[0], "cd"))
 		ret = builtin_cd(argv);
 	g_last_exit_st = ret;
-	//restore_fds(); this should be called even in forks
+	restore_fds();
 	return (0); //errors ?
 }
 
