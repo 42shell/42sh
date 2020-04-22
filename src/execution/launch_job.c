@@ -14,7 +14,7 @@
 
 static void		reset_signals(void)
 {
-	prctl(PR_SET_PDEATHSIG, SIGHUP);
+	prctl(PR_SET_PDEATHSIG, SIGTERM);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGTTIN, SIG_DFL);
@@ -96,15 +96,8 @@ int				launch_job(t_job *job)
 
 	if (job->bg)
 	{
-		if (job->command->type == CONNECTION
-			&& (job->command->value.connection->connector == AND_IF
-				|| job->command->value.connection->connector == OR_IF))
-		{
-			process = process_new(job->command, STDIN_FILENO, STDOUT_FILENO);
-			launch_process(process, 0, true);
-		}
-		else
-			eval_command(job->command);
+		process = process_new(job->command, STDIN_FILENO, STDOUT_FILENO);
+		launch_process(process, 0, true);
 		put_job_bg(job, false);
 		ft_printf("[%d] %d\n", job->id + 1, job->pgid);
 	}

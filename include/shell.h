@@ -40,9 +40,8 @@
 
 /*
 ** -fix readline problems
-** 		-rl_del
+** 		-rl_del??
 **		-env/termcaps...
-**		-better way to handle init and del
 **		-write on 2 ? sounds weird to do that in readline,
 **		 maybe dup2 in shell.get_input
 **		-rigorous testing
@@ -73,7 +72,7 @@
 # define PSP			"p> "
 # define PSH			"h> "
 
-typedef int				(*t_input_func)(const char *);
+typedef int				(*t_input_func)(const char *, bool);
 
 int						g_last_exit_st;
 
@@ -91,8 +90,8 @@ t_shell					g_shell;
 int						init(int argc, char **argv);
 void					del(void);
 
-int						input_batch(const char *prompt);
-int						input_interactive(const char *prompt);
+int						input_batch(const char *prompt, bool heredoc);
+int						input_interactive(const char *prompt, bool heredoc);
 
 void					init_sig(void);
 

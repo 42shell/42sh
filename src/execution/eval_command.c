@@ -31,8 +31,7 @@ int			eval_simple_command(t_command *command, int in, int out,
 		return (0);
 	}
 	builtin = is_builtin(simple->argv[0]);
-	if (!builtin || (g_exec_status & EXEC_ASYNC)
-		|| (g_exec_status & EXEC_PIPELINE))
+	if ((g_exec_status & EXEC_PIPELINE) || !builtin)
 	{
 		process = process_new(command, in, out);
 		return (launch_process(process, fd_to_close, false));

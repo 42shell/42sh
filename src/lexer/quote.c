@@ -28,10 +28,6 @@ int		backslash_newline(void)
 }
 */
 
-
-/*
-** get_next_line() in batch mode or may fail if line[i+1] = 0
-*/
 int		lx_backslash(void)
 {
 	if (g_lexer.line[g_lexer.i] == BSLASH && g_lexer.quote_st != SQUOTE)

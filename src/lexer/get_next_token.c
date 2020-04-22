@@ -74,7 +74,7 @@ t_token			*get_next_token(void)
 		return (NULL);
 	if (g_lexer.line_cont || g_lexer.quote_st)
 	{
-		if (g_shell.get_input(get_prompt()) != 0)
+		if (g_shell.get_input(get_prompt(), false) != 0)
 			return (NULL);
 		g_lexer.line_cont = 0;
 	}

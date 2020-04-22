@@ -14,7 +14,7 @@
 
 void	init_sig(void)
 {
-	prctl(PR_SET_PDEATHSIG, SIGHUP);
+	prctl(PR_SET_PDEATHSIG, SIGTERM);
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGTTIN, SIG_IGN);
