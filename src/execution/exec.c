@@ -6,19 +6,20 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/22 18:07:49 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/24 01:04:59 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-int			exec_builtin(char **argv, char **env)
+int			exec_builtin(char **argv)
 {
-	(void)env;
 	int		ret;
+
+	ret = 0;
 	if (ft_strequ(argv[0], "env"))
-		builtin_env(argv, g_env);
-	if (ft_strequ(argv[0], "exit"))
+		ret = builtin_env(argv, g_env);
+	else if (ft_strequ(argv[0], "exit"))
 		builtin_exit(argv);
 	else if (ft_strequ(argv[0], "unsetenv"))
 		ret = builtin_unsetenv(argv);

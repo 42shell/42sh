@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:00:39 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/11 13:33:59 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/24 01:05:17 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int					launch_job(t_job *job);
 
 char    			**get_argv(t_simple_cmd *command);
 char				*get_exec_path(char *command, t_env *env);
-int					exec_builtin(char **argv, char **env);
+int					exec_builtin(char **argv);
 int					exec_binary(char **argv, char **env);
 
 /*

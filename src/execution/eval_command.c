@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/22 18:08:42 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/24 01:06:09 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int			eval_simple_command(t_command *command, int in, int out,
 	if (set_redir(simple, true) != 0)
 		return (1);
 	if (is_builtin(simple->argv[0]))
-		return (exec_builtin(simple->argv, g_env->env));
+		return (exec_builtin(simple->argv));
 	return (exec_binary(simple->argv, g_env->env));
 }
 
