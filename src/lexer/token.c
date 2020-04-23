@@ -12,10 +12,13 @@
 
 #include "shell.h"
 
-void	token_del(t_token **tok)
+void	token_del(t_token **token)
 {
-	ft_dstr_del((void **)&(*tok)->value, NULL);
-	ft_memdel((void **)tok);
+	if (!token || !*token)
+		return ;
+	token_del(&(*token)->next);
+	ft_dstr_del(&(*token)->value);
+	ft_memdel((void **)token);
 }
 
 t_token	*token_new(int type)
@@ -24,7 +27,7 @@ t_token	*token_new(int type)
 
 	if (!(token = (t_token *)ft_xmalloc(sizeof(*token))))
 		return (NULL);
-	token->value = ft_dstr_new("", 0, 16);
+	token->value = ft_dstr_new(16);
 	token->type = type;
 	return (token);
 }

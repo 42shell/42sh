@@ -10,37 +10,20 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../inc/libft.h"
+#include "libft.h"
 
-/*
-** -str is the string you want to add to the dstr on creation.
-**  Just pass "" for an empty string.
-** -length is the number of bytes you want to copy from the string.
-** -size is the size you want for the dstr, it avoids to create
-**  a dstr of 1 then realloc if you know you will need more space.
-** -if len is more than string length, we reduce it to the string length
-**  to avoid segfault.
-** -if len is more than size, size is increased to have enough space.
-**  size is rounded to next power of two cause it s cool.
-*/
-
-t_dstr		*ft_dstr_new(char *str, size_t len, size_t size)
+t_dstr		*ft_dstr_new(size_t size)
 {
 	t_dstr	*dstr;
-	size_t	cmp;
 
-	if (!str)
+	if (!(dstr = (t_dstr *)ft_memalloc(sizeof(t_dstr))))
 		return (NULL);
-	dstr = (t_dstr *)ft_xmalloc(sizeof(t_dstr));
-	if ((cmp = ft_strlen(str)) < len)
-		len = cmp;
-	if (size - 1 < len)
-		size = ft_next_power_of_two(len + 1);
-	else
-		size = ft_next_power_of_two(size);
-	dstr->str = (char *)ft_xmalloc(size);
-	ft_memcpy(dstr->str, str, len);
+	size = ft_next_power_of_two(size);
+	if (!(dstr->str = (char *)ft_memalloc(size)))
+	{
+		free(dstr);
+		return (NULL);
+	}
 	dstr->size = size;
-	dstr->len = len;
 	return (dstr);
 }

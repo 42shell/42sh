@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:50:00 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/29 14:23:23 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/11 13:43:37 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #define PRINT_DIR	2
 #define NO_OLDPWD	1
 
-char	*get_cd_dir(char **argv, int *options, t_env *env)
+char	*get_cd_dir(char **argv, int *options)
 {
 	int		i;
 	char	*ret;
@@ -30,7 +30,7 @@ char	*get_cd_dir(char **argv, int *options, t_env *env)
 	{
 		if (ft_strcmp(argv[i], "-") == 0)
 		{
-			if ((ret = get_env_var("OLDPWD", env)) == NULL)
+			if ((ret = get_env_var("OLDPWD", g_env)) == NULL)
 			{
 				ft_putstr_fd("cd: OLDPWD not set\n", 2);
 				return ((char *)NO_OLDPWD);
@@ -72,8 +72,7 @@ int		get_cd_options(char **argv, int *options)
 ** This is step 5 in the posix cd algorithm.
 */
 
-bool	get_curpath_in_cdpath(char *dir, char **curpath, t_env *env
-		, int *options)
+bool	get_curpath_in_cdpath(char *dir, char **curpath, int *options)
 {
 	char		*tmp;
 	char		**cdpath;
@@ -81,8 +80,8 @@ bool	get_curpath_in_cdpath(char *dir, char **curpath, t_env *env
 	int			i;
 
 	if (ft_strequ(dir, ".") || ft_strequ(dir, "..")
-			|| (ft_strstr(dir, "./") == dir) || (ft_strstr(dir, "../") == dir)
-			|| (tmp = get_env_var("CDPATH", env)) == NULL)
+	|| (ft_strstr(dir, "./") == dir) || (ft_strstr(dir, "../") == dir)
+	|| (tmp = get_env_var("CDPATH", g_env)) == NULL)
 		return (false);
 	cdpath = split_path(tmp);
 	i = 0;
@@ -102,7 +101,7 @@ bool	get_curpath_in_cdpath(char *dir, char **curpath, t_env *env
 	return (false);
 }
 
-int		finish_cd(char *curpath, char *dir, int options, t_env *env)
+int		finish_cd(char *curpath, char *dir, int options)
 {
 	int		ret;
 	char	*pwd;
@@ -117,9 +116,9 @@ int		finish_cd(char *curpath, char *dir, int options, t_env *env)
 	ret = (chdir(curpath) == -1) ? 1 : ret;
 	if (ret == 0)
 	{
-		set_env_var("OLDPWD", get_env_var("PWD", env), env);
+		set_env_var("OLDPWD", get_env_var("PWD", g_env), g_env);
 		pwd = getcwd(NULL, 0);
-		set_env_var("PWD", (options & CD_P) ? pwd : curpath, env);
+		set_env_var("PWD", (options & CD_P) ? pwd : curpath, g_env);
 		free(pwd);
 	}
 	if (options & PRINT_DIR && ret == 0)
@@ -131,7 +130,7 @@ int		finish_cd(char *curpath, char *dir, int options, t_env *env)
 	return (ret);
 }
 
-int		builtin_cd(char **argv, t_env *env)
+int		builtin_cd(char **argv)
 {
 	char	*dir;
 	char	*curpath;
@@ -140,22 +139,22 @@ int		builtin_cd(char **argv, t_env *env)
 	options = 0;
 	if (get_cd_options(argv, &options) == -1)
 		return (1);
-	if ((dir = get_cd_dir(argv, &options, env)) == (char *)NO_OLDPWD)
+	if ((dir = get_cd_dir(argv, &options)) == (char *)NO_OLDPWD)
 		return (1);
 	if (dir == NULL)
 	{
-		dir = get_home_dir(env);
+		dir = get_home_dir();
 		if (dir == NULL)
 			return (1);
 	}
-	if (dir[0] == '/' || !get_curpath_in_cdpath(dir, &curpath, env, &options))
+	if (dir[0] == '/' || !get_curpath_in_cdpath(dir, &curpath, &options))
 		curpath = ft_strdup(dir);
 	if (curpath[0] != '/' && !(options & CD_P))
-		append_curpath_to_pwd(&curpath, env);
+		append_curpath_to_pwd(&curpath);
 	if (curpath == NULL)
 	{
 		free(dir);
 		return (1);
 	}
-	return (finish_cd(curpath, dir, options, env));
+	return (finish_cd(curpath, dir, options));
 }

@@ -1,4 +1,4 @@
-env: ./lol: No such file or directory
+env: './lol': No such file or directory
 ~~~
 env: illegal option -- q
 ~~~

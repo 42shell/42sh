@@ -24,7 +24,9 @@ bool	is_operator_part(char c)
 
 bool	is_redir(t_token *token)
 {
-	return (LESS <= token->type && token->type <= GREATAND);
+	if (LESS <= token->type && token->type <= GREATAND)
+		return (true);
+	return (false);
 }
 
 bool	is_operator_next(char *ope, char c)

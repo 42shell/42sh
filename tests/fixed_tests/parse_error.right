@@ -1,37 +1,35 @@
-42sh: parse error near '&&'
+42sh: syntax error near unexpected token '&&'
 ~~~
-42sh: parse error near '&&'
+42sh: syntax error near unexpected token '&&'
 ~~~
-42sh: parse error near '>'
+42sh: syntax error near unexpected token 'newline'
 ~~~
-42sh: parse error near '>'
+42sh: syntax error near unexpected token 'newline'
 ~~~
-42sh: parse error near ';'
+42sh: syntax error near unexpected token ';'
 ~~~
-42sh: parse error near ';'
+42sh: syntax error near unexpected token ';'
 ~~~
-42sh: parse error near '<<'
+42sh: syntax error near unexpected token 'newline'
 ~~~
-42sh: parse error near '<<'
+42sh: syntax error near unexpected token 'newline'
 ~~~
-42sh: parse error near '>'
+42sh: syntax error near unexpected token 'newline'
 ~~~
-42sh: parse error near '>'
+42sh: syntax error near unexpected token 'newline'
 ~~~
-42sh: parse error near '&'
+42sh: syntax error near unexpected token '&'
 ~~~
-42sh: parse error near '|'
+42sh: syntax error near unexpected token '|'
 ~~~
-42sh: parse error near '|'
+42sh: syntax error near unexpected token '|'
 ~~~
-42sh: parse error near '|'
-~~~
-42sh: parse error near ';'
+42sh: syntax error near unexpected token ';'
 ~~~
 lol
 ~~~
-42sh: parse error near '&&'
+42sh: syntax error near unexpected token '&&'
 ~~~
 lol
 ~~~
-42sh: parse error near '<'
+42sh: syntax error near unexpected token '>'

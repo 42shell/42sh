@@ -18,17 +18,17 @@ void	pf_bufferize(t_printf *pf, const char *data, size_t size)
 
 	if (!data || !pf)
 		return ;
-	diff = BUFF_SIZE - pf->buff_index;
+	diff = PF_BUFF_SIZE - pf->buff_index;
 	while (diff < size)
 	{
 		ft_memcpy(&pf->buff[pf->buff_index], data, diff);
-		write(pf->fd, pf->buff, BUFF_SIZE);
-		ft_bzero(pf->buff, BUFF_SIZE);
+		write(pf->fd, pf->buff, PF_BUFF_SIZE);
+		ft_bzero(pf->buff, PF_BUFF_SIZE);
 		size -= diff;
 		data += diff;
-		diff = BUFF_SIZE;
+		diff = PF_BUFF_SIZE;
 		pf->buff_index = 0;
-		pf->ret += BUFF_SIZE;
+		pf->ret += PF_BUFF_SIZE;
 	}
 	ft_memcpy(&pf->buff[pf->buff_index], data, size);
 	pf->buff_index += size;

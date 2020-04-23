@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 14:14:32 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/20 20:22:39 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/24 01:49:04 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,16 +106,41 @@ t_array	*get_matches(char *path)
 	return (ret);
 }
 
-void	path_expand(t_node *pattern_node)
+void	add_matches_to_list(t_token *token, t_array *matches)
+{
+	char	**array;
+	t_token	*cur;
+	t_token *old_next;
+	size_t	i;
+
+	free(token->value->str);
+	array = (char **)matches->array;
+	token->value->str = ft_strdup(array[0]);
+	token->value->len = ft_strlen(array[0]);
+	token->value->size = token->value->len + 1;
+	cur = token;
+	old_next = token->next;
+	i = 1;
+	while (i < matches->size)
+	{
+		cur->next = token_new(WORD);
+		ft_dstr_append(cur->next->value, array[i]);
+		i++;
+		cur = cur->next;
+	}
+	cur->next = old_next;
+}
+
+void	path_expand(t_token *token)
 {
 	t_array *matches;
 
-	if (!has_glob_char(node_token(pattern_node)->value->str))
+	if (!has_glob_char(token->value->str))
 		return ;
-	matches = get_matches(node_token(pattern_node)->value->str);
+	matches = get_matches(token->value->str);
 	if (matches->size == 0)
 		return (array_destroy(matches));
 	sort_matches((char **)(matches->array), matches->size);
-	node_add_child(pattern_node, node_new(matches));
-	node_token(pattern_node)->type = PATTERN;
+	add_matches_to_list(token, matches);
+	array_destroy(matches);
 }

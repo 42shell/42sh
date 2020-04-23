@@ -6,43 +6,39 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/19 14:47:46 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/24 01:38:47 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SHELL_H
 # define SHELL_H
 
+#include <stdio.h>
+
 # include <unistd.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <sys/uio.h>
 # include <sys/stat.h>
-# include <signal.h>
+# include <sys/prctl.h>
 # include <sys/ioctl.h>
+# include <signal.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <dirent.h>
 # include "libft.h"
+# include "readline.h"
 # include "ft_printf.h"
 # include "env.h"
-# include "terminal.h"
-# include "input.h"
 # include "lexer.h"
 # include "parser.h"
 # include "exec.h"
 # include "expansion.h"
 # include "builtins.h"
+# include "autocomplete.h"
+# include "utils.h"
 
 t_ht	*g_sh_vars;
-
-typedef struct		s_sh
-{
-	struct s_term	term;
-	struct s_input	input;
-	struct s_lexer	lexer;
-	struct s_env	env;
-}					t_sh;
 
 # define V_RDONLY	1
 # define V_EXPORT	2
@@ -64,33 +60,62 @@ typedef struct			s_var
 	t_var_value_func	value_func;
 }						t_var;
 
-int					init(t_sh *shell, int argc, char **argv);
-void				del(t_sh *shell);
+/*
+** -fix readline problems
+** 		-rl_del??
+**		-env/termcaps...
+**		-write on 2 ? sounds weird to do that in readline,
+**		 maybe dup2 in shell.get_input
+**		-rigorous testing
+** -proper init handling
+**		-tty stuff, empty env, job control...
+** -input
+**		-redo input_interactive() properly, EOF and INT handling...
+** -error handling
+**		-^C ^D
+**		-last exit status, close fds... assert everything is perfect
+** -others
+** 		-flush cache table when PATH is modified.
+** 		-check comments work properly
+** 		-in case of "ls | \n cat", newline is not removed from line before stored in history
+**		 don t know if it is handled in expand()
+** -leaks
+*/
 
-void				init_sig(t_sh *shell);
-void				sig_handle(int sig);
-void				sig_action(t_sh *shell, int sig);
+# define INPUT_INT		3
+# define INPUT_EOF		4
 
-char				*ft_strjoin_triple(char *s1, char *s2, char *s3);
-void				free_arr(char **arr);
+# define PS1			"$> "
+# define PS2			"> "
+# define PSQ			"q> "
+# define PSD			"d> "
+# define PSA			"a> "
+# define PSO			"o> "
+# define PSP			"p> "
+# define PSH			"h> "
 
-t_env				env_dup(char **env);
-char				*get_env_var(char *var_name, t_env *env);
-void				add_env_var(char *var, char *value, t_env *env);
-void				replace_env_var(char *var, char *value, t_env *env);
-void				remove_env_var(char *name, t_env *env);
-void				set_env_var(char *var, char *value, t_env *env);
+typedef int				(*t_input_func)(const char *, bool);
 
-char				*get_executable_path(char *command, t_env *env);
-char				*append_filename(char *path, char *filename);
-char				**split_path(char const *path);
+int						g_last_exit_st;
 
-char				get_opt(int argc, char *argv[]);
-bool				is_builtin(char *str);
+typedef struct			s_shell
+{
+	bool				interactive_mode;
+	t_input_func		get_input;
+	t_job				*jobs;
+	pid_t				pgid;
+	struct termios		tmodes;
+}						t_shell;
 
-bool				is_valid_var_name(char *str);
+t_shell					g_shell;
 
-char				*ft_mktemp(char *template);
+int						init(int argc, char **argv);
+void					del(void);
+
+int						input_batch(const char *prompt, bool heredoc);
+int						input_interactive(const char *prompt, bool heredoc);
+
+void					init_sig(void);
 
 void				import_env(t_ht *map, char **env);
 void				add_var(t_ht *map, char *name, char *value, int attributes);

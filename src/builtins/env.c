@@ -6,17 +6,37 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 17:03:57 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/17 14:55:26 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/11 16:26:41 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-#include <stdlib.h>
-#include <unistd.h>
+#include "shell.h"
+#include "shell.h"
+
 #define EMPTY_ENV 	1
 #define NEW_PATH	2
 
-extern int	g_last_exit_st;
+int			exec_command_env(char **argv, t_env *env)
+{
+	pid_t		pid;
+	int			status;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		if ((execve(argv[0], argv, env->env) == -1))
+		{
+			ft_dprintf(2, "env: %s: No such file or directory\n", argv[0]);
+			exit(g_last_exit_st);
+		}
+		exit(0);
+	}
+	wait(&status);
+	g_last_exit_st = WIFEXITED(status) ? WEXITSTATUS(status)
+		: g_last_exit_st;
+	return (g_last_exit_st);
+}
 
 int		get_env_options(int argc, char **argv, int *options)
 {
@@ -69,6 +89,7 @@ int		print_env(t_env *env)
 		write(1, "\n", 1);
 	}
 	free_arr(env->env);
+	free(env);
 	return (0);
 }
 
@@ -92,14 +113,19 @@ int		finish_env(char **argv, int i, t_env *new_env)
 		ret = g_last_exit_st;
 	}
 	free_arr(new_env->env);
+	free(new_env);
 	return (ret);
 }
+
+/*
+** exec_binary(get_exec_path(argv[i])), argv[i], NULL, new_env->env);
+*/
 
 int		builtin_env(char **argv, t_env *env)
 {
 	int				options;
 	int				argc;
-	t_env			new_env;
+	t_env			*new_env;
 	int				i;
 	char			*cmd_path;
 
@@ -110,14 +136,14 @@ int		builtin_env(char **argv, t_env *env)
 	if (!get_env_options(argc, argv, &options))
 		return (1);
 	new_env = (options & EMPTY_ENV) ? env_dup(argv + argc) : env_dup(env->env);
-	i = modify_env(argv, &new_env, &options);
+	i = modify_env(argv, new_env, &options);
 	if (argv[i] == NULL)
-		return (print_env(&new_env));
-	cmd_path = (options & NEW_PATH) ? get_executable_path(argv[i], &new_env)
-		: get_executable_path(argv[i], env);
+		return (print_env(new_env));
+	cmd_path = (options & NEW_PATH) ? get_exec_path(argv[i], new_env)
+		: get_exec_path(argv[i], env);
 	if (cmd_path == NULL)
 		ft_dprintf(2, "env: '%s': No such file or directory\n", argv[i]);
 	free(argv[i]);
 	argv[i] = cmd_path;
-	return (finish_env(argv, i, &new_env));
+	return (finish_env(argv, i, new_env));
 }

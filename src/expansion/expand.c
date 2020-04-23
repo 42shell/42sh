@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:08:22 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/13 18:07:31 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/24 01:07:43 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int		tilde_expand(t_dstr *str, char *home_dir)
 
 	if (home_dir == NULL)
 		return (0);
-	if (str->str[0] == '~' &&
-			(str->str[1] == '\0' || str->str[1] == '/' || str->str[1] == ':'))
+	if (str->str[0] == '~'
+	&& (str->str[1] == '\0' || str->str[1] == '/' || str->str[1] == ':'))
 	{
 		new = ft_strjoin(home_dir, str->str + 1);
 		free(str->str);
@@ -45,26 +45,31 @@ int		tilde_expand(t_dstr *str, char *home_dir)
 ** completely expanded command, unless the original word contained single-quote
 ** or double-quote characters. -> bash does not seem to keep the empty field in
 ** any case ? would be easier to implement.
+** ^ disregard that
+** we store the next token before expanding because we may add new tokens after
+** the token we expand, and we don't want to expand them
 */
 
-int		expand(t_node *command, t_env *env)
+int		expand(t_simple_cmd *command, t_env *env)
 {
-	int		i;
 	int		pos;
 	char	*home_dir;
+	t_token	*cur;
+	t_token *next;
 
-	i = 0;
 	home_dir = get_env_var("HOME", env);
-	while (i < command->nb_children)
+	cur = command->args;
+	while (cur != NULL)
 	{
-		if (node_token(command->child[i])->type == WORD)
+		next = cur->next;
+		if (cur->type == WORD)
 		{
-			pos = tilde_expand(node_token(command->child[i])->value, home_dir);
-			param_expand(node_token(command->child[i])->value, pos, env, false);
-			path_expand(command->child[i]);
-			remove_quotes(node_token(command->child[i])->value);
+			pos = tilde_expand(cur->value, home_dir);
+			param_expand(cur->value, pos, env, false);
+			path_expand(cur);
+			remove_quotes(cur->value);
 		}
-		i++;
+		cur = next;
 	}
 	return (0);
 }

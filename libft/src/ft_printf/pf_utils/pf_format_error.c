@@ -34,7 +34,7 @@ void		pf_format_error(t_printf *pf)
 	size_t	i;
 
 	i = 0;
-	ft_bzero(pf->buff, BUFF_SIZE);
+	ft_bzero(pf->buff, PF_BUFF_SIZE);
 	pf_bufferize(pf, "\"", 1);
 	while (pf->format_start[i])
 		print_literal(pf, pf->format_start[i++]);

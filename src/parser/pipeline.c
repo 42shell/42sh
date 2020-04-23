@@ -6,113 +6,55 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 04:37:16 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/19 17:21:29 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 00:09:03 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-extern int	g_parse_error;
-extern char	*g_error_near;
-
 /*
-**	returns commands in this format:
+** pipeline     : command
+**              | command pipe_list
 **
-**	ls -l 2 > test -a -f
+** pipe_list    : '|' linebreak command pipe_list 
+**              | EMPTY
 **
-**                                 NULL
-**                          /   /   |   \   \
-**                         ls  -l   >   -a  -f
-**                                 / \
-**                                2   test
+**
+**                 |
+**               /   \
+**              |    test
+**           /     \
+**         ls      cat
 */
 
-static t_node	*command(t_lexer *lexer)
+t_command	*parse_pipe_list(t_command *left_operand)
 {
-	t_node		*command;
-	t_node		*redirect;
-	t_node		*word;
+	t_command	*pipeline;
+	t_command	*right_operand;
+	int			type;
 
-	if (lexer->curr_tok == NULL || g_parse_error != NOERR)
-		return (NULL);
-	command = node_new(NULL);
-	while ((redirect = io_redirect(lexer))
-			|| (lexer->curr_tok && lexer->curr_tok->type == WORD))
+	if (g_parser.token == NULL || (type = g_parser.token->type) != PIPE
+			|| left_operand == NULL)
+		return (left_operand);
+	token_del(&g_parser.token);
+	g_parser.token = get_next_token();
+	parse_linebreak(type);
+	right_operand = parse_command();
+	if (right_operand == NULL)
 	{
-		if (redirect != NULL)
-			node_add_child(command, redirect);
-		else if (lexer->curr_tok->type == WORD)
-		{
-			word = node_new(lexer->curr_tok);
-			node_add_child(command, word);
-			eat(lexer);
-		}
+		if (g_parser.status == NOERR)
+			g_parser.status = UNEXPECTED_TOKEN;
+		command_del(&left_operand);
+		return (NULL);
 	}
-	if (command->nb_children == 0)
-		ft_memdel((void *)&command);
-	return (command);
+	pipeline = command_new(CONNECTION);
+	pipeline->value.connection->connector = type;
+	pipeline->value.connection->left = left_operand;
+	pipeline->value.connection->right = right_operand;
+	return (parse_pipe_list(pipeline));
 }
 
-static t_node	*pipe_list(t_lexer *lexer, t_node *left_command)
+t_command	*parse_pipeline(void)
 {
-	t_node	*left_pipe;
-	t_node	*right_command;
-	t_node	*right_pipe;
-
-	if (lexer->curr_tok == NULL || g_parse_error != NOERR)
-		return (NULL);
-	left_pipe = NULL;
-	if (lexer->curr_tok->type == PIPE)
-	{
-		left_pipe = node_new(lexer->curr_tok);
-		eat(lexer);
-		node_add_child(left_pipe, left_command);
-		right_command = command(lexer);
-		if (right_command == NULL && g_parse_error == NOERR)
-		{
-			g_parse_error = NO_CMD_AFTER_PIPE;
-			g_error_near = ft_strdup("|");
-		}
-		right_pipe = pipe_list(lexer, right_command);
-		if (right_pipe != NULL)
-			node_add_child(left_pipe, right_pipe);
-		else
-			node_add_child(left_pipe, right_command);
-	}
-	return (left_pipe);
-}
-
-/*
-**	pipeline         : command pipe_list
-**	returns pipes in this format :
-**	ex:           ls | cat | wc:
-**
-**
-**						"|"
-**                     /   \
-**                    ls   "|"
-**                        /   \
-**                      cat    wc
-**	(commands are actually stored with a NULL data node whose children contain
-**	the words, see above)
-*/
-
-t_node			*pipeline(t_lexer *lexer)
-{
-	t_node *left_command;
-	t_node *pipe;
-
-	if (g_parse_error != NOERR)
-		return (NULL);
-	left_command = command(lexer);
-	if (left_command == NULL && g_parse_error == NOERR)
-	{
-		g_parse_error = NO_CMD_BEFORE_PIPE;
-		if (lexer->curr_tok)
-			g_error_near = ft_strdup(lexer->curr_tok->value->str);
-	}
-	pipe = pipe_list(lexer, left_command);
-	if (pipe != NULL)
-		return (pipe);
-	return (left_command);
+	return (parse_pipe_list(parse_command()));
 }

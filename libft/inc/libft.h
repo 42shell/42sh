@@ -6,7 +6,7 @@
 /*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 16:27:46 by nbousset          #+#    #+#             */
-/*   Updated: 2020/02/20 20:24:29 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/24 01:49:35 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,32 +19,7 @@
 # include <stdbool.h>
 # include <stdint.h>
 
-/*
-** -----------------------------Struct double-----------------------------
-*/
-
-# define DOUBLE_EXPONENT_MASK		0x7ff
-# define DOUBLE_MANTISSA_MASK		0xfffffffffffff
-# define DOUBLE_EXPONENT_MAX		0x7ff
-# define DOUBLE_EXPONENT_SHIFT		0x3ff
-
-# define LDOUBLE_EXPONENT_MASK		0x7fff
-# define LDOUBLE_MANTISSA_MASK		0xffffffffffffffff
-# define LDOUBLE_EXPONENT_MAX		0x7fff
-# define LDOUBLE_EXPONENT_SHIFT		0x3fff
-
-typedef struct			s_double
-{
-	double				f;
-	long double			lf;
-	uint8_t				neg;
-	uint16_t			exponent;
-	uint64_t			mantissa;
-	int					real_exponent;
-	uint8_t				is_denormalized;
-	uint8_t				is_inf;
-	uint8_t				is_nan;
-}						t_double;
+ssize_t					readc(int fd, void *ptr);
 
 /*
 ** -----------------------------Struct list-----------------------------
@@ -78,21 +53,6 @@ void					ft_list_split(t_list_head *head,
 void					ft_list_sort(t_list_head **head,
 						int (*cmp)(void *a, void *b));
 
-/*
-** --------------------------------Struct node-------------------------------
-*/
-
-typedef struct			s_node
-{
-	void				*data;
-	int					nb_children;
-	int					capacity;
-	struct s_node		**child;
-}						t_node;
-
-t_node					*node_new(void *data);
-int						node_add_child(t_node *parent, t_node *child);
-
 
 /*
 **--------------------------Struct array----------------------------------
@@ -106,7 +66,7 @@ typedef struct			s_array
 }						t_array;
 
 
-t_array					*array_new(size_t alloc);
+t_array					*array_new(size_t size);
 void					array_realloc(t_array *array);
 void					array_append(t_array *array, void *data);
 void					array_destroy(t_array *array);
@@ -155,14 +115,17 @@ typedef struct			s_dstr
 	size_t				len;
 }						t_dstr;
 
-t_dstr					*ft_dstr_new(char *str, size_t len, size_t size);
-void					ft_dstr_del(void **ptr, void *priv);
+t_dstr					*ft_dstr_new(size_t size);
+int						ft_dstr_cat(t_dstr *dstr, char *str);
+t_dstr					*ft_dstr_dup(t_dstr *dstr);
+t_dstr					*ft_dstr_from_str(char *str);
 int						ft_dstr_add(t_dstr *dstr, char c);
 int						ft_dstr_insert(t_dstr *dstr, size_t i, char *str,
 						size_t len);
 int						ft_dstr_append(t_dstr *dstr, char *str);
 int						ft_dstr_remove(t_dstr *dstr, size_t i, size_t len);
 int						ft_dstr_clear(t_dstr *dstr, size_t size);
+void					ft_dstr_del(t_dstr **ptr);
 
 /*
 ** -----------------------------Memory-----------------------------
@@ -205,6 +168,12 @@ char					*ft_strcat(char *s1, const char *s2);
 size_t					ft_strnlen(const char *s, size_t maxlen);
 char					*ft_strndup(const char *s1, size_t n);
 
+/*
+** -----------------------------Put-----------------------------
+*/
+
+int						ft_putc(int c);
+int						ft_putstr(const char *str);
 void					ft_putstr_fd(const char *str, int fd);
 void					ft_putendl(char const *s);
 
@@ -262,7 +231,6 @@ char					*ft_utoa(uintmax_t n);
 int						ft_dtoc_36(int d);
 int						ft_islower(int c);
 int						ft_isupper(int c);
-void					ft_putstr(const char *s);
 char					*ft_strpad(char *str, size_t field_width,
 						int side, char c);
 
