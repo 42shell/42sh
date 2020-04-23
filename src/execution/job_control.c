@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/11 17:07:33 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/24 01:08:23 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	wait_for_job(t_job *job)
 	pid_t		pid;
 	int			status;
 
-	pid = 0;
 	status = 0;
 	if (!job->processes)
 		return ;

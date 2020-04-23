@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 20:03:18 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 00:30:01 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/24 01:08:32 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ static int		line_get(void)
 	int		ret;
 	int		i;
 
-	i = g_heredoc_ptr - g_lexer.line;
 	while (!ft_strchr(g_heredoc_ptr, '\n'))
 	{
 		i = g_heredoc_ptr - g_lexer.line;

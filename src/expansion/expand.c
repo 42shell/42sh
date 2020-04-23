@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:08:22 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/11 17:58:31 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/24 01:07:43 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,11 @@ int		tilde_expand(t_dstr *str, char *home_dir)
 
 int		expand(t_simple_cmd *command, t_env *env)
 {
-	int		i;
 	int		pos;
 	char	*home_dir;
 	t_token	*cur;
 	t_token *next;
 
-	i = 0;
 	home_dir = get_env_var("HOME", env);
 	cur = command->args;
 	while (cur != NULL)

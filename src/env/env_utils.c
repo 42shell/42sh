@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:58:15 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/11 13:33:36 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/24 01:08:51 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void	add_env_var(char *var, char *value, t_env *env)
 	int		i;
 	char	**new;
 
-	i = 0;
 	if (value == NULL)
 		value = "";
 	if (env->size < env->capacity)
