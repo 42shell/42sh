@@ -16,16 +16,18 @@
 # include "shell.h"
 
 int		builtin_env(char **argv, t_env *env);
-int		builtin_unsetenv(char **argv, t_env *env);
-int		builtin_setenv(char **argv, t_env *env);
+int		builtin_unsetenv(char **argv);
+int		builtin_setenv(char **argv);
 void	builtin_exit(char **argv);
 int		builtin_echo(char **argv);
+int		builtin_cd(char **argv);
 
-int		builtin_cd(char **argv, t_env *env);
-char	*get_pwd(t_env *env);
-char	*get_home_dir(t_env *env);
-void	append_curpath_to_pwd(char **curpath, t_env *env);
+char	*get_pwd();
+char	*get_home_dir();
+void	append_curpath_to_pwd(char **curpath);
 void	remove_dots(char *curpath);
 int		remove_dotdots(char *curpath);
+
+bool	is_builtin(char *str);
 
 #endif

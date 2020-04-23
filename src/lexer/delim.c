@@ -6,75 +6,104 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/13 19:15:17 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 00:14:55 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static int	delim_token(t_lexer *lexer)
+static int	delim_token()
 {
-	if (lexer->curr_tok)
+	if (g_lexer.token)
 	{
-		if (is_operator_start(*lexer->curr_tok->value->str))
-			lexer->curr_tok->type =
-			get_operator_type(lexer->curr_tok->value->str);
-		else if ((lexer->str[lexer->i] == '<' || lexer->str[lexer->i] == '>')
-		&& ft_strisnbr(lexer->curr_tok->value->str))
-			lexer->curr_tok->type = IO_NUMBER;
-		lexer->state |= DELIMITED;
+		if (is_operator_start(*g_lexer.token->value->str))
+			g_lexer.token->type =
+			get_operator_type(g_lexer.token->value->str);
+		else if ((g_lexer.line[g_lexer.i] == '<' || g_lexer.line[g_lexer.i] == '>')
+		&& ft_strisnbr(g_lexer.token->value->str))
+			g_lexer.token->type = IO_NUMBER;
+		g_lexer.token_delimited = true;
 	}
 	return (0);
 }
 
-int			end(t_lexer *lexer)
+int			lx_end(void)
 {
-	if (lexer->str[lexer->i] == '\0' || lexer->i == lexer->len - 1)
+	if (!g_lexer.line[g_lexer.i])
 	{
-		if (lexer->curr_tok && !lexer->quote)
-			delim_token(lexer);
-		lexer->state |= END;
+		g_lexer.end_of_input = 1;
+		if (g_lexer.token && !g_lexer.quote_st && g_lexer.nl_found)
+		{
+			delim_token();
+			g_lexer.nl_found = 0;
+		}
 		return (1);
 	}
 	return (0);
 }
 
-int			operator_end(t_lexer *lexer)
+int			lx_operator_end(void)
 {
-	if (lexer->curr_tok && !lexer->quote
-	&& (is_operator_start(*lexer->curr_tok->value->str)
-	&& (lexer->i > 0 ? is_operator_part(lexer->str[lexer->i - 1]) : 0))
-	&& (!is_operator_part(lexer->str[lexer->i])
-	|| !is_operator_next(lexer->curr_tok->value->str, lexer->str[lexer->i])))
+	if (g_lexer.token && !g_lexer.quote_st
+	&& (is_operator_start(*g_lexer.token->value->str)
+	&& (g_lexer.i > 0 ? is_operator_part(g_lexer.line[g_lexer.i - 1]) : 0))
+	&& (!is_operator_part(g_lexer.line[g_lexer.i])
+	|| !is_operator_next(g_lexer.token->value->str, g_lexer.line[g_lexer.i])))
 	{
-		delim_token(lexer);
+		delim_token();
 		return (1);
 	}
 	return (0);
 }
 
-int			operator_new(t_lexer *lexer)
+int			lx_operator_new(void)
 {
-	if (lexer->curr_tok && !lexer->quote
-	&& is_operator_start(lexer->str[lexer->i]))
+	if (g_lexer.token && !g_lexer.quote_st
+	&& is_operator_start(g_lexer.line[g_lexer.i]))
 	{
-		if ((lexer->str[lexer->i] == '<' || lexer->str[lexer->i] == '>')
-		&& ft_strisnbr(lexer->curr_tok->value->str))
-			lexer->curr_tok->type = IO_NUMBER;
-		delim_token(lexer);
+		if ((g_lexer.line[g_lexer.i] == '<' || g_lexer.line[g_lexer.i] == '>')
+		&& ft_strisnbr(g_lexer.token->value->str))
+			g_lexer.token->type = IO_NUMBER;
+		delim_token();
 		return (1);
 	}
 	return (0);
 }
 
-int			blank(t_lexer *lexer)
+/*
+** the first time we process it, we delim the current token.
+** the second time we create a NEWLINE token, increase index, set nl_found to true
+** and delim the NEWLINE token to return it.
+*/
+
+int			lx_newline(void)
 {
-	if (!lexer->quote && ft_iswhitespace(lexer->str[lexer->i]))
+	if (!g_lexer.quote_st && g_lexer.line[g_lexer.i] == '\n')
 	{
-		if (lexer->curr_tok)
-			delim_token(lexer);
-		while (ft_iswhitespace(lexer->str[lexer->i]))
-			lexer->i++;
+		if (!g_lexer.token)
+		{
+			g_lexer.nl_found = 1;
+			g_lexer.token = token_new(NEWLINE);
+			ft_dstr_append(g_lexer.token->value, "newline");
+			g_lexer.i++;
+		}
+		delim_token();
+		return (1);
+	}
+	return (0);
+}
+
+int			lx_blank(void)
+{
+	if (!g_lexer.quote_st
+	&& (g_lexer.line[g_lexer.i] == '\t'
+	|| g_lexer.line[g_lexer.i] == ' '))
+	{
+		if (g_lexer.token)
+			delim_token();
+		while (g_lexer.line[g_lexer.i] == '\t'
+		|| g_lexer.line[g_lexer.i] == ' ')
+			g_lexer.i++;
 		return (1);
 	}
 	return (0);

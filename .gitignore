@@ -1,3 +1,6 @@
+# Vim future
+*.vs
+
 # Swp files
 *.swp
 *.swo

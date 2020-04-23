@@ -13,61 +13,86 @@
 #ifndef SHELL_H
 # define SHELL_H
 
+#include <stdio.h>
+
 # include <unistd.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <sys/uio.h>
 # include <sys/stat.h>
-# include <signal.h>
+# include <sys/prctl.h>
 # include <sys/ioctl.h>
+# include <signal.h>
 # include <fcntl.h>
 # include <limits.h>
 # include <dirent.h>
 # include "libft.h"
+# include "readline.h"
 # include "ft_printf.h"
 # include "env.h"
-# include "terminal.h"
-# include "input.h"
 # include "lexer.h"
 # include "parser.h"
 # include "exec.h"
 # include "expansion.h"
 # include "builtins.h"
+# include "autocomplete.h"
+# include "utils.h"
 
-typedef struct		s_sh
+/*
+** -fix readline problems
+** 		-rl_del??
+**		-env/termcaps...
+**		-write on 2 ? sounds weird to do that in readline,
+**		 maybe dup2 in shell.get_input
+**		-rigorous testing
+** -proper init handling
+**		-tty stuff, empty env, job control...
+** -input
+**		-redo input_interactive() properly, EOF and INT handling...
+** -error handling
+**		-^C ^D
+**		-last exit status, close fds... assert everything is perfect
+** -others
+** 		-flush cache table when PATH is modified.
+** 		-check comments work properly
+** 		-in case of "ls | \n cat", newline is not removed from line before stored in history
+**		 don t know if it is handled in expand()
+** -leaks
+*/
+
+# define INPUT_INT		3
+# define INPUT_EOF		4
+
+# define PS1			"$> "
+# define PS2			"> "
+# define PSQ			"q> "
+# define PSD			"d> "
+# define PSA			"a> "
+# define PSO			"o> "
+# define PSP			"p> "
+# define PSH			"h> "
+
+typedef int				(*t_input_func)(const char *, bool);
+
+int						g_last_exit_st;
+
+typedef struct			s_shell
 {
-	struct s_term	term;
-	struct s_input	input;
-	struct s_lexer	lexer;
-	struct s_env	env;
-}					t_sh;
+	bool				interactive_mode;
+	t_input_func		get_input;
+	t_job				*jobs;
+	pid_t				pgid;
+	struct termios		tmodes;
+}						t_shell;
 
-int					init(t_sh *shell, int argc, char **argv);
-void				del(t_sh *shell);
+t_shell					g_shell;
 
-void				init_sig(t_sh *shell);
-void				sig_handle(int sig);
-void				sig_action(t_sh *shell, int sig);
+int						init(int argc, char **argv);
+void					del(void);
 
-char				*ft_strjoin_triple(char *s1, char *s2, char *s3);
-void				free_arr(char **arr);
+int						input_batch(const char *prompt, bool heredoc);
+int						input_interactive(const char *prompt, bool heredoc);
 
-t_env				env_dup(char **env);
-char				*get_env_var(char *var_name, t_env *env);
-void				add_env_var(char *var, char *value, t_env *env);
-void				replace_env_var(char *var, char *value, t_env *env);
-void				remove_env_var(char *name, t_env *env);
-void				set_env_var(char *var, char *value, t_env *env);
-
-char				*get_executable_path(char *command, t_env *env);
-char				*append_filename(char *path, char *filename);
-char				**split_path(char const *path);
-
-char				get_opt(int argc, char *argv[]);
-bool				is_builtin(char *str);
-
-bool				is_valid_var_name(char *str);
-
-char				*ft_mktemp(char *template);
+void					init_sig(void);
 
 #endif

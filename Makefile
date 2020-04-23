@@ -31,7 +31,7 @@ LFLAGS          := -ltermcap
 #------------------------------------------------#
 
 CC              := gcc
-CFLAGS          := -Wall -Wextra
+CFLAGS          := -Wall -Wextra #-Werror
 ifeq ($(BUILDTYPE), debug)
 	CFLAGS := $(CFLAGS) $(DBG_FLAGS)
 endif
@@ -41,98 +41,95 @@ PFLAGS          := -Iinclude $(LIB_FT_INC)
 #                    SOURCES                     |
 #------------------------------------------------#
 
-SRC_BUILTINS    := builtins.c\
-                   cd.c\
-                   cd_utils.c\
-                   env.c
+SRC_BUILTINS    :=	builtins.c\
+					builtin_utils.c\
+					cd.c\
+					cd_utils.c\
+					env.c
 SRC_BUILTINS    := $(addprefix builtins/,$(SRC_BUILTINS))
 
-SRC_EXEC        := argv.c\
-                   exec.c\
-                   open_heredoc.c\
-                   pipe.c\
-                   redir.c\
-                   redir_utils.c\
+SRC_COMPLETE    := get_autocomplete_list.c\
+                   get_command_list.c\
+                   get_file_list.c\
                    utils.c
-SRC_EXEC        := $(addprefix exec/,$(SRC_EXEC))
+SRC_COMPLETE    := $(addprefix complete/,$(SRC_COMPLETE))
+
+SRC_ENV		    := env_dup.c\
+                   env_utils.c
+SRC_ENV    		:= $(addprefix env/,$(SRC_ENV))
+
+SRC_EXEC        := eval_command.c\
+				   exec.c\
+				   get_argv.c\
+				   get_exec_path.c\
+				   launch_job.c\
+				   job_control.c\
+				   job_get_status.c\
+				   job_set_status.c\
+				   job_print.c\
+				   job_utils.c\
+				   job.c\
+				   redirect.c\
+				   redirect_utils.c\
+				   redirect_error.c\
+                   open_heredoc.c
+				   #utils.c
+SRC_EXEC        := $(addprefix execution/,$(SRC_EXEC))
 
 SRC_EXPANSION   := expand.c\
                    param_exp.c\
                    quotes.c\
-				   path_exp.c\
 				   is_match.c\
-				   sort_matches.c
+				   sort_matches.c\
+				   path_exp.c
 SRC_EXPANSION   := $(addprefix expansion/,$(SRC_EXPANSION))
-
-SRC_INPUT       := comp_cmd.c\
-                   comp_files.c\
-                   comp_line_edit.c\
-                   comp_utils.c\
-                   complete.c\
-                   copypaste.c\
-                   ctrl_c_d.c\
-                   delchar.c\
-                   draw.c\
-                   enter.c\
-                   escape.c\
-                   history.c\
-                   init.c\
-                   move_basic.c\
-                   move_spec.c\
-                   move_utils.c\
-                   readline.c
-SRC_INPUT       := $(addprefix input/,$(SRC_INPUT))
 
 SRC_LEXER       := append.c\
                    delim.c\
-                   eat.c\
-                   init.c\
+                   get_next_token.c\
                    quote.c\
                    token.c\
                    utils.c
 SRC_LEXER       := $(addprefix lexer/,$(SRC_LEXER))
 
-SRC_PARSER      := heredoc.c\
-                   parser.c\
-                   pipeline.c\
-                   redirect.c\
-                   utils.c
+SRC_PARSER      := and_or.c\
+				   pipeline.c\
+				   command.c\
+				   command_list.c\
+                   io_redirect.c\
+				   separator.c\
+				   heredoc.c\
+				   error.c\
+				   debug.c\
+                   del.c
 SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
 
 SRC_SHELL       := del.c\
-                   env_utils.c\
-                   env_utils2.c\
-                   ft_mktemp.c\
-                   get_opt.c\
                    init.c\
-                   main.c\
-                   path_utils.c\
-                   utils.c
+				   signal.c\
+				   input.c\
+                   main.c
 SRC_SHELL       := $(addprefix shell/,$(SRC_SHELL))
 
-SRC_SIGNAL      := init.c\
-                   sig_action.c\
-                   sig_handle.c
-SRC_SIGNAL      := $(addprefix signal/,$(SRC_SIGNAL))
-
-SRC_TERM        := clear.c\
-                   cursor.c\
-                   init.c\
-                   print.c\
-                   window.c
-SRC_TERM        := $(addprefix term/,$(SRC_TERM))
+SRC_UTILS      := str_utils.c\
+				  array_utils.c\
+				  path_utils.c\
+                  ft_mktemp.c\
+                  get_opt.c\
+				  var_utils.c
+SRC_UTILS      := $(addprefix utils/,$(SRC_UTILS))
 
 SRC_PATH        := src
 SRC_NAME        := $(SRC_BUILTINS)\
+					$(SRC_COMPLETE)\
+					$(SRC_ENV)\
                    $(SRC_EXEC)\
                    $(SRC_EXPANSION)\
                    $(SRC_HISTORY)\
-                   $(SRC_INPUT)\
                    $(SRC_LEXER)\
                    $(SRC_PARSER)\
                    $(SRC_SHELL)\
-                   $(SRC_SIGNAL)\
-                   $(SRC_TERM)
+				    $(SRC_UTILS)
 SRC             := $(addprefix $(SRC_PATH)/,$(SRC_NAME))
 
 OBJ_PATH        := obj

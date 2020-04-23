@@ -12,37 +12,39 @@
 
 #include "shell.h"
 
-int		operator_next(t_lexer *lexer)
+int		lx_operator_next(void)
 {
-	if (lexer->curr_tok && !lexer->quote
-	&& (lexer->i != 0 ? is_operator_part(lexer->str[lexer->i - 1]) : 0)
-	&& is_operator_part(lexer->str[lexer->i])
-	&& is_operator_next(lexer->curr_tok->value->str, lexer->str[lexer->i]))
+	if (g_lexer.token && !g_lexer.quote_st
+	&& (g_lexer.i != 0 ? is_operator_part(g_lexer.line[g_lexer.i - 1]) : 0)
+	&& is_operator_part(g_lexer.line[g_lexer.i])
+	&& is_operator_next(g_lexer.token->value->str, g_lexer.line[g_lexer.i]))
 	{
-		ft_dstr_add(lexer->curr_tok->value, lexer->str[lexer->i]);
-		lexer->i++;
+		ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i]);
+		g_lexer.i++;
 		return (1);
 	}
 	return (0);
 }
 
-int		word_next(t_lexer *lexer)
+int		lx_word_next(void)
 {
-	if (lexer->curr_tok)
+	if (g_lexer.token)
 	{
-		ft_dstr_add(lexer->curr_tok->value, lexer->str[lexer->i]);
-		lexer->i++;
+		ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i]);
+		if (g_lexer.quote_st == BSLASH)
+			g_lexer.quote_st &= ~BSLASH;
+		g_lexer.i++;
 		return (1);
 	}
 	return (0);
 }
 
-int		comment(t_lexer *lexer)
+int		lx_comment(void)
 {
-	if (*lexer->str == '#')
+	if (g_lexer.line[g_lexer.i] == '#')
 	{
-		while (lexer->str[lexer->i] && lexer->str[lexer->i] != '\n')
-			lexer->i++;
+		while (g_lexer.line[g_lexer.i] && g_lexer.line[g_lexer.i] != '\n')
+			g_lexer.i++;
 		return (1);
 	}
 	return (0);
@@ -53,10 +55,10 @@ int		comment(t_lexer *lexer)
 ** functions will not enter their if statement if curr_tok is set to NULL.
 */
 
-int		word_start(t_lexer *lexer)
+int		lx_word_start(void)
 {
-	lexer->curr_tok = token_new(WORD);
-	ft_dstr_add(lexer->curr_tok->value, lexer->str[lexer->i]);
-	lexer->i++;
+	g_lexer.token = token_new(WORD);
+	ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i]);
+	g_lexer.i++;
 	return (1);
 }

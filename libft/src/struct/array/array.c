@@ -6,11 +6,11 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 16:41:57 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/17 13:00:15 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/03 19:21:49 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../inc/libft.h"
+#include "libft.h"
 
 t_array		*array_new()
 {
@@ -52,13 +52,15 @@ void		array_append(t_array *array, void *data)
 {
 	if (array->size == array->allocated)
 		array_realloc(array);
-	array->array[array->size++] = data; 
+	array->array[array->size++] = data;
 }
 
 void		array_destroy(t_array *array)
 {
 	size_t i;
 
+	if (array == NULL)
+		return ;
 	i = 0;
 	while (i < array->size)
 		free(array->array[i++]);

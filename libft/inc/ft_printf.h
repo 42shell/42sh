@@ -16,7 +16,7 @@
 # include <stdarg.h>
 # include "libft.h"
 
-# define BUFF_SIZE		48
+# define PF_BUFF_SIZE		48
 
 /*
 ** Flags
@@ -45,7 +45,7 @@
 
 typedef struct			s_printf
 {
-	char				buff[BUFF_SIZE];
+	char				buff[PF_BUFF_SIZE];
 	size_t				buff_index;
 	const char			*format_start;
 	const char			*format;

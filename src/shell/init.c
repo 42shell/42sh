@@ -6,28 +6,28 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/29 14:18:16 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/11 13:44:50 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static void	increase_shlvl(t_env *env)
+static void	increase_shlvl(void)
 {
 	char	*shlvl_str;
 	int		shlvl_int;
 
-	shlvl_str = get_env_var("SHLVL", env);
+	shlvl_str = get_env_var("SHLVL", g_env);
 	if (shlvl_str != NULL)
 		shlvl_int = ft_atoi(shlvl_str) + 1;
 	else
 		shlvl_int = 1;
 	shlvl_str = ft_itoa(shlvl_int);
-	set_env_var("SHLVL", shlvl_str, env);
+	set_env_var("SHLVL", shlvl_str, g_env);
 	free(shlvl_str);
 }
 
-static int	parse_args(t_sh *shell, int argc, char **argv)
+static int	parse_args(int argc, char **argv)
 {
 	int		fd;
 
@@ -38,15 +38,23 @@ static int	parse_args(t_sh *shell, int argc, char **argv)
 			write(STDERR_FILENO, "42sh: Could not open file\n", 26);
 			exit(1);
 		}
+		g_shell.get_input = &input_batch;
 		dup2(fd, STDIN_FILENO);
 		close(fd);
-		return (0);
 	}
-	shell->input.interactive = true;
+	else
+	{
+		g_shell.get_input = &input_interactive;
+		g_shell.interactive_mode = true;
+		g_rl_complete.get_matches = &get_autocomplete_list;
+		g_rl_retain_nl = true;
+		//g_rl_prompt_cr = true;
+		g_rl_hist_doubl = false;
+	}
 	return (0);
 }
 
-int			init(t_sh *shell, int argc, char **argv)
+int			init(int argc, char **argv)
 {
 	extern char	**environ;
 
@@ -55,17 +63,24 @@ int			init(t_sh *shell, int argc, char **argv)
 		ft_dprintf(2, "42sh: stdin is not a tty\n");
 		exit(1);
 	}
-	ft_bzero(shell, sizeof(*shell));
-	parse_args(shell, argc, argv);
-	if (shell->input.interactive)
+	g_env = env_dup(environ);
+	increase_shlvl();
+	parse_args(argc, argv);
+	if (g_shell.interactive_mode)
 	{
-		init_sig(shell);
-		init_term(&shell->term);
+		while (tcgetpgrp(STDIN_FILENO) != (g_shell.pgid = getpgrp()))
+    		kill(-g_shell.pgid, SIGTTIN);
+		init_sig();
+		/* Put ourselves in our own process group. */
+		g_shell.pgid = getpid();
+		if (setpgid (g_shell.pgid, g_shell.pgid) < 0)
+		{
+			ft_dprintf(2, "42sh: Couldn't put the shell in its own process group\n");
+			exit (1);
+		}
+    	/* Grab control of the terminal. */
+		tcgetattr(STDIN_FILENO, &g_shell.tmodes);
+		tcsetpgrp(STDIN_FILENO, g_shell.pgid);
 	}
-	init_input(&shell->input, &shell->term);
-	init_lexer(&shell->lexer, &shell->input);
-	shell->env = env_dup(environ);
-	increase_shlvl(&shell->env);
-	g_env = &shell->env;
 	return (0);
 }

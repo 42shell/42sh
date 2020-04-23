@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 14:02:44 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/29 14:26:13 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/11 13:42:07 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 #define CD_P		1
 #define PRINT_DIR	2
 
-char	*get_pwd(t_env *env)
+char	*get_pwd(void)
 {
 	static char	buf[PATH_MAX + 1];
 	char		*pwd;
 
-	pwd = get_env_var("PWD", env);
+	pwd = get_env_var("PWD", g_env);
 	if (pwd == NULL)
 	{
 		if (getcwd(buf, PATH_MAX + 1) == NULL)
@@ -34,11 +34,11 @@ char	*get_pwd(t_env *env)
 	return (pwd);
 }
 
-char	*get_home_dir(t_env *env)
+char	*get_home_dir(void)
 {
 	char *home;
 
-	home = get_env_var("HOME", env);
+	home = get_env_var("HOME", g_env);
 	if (home == NULL)
 		write(2, "42sh: cd: HOME not set\n", 23);
 	return (ft_strdup(home));
@@ -48,12 +48,12 @@ char	*get_home_dir(t_env *env)
 ** This is step 7 in the posix cd algorithm.
 */
 
-void	append_curpath_to_pwd(char **curpath, t_env *env)
+void	append_curpath_to_pwd(char **curpath)
 {
 	char *new;
 	char *pwd;
 
-	if ((pwd = get_pwd(env)))
+	if ((pwd = get_pwd()))
 	{
 		new = append_filename(pwd, *curpath);
 		free(*curpath);
