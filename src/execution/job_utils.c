@@ -22,7 +22,7 @@ t_job		*get_job_percent_format(char *format)
 	else if (format[1] == '-')
 		return (g_shell.prev_job);
 	job = g_shell.jobs;
-	id = ft_atoi(format);
+	id = ft_atoi(++format) - 1;
 	while (job && job->id != id)
 		job = job->next;
 	return (job);
@@ -30,7 +30,12 @@ t_job		*get_job_percent_format(char *format)
 
 void		update_curr_ptr(t_job *job)
 {
-	g_shell.prev_job = g_shell.curr_job;
+	if (job == g_shell.curr_job)
+		return ;
+	if (!g_shell.prev_job)
+		g_shell.prev_job = job;
+	else
+		g_shell.prev_job = g_shell.curr_job;
 	g_shell.curr_job = job;
 }
 
@@ -62,9 +67,16 @@ void		remove_job_from_list(int job_id)
 		if (job->id == job_id)
 		{
 			if (prev)
+			{
+				prev->id--;
 				prev->next = job->next;
+			}
 			else
 				g_shell.jobs = job->next;
+			if (g_shell.curr_job && g_shell.curr_job->id == job_id)
+				g_shell.curr_job = g_shell.prev_job;
+			if (g_shell.prev_job && g_shell.prev_job->id == job_id)
+				g_shell.prev_job = NULL;
 		}
 		prev = job;
 		job = job->next;

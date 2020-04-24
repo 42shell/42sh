@@ -12,11 +12,10 @@
 
 #include "shell.h"
 
-int		builtin_fg(char **argv)
+static t_job	*get_job_ptr(char **argv)
 {
-	int		id;
 	t_job	*job;
-	t_dstr	*format;
+	int		id;
 
 	if (!argv[1])
 		job = g_shell.curr_job;
@@ -27,12 +26,37 @@ int		builtin_fg(char **argv)
 		else
 		{
 			job = g_shell.jobs;
-			id = ft_atoi(argv[1]);
+			id = ft_atoi(argv[1]) - 1;
 			while (job && job->id != id)
 				job = job->next;
 		}
 	}
-	if (!job)
+	return (job);
+}
+
+int				builtin_bg(char **argv)
+{
+	t_job	*job;
+	t_dstr	*format;
+
+	if (!(job = get_job_ptr(argv)))
+	{
+		ft_dprintf(2, "42sh: bg: %s: No such job\n",
+								argv[1] ? argv[1] : "current");
+		return (1);
+	}
+	format = format_job(job->command, NULL);
+	ft_printf("%s &\n", format->str);
+	continue_job(job, true);
+	return (0);
+}
+
+int				builtin_fg(char **argv)
+{
+	t_job	*job;
+	t_dstr	*format;
+
+	if (!(job = get_job_ptr(argv)))
 	{
 		ft_dprintf(2, "42sh: fg: %s: No such job\n",
 								argv[1] ? argv[1] : "current");
@@ -40,6 +64,6 @@ int		builtin_fg(char **argv)
 	}
 	format = format_job(job->command, NULL);
 	ft_printf("%s\n", format->str);
-	put_job_fg(job, true);
+	continue_job(job, false);
 	return (0);
 }

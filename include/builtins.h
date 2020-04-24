@@ -22,6 +22,7 @@ void	builtin_exit(char **argv);
 int		builtin_echo(char **argv);
 int		builtin_cd(char **argv);
 int		builtin_fg(char **argv);
+int		builtin_bg(char **argv);
 
 char	*get_pwd();
 char	*get_home_dir();
