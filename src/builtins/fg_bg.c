@@ -39,7 +39,7 @@ int				builtin_bg(char **argv)
 	t_job	*job;
 	t_dstr	*format;
 
-	if (!(job = get_job_ptr(argv)))
+	if (!g_shell.jobs->next || !(job = get_job_ptr(argv)))
 	{
 		ft_dprintf(2, "42sh: bg: %s: No such job\n",
 								argv[1] ? argv[1] : "current");
@@ -56,7 +56,7 @@ int				builtin_fg(char **argv)
 	t_job	*job;
 	t_dstr	*format;
 
-	if (!(job = get_job_ptr(argv)))
+	if (!g_shell.jobs->next || !(job = get_job_ptr(argv)))
 	{
 		ft_dprintf(2, "42sh: fg: %s: No such job\n",
 								argv[1] ? argv[1] : "current");
