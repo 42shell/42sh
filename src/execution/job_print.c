@@ -57,7 +57,6 @@ t_dstr		*format_job(t_command *command, t_dstr *buf)
 	}
 	else if (command->type == SIMPLE)
 		format_simple_command(command->value.simple, buf);
-	//subshell
 	return (buf);
 }
 
@@ -65,13 +64,21 @@ void		print_job(t_job *job, int status)
 {
 	t_dstr	*format;
 	char	*status_str;
-
+	char	*curr;
+	
 	status_str = NULL;
 	if (status == JOB_DONE)
 		status_str = "Done";
 	else if (status == JOB_STOPPED)
 		status_str = "Stopped";
+	if (job == g_shell.curr_job)
+		curr = ft_strdup("+");
+	else if (job == g_shell.prev_job)
+		curr = ft_strdup("-");
+	else
+		curr = ft_strdup(" ");
 	format = format_job(job->command, NULL);
-	ft_printf("[%d]+  %s    %s\n", job->id + 1, status_str, format->str);
+	ft_printf("[%d]%s %s %s\n", job->id + 1, curr, status_str, format->str);
 	ft_dstr_del(&format);
+	free(curr);
 }

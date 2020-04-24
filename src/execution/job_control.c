@@ -33,6 +33,7 @@ void	notif_jobs(void)
 		}
 		else if (job_is_stopped(job) && !job->notified)
 		{
+			update_curr_ptr(job);
 			print_job(job, JOB_STOPPED);
 			job->notified = true;
 		}
@@ -77,6 +78,7 @@ void	continue_job(t_job *job, bool bg)
 void	put_job_bg(t_job *job, bool cont)
 {
 	job->bg = true;
+	update_curr_ptr(job);
 	if (cont)
 		kill(-job->pgid, SIGCONT);
 }
@@ -88,10 +90,12 @@ void	put_job_fg(t_job *job, bool cont)
 	if (cont)
 	{
 		kill(-job->pgid, SIGCONT);
-		tcsetattr (STDIN_FILENO, TCSADRAIN, &job->tmodes);
+		if (job->has_tmodes)
+			tcsetattr (STDIN_FILENO, TCSADRAIN, &job->tmodes);
 	}
 	wait_for_job(job);
 	tcsetpgrp(STDIN_FILENO, g_shell.pgid);
 	tcgetattr(STDIN_FILENO, &job->tmodes);
+	job->has_tmodes = true;
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &g_shell.tmodes);
 }

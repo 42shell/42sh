@@ -16,5 +16,7 @@ bool	is_builtin(char *str)
 {
 	return (ft_strcmp(str, "echo") == 0 || ft_strcmp(str, "cd") == 0
 		|| ft_strcmp(str, "setenv") == 0 || ft_strcmp(str, "unsetenv") == 0
-		|| ft_strcmp(str, "env") == 0 || ft_strcmp(str, "exit") == 0);
+		|| ft_strcmp(str, "env") == 0 || ft_strcmp(str, "exit") == 0
+		|| ft_strcmp(str, "fg") == 0 || ft_strcmp(str, "bg") == 0
+		|| ft_strcmp(str, "jobs") == 0);
 }

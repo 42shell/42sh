@@ -29,6 +29,8 @@ int			exec_builtin(char **argv)
 		ret = builtin_echo(argv);
 	else if (ft_strequ(argv[0], "cd"))
 		ret = builtin_cd(argv);
+	else if (ft_strequ(argv[0], "fg"))
+		ret = builtin_fg(argv);
 	g_last_exit_st = ret;
 	restore_fds();
 	return (0); //errors ?
