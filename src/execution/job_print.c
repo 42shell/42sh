@@ -27,7 +27,8 @@ static void	format_simple_command(t_simple_cmd *command, t_dstr *buf)
 	}
 	while (redir)
 	{
-		ft_dstr_append(buf, redir->left_op->value->str);
+		if (redir->left_op)
+			ft_dstr_append(buf, redir->left_op->value->str);
 		ft_dstr_append(buf, redir->operator->value->str);
 		ft_dstr_append(buf, redir->right_op->value->str);
 		if ((redir = redir->next))
