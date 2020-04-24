@@ -76,7 +76,7 @@ int			eval_and_or(t_connection *and_or)
 	g_exec_status |= EXEC_AND_OR;
 	eval_command(and_or->left);
 	if (g_shell.jobs->bg)
-		wait_for_job(g_shell.jobs);
+		wait_for_job(g_shell.jobs, true);
 	else
 		put_job_fg(g_shell.jobs, false);
 	if ((and_or->connector == AND_IF && g_last_exit_st == 0)

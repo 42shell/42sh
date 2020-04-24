@@ -100,7 +100,7 @@ int					exec_binary(char **argv, char **env);
 
 void				put_job_fg(t_job *job, bool cont);
 void				put_job_bg(t_job *job, bool cont);
-void				wait_for_job(t_job *job);
+void				wait_for_job(t_job *job, bool subshell);
 void				continue_job(t_job *job, bool bg);
 void				notif_jobs(void);
 
