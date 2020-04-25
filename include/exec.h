@@ -124,8 +124,8 @@ bool				job_is_stopped(t_job *job);
 ** job utils
 */
 
-t_job		*get_job_percent_format(char *format);
-void		update_curr_ptr(t_job *job);
+t_job				*get_job_percent_format(char *format);
+void				update_curr_ptr(t_job *job);
 t_job				*get_job(pid_t pgid);
 void				add_job(t_job *job);
 void				add_process(t_process *process);

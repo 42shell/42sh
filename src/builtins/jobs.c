@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fg.c                                               :+:      :+:    :+:   */
+/*   jobs.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -48,6 +48,7 @@ int				builtin_bg(char **argv)
 	format = format_job(job->command, NULL);
 	ft_printf("%s &\n", format->str);
 	continue_job(job, true);
+	ft_dstr_del(&format);
 	return (0);
 }
 
@@ -65,5 +66,11 @@ int				builtin_fg(char **argv)
 	format = format_job(job->command, NULL);
 	ft_printf("%s\n", format->str);
 	continue_job(job, false);
+	ft_dstr_del(&format);
 	return (0);
+}
+
+int				builtin_jobs(char **argv)
+{
+	;
 }
