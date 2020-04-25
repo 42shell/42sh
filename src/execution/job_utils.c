@@ -71,10 +71,7 @@ void		remove_job_from_list(int job_id)
 				g_shell.prev_job = NULL;
 			}
 			if (prev)
-			{
-				prev->id--;
 				prev->next = job->next;
-			}
 			else
 				g_shell.jobs = job->next;
 		}

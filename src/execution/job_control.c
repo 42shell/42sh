@@ -25,7 +25,7 @@ void	notif_jobs(void)
 		if (job_is_done(job))
 		{
 			if (job->bg)
-				print_job(job, JOB_DONE);
+				print_job(job);
 			remove_job_from_list(job->id);
 			process_del(&job->processes);
 			command_del(&job->command);
@@ -35,7 +35,7 @@ void	notif_jobs(void)
 		{
 			ft_printf("\n");
 			update_curr_ptr(job);
-			print_job(job, JOB_STOPPED);
+			print_job(job);
 			job->notified = true;
 		}
 		job = next;
@@ -63,7 +63,7 @@ void	wait_for_job(t_job *job, bool subshell)
 			ft_dprintf(2, "42sh: waitpid: unexpected error.\n", pid);
 			break ;
 		}
-		g_last_exit_st = WEXITSTATUS(job->processes->status);
+		g_last_exit_st = WEXITSTATUS(status);
 	}
 }
 

@@ -33,6 +33,8 @@ int			exec_builtin(char **argv)
 		ret = builtin_fg(argv);
 	else if (ft_strequ(argv[0], "bg"))
 		ret = builtin_bg(argv);
+	else if (ft_strequ(argv[0], "jobs"))
+		ret = builtin_jobs(argv);
 	g_last_exit_st = ret;
 	restore_fds();
 	return (0); //errors ?

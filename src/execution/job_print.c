@@ -61,17 +61,19 @@ t_dstr		*format_job(t_command *command, t_dstr *buf)
 	return (buf);
 }
 
-void		print_job(t_job *job, int status)
+void		print_job(t_job *job)
 {
 	t_dstr	*format;
 	char	*status_str;
 	char	*curr;
 	
 	status_str = NULL;
-	if (status == JOB_DONE)
+	if (job_is_done(job))
 		status_str = "Done";
-	else if (status == JOB_STOPPED)
+	else if (job_is_stopped(job))
 		status_str = "Stopped";
+	else
+		status_str = "Running";
 	if (job == g_shell.curr_job)
 		curr = ft_strdup("+");
 	else if (job == g_shell.prev_job)

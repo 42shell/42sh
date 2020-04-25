@@ -72,5 +72,16 @@ int				builtin_fg(char **argv)
 
 int				builtin_jobs(char **argv)
 {
-	;
+	t_job		*job;
+
+	update_status();
+	job = g_shell.jobs->next;
+	while (job)
+	{
+		print_job(job);
+		job->notified = true;
+		job = job->next;
+	}
+	printf("\n");
+	return (0);
 }
