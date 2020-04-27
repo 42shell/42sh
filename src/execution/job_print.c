@@ -36,17 +36,15 @@ static void	format_simple_command(t_simple_cmd *command, t_dstr *buf)
 	}
 }
 
-t_dstr		*format_job(t_command *command, t_dstr *buf)
+t_dstr		*format_command(t_command *command, t_dstr *buf)
 {
 	enum e_token_type connector;
 
 	if (!command)
 		return (NULL);
-	if (!buf)
-		buf = ft_dstr_new(36);
 	if (command->type == CONNECTION)
 	{
-		format_job(command->value.connection->left, buf);
+		format_command(command->value.connection->left, buf);
 		connector = command->value.connection->connector;
 		if (connector == AND_IF)
 			ft_dstr_append(buf, " && ");
@@ -54,12 +52,78 @@ t_dstr		*format_job(t_command *command, t_dstr *buf)
 			ft_dstr_append(buf, " || ");
 		else if (connector == PIPE)
 			ft_dstr_append(buf, " | ");
-		format_job(command->value.connection->right, buf);
+		format_command(command->value.connection->right, buf);
 	}
 	else if (command->type == SIMPLE)
 		format_simple_command(command->value.simple, buf);
 	return (buf);
 }
+
+void		format_process_long(t_process *process, t_dstr *buf)
+{
+	char	*pid;
+	char	*sig;
+	char	*exit_st;
+
+	sig = NULL;
+	exit_st = NULL;
+	pid = ft_itoa(process->pid);
+	ft_dstr_append(buf, pid);
+	ft_dstr_append(buf, " ");
+	if (WIFEXITED(process->status))
+	{
+		exit_st = ft_itoa(WEXITSTATUS(process->status));
+		ft_dstr_append(buf, "Exit ");
+		ft_dstr_append(buf, exit_st);
+		ft_dstr_append(buf, "       ");
+	}
+	else if (WIFSTOPPED(process->status))
+	{
+		ft_dstr_append(buf, "Stopped ");
+		sig = ft_itoa(WSTOPSIG(process->status));
+		ft_dstr_append(buf, sig);
+		ft_dstr_append(buf, "   ");
+	}
+	else
+		ft_dstr_append(buf, "Running       ");
+	if (process->stdin != 0)
+		ft_dstr_append(buf, "| ");
+	format_command(process->command, buf);
+	free(exit_st);
+	free(sig);
+	free(pid);
+}
+
+/*
+[1]+  Stopped                 cat | test
+[1]+    31 Stopped (tty input)     cat
+        32 Exit 1                  | test
+*/
+
+void		print_job_long(t_job *job)
+{
+	t_dstr		*buf;
+	t_process	*process;
+	char		*curr;
+
+	buf = ft_dstr_new(32);
+	process = job->processes;
+	while (process)
+	{
+		format_process_long(process, buf);
+		if (process->next)
+			ft_dstr_append(buf, "\n       ");
+		process = process->next;
+	}
+	if (job == g_shell.curr_job)
+		curr = "+";
+	else if (job == g_shell.prev_job)
+		curr = "-";
+	else
+		curr = " ";
+	ft_printf("[%d]%s   %s\n", job->id + 1, curr, buf->str);
+}
+
 
 void		print_job(t_job *job)
 {
@@ -75,13 +139,13 @@ void		print_job(t_job *job)
 	else
 		status_str = "Running";
 	if (job == g_shell.curr_job)
-		curr = ft_strdup("+");
+		curr = "+";
 	else if (job == g_shell.prev_job)
-		curr = ft_strdup("-");
+		curr = "-";
 	else
-		curr = ft_strdup(" ");
-	format = format_job(job->command, NULL);
-	ft_printf("[%d]%s %s %s\n", job->id + 1, curr, status_str, format->str);
+		curr = " ";
+	format = format_command(job->command, NULL);
+	ft_printf("[%d]%s %-20s %s\n", job->id + 1, curr, status_str, format->str);
 	ft_dstr_del(&format);
 	free(curr);
 }

@@ -78,10 +78,9 @@ int				builtin_jobs(char **argv)
 	job = g_shell.jobs->next;
 	while (job)
 	{
-		print_job(job);
+		print_job_long(job);
 		job->notified = true;
 		job = job->next;
 	}
-	printf("\n");
 	return (0);
 }
