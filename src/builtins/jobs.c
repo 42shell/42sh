@@ -37,36 +37,38 @@ static t_job	*get_job_ptr(char **argv)
 int				builtin_bg(char **argv)
 {
 	t_job	*job;
-	t_dstr	*format;
+	t_dstr	*buf;
 
+	buf = ft_dstr_new(32);
 	if (!g_shell.jobs->next || !(job = get_job_ptr(argv)))
 	{
 		ft_dprintf(2, "42sh: bg: %s: No such job\n",
 								argv[1] ? argv[1] : "current");
 		return (1);
 	}
-	format = format_job(job->command, NULL);
-	ft_printf("%s &\n", format->str);
+	format_command(job->command, buf);
+	ft_printf("%s &\n", buf->str);
 	continue_job(job, true);
-	ft_dstr_del(&format);
+	ft_dstr_del(&buf);
 	return (0);
 }
 
 int				builtin_fg(char **argv)
 {
 	t_job	*job;
-	t_dstr	*format;
+	t_dstr	*buf;
 
+	buf = ft_dstr_new(32);
 	if (!g_shell.jobs->next || !(job = get_job_ptr(argv)))
 	{
 		ft_dprintf(2, "42sh: fg: %s: No such job\n",
 								argv[1] ? argv[1] : "current");
 		return (1);
 	}
-	format = format_job(job->command, NULL);
-	ft_printf("%s\n", format->str);
+	format_command(job->command, buf);
+	ft_printf("%s\n", buf->str);
 	continue_job(job, false);
-	ft_dstr_del(&format);
+	ft_dstr_del(&buf);
 	return (0);
 }
 

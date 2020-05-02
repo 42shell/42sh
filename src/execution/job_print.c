@@ -40,7 +40,7 @@ t_dstr		*format_command(t_command *command, t_dstr *buf)
 {
 	enum e_token_type connector;
 
-	if (!command)
+	if (!command || !buf)
 		return (NULL);
 	if (command->type == CONNECTION)
 	{
@@ -127,10 +127,11 @@ void		print_job_long(t_job *job)
 
 void		print_job(t_job *job)
 {
-	t_dstr	*format;
+	t_dstr	*buf;
 	char	*status_str;
 	char	*curr;
 	
+	buf = ft_dstr_new(32);
 	status_str = NULL;
 	if (job_is_done(job))
 		status_str = "Done";
@@ -144,8 +145,8 @@ void		print_job(t_job *job)
 		curr = "-";
 	else
 		curr = " ";
-	format = format_command(job->command, NULL);
-	ft_printf("[%d]%s %-20s %s\n", job->id + 1, curr, status_str, format->str);
-	ft_dstr_del(&format);
+	format_command(job->command, buf);
+	ft_printf("[%d]%s %-20s %s\n", job->id + 1, curr, status_str, buf->str);
+	ft_dstr_del(&buf);
 	free(curr);
 }

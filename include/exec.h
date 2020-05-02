@@ -135,7 +135,7 @@ void				remove_job_from_list(pid_t pgid);
 ** job display
 */
 
-t_dstr				*format_job(t_command *command, t_dstr *buf);
+t_dstr				*format_command(t_command *command, t_dstr *buf);
 void				print_job(t_job *job);
 void		print_job_long(t_job *job);
 
