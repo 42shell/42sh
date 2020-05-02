@@ -94,12 +94,6 @@ void		format_process_long(t_process *process, t_dstr *buf)
 	free(pid);
 }
 
-/*
-[1]+  Stopped                 cat | test
-[1]+    31 Stopped (tty input)     cat
-        32 Exit 1                  | test
-*/
-
 void		print_job_long(t_job *job)
 {
 	t_dstr		*buf;
@@ -148,5 +142,4 @@ void		print_job(t_job *job)
 	format_command(job->command, buf);
 	ft_printf("[%d]%s %-20s %s\n", job->id + 1, curr, status_str, buf->str);
 	ft_dstr_del(&buf);
-	free(curr);
 }
