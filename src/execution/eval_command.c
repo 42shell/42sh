@@ -34,7 +34,7 @@ int			eval_simple_command(t_command *command, int in, int out,
 	if ((g_exec_status & EXEC_PIPELINE) || !builtin)
 	{
 		process = process_new(command, in, out);
-		return (launch_process(process, fd_to_close, false));
+		return (launch_process(process, fd_to_close));
 	}
 	if (set_redir(simple, true) != 0)
 		return (1);
@@ -76,7 +76,7 @@ int			eval_and_or(t_connection *and_or)
 	g_exec_status |= EXEC_AND_OR;
 	eval_command(and_or->left);
 	if (g_shell.jobs->bg)
-		wait_for_job(g_shell.jobs, true);
+		wait_for_job(g_shell.jobs);
 	else
 		put_job_fg(g_shell.jobs, false);
 	if ((and_or->connector == AND_IF && g_last_exit_st == 0)

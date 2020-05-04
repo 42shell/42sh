@@ -68,6 +68,8 @@ typedef struct			s_job
 
 t_ht					*g_binaries;
 
+bool					g_job_control_enabled;
+
 /*
 ** main functions
 */
@@ -82,7 +84,7 @@ int					eval_command_list(t_command *command_list);
 ** launch job/process
 */
 
-int					launch_process(t_process *process, int to_close, bool subshell);
+int					launch_process(t_process *process, int to_close);
 int					launch_job(t_job *job);
 
 /*
@@ -93,6 +95,7 @@ char    			**get_argv(t_simple_cmd *command);
 char				*get_exec_path(char *command, t_env *env);
 int					exec_builtin(char **argv);
 int					exec_binary(char **argv, char **env);
+int					exec_simple_cmd(t_simple_cmd *simple);
 
 /*
 ** job control
@@ -100,7 +103,7 @@ int					exec_binary(char **argv, char **env);
 
 void				put_job_fg(t_job *job, bool cont);
 void				put_job_bg(t_job *job, bool cont);
-void				wait_for_job(t_job *job, bool subshell);
+void				wait_for_job(t_job *job);
 void				continue_job(t_job *job, bool bg);
 void				notif_jobs(void);
 
@@ -137,7 +140,7 @@ void				remove_job_from_list(pid_t pgid);
 
 t_dstr				*format_command(t_command *command, t_dstr *buf);
 void				print_job(t_job *job);
-void		print_job_long(t_job *job);
+void				print_job_long(t_job *job);
 
 /*
 ** job new/del

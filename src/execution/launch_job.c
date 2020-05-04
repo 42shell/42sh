@@ -44,19 +44,18 @@ static pid_t	fork_child(int in, int out, int to_close)
 	return (pid);
 }
 
-static int		exec_simple_cmd(t_simple_cmd *simple)
+static void		set_child_attr(t_process *process)
 {
-	char			**argv;
-
-	if (set_redir(simple, true) != 0)
-		return (1);
-	argv = simple->argv == NULL ? get_argv(simple) : simple->argv;
-	if (is_builtin(argv[0]))
-		return (exec_builtin(argv));
-	return (exec_binary(argv, g_env->env));
+	process->pid = getpid();
+	if (!g_shell.jobs->pgid)
+		g_shell.jobs->pgid = process->pid;
+	setpgid(process->pid, g_shell.jobs->pgid);
+	if (!g_shell.jobs->bg)
+		tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
+	reset_signals();
 }
 
-int				launch_process(t_process *process, int to_close, bool subshell)
+int				launch_process(t_process *process, int to_close)
 {
 	pid_t	pid;
 
@@ -64,19 +63,15 @@ int				launch_process(t_process *process, int to_close, bool subshell)
 		return (-1);
 	else if (pid == 0)
 	{
-		process->pid = getpid();
-		if (!g_shell.jobs->pgid)
-			g_shell.jobs->pgid = process->pid;
-		setpgid(process->pid, g_shell.jobs->pgid);
-		if (!g_shell.jobs->bg)
-			tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
-		reset_signals();
+		set_child_attr(process);
+		g_job_control_enabled = false;
 		if (process->command->type == SIMPLE)
 			exec_simple_cmd(process->command->value.simple);
 		else
+		{
 			eval_command(process->command);
-		if (subshell)
-			wait_for_job(g_shell.jobs, true);
+			wait_for_job(g_shell.jobs);
+		}
 		exit(0);
 	}
 	else
@@ -97,7 +92,7 @@ int				launch_job(t_job *job)
 	if (job->bg)
 	{
 		process = process_new(job->command, STDIN_FILENO, STDOUT_FILENO);
-		launch_process(process, 0, true);
+		launch_process(process, 0);
 		put_job_bg(job, false);
 		ft_printf("[%d] %d\n", job->id + 1, job->pgid);
 	}

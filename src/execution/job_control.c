@@ -42,7 +42,7 @@ void	notif_jobs(void)
 	}
 }
 
-void	wait_for_job(t_job *job, bool subshell)
+void	wait_for_job(t_job *job)
 {
 	pid_t		pid;
 	int			status;
@@ -50,7 +50,7 @@ void	wait_for_job(t_job *job, bool subshell)
 	status = 0;
 	if (!job->processes)
 		return ;
-	while (!job_is_done(job) && (subshell ? 1 : !job_is_stopped(job)))
+	while (!job_is_done(job) && (g_job_control_enabled ? !job_is_stopped(job) : 1))
 	{
 		pid = waitpid(WAIT_ANY, &status, WUNTRACED);
 		if (pid > 0 && mark_status(pid, status) < 0)
@@ -94,7 +94,7 @@ void	put_job_fg(t_job *job, bool cont)
 		if (job->has_tmodes)
 			tcsetattr(STDIN_FILENO, TCSADRAIN, &job->tmodes);
 	}
-	wait_for_job(job, false);
+	wait_for_job(job);
 	tcsetpgrp(STDIN_FILENO, g_shell.pgid);
 	tcgetattr(STDIN_FILENO, &job->tmodes);
 	job->has_tmodes = true;

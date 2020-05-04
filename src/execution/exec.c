@@ -58,3 +58,15 @@ int			exec_binary(char **argv, char **env)
 	free(path);
 	return (0);
 }
+
+int			exec_simple_cmd(t_simple_cmd *simple)
+{
+	char			**argv;
+
+	if (set_redir(simple, true) != 0)
+		return (1);
+	argv = simple->argv == NULL ? get_argv(simple) : simple->argv;
+	if (is_builtin(argv[0]))
+		return (exec_builtin(argv));
+	return (exec_binary(argv, g_env->env));
+}

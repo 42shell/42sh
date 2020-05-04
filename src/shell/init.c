@@ -68,6 +68,7 @@ int			init(int argc, char **argv)
 	parse_args(argc, argv);
 	if (g_shell.interactive_mode)
 	{
+		g_job_control_enabled = true;
 		while (tcgetpgrp(STDIN_FILENO) != (g_shell.pgid = getpgrp()))
     		kill(-g_shell.pgid, SIGTTIN);
 		init_sig();
