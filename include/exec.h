@@ -41,6 +41,7 @@ typedef struct			s_process
 	int					stdin;
 	int					stdout;
 	int					status;
+	bool				subshell;
 	bool				stopped;
 	bool				done;
 }						t_process;
@@ -68,6 +69,7 @@ typedef struct			s_job
 
 t_ht					*g_binaries;
 
+bool					g_already_forked;
 bool					g_job_control_enabled;
 
 /*
@@ -75,10 +77,9 @@ bool					g_job_control_enabled;
 */
 
 int					eval_command(t_command *command);
-int					eval_and_or(t_connection *and_or);
-int					eval_pipeline(t_connection *pipeline, int in, int out);
-int					eval_simple_command(t_command *command, int in, int out,
-					int fd_to_close);
+int					eval_and_or(t_command *command);
+int					eval_pipeline(t_command *command, int in, int out);
+int					eval_simple_command(t_command *commande);
 int					eval_command_list(t_command *command_list);
 /*
 ** launch job/process
@@ -95,7 +96,7 @@ char    			**get_argv(t_simple_cmd *command);
 char				*get_exec_path(char *command, t_env *env);
 int					exec_builtin(char **argv);
 int					exec_binary(char **argv, char **env);
-int					exec_simple_cmd(t_simple_cmd *simple);
+int					exec_simple_command(t_simple_cmd *simple);
 
 /*
 ** job control

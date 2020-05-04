@@ -64,6 +64,7 @@ SRC_EXEC        := eval_command.c\
 				   get_argv.c\
 				   get_exec_path.c\
 				   launch_job.c\
+				   launch_process.c\
 				   job_control.c\
 				   job_get_status.c\
 				   job_set_status.c\

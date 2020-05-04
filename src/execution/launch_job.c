@@ -12,87 +12,21 @@
 
 #include "shell.h"
 
-static void		reset_signals(void)
-{
-	prctl(PR_SET_PDEATHSIG, SIGTERM);
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-	signal(SIGTTIN, SIG_DFL);
-	signal(SIGTTOU, SIG_DFL);
-	signal(SIGTSTP, SIG_DFL);
-}
-
-static pid_t	fork_child(int in, int out, int to_close)
-{
-	pid_t	pid;
-
-	if ((pid = fork()) == -1)
-		return (-1);
-	else if (pid == 0)
-	{
-		if (to_close)
-			close(to_close);
-		if (in != STDIN_FILENO)
-			dup2(in, STDIN_FILENO);
-		if (out != STDOUT_FILENO)
-			dup2(out, STDOUT_FILENO);
-	}
-	if (in != STDIN_FILENO)
-		close(in);
-	if (out != STDOUT_FILENO)
-		close(out);
-	return (pid);
-}
-
-static void		set_child_attr(t_process *process)
-{
-	process->pid = getpid();
-	if (!g_shell.jobs->pgid)
-		g_shell.jobs->pgid = process->pid;
-	setpgid(process->pid, g_shell.jobs->pgid);
-	if (!g_shell.jobs->bg)
-		tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
-	reset_signals();
-}
-
-int				launch_process(t_process *process, int to_close)
-{
-	pid_t	pid;
-
-	if ((pid = fork_child(process->stdin, process->stdout, to_close)) == -1)
-		return (-1);
-	else if (pid == 0)
-	{
-		set_child_attr(process);
-		g_job_control_enabled = false;
-		if (process->command->type == SIMPLE)
-			exec_simple_cmd(process->command->value.simple);
-		else
-		{
-			eval_command(process->command);
-			wait_for_job(g_shell.jobs);
-		}
-		exit(0);
-	}
-	else
-	{
-		process->pid = pid;
-		if (!g_shell.jobs->pgid)
-			g_shell.jobs->pgid = pid;
-		setpgid(process->pid, g_shell.jobs->pgid);
-		add_process(process);
-	}
-	return (pid);
-}
-
 int				launch_job(t_job *job)
 {
 	t_process	*process;
 
 	if (job->bg)
 	{
-		process = process_new(job->command, STDIN_FILENO, STDOUT_FILENO);
-		launch_process(process, 0);
+		if (job->command->type == CONNECTION
+		&& (job->command->value.connection->connector == AND_IF
+			||  job->command->value.connection->connector == OR_IF))
+		{
+			process = process_new(job->command, STDIN_FILENO, STDOUT_FILENO);
+			launch_process(process, 0);
+		}
+		else
+			eval_command(job->command);
 		put_job_bg(job, false);
 		ft_printf("[%d] %d\n", job->id + 1, job->pgid);
 	}

@@ -71,5 +71,6 @@ int		expand(t_simple_cmd *command, t_env *env)
 		}
 		cur = next;
 	}
+	command->is_expand = true;
 	return (0);
 }

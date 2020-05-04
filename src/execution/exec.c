@@ -36,7 +36,6 @@ int			exec_builtin(char **argv)
 	else if (ft_strequ(argv[0], "jobs"))
 		ret = builtin_jobs(argv);
 	g_last_exit_st = ret;
-	restore_fds();
 	return (0); //errors ?
 }
 
@@ -59,14 +58,21 @@ int			exec_binary(char **argv, char **env)
 	return (0);
 }
 
-int			exec_simple_cmd(t_simple_cmd *simple)
+int			exec_simple_command(t_simple_cmd *simple)
 {
-	char			**argv;
-
 	if (set_redir(simple, true) != 0)
 		return (1);
-	argv = simple->argv == NULL ? get_argv(simple) : simple->argv;
-	if (is_builtin(argv[0]))
-		return (exec_builtin(argv));
-	return (exec_binary(argv, g_env->env));
+	if (simple->argv)
+	{
+		if (is_builtin(simple->argv[0]))
+		{
+			exec_builtin(simple->argv);
+			restore_fds();
+		}
+		else
+			exec_binary(simple->argv, g_env->env);
+	}
+	else
+		restore_fds();
+	return (0);
 }

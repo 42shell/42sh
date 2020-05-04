@@ -50,7 +50,8 @@ void	wait_for_job(t_job *job)
 	status = 0;
 	if (!job->processes)
 		return ;
-	while (!job_is_done(job) && (g_job_control_enabled ? !job_is_stopped(job) : 1))
+	while (!job_is_done(job)
+	&& (g_job_control_enabled ? !job_is_stopped(job) : 1))
 	{
 		pid = waitpid(WAIT_ANY, &status, WUNTRACED);
 		if (pid > 0 && mark_status(pid, status) < 0)
