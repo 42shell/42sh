@@ -62,16 +62,13 @@ int			eval_pipeline(t_command *command, int in, int out)
 	if (pipe(fd) == -1)
 		return (-1);
 	pipeline = command->value.connection;
-	if (pipeline->left->type == CONNECTION
-	&& pipeline->left->value.connection->connector == PIPE)
-		eval_pipeline(pipeline->left, in, fd[1]);
-	else
-	{
-		process = process_new(pipeline->left, in, fd[1]);
-		launch_process(process, fd[0]);
-	}
 	process = process_new(pipeline->right, fd[0], out);
 	launch_process(process, fd[1]);
+	if (pipeline->left->type == CONNECTION
+	&& pipeline->left->value.connection->connector == PIPE)
+		return (eval_pipeline(pipeline->left, in, fd[1]));
+	process = process_new(pipeline->left, in, fd[1]);
+	launch_process(process, fd[0]);
 	return (0);
 }
 

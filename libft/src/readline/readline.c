@@ -88,6 +88,7 @@ static int	rl_init(void)
 		g_rl_is_init = true;
 	}
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &g_rl_term);
+	tputs(g_rl_caps[C_KS], 1, ft_putc);
 	return (0);
 }
 

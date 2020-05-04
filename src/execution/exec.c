@@ -65,14 +65,10 @@ int			exec_simple_command(t_simple_cmd *simple)
 	if (simple->argv)
 	{
 		if (is_builtin(simple->argv[0]))
-		{
 			exec_builtin(simple->argv);
-			restore_fds();
-		}
 		else
 			exec_binary(simple->argv, g_env->env);
 	}
-	else
-		restore_fds();
+	restore_fds();
 	return (0);
 }

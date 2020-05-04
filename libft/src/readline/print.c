@@ -25,7 +25,12 @@ void		rl_carriage_return(bool echo_missing_nl)
 		g_rl_posx++;
 	}
 	while (i++ < g_rl_sizex - 2)
-		movcright();
+	{
+		if (g_rl_posy == g_rl_sizey - 1 && g_rl_posx == g_rl_sizex - 1)
+			movcnl();
+		else
+			movcright();
+	}
 	tputs(g_rl_caps[C_CR], 1, ft_putc);
 	g_rl_posx = 0;
 }

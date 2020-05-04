@@ -27,7 +27,10 @@ static pid_t	fork_child(int in, int out, int to_close)
 	pid_t	pid;
 
 	if ((pid = fork()) == -1)
+	{
+		kill(0, SIGABRT);//printf
 		return (-1);
+	}
 	else if (pid == 0)
 	{
 		if (to_close)
