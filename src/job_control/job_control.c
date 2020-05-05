@@ -64,7 +64,7 @@ void	wait_for_job(t_job *job)
 			ft_dprintf(2, "42sh: waitpid: unexpected error.\n", pid);
 			break ;
 		}
-		g_last_exit_st = WIFEXITED(status) ? WEXITSTATUS(status) : 1; //this goes in mark_status
+		g_last_exit_st = WIFEXITED(status) ? WEXITSTATUS(status) : g_last_exit_st;//fix this
 	}
 }
 

@@ -55,7 +55,7 @@ static t_list_head	*get_jobs_list(char **argv)
 			free(list);
 			return (NULL);
 		}
-		ft_list_add(job, list);
+		ft_list_add_tail(job, list);
 		i++;
 	}
 	return (list);
@@ -66,7 +66,7 @@ int					builtin_bg(char **argv)
 	t_list_head	*list;
 	t_list_head	*curr;
 	t_job		*job;
-	t_dstr		*buf;
+	t_dstr		*command_format;
 
 	if (!g_shell.jobs->next || !(list = get_jobs_list(argv)))
 	{
@@ -78,11 +78,11 @@ int					builtin_bg(char **argv)
 	while (curr != list)
 	{
 		job = (t_job *)curr->data;
-		buf = ft_dstr_new(32);
-		format_command(job->command, buf);
-		ft_printf("%s &\n", buf->str);
+		command_format = ft_dstr_new(32);
+		format_command(command_format, job->command);
+		ft_printf("%s &\n", command_format->str);
+		ft_dstr_del(&command_format);
 		continue_job(job, true);
-		ft_dstr_del(&buf);
 		curr = curr->next;
 	}
 	while (list->next != list)
@@ -96,7 +96,7 @@ int					builtin_fg(char **argv)
 	t_list_head	*list;
 	t_list_head	*curr;
 	t_job		*job;
-	t_dstr		*buf;
+	t_dstr		*command_format;
 
 	if (!g_shell.jobs->next || !(list = get_jobs_list(argv)))
 	{
@@ -108,11 +108,11 @@ int					builtin_fg(char **argv)
 	while (curr != list)
 	{
 		job = (t_job *)curr->data;
-		buf = ft_dstr_new(32);
-		format_command(job->command, buf);
-		ft_printf("%s\n", buf->str);
+		command_format = ft_dstr_new(32);
+		format_command(command_format, job->command);
+		ft_printf("%s\n", command_format->str);
+		ft_dstr_del(&command_format);
 		continue_job(job, false);
-		ft_dstr_del(&buf);
 		curr = curr->next;
 	}
 	while (list->next != list)
