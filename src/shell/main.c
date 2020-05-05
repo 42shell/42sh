@@ -52,7 +52,6 @@ int				main_loop(void)
 		if ((g_parser.token = get_next_token())
 		&& (command_list = get_command_list()))
 		{
-			g_exec_status = 0;
 			g_last_exit_st = 0;
 			eval_command_list(command_list);
 		}

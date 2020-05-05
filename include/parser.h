@@ -57,6 +57,7 @@ typedef struct					s_simple_cmd
 	t_token						*args;
 	t_token						*assigns;
 	char						**argv;
+	bool						is_expand;
 }								t_simple_cmd;
 
 /*

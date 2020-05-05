@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
+/*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/24 01:41:42 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/05 15:24:46 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,13 @@ int			exec_builtin(char **argv)
 		builtin_unset(argv);
 	else if (ft_strequ(argv[0], "set"))
 		builtin_set();
+	else if (ft_strequ(argv[0], "fg"))
+		ret = builtin_fg(argv);
+	else if (ft_strequ(argv[0], "bg"))
+		ret = builtin_bg(argv);
+	else if (ft_strequ(argv[0], "jobs"))
+		ret = builtin_jobs(argv);
 	g_last_exit_st = ret;
-	restore_fds();
 	return (0); //errors ?
 }
 
@@ -56,5 +61,20 @@ int			exec_binary(char **argv, char **env)
 		return (1); //code ?
 	}
 	free(path);
+	return (0);
+}
+
+int			exec_simple_command(t_simple_cmd *simple)
+{
+	if (set_redir(simple, true) != 0)
+		return (1);
+	if (simple->argv)
+	{
+		if (is_builtin(simple->argv[0]))
+			exec_builtin(simple->argv);
+		else
+			exec_binary(simple->argv, g_env->env);
+	}
+	restore_fds();
 	return (0);
 }

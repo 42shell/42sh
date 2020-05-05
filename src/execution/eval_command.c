@@ -12,35 +12,26 @@
 
 #include "shell.h"
 
-int			g_exec_status;
-
-int			eval_simple_command(t_command *command, int in, int out,
-		int fd_to_close)
+int			eval_simple_command(t_command *command)
 {
 	t_process		*process;
 	t_simple_cmd	*simple;
-	bool			builtin;
 
 	simple = command->value.simple;
-	expand(simple, g_env);
-	simple->argv = get_argv(simple);
-	if (!simple->argv)
+	if (!simple->is_expand)
 	{
-		set_redir(simple, true);
-		restore_fds();
-		return (0);
+		expand(simple, g_env);
+		if (!(simple->argv = get_argv(simple)))
+			return (exec_simple_command(simple));
 	}
-	builtin = is_builtin(simple->argv[0]);
-	if ((g_exec_status & EXEC_PIPELINE) || !builtin)
+	if (!g_already_forked
+	&& (!is_builtin(simple->argv[0])
+		|| (g_job_control_enabled && g_shell.jobs->bg)))
 	{
-		process = process_new(command, in, out);
-		return (launch_process(process, fd_to_close, false));
+		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
+		return (launch_process(process, 0));
 	}
-	if (set_redir(simple, true) != 0)
-		return (1);
-	if (is_builtin(simple->argv[0]))
-		return (exec_builtin(simple->argv));
-	return (exec_binary(simple->argv, g_env->env));
+	return (exec_simple_command(simple));
 }
 
 /*
@@ -56,31 +47,37 @@ int			eval_simple_command(t_command *command, int in, int out,
 ** it allows us to wait for the first 'ls' to finish in the background.
 */
 
-int			eval_pipeline(t_connection *pipeline, int in, int out)
+int			eval_pipeline(t_command *command, int in, int out)
 {
-	int			fd[2];
+	t_connection	*pipeline;
+	t_process		*process;
+	int				fd[2];
 
-	g_exec_status |= EXEC_PIPELINE;
 	if (pipe(fd) == -1)
 		return (-1);
-	if (pipeline->left->type == CONNECTION)
-		eval_pipeline(pipeline->left->value.connection, in, fd[1]);
-	else
-		eval_simple_command(pipeline->left, in, fd[1], fd[0]);
-	eval_simple_command(pipeline->right, fd[0], out, fd[1]);
+	pipeline = command->value.connection;
+	process = process_new(pipeline->right, fd[0], out);
+	launch_process(process, fd[1]);
+	if (pipeline->left->type == CONNECTION
+	&& pipeline->left->value.connection->connector == PIPE)
+		return (eval_pipeline(pipeline->left, in, fd[1]));
+	process = process_new(pipeline->left, in, fd[1]);
+	launch_process(process, fd[0]);
 	return (0);
 }
 
-int			eval_and_or(t_connection *and_or)
+int			eval_and_or(t_command *command)
 {
-	g_exec_status |= EXEC_AND_OR;
+	t_connection	*and_or;
+
+	and_or = command->value.connection;
 	eval_command(and_or->left);
 	if (g_shell.jobs->bg)
 		wait_for_job(g_shell.jobs);
 	else
 		put_job_fg(g_shell.jobs, false);
 	if ((and_or->connector == AND_IF && g_last_exit_st == 0)
-			|| (and_or->connector == OR_IF && g_last_exit_st != 0))
+	|| (and_or->connector == OR_IF && g_last_exit_st != 0))
 		eval_command(and_or->right);
 	return (0);
 }
@@ -90,14 +87,13 @@ int			eval_command(t_command *command)
 	if (command->type == CONNECTION)
 	{
 		if (command->value.connection->connector == OR_IF
-				|| command->value.connection->connector == AND_IF)
-			return (eval_and_or(command->value.connection));
+		|| command->value.connection->connector == AND_IF)
+			return (eval_and_or(command));
 		if (command->value.connection->connector == PIPE)
-			return (eval_pipeline(command->value.connection,
-						STDIN_FILENO, STDOUT_FILENO));
+			return (eval_pipeline(command, STDIN_FILENO, STDOUT_FILENO));
 	}
 	if (command->type == SIMPLE)
-		return (eval_simple_command(command, STDIN_FILENO, STDOUT_FILENO, 0));
+		return (eval_simple_command(command));
 	return (0);
 }
 
@@ -112,10 +108,7 @@ int			eval_command_list(t_command *command_list)
 		job = job_new(command, STDIN_FILENO, STDOUT_FILENO);
 		add_job(job);
 		if (command->flags & CMD_AMPERSAND)
-		{
-			g_exec_status |= EXEC_ASYNC;
 			job->bg = true;
-		}
 		launch_job(g_shell.jobs);
 		command = command->next;
 	}

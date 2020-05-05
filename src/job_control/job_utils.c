@@ -12,6 +12,14 @@
 
 #include "shell.h"
 
+void		update_curr_ptr(t_job *job)
+{
+	if (g_shell.curr_job == job)
+		return ;
+	g_shell.prev_job = g_shell.curr_job;
+	g_shell.curr_job = job;
+}
+
 void		add_job(t_job *job)
 {
 	job->next = g_shell.jobs;
@@ -39,6 +47,13 @@ void		remove_job_from_list(int job_id)
 	{
 		if (job->id == job_id)
 		{
+			if (g_shell.prev_job && g_shell.prev_job == job)
+				g_shell.prev_job = NULL;
+			if (g_shell.curr_job && g_shell.curr_job == job)
+			{
+				g_shell.curr_job = g_shell.prev_job;
+				g_shell.prev_job = NULL;
+			}
 			if (prev)
 				prev->next = job->next;
 			else

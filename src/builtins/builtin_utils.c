@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:58:50 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/24 01:44:47 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/05 15:25:19 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,6 @@ bool	is_builtin(char *str)
 		|| ft_strcmp(str, "setenv") == 0 || ft_strcmp(str, "unsetenv") == 0
 		|| ft_strcmp(str, "env") == 0 || ft_strcmp(str, "exit") == 0
 		|| ft_strcmp(str, "export") == 0 || ft_strcmp(str, "unset") == 0
-		|| ft_strcmp(str, "set") == 0);
+		|| ft_strcmp(str, "set") == 0 || ft_strcmp(str, "fg") == 0 
+		|| ft_strcmp(str, "bg") == 0 || ft_strcmp(str, "jobs") == 0);
 }

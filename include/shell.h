@@ -32,7 +32,8 @@
 # include "env.h"
 # include "lexer.h"
 # include "parser.h"
-# include "exec.h"
+# include "execution.h"
+# include "job_control.h"
 # include "expansion.h"
 # include "builtins.h"
 # include "autocomplete.h"
@@ -103,6 +104,8 @@ typedef struct			s_shell
 	bool				interactive_mode;
 	t_input_func		get_input;
 	t_job				*jobs;
+	t_job				*curr_job;
+	t_job				*prev_job;
 	pid_t				pgid;
 	struct termios		tmodes;
 }						t_shell;

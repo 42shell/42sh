@@ -46,6 +46,7 @@ SRC_BUILTINS    :=	builtins.c\
 					cd.c\
 					cd_utils.c\
 					var_builtins.c\
+					jobs.c\
 					env.c
 SRC_BUILTINS    := $(addprefix builtins/,$(SRC_BUILTINS))
 
@@ -60,22 +61,24 @@ SRC_ENV		    := env_dup.c\
 SRC_ENV    		:= $(addprefix env/,$(SRC_ENV))
 
 SRC_EXEC        := eval_command.c\
-				   exec.c\
+				   execute.c\
 				   get_argv.c\
 				   get_exec_path.c\
-				   launch_job.c\
+				   redirect.c\
+				   redirect_utils.c\
+				   redirect_error.c\
+                   open_heredoc.c
+SRC_EXEC        := $(addprefix execution/,$(SRC_EXEC))
+
+SRC_JOB       	:= launch_job.c\
+				   launch_process.c\
 				   job_control.c\
 				   job_get_status.c\
 				   job_set_status.c\
 				   job_print.c\
 				   job_utils.c\
-				   job.c\
-				   redirect.c\
-				   redirect_utils.c\
-				   redirect_error.c\
-                   open_heredoc.c
-				   #utils.c
-SRC_EXEC        := $(addprefix execution/,$(SRC_EXEC))
+				   job_new_del.c
+SRC_JOB			:= $(addprefix job_control/,$(SRC_JOB))
 
 SRC_EXPANSION   := expand.c\
                    param_exp.c\
@@ -122,15 +125,16 @@ SRC_UTILS      := $(addprefix utils/,$(SRC_UTILS))
 
 SRC_PATH        := src
 SRC_NAME        := $(SRC_BUILTINS)\
-					$(SRC_COMPLETE)\
-					$(SRC_ENV)\
+				   $(SRC_COMPLETE)\
+				   $(SRC_ENV)\
                    $(SRC_EXEC)\
+                   $(SRC_JOB)\
                    $(SRC_EXPANSION)\
                    $(SRC_HISTORY)\
                    $(SRC_LEXER)\
                    $(SRC_PARSER)\
                    $(SRC_SHELL)\
-				    $(SRC_UTILS)
+				   $(SRC_UTILS)
 SRC             := $(addprefix $(SRC_PATH)/,$(SRC_NAME))
 
 OBJ_PATH        := obj
