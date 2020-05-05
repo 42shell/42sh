@@ -25,11 +25,19 @@ int		builtin_fg(char **argv);
 int		builtin_bg(char **argv);
 int		builtin_jobs(char **argv);
 
+/*
+** cd utils
+*/
+
 char	*get_pwd();
 char	*get_home_dir();
 void	append_curpath_to_pwd(char **curpath);
 void	remove_dots(char *curpath);
 int		remove_dotdots(char *curpath);
+
+/*
+** utils
+*/
 
 bool	is_builtin(char *str);
 

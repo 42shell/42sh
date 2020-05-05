@@ -70,7 +70,7 @@ void		format_process_long(t_process *process, t_dstr *buf)
 	pid = ft_itoa(process->pid);
 	ft_dstr_append(buf, pid);
 	ft_dstr_append(buf, " ");
-	if (WIFEXITED(process->status))
+	if (WIFEXITED(process->status))//better -> terminated (signaled || exit_st)
 	{
 		exit_st = ft_itoa(WEXITSTATUS(process->status));
 		ft_dstr_append(buf, "Exit ");
@@ -104,7 +104,7 @@ void		print_job_long(t_job *job)
 	process = job->processes;
 	while (process)
 	{
-		format_process_long(process, buf);
+		format_process_long(process, buf); //only status of pgroup leader ?
 		if (process->next)
 			ft_dstr_append(buf, "\n       ");
 		process = process->next;

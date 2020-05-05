@@ -23,6 +23,7 @@ typedef struct			s_process
 	int					stdin;
 	int					stdout;
 	int					status;
+	int					signaled;
 	bool				stopped;
 	bool				done;
 }						t_process;

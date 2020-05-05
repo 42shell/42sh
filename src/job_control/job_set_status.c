@@ -29,13 +29,15 @@ void	set_process_status(t_process *process, int status)
 {
 	process->status = status;
 	if (WIFSTOPPED(status))
-		process->stopped = 1;
+	{
+		process->stopped = true;
+		process->signaled = WSTOPSIG(process->status);
+	}
 	else
 	{
 		process->done = true;
 		if (WIFSIGNALED(status))
-			ft_dprintf(2, "%d: Terminated by signal %d.\n",
-			(int)process->pid, WTERMSIG(process->status));
+			process->signaled = WTERMSIG(process->status);
 	}
 }
 

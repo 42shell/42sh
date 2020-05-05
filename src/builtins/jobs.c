@@ -12,93 +12,97 @@
 
 #include "shell.h"
 
-static t_job	*get_job_by_percent_format(char *format)
+#define JOBS_L	1
+#define JOBS_N	2
+#define JOBS_P	4
+#define JOBS_R	8
+#define JOBS_S	16
+
+static t_list_head	*get_jobs_list(int options)
 {
-	t_job	*job;
-	int		id;
-
-	if (format[1] == '+')
-		return (g_shell.curr_job);
-	else if (format[1] == '-')
-		return (g_shell.prev_job);
-	id = ft_atoi(++format) - 1;
-	job = g_shell.jobs;
-	while (job && job->id != id)
-		job = job->next;
-	return (job);
-}
-
-static t_job	*get_job_ptr(char **argv)
-{
-	t_job	*job;
-	int		id;
-
-	if (!argv[1])
-		job = g_shell.curr_job;
-	else
-	{
-		if (argv[1][0] == '%')
-			job = get_job_by_percent_format(argv[1]);
-		else
-		{
-			job = g_shell.jobs;
-			id = ft_atoi(argv[1]) - 1;
-			while (job && job->id != id)
-				job = job->next;
-		}
-	}
-	return (job);
-}
-
-int				builtin_bg(char **argv)
-{
-	t_job	*job;
-	t_dstr	*buf;
-
-	buf = ft_dstr_new(32);
-	if (!g_shell.jobs->next || !(job = get_job_ptr(argv)))
-	{
-		ft_dprintf(2, "42sh: bg: %s: No such job\n",
-								argv[1] ? argv[1] : "current");
-		return (1);
-	}
-	format_command(job->command, buf);
-	ft_printf("%s &\n", buf->str);
-	continue_job(job, true);
-	ft_dstr_del(&buf);
-	return (0);
-}
-
-int				builtin_fg(char **argv)
-{
-	t_job	*job;
-	t_dstr	*buf;
-
-	buf = ft_dstr_new(32);
-	if (!g_shell.jobs->next || !(job = get_job_ptr(argv)))
-	{
-		ft_dprintf(2, "42sh: fg: %s: No such job\n",
-								argv[1] ? argv[1] : "current");
-		return (1);
-	}
-	format_command(job->command, buf);
-	ft_printf("%s\n", buf->str);
-	continue_job(job, false);
-	ft_dstr_del(&buf);
-	return (0);
-}
-
-int				builtin_jobs(char **argv)
-{
+	t_list_head	*list;
 	t_job		*job;
 
-	update_status();
+	list = ft_list_first_head(NULL);
 	job = g_shell.jobs->next;
 	while (job)
 	{
-		print_job_long(job);
-		job->notified = true;
+		if (((options & JOBS_N) && job->notified == false)
+		|| ((options & JOBS_R) && !job_is_stopped(job) && !job_is_done(job))
+		|| ((options & JOBS_S) && job_is_stopped(job))
+		|| !(options & (JOBS_N | JOBS_R | JOBS_S)))
+			ft_list_add(job, list);
 		job = job->next;
 	}
+	return (list);
+}
+
+static void			set_option(int *options, char c)
+{
+	if (c == 'l')
+		*options = ((*options | JOBS_L) &~ JOBS_P);
+	else if (c == 'n')
+		*options = ((*options | JOBS_N) &~ (JOBS_R | JOBS_S));
+	else if (c == 'p')
+		*options = ((*options | JOBS_P) &~ JOBS_L);
+	else if (c == 'r')
+		*options = ((*options | JOBS_R) &~ (JOBS_N | JOBS_S));
+	else
+		*options = ((*options | JOBS_S) &~ (JOBS_R | JOBS_N));
+}
+
+static int			get_jobs_options(char **argv, int *options)
+{
+	int		argc;
+	int		ret;
+	char	c;
+
+	argc = 0;
+	ret = 0;
+	while (argv[argc])
+		argc++;
+	while ((c = get_opt(argc, argv)) != -1)
+	{
+		if (ret == 0 && (c == 'l' || c == 'n' || c == 'p' || c == 'r' || c == 's'))
+			set_option(options, c);
+		else if (ret == 0)
+		{
+			ft_dprintf(2, "jobs: illegal option -- %d\n", c);
+			ret = -1;
+		}
+	}
+	return (ret);
+}
+
+int					builtin_jobs(char **argv)
+{
+	t_list_head	*list;
+	t_list_head	*curr;
+	t_job		*job;
+	int			options;
+
+	options = 0;
+	if (!g_shell.jobs->next)
+		return (0);
+	if (get_jobs_options(argv, &options) == -1)
+		return (2);
+	update_status();
+	list = get_jobs_list(options);
+	curr = list->next;
+	while (curr != list)
+	{
+		job = (t_job *)curr->data;
+		if (options & JOBS_L)
+			print_job_long(job);
+		else if (options & JOBS_P)
+			ft_printf("%d\n", job->pgid);
+		else
+			print_job(job);
+		job->notified = true;
+		curr = curr->next;
+	}
+	while (list->next != list)
+		ft_list_del(list->next);
+	free(list);
 	return (0);
 }
