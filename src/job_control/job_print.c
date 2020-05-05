@@ -116,6 +116,7 @@ void		print_job_long(t_job *job)
 	else
 		curr = " ";
 	ft_printf("[%d]%s   %s\n", job->id + 1, curr, buf->str);
+	ft_dstr_del(&buf);
 }
 
 

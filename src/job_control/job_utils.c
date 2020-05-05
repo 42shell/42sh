@@ -12,22 +12,6 @@
 
 #include "shell.h"
 
-t_job		*get_job_percent_format(char *format)
-{
-	t_job	*job;
-	int		id;
-
-	if (format[1] == '+')
-		return (g_shell.curr_job);
-	else if (format[1] == '-')
-		return (g_shell.prev_job);
-	id = ft_atoi(++format) - 1;
-	job = g_shell.jobs;
-	while (job && job->id != id)
-		job = job->next;
-	return (job);
-}
-
 void		update_curr_ptr(t_job *job)
 {
 	if (g_shell.curr_job == job)

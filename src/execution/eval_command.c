@@ -24,15 +24,9 @@ int			eval_simple_command(t_command *command)
 		if (!(simple->argv = get_argv(simple)))
 			return (exec_simple_command(simple));
 	}
-	if (is_builtin(simple->argv[0]))
-	{
-		if (g_shell.jobs->bg && !g_already_forked)
-		{
-			process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
-			return (launch_process(process, 0));
-		}
-	}
-	else if (!g_already_forked)
+	if (!g_already_forked
+	&& (!is_builtin(simple->argv[0])
+		|| (g_job_control_enabled && g_shell.jobs->bg)))
 	{
 		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
 		return (launch_process(process, 0));

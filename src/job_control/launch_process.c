@@ -22,7 +22,7 @@ static void		reset_signals(void)
 	signal(SIGTSTP, SIG_DFL);
 }
 
-static pid_t	fork_child(int in, int out, int to_close)
+static pid_t	fork_child(int in, int out, int fd_to_close)
 {
 	pid_t	pid;
 
@@ -33,8 +33,8 @@ static pid_t	fork_child(int in, int out, int to_close)
 	}
 	else if (pid == 0)
 	{
-		if (to_close)
-			close(to_close);
+		if (fd_to_close)
+			close(fd_to_close);
 		if (in != STDIN_FILENO)
 			dup2(in, STDIN_FILENO);
 		if (out != STDOUT_FILENO)
