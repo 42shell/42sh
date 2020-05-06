@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 14:43:58 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/06 15:47:10 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/06 16:18:24 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	free_var(void *var_ptr)
 	var = var_ptr;
 	free(var->name);
 	free(var->value);
+	free(var->exportstr);
 	free(var);
 }
 
