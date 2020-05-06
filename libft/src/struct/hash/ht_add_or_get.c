@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 19:33:41 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/20 19:36:06 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/05 18:49:49 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,9 @@ void			ht_put(t_ht *map, const char *key, void *value)
 	}
 	if (bkt->key != NULL)
 	{
-		bkt->next = ft_xmalloc(sizeof(t_pair));
-		*(bkt->next) = *(bkt);
-		bkt->next->next = NULL;
+		pair = ft_xmalloc(sizeof(t_pair));
+		*(pair) = *(bkt);
+		bkt->next = pair;
 	}
 	bkt->key = ft_strdup(key);
 	bkt->value = value;
