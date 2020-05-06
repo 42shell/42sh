@@ -102,7 +102,7 @@ int					builtin_fg(char **argv)
 	{
 		ft_dprintf(2, "42sh: fg: %s: No such job\n",
 		argv[1] ? argv[1] : "current");
-		return (1);
+		return (0);
 	}
 	curr = list->next;
 	while (curr != list)

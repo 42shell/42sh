@@ -36,7 +36,7 @@ int			exec_builtin(char **argv)
 	else if (ft_strequ(argv[0], "jobs"))
 		ret = builtin_jobs(argv);
 	g_last_exit_st = ret;
-	return (0); //errors ?
+	return (0);
 }
 
 int			exec_binary(char **argv, char **env)
