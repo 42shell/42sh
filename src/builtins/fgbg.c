@@ -43,8 +43,13 @@ static t_list_head	*get_jobs_list(char **argv)
 	list = ft_list_first_head(NULL);
 	if (!argv[i])
 	{
-		ft_list_add(g_shell.curr_job, list);
-		return (list);
+		if (g_shell.curr_job)
+		{
+			ft_list_add(g_shell.curr_job, list);
+			return (list);
+		}
+		free(list);
+		return (NULL);
 	}
 	while (argv[i])
 	{
@@ -75,7 +80,7 @@ int					builtin_bg(char **argv)
 		return (1);
 	}
 	curr = list->next;
-	while (curr != list)
+	while (curr && curr != list)
 	{
 		job = (t_job *)curr->data;
 		command_format = ft_dstr_new(32);
@@ -105,7 +110,7 @@ int					builtin_fg(char **argv)
 		return (0);
 	}
 	curr = list->next;
-	while (curr != list)
+	while (curr && curr != list)
 	{
 		job = (t_job *)curr->data;
 		command_format = ft_dstr_new(32);
