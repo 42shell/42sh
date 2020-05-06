@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/24 01:46:14 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/05 17:27:08 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,12 @@ static void	increase_shlvl(void)
 		shlvl_int = ft_atoi(shlvl_str) + 1;
 	else
 		shlvl_int = 1;
+	if (shlvl_int >= 1000)
+	{
+		dprintf(2, "42sh: warning: shell level (%d) too high, resetting to 1",
+				shlvl_int);
+		shlvl_int = 1;
+	}
 	shlvl_str = ft_itoa(shlvl_int);
 	set_var("SHLVL", shlvl_str, V_EXPORT);
 	free(shlvl_str);
