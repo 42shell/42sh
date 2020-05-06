@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 15:01:14 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/11 13:42:45 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/05 17:15:47 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_list_head	*comp_get_command_list(char *partial)
 	char			*path;
 	int				i;
 
-	path = get_env_var("PATH", g_env);
+	path = get_var_value("PATH");
 	if (path == NULL)
 		return (NULL);
 	path_dirs = split_path(path);

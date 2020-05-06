@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:08:22 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/24 01:07:43 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/05 15:53:23 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,14 @@ int		tilde_expand(t_dstr *str, char *home_dir)
 ** the token we expand, and we don't want to expand them
 */
 
-int		expand(t_simple_cmd *command, t_env *env)
+int		expand(t_simple_cmd *command)
 {
 	int		pos;
 	char	*home_dir;
 	t_token	*cur;
 	t_token *next;
 
-	home_dir = get_env_var("HOME", env);
+	home_dir = get_var_value("HOME");
 	cur = command->args;
 	while (cur != NULL)
 	{
@@ -65,7 +65,7 @@ int		expand(t_simple_cmd *command, t_env *env)
 		if (cur->type == WORD)
 		{
 			pos = tilde_expand(cur->value, home_dir);
-			param_expand(cur->value, pos, env, false);
+			param_expand(cur->value, pos, false);
 			path_expand(cur);
 			remove_quotes(cur->value);
 		}

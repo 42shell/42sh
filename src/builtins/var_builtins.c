@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/19 15:13:13 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/20 20:23:15 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/05 17:19:32 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,13 @@ int		builtin_export(char **argv)
 					argv[i]);
 			ret = 1;
 		}
-		else
-			set_env_var(argv[i], value, g_env);
+		else 
+		{
+			if (value == NULL && var_exists(argv[i]))
+				set_var_attributes(argv[i], V_EXPORT);
+			else
+				set_var(argv[i], value, V_EXPORT);
+		}
 		i++;
 	}
 	if (i == 1)
@@ -56,10 +61,7 @@ int		builtin_unset(char **argv)
 			ret = 1;
 		}
 		else
-		{
-			ht_remove(g_sh_vars, argv[i]);
-			remove_env_var(argv[i], g_env);
-		}
+			unset_var(argv[i]);
 		i++;
 	}
 	return (ret);
@@ -86,8 +88,8 @@ int		builtin_set(void)
 	t_array *vars;
 	size_t	i;
 
-	vars = array_new(ht_get_count(g_sh_vars));
-	ht_enum(g_sh_vars, add_var_to_arr, vars);
+	vars = array_new(ht_get_count(g_shell.vars));
+	ht_enum(g_shell.vars, add_var_to_arr, vars);
 	sort_matches((char **)vars->array, vars->size);
 	i = 0;
 	while (i < vars->size)

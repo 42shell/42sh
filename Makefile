@@ -56,9 +56,12 @@ SRC_COMPLETE    := get_autocomplete_list.c\
                    utils.c
 SRC_COMPLETE    := $(addprefix complete/,$(SRC_COMPLETE))
 
-SRC_ENV		    := env_dup.c\
-                   env_utils.c
-SRC_ENV    		:= $(addprefix env/,$(SRC_ENV))
+SRC_VARIABLES	:= env_dup.c\
+                   env_utils.c\
+				   export_env.c\
+				   var_utils.c\
+				   variables.c
+SRC_VARIABLES	:= $(addprefix variables/,$(SRC_VARIABLES))
 
 SRC_EXEC        := eval_command.c\
 				   execute.c\
@@ -111,7 +114,6 @@ SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
 SRC_SHELL       := del.c\
                    init.c\
                    main.c\
-				   variables.c\
 				   signal.c\
 				   input.c
 SRC_SHELL       := $(addprefix shell/,$(SRC_SHELL))
@@ -126,7 +128,7 @@ SRC_UTILS      := $(addprefix utils/,$(SRC_UTILS))
 SRC_PATH        := src
 SRC_NAME        := $(SRC_BUILTINS)\
 				   $(SRC_COMPLETE)\
-				   $(SRC_ENV)\
+				   $(SRC_VARIABLES)\
                    $(SRC_EXEC)\
                    $(SRC_JOB)\
                    $(SRC_EXPANSION)\

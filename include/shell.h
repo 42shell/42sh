@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/24 01:38:47 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/05 17:26:59 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,7 @@
 # include "autocomplete.h"
 # include "utils.h"
 
-t_ht	*g_sh_vars;
-
+# define V_NOATTR	0
 # define V_RDONLY	1
 # define V_EXPORT	2
 # define V_HIDDEN	4
@@ -108,6 +107,7 @@ typedef struct			s_shell
 	t_job				*prev_job;
 	pid_t				pgid;
 	struct termios		tmodes;
+	t_ht				*vars;
 }						t_shell;
 
 t_shell					g_shell;
@@ -120,8 +120,17 @@ int						input_interactive(const char *prompt, bool heredoc);
 
 void					init_sig(void);
 
-void				import_env(t_ht *map, char **env);
-void				add_var(t_ht *map, char *name, char *value, int attributes);
+void				import_env(char **env);
+void				add_var(const char *name, const char *value,
+					const int attributes);
 void				free_var(void *var_ptr);
+char				*get_var_value(const char *name);
+void				set_var(const char *name, const char *value,
+					const int attributes);
+void				set_var_attributes(const char *name, const int attributes);
+char				*get_var_value(const char *name);
+t_env				*export_env(t_ht *map);
+void				unset_var(const char *name);
+bool				var_exists(const char *name);
 
 #endif

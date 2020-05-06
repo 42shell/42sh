@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/24 01:07:19 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/05 15:54:13 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int			eval_simple_command(t_command *command)
 	simple = command->value.simple;
 	if (!simple->is_expand)
 	{
-		expand(simple, g_env);
+		expand(simple);
 		if (!(simple->argv = get_argv(simple)))
 			return (exec_simple_command(simple));
 	}

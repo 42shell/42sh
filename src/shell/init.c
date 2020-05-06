@@ -17,13 +17,13 @@ static void	increase_shlvl(void)
 	char	*shlvl_str;
 	int		shlvl_int;
 
-	shlvl_str = get_env_var("SHLVL", g_env);
+	shlvl_str = get_var_value("SHLVL");
 	if (shlvl_str != NULL)
 		shlvl_int = ft_atoi(shlvl_str) + 1;
 	else
 		shlvl_int = 1;
 	shlvl_str = ft_itoa(shlvl_int);
-	set_env_var("SHLVL", shlvl_str, g_env);
+	set_var("SHLVL", shlvl_str, V_EXPORT);
 	free(shlvl_str);
 }
 
@@ -63,9 +63,8 @@ int			init(int argc, char **argv)
 		ft_dprintf(2, "42sh: stdin is not a tty\n");
 		exit(1);
 	}
-	g_env = env_dup(environ);
-	g_sh_vars = ht_new(1024, free_var);
-	import_env(g_sh_vars, g_env->env);
+	g_shell.vars = ht_new(1024, free_var);
+	import_env(environ);
 	increase_shlvl();
 	parse_args(argc, argv);
 	if (g_shell.interactive_mode)
