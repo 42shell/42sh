@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 14:43:58 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/06 15:24:25 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/06 15:47:10 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,38 @@ void	add_var(const char *name, const char *value, const int attributes)
 
 	new_var = make_new_var(name, value, attributes, NULL);
 	ht_put(g_shell.vars, name, new_var);
+}
+
+void	set_local_variables(t_simple_cmd *cmd)
+{
+	t_token *token;
+	char	*assignment;
+	char	*value;
+
+	token = cmd->assigns;
+	while (token)
+	{
+		assignment = token->value->str;
+		if ((value = ft_strchr(assignment, '=')))
+			*(value++) = '\0';
+		set_var(assignment, value, V_NOATTR);
+		token = token->next;
+	}
+}
+
+void	set_temp_env_variables(t_simple_cmd *cmd, t_env *temp_env)
+{
+	t_token *token;
+	char	*assignment;
+	char	*value;
+
+	token = cmd->assigns;
+	while (token)
+	{
+		assignment = token->value->str;
+		if ((value = ft_strchr(assignment, '=')))
+			*(value++) = '\0';
+		set_env_var(assignment, value, temp_env);
+		token = token->next;
+	}
 }

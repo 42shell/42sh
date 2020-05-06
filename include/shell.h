@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/05 17:26:59 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/06 15:45:08 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,5 +132,7 @@ char				*get_var_value(const char *name);
 t_env				*export_env(t_ht *map);
 void				unset_var(const char *name);
 bool				var_exists(const char *name);
+void				set_local_variables(t_simple_cmd *cmd);
+void				set_temp_env_variables(t_simple_cmd *cmd, t_env *temp_env);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/06 15:26:27 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/06 15:46:09 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int			exec_simple_command(t_simple_cmd *simple)
 	if (simple->argv)
 	{
 		temp_env = export_env(g_shell.vars);
+		set_temp_env_variables(simple, temp_env);
 		if (is_builtin(simple->argv[0]))
 			exec_builtin(simple->argv, temp_env);
 		else
@@ -80,6 +81,8 @@ int			exec_simple_command(t_simple_cmd *simple)
 		free_arr(temp_env->env);
 		free(temp_env);
 	}
+	else
+		set_local_variables(simple);
 	restore_fds();
 	return (0);
 }
