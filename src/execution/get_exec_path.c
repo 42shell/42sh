@@ -33,7 +33,7 @@ static char	*cache_search(char *command)
 	return (ret);
 }
 
-char		*get_exec_path(char *command, t_env *env)
+char		*get_exec_path(char *command, t_array *env)
 {
 	char		**path;
 	char		*ret;

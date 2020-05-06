@@ -6,13 +6,13 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/06 15:46:09 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/06 16:48:41 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-int			exec_builtin(char **argv, t_env *temp_env)
+int			exec_builtin(char **argv, t_array *temp_env)
 {
 	int		ret;
 
@@ -45,7 +45,7 @@ int			exec_builtin(char **argv, t_env *temp_env)
 	return (0); //errors ?
 }
 
-int			exec_binary(char **argv, t_env *temp_env)
+int			exec_binary(char **argv, t_array *temp_env)
 {
 	char	*path;
 
@@ -54,7 +54,7 @@ int			exec_binary(char **argv, t_env *temp_env)
 		ft_dprintf(2, "42sh: %s: command not found\n", argv[0]);
 		exit (1); //code?
 	}
-	else if (execve(path, argv, temp_env->env) == -1)
+	else if (execve(path, argv, (char **)temp_env->array) == -1)
 	{
 		ft_dprintf(2, "42sh: %s: cannot execute command\n", argv[0]);
 		free(path);
@@ -66,7 +66,7 @@ int			exec_binary(char **argv, t_env *temp_env)
 
 int			exec_simple_command(t_simple_cmd *simple)
 {
-	t_env *temp_env;
+	t_array *temp_env;
 
 	if (set_redir(simple, true) != 0)
 		return (1);
@@ -78,8 +78,7 @@ int			exec_simple_command(t_simple_cmd *simple)
 			exec_builtin(simple->argv, temp_env);
 		else
 			exec_binary(simple->argv, temp_env);
-		free_arr(temp_env->env);
-		free(temp_env);
+		array_destroy(temp_env);
 	}
 	else
 		set_local_variables(simple);

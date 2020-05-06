@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 17:03:57 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/11 16:26:41 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/06 16:42:53 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #define EMPTY_ENV 	1
 #define NEW_PATH	2
 
-int			exec_command_env(char **argv, t_env *env)
+int			exec_command_env(char **argv, t_array *env)
 {
 	pid_t		pid;
 	int			status;
@@ -25,7 +25,7 @@ int			exec_command_env(char **argv, t_env *env)
 	pid = fork();
 	if (pid == 0)
 	{
-		if ((execve(argv[0], argv, env->env) == -1))
+		if ((execve(argv[0], argv, (char **)env->array) == -1))
 		{
 			ft_dprintf(2, "env: %s: No such file or directory\n", argv[0]);
 			exit(g_last_exit_st);
@@ -58,7 +58,7 @@ int		get_env_options(int argc, char **argv, int *options)
 	return (ret);
 }
 
-int		modify_env(char **argv, t_env *env, int *options)
+int		modify_env(char **argv, t_array *env, int *options)
 {
 	int		i;
 	char	*value;
@@ -78,22 +78,21 @@ int		modify_env(char **argv, t_env *env, int *options)
 	return (i);
 }
 
-int		print_env(t_env *env)
+int		print_env(t_array *env)
 {
-	int i;
+	size_t	i;
 
 	i = 0;
-	while (env->env[i])
+	while (i < env->size)
 	{
-		ft_putstr_fd(env->env[i++], 1);
+		ft_putstr_fd(env->array[i++], 1);
 		write(1, "\n", 1);
 	}
-	free_arr(env->env);
-	free(env);
+	array_destroy(env);
 	return (0);
 }
 
-int		finish_env(char **argv, int i, t_env *new_env)
+int		finish_env(char **argv, int i, t_array *new_env)
 {
 	int		ret;
 
@@ -112,8 +111,7 @@ int		finish_env(char **argv, int i, t_env *new_env)
 		exec_command_env(argv + i, new_env);
 		ret = g_last_exit_st;
 	}
-	free_arr(new_env->env);
-	free(new_env);
+	array_destroy(new_env);
 	return (ret);
 }
 
@@ -121,11 +119,11 @@ int		finish_env(char **argv, int i, t_env *new_env)
 ** exec_binary(get_exec_path(argv[i])), argv[i], NULL, new_env->env);
 */
 
-int		builtin_env(char **argv, t_env *env)
+int		builtin_env(char **argv, t_array *env)
 {
 	int				options;
 	int				argc;
-	t_env			*new_env;
+	t_array			*new_env;
 	int				i;
 	char			*cmd_path;
 
@@ -135,7 +133,8 @@ int		builtin_env(char **argv, t_env *env)
 		argc++;
 	if (!get_env_options(argc, argv, &options))
 		return (1);
-	new_env = (options & EMPTY_ENV) ? env_dup(argv + argc) : env_dup(env->env);
+	new_env = (options & EMPTY_ENV) ? env_dup(argv + argc)
+									: env_dup((char **)env->array);
 	i = modify_env(argv, new_env, &options);
 	if (argv[i] == NULL)
 		return (print_env(new_env));

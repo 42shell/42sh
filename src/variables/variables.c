@@ -73,7 +73,7 @@ void	set_local_variables(t_simple_cmd *cmd)
 	}
 }
 
-void	set_temp_env_variables(t_simple_cmd *cmd, t_env *temp_env)
+void	set_temp_env_variables(t_simple_cmd *cmd, t_array *temp_env)
 {
 	t_token *token;
 	char	*assignment;

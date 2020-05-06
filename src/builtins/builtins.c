@@ -31,7 +31,7 @@ int		builtin_echo(char **argv)
 /*
 ** "42sh: error" its not a binary
 */
-int		builtin_setenv(char **argv, t_env *env)
+int		builtin_setenv(char **argv, t_array *env)
 {
 	if (argv[1] == NULL)
 		return (builtin_env(argv, env));
