@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 14:45:52 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/06 18:12:03 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,18 +61,16 @@ t_dstr		*format_command(t_command *command, t_dstr *buf)
 
 void		format_process_long(t_process *process, t_dstr *buf)
 {
-	char	*pid;
-	char	*sig;
-	char	*exit_st;
+	char	pid[10];
+	char	sig[10];
+	char	exit_st[10];
 
-	sig = NULL;
-	exit_st = NULL;
-	pid = ft_itoa(process->pid);
+	ft_itoa(process->pid, pid);
 	ft_dstr_append(buf, pid);
 	ft_dstr_append(buf, " ");
 	if (WIFEXITED(process->status))
 	{
-		exit_st = ft_itoa(WEXITSTATUS(process->status));
+		ft_itoa(WEXITSTATUS(process->status), exit_st);
 		ft_dstr_append(buf, "Exit ");
 		ft_dstr_append(buf, exit_st);
 		ft_dstr_append(buf, "       ");
@@ -80,7 +78,7 @@ void		format_process_long(t_process *process, t_dstr *buf)
 	else if (WIFSTOPPED(process->status))
 	{
 		ft_dstr_append(buf, "Stopped ");
-		sig = ft_itoa(WSTOPSIG(process->status));
+		ft_itoa(WSTOPSIG(process->status), sig);
 		ft_dstr_append(buf, sig);
 		ft_dstr_append(buf, "   ");
 	}
@@ -89,9 +87,6 @@ void		format_process_long(t_process *process, t_dstr *buf)
 	if (process->stdin != 0)
 		ft_dstr_append(buf, "| ");
 	format_command(process->command, buf);
-	free(exit_st);
-	free(sig);
-	free(pid);
 }
 
 void		print_job_long(t_job *job)

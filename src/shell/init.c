@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/05 17:27:08 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/06 18:13:43 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static void	increase_shlvl(void)
 {
 	char	*shlvl_str;
+	char	buf[10];
 	int		shlvl_int;
 
 	shlvl_str = get_var_value("SHLVL");
@@ -28,9 +29,7 @@ static void	increase_shlvl(void)
 				shlvl_int);
 		shlvl_int = 1;
 	}
-	shlvl_str = ft_itoa(shlvl_int);
-	set_var("SHLVL", shlvl_str, V_EXPORT);
-	free(shlvl_str);
+	set_var("SHLVL", ft_itoa(shlvl_int, buf), V_EXPORT);
 }
 
 static int	parse_args(int argc, char **argv)

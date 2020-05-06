@@ -6,7 +6,7 @@
 /*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 16:27:46 by nbousset          #+#    #+#             */
-/*   Updated: 2020/04/24 01:49:35 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/06 18:08:49 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,7 @@ unsigned int			ft_next_power_of_two(unsigned int v);
 uint32_t				ft_base_isvalid(char *base);
 long					ft_atoi(const char *str);
 long					ft_atoi_base(const char *nbr, uint32_t base);
-char					*ft_itoa(long n);
+char					*ft_itoa(int n, char *str);
 char					*ft_itoa_base(long n, uint32_t base);
 
 /*
