@@ -69,7 +69,10 @@ int			exec_simple_command(t_simple_cmd *simple)
 	t_array *temp_env;
 
 	if (set_redir(simple, true) != 0)
-		return (1);
+	{
+		restore_fds();
+		return (g_last_exit_st = 1);
+	}
 	if (simple->argv)
 	{
 		temp_env = export_env(g_shell.vars);
