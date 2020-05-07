@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/24 01:05:43 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/06 19:32:52 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@ int				launch_job(t_job *job)
 
 	if (job->bg)
 	{
+		g_last_exit_st = 0;
 		if (job->command->type == CONNECTION
-		&& (job->command->value.connection->connector == AND_IF
-			||  job->command->value.connection->connector == OR_IF))
+			&& (job->command->value.connection->connector == AND_IF
+			|| job->command->value.connection->connector == OR_IF))
 		{
 			process = process_new(job->command, STDIN_FILENO, STDOUT_FILENO);
 			launch_process(process, 0);

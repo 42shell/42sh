@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/06 16:48:41 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/06 22:23:32 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,21 +47,27 @@ int			exec_builtin(char **argv, t_array *temp_env)
 
 int			exec_binary(char **argv, t_array *temp_env)
 {
-	char	*path;
+	char		*path;
+	struct stat	b;
 
 	if (!(path = get_exec_path(argv[0], temp_env)))
 	{
 		ft_dprintf(2, "42sh: %s: command not found\n", argv[0]);
-		exit (1); //code?
+		exit(127);
 	}
-	else if (execve(path, argv, (char **)temp_env->array) == -1)
+	execve(path, argv, (char **)temp_env->array);
+	if (stat(path, &b) != 0)
 	{
-		ft_dprintf(2, "42sh: %s: cannot execute command\n", argv[0]);
-		free(path);
-		return (1); //code ?
+		ft_dprintf(2, "42sh: %s: command not found\n", argv[0]);
+		exit(127);
 	}
-	free(path);
-	return (0);
+	if (!(S_IXUSR & b.st_mode))
+		ft_dprintf(2, "42sh: %s: Permission denied\n", argv[0]);
+	else if (S_ISDIR(b.st_mode))
+		ft_dprintf(2, "42sh: %s: Is a directory\n", argv[0]);
+	else
+		ft_dprintf(2, "42sh: %s: cannot execute command\n", argv[0]);
+	exit(126);
 }
 
 int			exec_simple_command(t_simple_cmd *simple)
@@ -84,7 +90,10 @@ int			exec_simple_command(t_simple_cmd *simple)
 		array_destroy(temp_env);
 	}
 	else
+	{
 		set_local_variables(simple);
+		g_last_exit_st = 0;
+	}
 	restore_fds();
 	return (0);
 }
