@@ -6,7 +6,7 @@
 /*   By: fratajcz </var/spool/mail/fratajcz>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/06 17:23:15 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/06 19:17:29 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 15:33:57 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*get_shell_pid(void)
 	return (g_shell_pid);
 }
 
-int		g_last_bg_job_pid;
+int		g_last_bg_job_pid = -1;
 
 /*
 ** $!
@@ -48,5 +48,7 @@ char	*get_last_bg_job_pid(void)
 {
 	static char	str[10];
 
+	if (g_last_bg_job_pid == -1)
+		return ("");
 	return (ft_itoa(g_last_bg_job_pid, str));
 }

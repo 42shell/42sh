@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/07 14:46:47 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 15:32:39 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,10 @@ void	continue_job(t_job *job, bool bg)
 
 void	put_job_bg(t_job *job, bool cont)
 {
+	extern int	g_last_bg_job_pid;
+
 	job->bg = true;
+	g_last_bg_job_pid = job->pgid;
 	update_curr_ptr(job);
 	if (cont)
 		kill(-job->pgid, SIGCONT);
