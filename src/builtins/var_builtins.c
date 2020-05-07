@@ -6,13 +6,13 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/19 15:13:13 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/06 17:48:03 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 16:31:25 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-int		builtin_export(char **argv)
+int		builtin_export(char **argv, __attribute__((unused)) t_array *env)
 {
 	int		i;
 	int		ret;
@@ -45,7 +45,7 @@ int		builtin_export(char **argv)
 	return (ret);
 }
 
-int		builtin_unset(char **argv)
+int		builtin_unset(char **argv, __attribute__((unused)) t_array *env)
 {
 	int		i;
 	int		ret;
@@ -85,11 +85,12 @@ static void	add_var_to_arr(const char *key, void *value, void *obj)
 	array_append(array, var->exportstr);
 }
 
-int		builtin_set(void)
+int			builtin_set(char **argv, __attribute__((unused)) t_array *env)
 {
 	t_array *vars;
 	size_t	i;
 
+	(void)argv;
 	vars = array_new(ht_get_count(g_shell.vars));
 	ht_enum(g_shell.vars, add_var_to_arr, vars);
 	sort_matches((char **)vars->array, vars->size);

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:50:00 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/05 17:15:36 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 16:28:19 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ int		finish_cd(char *curpath, char *dir, int options)
 	return (ret);
 }
 
-int		builtin_cd(char **argv)
+int		builtin_cd(char **argv, __attribute__((unused)) t_array *env)
 {
 	char	*dir;
 	char	*curpath;

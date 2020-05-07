@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/06 22:23:32 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 16:37:15 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,18 @@
 
 int			exec_builtin(char **argv, t_array *temp_env)
 {
-	int		ret;
+	int				ret;
+	t_builtin_func	builtin;
 
 	ret = 0;
-	if (ft_strequ(argv[0], "env"))
-		ret = builtin_env(argv, temp_env);
-	else if (ft_strequ(argv[0], "exit"))
-		builtin_exit(argv);
-	else if (ft_strequ(argv[0], "unsetenv"))
-		ret = builtin_unsetenv(argv);
-	else if (ft_strequ(argv[0], "setenv"))
-		ret = builtin_setenv(argv, temp_env);
-	else if (ft_strequ(argv[0], "echo"))
-		ret = builtin_echo(argv);
-	else if (ft_strequ(argv[0], "cd"))
-		ret = builtin_cd(argv);
-	else if (ft_strequ(argv[0], "export"))
-		builtin_export(argv);
-	else if (ft_strequ(argv[0], "unset"))
-		builtin_unset(argv);
-	else if (ft_strequ(argv[0], "set"))
-		builtin_set();
-	else if (ft_strequ(argv[0], "fg"))
-		ret = builtin_fg(argv);
-	else if (ft_strequ(argv[0], "bg"))
-		ret = builtin_bg(argv);
-	else if (ft_strequ(argv[0], "jobs"))
-		ret = builtin_jobs(argv);
+	builtin = ht_get(g_builtins, argv[0]);
+	if (builtin == NULL)
+		return (1);
+	ret = builtin(argv, temp_env);
+	if (g_already_forked)
+		exit(ret);
 	g_last_exit_st = ret;
-	return (0); //errors ?
+	return (0);
 }
 
 int			exec_binary(char **argv, t_array *temp_env)

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/06 18:18:40 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 16:16:35 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,23 @@ static void	init_vars(void)
 	ht_put(g_shell.vars, "!", var);
 }
 
+static void	init_builtins(void)
+{
+	g_builtins = ht_new(32, free);
+	ht_put(g_builtins, "env", builtin_env);
+	ht_put(g_builtins, "exit", builtin_exit);
+	ht_put(g_builtins, "unsetenv", builtin_unsetenv);
+	ht_put(g_builtins, "setenv", builtin_setenv);
+	ht_put(g_builtins, "echo", builtin_echo);
+	ht_put(g_builtins, "cd", builtin_cd);
+	ht_put(g_builtins, "export", builtin_export);
+	ht_put(g_builtins, "unset", builtin_unset);
+	ht_put(g_builtins, "set", builtin_set);
+	ht_put(g_builtins, "fg", builtin_fg);
+	ht_put(g_builtins, "bg", builtin_bg);
+	ht_put(g_builtins, "jobs", builtin_jobs);
+}
+
 int			init(int argc, char **argv)
 {
 
@@ -86,6 +103,7 @@ int			init(int argc, char **argv)
 		exit(1);
 	}
 	init_vars();
+	init_builtins();
 	parse_args(argc, argv);
 	if (g_shell.interactive_mode)
 	{

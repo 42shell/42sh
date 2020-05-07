@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/07 15:30:28 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 17:06:08 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	mark_job_as_running(t_job *job)
 {
 	t_process *process;
 
- 	process = job->processes;
+	process = job->processes;
 	while (process)
 	{
 		process->stopped = false;
@@ -48,7 +48,7 @@ void	set_process_status(t_process *process, int status)
 			signal = WTERMSIG(status);
 			if (process->stdout == 1)
 				g_last_exit_st = signal + 128;
-			if (signal != 13)
+			if (signal != 13 && signal != 2)
 				ft_dprintf(2, "%d: Terminated by signal %d.\n",
 				(int)process->pid, WTERMSIG(process->status));
 		}

@@ -6,13 +6,13 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:07:29 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/05 17:20:03 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 16:27:35 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-int		builtin_echo(char **argv)
+int		builtin_echo(char **argv, __attribute__((unused)) t_array *env)
 {
 	int i;
 
@@ -31,6 +31,7 @@ int		builtin_echo(char **argv)
 /*
 ** "42sh: error" its not a binary
 */
+
 int		builtin_setenv(char **argv, t_array *env)
 {
 	if (argv[1] == NULL)
@@ -47,7 +48,7 @@ int		builtin_setenv(char **argv, t_array *env)
 	return (1);
 }
 
-int		builtin_unsetenv(char **argv)
+int		builtin_unsetenv(char **argv, __attribute__((unused)) t_array *env)
 {
 	int		i;
 	t_var	*var;
@@ -61,7 +62,7 @@ int		builtin_unsetenv(char **argv)
 	return (0);
 }
 
-void	builtin_exit(char **argv)
+void	builtin_exit(char **argv, __attribute__((unused)) t_array *env)
 {
 	int i;
 

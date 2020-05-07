@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/06 18:18:18 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 16:11:45 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@
 # define V_SPECIAL	8
 
 typedef char *(*t_var_value_func)(void);
+typedef int(*t_builtin_func)(char **argv, t_array *temp_env);
 
 /*
 ** value_func is used to get the values of special variables like $$.
@@ -111,6 +112,7 @@ typedef struct			s_shell
 }						t_shell;
 
 t_shell					g_shell;
+t_ht					*g_builtins;
 
 int						init(int argc, char **argv);
 void					del(void);

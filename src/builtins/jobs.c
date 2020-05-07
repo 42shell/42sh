@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:50:00 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/11 13:43:37 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 16:33:06 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static t_job	*get_job_ptr(char **argv)
 	return (job);
 }
 
-int				builtin_bg(char **argv)
+int				builtin_bg(char **argv, __attribute__((unused)) t_array *env)
 {
 	t_job	*job;
 	t_dstr	*buf;
@@ -69,7 +69,7 @@ int				builtin_bg(char **argv)
 	return (0);
 }
 
-int				builtin_fg(char **argv)
+int				builtin_fg(char **argv, __attribute__((unused)) t_array *env)
 {
 	t_job	*job;
 	t_dstr	*buf;
@@ -88,10 +88,11 @@ int				builtin_fg(char **argv)
 	return (0);
 }
 
-int				builtin_jobs(char **argv)
+int				builtin_jobs(char **argv, __attribute__((unused)) t_array *env)
 {
 	t_job		*job;
 
+	(void)argv;
 	update_status();
 	job = g_shell.jobs->next;
 	while (job)

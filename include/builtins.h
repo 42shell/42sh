@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:28:09 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/06 16:39:28 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 16:25:00 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,17 @@
 # include "shell.h"
 
 int		builtin_env(char **argv, t_array *env);
-int		builtin_unsetenv(char **argv);
+int		builtin_unsetenv(char **argv, t_array *env);
 int		builtin_setenv(char **argv, t_array *env);
-void	builtin_exit(char **argv);
-int		builtin_echo(char **argv);
-int		builtin_export(char **argv);
-int		builtin_unset(char **argv);
-int		builtin_set();
-int		builtin_cd(char **argv);
-int		builtin_fg(char **argv);
-int		builtin_bg(char **argv);
-int		builtin_jobs(char **argv);
+void	builtin_exit(char **argv, t_array *env);
+int		builtin_echo(char **argv, t_array *env);
+int		builtin_export(char **argv, t_array *env);
+int		builtin_unset(char **argv, t_array *env);
+int		builtin_set(char **argv, t_array *env);
+int		builtin_cd(char **argv, t_array *env);
+int		builtin_fg(char **argv, t_array *env);
+int		builtin_bg(char **argv, t_array *env);
+int		builtin_jobs(char **argv, t_array *env);
 
 char	*get_pwd();
 char	*get_home_dir();
