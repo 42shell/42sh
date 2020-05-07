@@ -18,6 +18,8 @@ char	*get_var_value(const char *name)
 
 	if ((var = ht_get(g_shell.vars, name)) == NULL)
 		return (NULL);
+	if (var->attributes & V_SPECIAL)
+		return (var->value_func());
 	return (var->value);
 }
 

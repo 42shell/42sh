@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 19:37:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/22 17:55:29 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/06 19:25:55 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ int				main_loop(void)
 		if ((g_parser.token = get_next_token())
 		&& (command_list = get_command_list()))
 		{
-			g_last_exit_st = 0;
 			eval_command_list(command_list);
 		}
 		if (g_shell.interactive_mode && g_lexer.line)

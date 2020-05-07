@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/06 18:13:43 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/06 18:18:40 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,18 +59,33 @@ static int	parse_args(int argc, char **argv)
 	return (0);
 }
 
-int			init(int argc, char **argv)
+static void	init_vars(void)
 {
 	extern char	**environ;
+	extern char	g_shell_pid[10];
+	t_var		*var;
+
+	ft_itoa(getpid(), g_shell_pid);
+	g_shell.vars = ht_new(1024, free_var);
+	import_env(environ);
+	increase_shlvl();
+	var = make_new_var("?", NULL, V_HIDDEN | V_SPECIAL, get_last_exit_status);
+	ht_put(g_shell.vars, "?", var);
+	var = make_new_var("$", NULL, V_HIDDEN | V_SPECIAL, get_shell_pid);
+	ht_put(g_shell.vars, "$", var);
+	var = make_new_var("!", NULL, V_HIDDEN | V_SPECIAL, get_last_bg_job_pid);
+	ht_put(g_shell.vars, "!", var);
+}
+
+int			init(int argc, char **argv)
+{
 
 	if (!isatty(STDIN_FILENO))
 	{
 		ft_dprintf(2, "42sh: stdin is not a tty\n");
 		exit(1);
 	}
-	g_shell.vars = ht_new(1024, free_var);
-	import_env(environ);
-	increase_shlvl();
+	init_vars();
 	parse_args(argc, argv);
 	if (g_shell.interactive_mode)
 	{

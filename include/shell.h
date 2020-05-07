@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/06 16:39:16 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/06 18:18:18 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,8 @@ int						input_interactive(const char *prompt, bool heredoc);
 void					init_sig(void);
 
 void				import_env(char **env);
+t_var				*make_new_var(const char *name, const char *value,
+					const int attributes, t_var_value_func value_func);
 void				add_var(const char *name, const char *value,
 					const int attributes);
 void				free_var(void *var_ptr);
@@ -134,5 +136,8 @@ void				unset_var(const char *name);
 bool				var_exists(const char *name);
 void				set_local_variables(t_simple_cmd *cmd);
 void				set_temp_env_variables(t_simple_cmd *cmd, t_array *temp_env);
+char				*get_last_exit_status(void);
+char				*get_shell_pid(void);
+char				*get_last_bg_job_pid(void);
 
 #endif

@@ -16,6 +16,8 @@ static char	*get_var_name(char *str)
 {
 	int	i;
 
+	if (str[0] == '$' || str[0] == '!' || str[0] == '?')
+		return (ft_strsub(str, 0, 1));
 	if (ft_isdigit(str[0]))
 		return (NULL);
 	i = 0;

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/19 15:13:13 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/05 17:19:32 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/06 17:48:03 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ static void	add_var_to_arr(const char *key, void *value, void *obj)
 	t_var			*var;
 
 	var = value;
+	if (var->attributes & V_HIDDEN)
+		return ;
 	array = obj;
 	if (var->exportstr == NULL)
 		var->exportstr = ft_strjoin_triple((char *)key, "=", var->value);

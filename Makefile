@@ -60,6 +60,7 @@ SRC_VARIABLES	:= env_dup.c\
                    env_utils.c\
 				   export_env.c\
 				   var_utils.c\
+				   special_params.c\
 				   variables.c
 SRC_VARIABLES	:= $(addprefix variables/,$(SRC_VARIABLES))
 
