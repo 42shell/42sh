@@ -20,9 +20,14 @@ static t_job		*get_job_by_str(char *str)
 	if (str[0] == '%')
 	{
 		if (str[1] == '+')
-			return (g_shell.curr_job);
+			return ((g_curr_job && g_curr_job->next != g_curr_job) ? g_curr_job->next->data : NULL);
 		else if (str[1] == '-')
-			return (g_shell.prev_job);
+		{
+			if (g_curr_job && g_curr_job->next != g_curr_job)
+				return (g_curr_job->next->next != g_curr_job
+				? g_curr_job->next->next->data : g_curr_job->next->data);
+			return (NULL);
+		}
 		id = ft_atoi(++str) - 1;
 	}
 	else
@@ -43,9 +48,9 @@ static t_list_head	*get_jobs_list(char **argv)
 	list = ft_list_first_head(NULL);
 	if (!argv[i])
 	{
-		if (g_shell.curr_job)
+		if (g_curr_job && g_curr_job->next != g_curr_job)
 		{
-			ft_list_add(g_shell.curr_job, list);
+			ft_list_add(g_curr_job->next->data, list);
 			return (list);
 		}
 		free(list);
@@ -73,6 +78,9 @@ int					builtin_bg(char **argv)
 	t_job		*job;
 	t_dstr		*command_format;
 
+	if (!g_job_control_enabled)
+		return (2);
+	update_status();
 	if (!g_shell.jobs->next || !(list = get_jobs_list(argv)))
 	{
 		ft_dprintf(2, "42sh: bg: %s: No such job\n",
@@ -103,11 +111,14 @@ int					builtin_fg(char **argv)
 	t_job		*job;
 	t_dstr		*command_format;
 
+	if (!g_job_control_enabled)
+		return (2);
+	update_status();
 	if (!g_shell.jobs->next || !(list = get_jobs_list(argv)))
 	{
 		ft_dprintf(2, "42sh: fg: %s: No such job\n",
 		argv[1] ? argv[1] : "current");
-		return (0);
+		return (1);
 	}
 	curr = list->next;
 	while (curr && curr != list)

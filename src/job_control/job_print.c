@@ -67,7 +67,7 @@ void		print_job_long(t_job *job)
 
 	if (!job)
 		return ;
-	print_job(job);
+	print_job(job, false);
 	command_format = ft_dstr_new(64);
 	process = job->processes;
 	while (process)
@@ -76,7 +76,7 @@ void		print_job_long(t_job *job)
 		if (process->stdin != 0)
 			ft_dstr_append(command_format, "| ");
 		format_command(command_format, process->command);
-		ft_printf(" |-  %-30s %s\n", process_format, command_format->str);
+		ft_printf("     %-30s %s\n", process_format, command_format->str);
 		ft_dstr_clear(command_format, 64);
 		free(process_format);
 		process = process->next;
@@ -84,7 +84,7 @@ void		print_job_long(t_job *job)
 	ft_dstr_del(&command_format);
 }
 
-void		print_job(t_job *job)
+void		print_job(t_job *job, bool print_command)
 {
 	t_dstr	*command_format;
 	char	*job_format;
@@ -92,16 +92,21 @@ void		print_job(t_job *job)
 	
 	if (!job)
 		return ;
-	if (job == g_shell.curr_job)
+	if (is_current_job(job))
 		curr = "+";
-	else if (job == g_shell.prev_job)
+	else if (is_previous_job(job))
 		curr = "-";
 	else
 		curr = " ";
-	command_format = ft_dstr_new(64);
 	job_format = get_job_format(job);
-	format_command(command_format, job->command);
-	ft_printf("[%d]%s %-30s %s\n", job->id + 1, curr, job_format, command_format->str);	
-	ft_dstr_del(&command_format);
+	if (print_command)
+	{
+		command_format = ft_dstr_new(64);
+		format_command(command_format, job->command);
+	}
+	ft_printf("[%d]%s %-30s %s\n", job->id + 1, curr, job_format,
+	print_command ? command_format->str : "");
+	if (print_command)
+		ft_dstr_del(&command_format);
 	free(job_format);
 }

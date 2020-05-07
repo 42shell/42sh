@@ -72,6 +72,7 @@ SRC_EXEC        := $(addprefix execution/,$(SRC_EXEC))
 
 SRC_JOB       	:= launch_job.c\
 				   launch_process.c\
+				   job_current.c\
 				   job_control.c\
 				   job_get_status.c\
 				   job_set_status.c\

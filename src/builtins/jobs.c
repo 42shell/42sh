@@ -82,7 +82,7 @@ int					builtin_jobs(char **argv)
 	int			options;
 
 	options = 0;
-	if (!g_shell.jobs->next)
+	if (!g_job_control_enabled || !g_shell.jobs)
 		return (0);
 	if (get_jobs_options(argv, &options) == -1)
 		return (2);
@@ -97,7 +97,7 @@ int					builtin_jobs(char **argv)
 		else if (options & JOBS_P)
 			ft_printf("%d\n", job->pgid);
 		else
-			print_job(job);
+			print_job(job, true);
 		job->notified = true;
 		curr = curr->next;
 	}
