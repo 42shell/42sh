@@ -6,7 +6,7 @@
 /*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/04 16:43:25 by nbousset          #+#    #+#             */
-/*   Updated: 2019/06/12 21:03:12 by nbousset         ###   ########.fr       */
+/*   Updated: 2020/05/07 17:53:22 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,5 @@
 
 int		ft_putc(int c)
 {
-	return ((int)write(STDOUT_FILENO, &c, 1));
+	return ((int)write(STDIN_FILENO, &c, 1));
 }
