@@ -6,7 +6,7 @@
 /*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 16:27:46 by nbousset          #+#    #+#             */
-/*   Updated: 2020/04/02 01:01:07 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/06 18:08:49 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ typedef struct			s_array
 }						t_array;
 
 
-t_array					*array_new(void);
+t_array					*array_new(size_t size);
 void					array_realloc(t_array *array);
 void					array_append(t_array *array, void *data);
 void					array_destroy(t_array *array);
@@ -79,25 +79,19 @@ typedef struct			s_pair
 {
 	char				*key;
 	void				*value;
+	struct s_pair		*next;
 }						t_pair;
-
-typedef struct			s_bucket
-{
-	size_t				size;
-	t_pair				*pairs;
-}						t_bucket;
 
 typedef void(*t_ht_free_func)(void *value);
 
 typedef struct			s_ht
 {
 	size_t				size;
-	t_bucket			*buckets;
+	t_pair				*buckets;
 	t_ht_free_func		free_value;
 }						t_ht;
 
-typedef void(*t_ht_enum_func)(const char *key, const void *value,
-								const void *obj);
+typedef void(*t_ht_enum_func)(const char *key, void *value, void *obj);
 
 t_ht					*ht_new(size_t size, t_ht_free_func free_value);
 void					ht_delete(t_ht *map);
@@ -106,7 +100,9 @@ bool					ht_exists(const t_ht *map, const char *key);
 void					ht_put(t_ht *map, const char *key, void *value);
 int						ht_get_count(const t_ht *map);
 int						ht_enum(const t_ht *map, t_ht_enum_func enum_func,
-								const void *obj);
+								void *obj);
+void					ht_remove(const t_ht *map, const char *key);
+size_t					hash_string(const char *s);
 
 /*
 ** -------------------------Dynamic strings------------------------
@@ -220,7 +216,7 @@ unsigned int			ft_next_power_of_two(unsigned int v);
 uint32_t				ft_base_isvalid(char *base);
 long					ft_atoi(const char *str);
 long					ft_atoi_base(const char *nbr, uint32_t base);
-char					*ft_itoa(long n);
+char					*ft_itoa(int n, char *str);
 char					*ft_itoa_base(long n, uint32_t base);
 
 /*

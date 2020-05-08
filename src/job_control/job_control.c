@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/24 01:08:23 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 15:32:39 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	notif_jobs(void)
 		if (job_is_done(job))
 		{
 			if (job->bg)
-				print_job(job, JOB_DONE);
+				print_job(job);
 			remove_job_from_list(job->id);
 			process_del(&job->processes);
 			command_del(&job->command);
@@ -33,7 +33,9 @@ void	notif_jobs(void)
 		}
 		else if (job_is_stopped(job) && !job->notified)
 		{
-			print_job(job, JOB_STOPPED);
+			ft_printf("\n");
+			update_curr_ptr(job);
+			print_job(job);
 			job->notified = true;
 		}
 		job = next;
@@ -48,7 +50,8 @@ void	wait_for_job(t_job *job)
 	status = 0;
 	if (!job->processes)
 		return ;
-	while (!job_is_done(job))
+	while (!job_is_done(job)
+	&& (g_job_control_enabled ? !job_is_stopped(job) : 1))
 	{
 		pid = waitpid(WAIT_ANY, &status, WUNTRACED);
 		if (pid > 0 && mark_status(pid, status) < 0)
@@ -61,7 +64,6 @@ void	wait_for_job(t_job *job)
 			ft_dprintf(2, "42sh: waitpid: unexpected error.\n", pid);
 			break ;
 		}
-		g_last_exit_st = WEXITSTATUS(job->processes->status);
 	}
 }
 
@@ -76,7 +78,11 @@ void	continue_job(t_job *job, bool bg)
 
 void	put_job_bg(t_job *job, bool cont)
 {
+	extern int	g_last_bg_job_pid;
+
 	job->bg = true;
+	g_last_bg_job_pid = job->pgid;
+	update_curr_ptr(job);
 	if (cont)
 		kill(-job->pgid, SIGCONT);
 }
@@ -88,10 +94,12 @@ void	put_job_fg(t_job *job, bool cont)
 	if (cont)
 	{
 		kill(-job->pgid, SIGCONT);
-		tcsetattr (STDIN_FILENO, TCSADRAIN, &job->tmodes);
+		if (job->has_tmodes)
+			tcsetattr(STDIN_FILENO, TCSADRAIN, &job->tmodes);
 	}
 	wait_for_job(job);
 	tcsetpgrp(STDIN_FILENO, g_shell.pgid);
 	tcgetattr(STDIN_FILENO, &job->tmodes);
+	job->has_tmodes = true;
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &g_shell.tmodes);
 }

@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 14:14:32 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 17:49:58 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/24 01:49:04 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ t_array	*get_matches_in_dirs(t_array *directories, char *filename, bool no_dir)
 	t_array			*ret;
 
 	i = 0;
-	ret = array_new();
+	ret = array_new(0);
 	while (i < directories->size)
 	{
 		if ((dirp = opendir(directories->array[i])))
@@ -74,7 +74,7 @@ t_array	*get_dirs_to_search(char *dirname)
 		directories = get_matches(dirname);
 	else
 	{
-		directories = array_new();
+		directories = array_new(0);
 		array_append(directories, ft_strdup(dirname));
 	}
 	return (directories);

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/14 17:52:18 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 17:06:08 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	mark_job_as_running(t_job *job)
 {
 	t_process *process;
 
- 	process = job->processes;
+	process = job->processes;
 	while (process)
 	{
 		process->stopped = false;
@@ -25,17 +25,33 @@ void	mark_job_as_running(t_job *job)
 	job->notified = false;
 }
 
+/*
+** We only set last_exit_st if stdout == 1 to ignore the exit status of the
+** first commands of a pipeline
+** TODO: only print necessary signals
+*/
+
 void	set_process_status(t_process *process, int status)
 {
+	int	signal;
+
 	process->status = status;
 	if (WIFSTOPPED(status))
 		process->stopped = 1;
 	else
 	{
 		process->done = true;
-		if (WIFSIGNALED(status))
-			ft_dprintf(2, "%d: Terminated by signal %d.\n",
-			(int)process->pid, WTERMSIG(process->status));
+		if (WIFEXITED(status) && process->stdout == 1)
+			g_last_exit_st = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+		{
+			signal = WTERMSIG(status);
+			if (process->stdout == 1)
+				g_last_exit_st = signal + 128;
+			if (signal != 13 && signal != 2)
+				ft_dprintf(2, "%d: Terminated by signal %d.\n",
+				(int)process->pid, WTERMSIG(process->status));
+		}
 	}
 }
 

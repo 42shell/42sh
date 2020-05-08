@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:50:00 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/11 13:43:37 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 16:28:19 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*get_cd_dir(char **argv, int *options)
 	{
 		if (ft_strcmp(argv[i], "-") == 0)
 		{
-			if ((ret = get_env_var("OLDPWD", g_env)) == NULL)
+			if ((ret = get_var_value("OLDPWD")) == NULL)
 			{
 				ft_putstr_fd("cd: OLDPWD not set\n", 2);
 				return ((char *)NO_OLDPWD);
@@ -81,7 +81,7 @@ bool	get_curpath_in_cdpath(char *dir, char **curpath, int *options)
 
 	if (ft_strequ(dir, ".") || ft_strequ(dir, "..")
 	|| (ft_strstr(dir, "./") == dir) || (ft_strstr(dir, "../") == dir)
-	|| (tmp = get_env_var("CDPATH", g_env)) == NULL)
+	|| (tmp = get_var_value("CDPATH")) == NULL)
 		return (false);
 	cdpath = split_path(tmp);
 	i = 0;
@@ -116,9 +116,9 @@ int		finish_cd(char *curpath, char *dir, int options)
 	ret = (chdir(curpath) == -1) ? 1 : ret;
 	if (ret == 0)
 	{
-		set_env_var("OLDPWD", get_env_var("PWD", g_env), g_env);
+		set_var("OLDPWD", get_var_value("PWD"), V_EXPORT);
 		pwd = getcwd(NULL, 0);
-		set_env_var("PWD", (options & CD_P) ? pwd : curpath, g_env);
+		set_var("PWD", (options & CD_P) ? pwd : curpath, V_EXPORT);
 		free(pwd);
 	}
 	if (options & PRINT_DIR && ret == 0)
@@ -130,7 +130,7 @@ int		finish_cd(char *curpath, char *dir, int options)
 	return (ret);
 }
 
-int		builtin_cd(char **argv)
+int		builtin_cd(char **argv, __attribute__((unused)) t_array *env)
 {
 	char	*dir;
 	char	*curpath;

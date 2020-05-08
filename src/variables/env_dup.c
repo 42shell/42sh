@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   var_utils.c                                        :+:      :+:    :+:   */
+/*   env_dup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/15 09:58:50 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/29 18:19:43 by fratajcz         ###   ########.fr       */
+/*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
+/*   Updated: 2020/05/06 16:31:13 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-bool	is_valid_var_name(char *str)
+t_array	*env_dup(char **environ)
 {
-	if (!ft_isalpha(*str))
-		return (false);
-	while (*str)
+	t_array *env;
+	int		i;
+
+	i = 0;
+	while (environ[i])
+		i++;
+	env = array_new(16);
+	i = 0;
+	while (environ[i])
 	{
-		if (!ft_isalnum(*str) && *str != '_')
-			return (false);
-		str++;
+		array_append(env, ft_strdup(environ[i]));
+		i++;
 	}
-	return (true);
+	return (env);
 }

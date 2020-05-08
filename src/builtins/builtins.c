@@ -6,13 +6,13 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:07:29 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/22 18:13:39 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 16:27:35 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-int		builtin_echo(char **argv)
+int		builtin_echo(char **argv, __attribute__((unused)) t_array *env)
 {
 	int i;
 
@@ -31,33 +31,38 @@ int		builtin_echo(char **argv)
 /*
 ** "42sh: error" its not a binary
 */
-int		builtin_setenv(char **argv)
+
+int		builtin_setenv(char **argv, t_array *env)
 {
 	if (argv[1] == NULL)
-		return (builtin_env(argv, g_env));
+		return (builtin_env(argv, env));
 	else if (argv[2] && argv[3])
 		write(2, "setenv: Too many arguments.\n", 28);
 	else if (!is_valid_var_name(argv[1]))
 		write(2, "setenv: Invalid variable name\n", 30);
 	else
 	{
-		set_env_var(argv[1], argv[2], g_env);
+		set_var(argv[1], argv[2], V_EXPORT);
 		return (0);
 	}
 	return (1);
 }
 
-int		builtin_unsetenv(char **argv)
+int		builtin_unsetenv(char **argv, __attribute__((unused)) t_array *env)
 {
-	int i;
+	int		i;
+	t_var	*var;
 
 	i = 1;
 	while (argv[i])
-		remove_env_var(argv[i++], g_env);
+	{
+		if ((var = ht_get(g_shell.vars, argv[i])) && var->attributes & V_EXPORT)
+			unset_var(argv[i++]);
+	}
 	return (0);
 }
 
-void	builtin_exit(char **argv)
+void	builtin_exit(char **argv, __attribute__((unused)) t_array *env)
 {
 	int i;
 

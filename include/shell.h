@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/24 17:41:36 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 16:11:45 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,34 @@
 # include "env.h"
 # include "lexer.h"
 # include "parser.h"
-# include "exec.h"
+# include "execution.h"
+# include "job_control.h"
 # include "expansion.h"
 # include "builtins.h"
 # include "autocomplete.h"
 # include "utils.h"
+
+# define V_NOATTR	0
+# define V_RDONLY	1
+# define V_EXPORT	2
+# define V_HIDDEN	4
+# define V_SPECIAL	8
+
+typedef char *(*t_var_value_func)(void);
+typedef int(*t_builtin_func)(char **argv, t_array *temp_env);
+
+/*
+** value_func is used to get the values of special variables like $$.
+*/
+
+typedef struct			s_var
+{
+	char				*name;
+	char				*value;
+	char				*exportstr;
+	int					attributes;
+	t_var_value_func	value_func;
+}						t_var;
 
 /*
 ** -fix readline problems
@@ -81,11 +104,15 @@ typedef struct			s_shell
 	bool				interactive_mode;
 	t_input_func		get_input;
 	t_job				*jobs;
+	t_job				*curr_job;
+	t_job				*prev_job;
 	pid_t				pgid;
 	struct termios		tmodes;
+	t_ht				*vars;
 }						t_shell;
 
 t_shell					g_shell;
+t_ht					*g_builtins;
 
 int						init(int argc, char **argv);
 void					del(void);
@@ -94,5 +121,25 @@ int						input_batch(const char *prompt, bool heredoc);
 int						input_interactive(const char *prompt, bool heredoc);
 
 void					init_sig(void);
+
+void				import_env(char **env);
+t_var				*make_new_var(const char *name, const char *value,
+					const int attributes, t_var_value_func value_func);
+void				add_var(const char *name, const char *value,
+					const int attributes);
+void				free_var(void *var_ptr);
+char				*get_var_value(const char *name);
+void				set_var(const char *name, const char *value,
+					const int attributes);
+void				set_var_attributes(const char *name, const int attributes);
+char				*get_var_value(const char *name);
+t_array				*export_env(t_ht *map);
+void				unset_var(const char *name);
+bool				var_exists(const char *name);
+void				set_local_variables(t_simple_cmd *cmd);
+void				set_temp_env_variables(t_simple_cmd *cmd, t_array *temp_env);
+char				*get_last_exit_status(void);
+char				*get_shell_pid(void);
+char				*get_last_bg_job_pid(void);
 
 #endif
