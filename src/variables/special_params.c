@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   special_params.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fratajcz </var/spool/mail/fratajcz>        +#+  +:+       +#+        */
+/*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/06 17:23:15 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/07 15:33:57 by fratajcz         ###   ########.fr       */
+/*   Created: 2020/05/08 18:37:29 by fratajcz          #+#    #+#             */
+/*   Updated: 2020/05/08 18:37:30 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
