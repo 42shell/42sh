@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/08 17:11:09 by fratajcz          #+#    #+#             */
-/*   Updated: 2019/11/29 00:15:24 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 18:43:57 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** add a new entry after the specified list head
 */
 
-void	ft_list_add(void *data, t_list_head *head) //<->
+void	ft_list_add(void *data, t_list_head *head)
 {
 	t_list_head *new;
 
