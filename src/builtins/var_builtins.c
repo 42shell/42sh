@@ -6,13 +6,21 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/19 15:13:13 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/07 16:31:25 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 17:28:16 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-int		builtin_export(char **argv, __attribute__((unused)) t_array *env)
+static void	export_one_var(char *name, char *value)
+{
+	if (value == NULL && var_exists(name))
+		set_var_attributes(name, V_EXPORT);
+	else
+		set_var(name, value, V_EXPORT);
+}
+
+int			builtin_export(char **argv, __attribute__((unused)) t_array *env)
 {
 	int		i;
 	int		ret;
@@ -31,13 +39,8 @@ int		builtin_export(char **argv, __attribute__((unused)) t_array *env)
 					argv[i]);
 			ret = 1;
 		}
-		else 
-		{
-			if (value == NULL && var_exists(argv[i]))
-				set_var_attributes(argv[i], V_EXPORT);
-			else
-				set_var(argv[i], value, V_EXPORT);
-		}
+		else
+			export_one_var(argv[i], value);
 		i++;
 	}
 	if (i == 1)
@@ -45,7 +48,7 @@ int		builtin_export(char **argv, __attribute__((unused)) t_array *env)
 	return (ret);
 }
 
-int		builtin_unset(char **argv, __attribute__((unused)) t_array *env)
+int			builtin_unset(char **argv, __attribute__((unused)) t_array *env)
 {
 	int		i;
 	int		ret;

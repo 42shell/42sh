@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 16:52:48 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 17:55:18 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static char			*get_signaled_exit_format(int status)
 {
 	char			sig[10];
-	char			*ret;
 
 	ft_itoa(WTERMSIG(status), sig);
 	return (ft_strjoin(" Terminated by signal ", sig));
@@ -24,7 +23,6 @@ static char			*get_signaled_exit_format(int status)
 static char			*get_signaled_stop_format(int status)
 {
 	char			sig[10];
-	char			*ret;
 
 	ft_itoa(WSTOPSIG(status), sig);
 	return (ft_strjoin(" Stopped by signal ", sig));

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:50:00 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 16:45:44 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 17:55:33 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,15 @@ static t_list_head	*get_jobs_list(int options)
 static void			set_option(int *options, char c)
 {
 	if (c == 'l')
-		*options = ((*options | JOBS_L) &~ JOBS_P);
+		*options = ((*options | JOBS_L) & ~JOBS_P);
 	else if (c == 'n')
-		*options = ((*options | JOBS_N) &~ (JOBS_R | JOBS_S));
+		*options = ((*options | JOBS_N) & ~(JOBS_R | JOBS_S));
 	else if (c == 'p')
-		*options = ((*options | JOBS_P) &~ JOBS_L);
+		*options = ((*options | JOBS_P) & ~JOBS_L);
 	else if (c == 'r')
-		*options = ((*options | JOBS_R) &~ (JOBS_N | JOBS_S));
+		*options = ((*options | JOBS_R) & ~(JOBS_N | JOBS_S));
 	else
-		*options = ((*options | JOBS_S) &~ (JOBS_R | JOBS_N));
+		*options = ((*options | JOBS_S) & ~(JOBS_R | JOBS_N));
 }
 
 static int			get_jobs_options(char **argv, int *options)
@@ -63,7 +63,8 @@ static int			get_jobs_options(char **argv, int *options)
 		argc++;
 	while ((c = get_opt(argc, argv)) != -1)
 	{
-		if (ret == 0 && (c == 'l' || c == 'n' || c == 'p' || c == 'r' || c == 's'))
+		if (ret == 0
+				&& (c == 'l' || c == 'n' || c == 'p' || c == 'r' || c == 's'))
 			set_option(options, c);
 		else if (ret == 0)
 		{
@@ -74,12 +75,22 @@ static int			get_jobs_options(char **argv, int *options)
 	return (ret);
 }
 
-int				builtin_jobs(char **argv,
-							__attribute__((unused)) t_array *env)
+static void			print_one_job(t_job *job, int options)
+{
+	if (options & JOBS_L)
+		print_job_long(job);
+	else if (options & JOBS_P)
+		ft_printf("%d\n", job->pgid);
+	else
+		print_job(job, true);
+	job->notified = true;
+}
+
+int					builtin_jobs(char **argv, __attribute__((unused))
+								t_array *env)
 {
 	t_list_head	*list;
 	t_list_head	*curr;
-	t_job		*job;
 	int			options;
 
 	(void)argv;
@@ -93,14 +104,7 @@ int				builtin_jobs(char **argv,
 	curr = list->next;
 	while (curr != list)
 	{
-		job = (t_job *)curr->data;
-		if (options & JOBS_L)
-			print_job_long(job);
-		else if (options & JOBS_P)
-			ft_printf("%d\n", job->pgid);
-		else
-			print_job(job, true);
-		job->notified = true;
+		print_one_job(curr->data, options);
 		curr = curr->next;
 	}
 	while (list->next != list)

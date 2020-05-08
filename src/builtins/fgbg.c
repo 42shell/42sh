@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:50:00 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 16:49:58 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 17:54:42 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,15 @@ static t_job		*get_job_by_str(char *str)
 	if (str[0] == '%')
 	{
 		if (str[1] == '+')
-			return ((g_curr_job && g_curr_job->next != g_curr_job) ? g_curr_job->next->data : NULL);
+			return ((g_curr_job && g_curr_job->next != g_curr_job)
+					? g_curr_job->next->data : NULL);
 		else if (str[1] == '-')
 		{
 			if (g_curr_job && g_curr_job->next != g_curr_job)
+			{
 				return (g_curr_job->next->next != g_curr_job
 				? g_curr_job->next->next->data : g_curr_job->next->data);
+			}
 			return (NULL);
 		}
 		id = ft_atoi(++str) - 1;
@@ -71,13 +74,25 @@ static t_list_head	*get_jobs_list(char **argv)
 	return (list);
 }
 
-int					builtin_bg(char **argv,
-								__attribute__((unused)) t_array *env)
+static void			fg_or_bg_one_job(t_job *job, bool bg)
+{
+	t_dstr	*command_format;
+
+	command_format = ft_dstr_new(32);
+	format_command(command_format, job->command);
+	if (bg)
+		ft_printf("%s &\n", command_format->str);
+	else
+		ft_printf("%s\n", command_format->str);
+	ft_dstr_del(&command_format);
+	continue_job(job, bg);
+}
+
+int					builtin_bg(char **argv, __attribute__((unused))
+								t_array *env)
 {
 	t_list_head	*list;
 	t_list_head	*curr;
-	t_job		*job;
-	t_dstr		*command_format;
 
 	if (!g_job_control_enabled)
 		return (2);
@@ -91,12 +106,7 @@ int					builtin_bg(char **argv,
 	curr = list->next;
 	while (curr && curr != list)
 	{
-		job = (t_job *)curr->data;
-		command_format = ft_dstr_new(32);
-		format_command(command_format, job->command);
-		ft_printf("%s &\n", command_format->str);
-		ft_dstr_del(&command_format);
-		continue_job(job, true);
+		fg_or_bg_one_job(curr->data, true);
 		curr = curr->next;
 	}
 	while (list->next != list)
@@ -105,13 +115,11 @@ int					builtin_bg(char **argv,
 	return (0);
 }
 
-int					builtin_fg(char **argv,
-								__attribute__((unused)) t_array *env)
+int					builtin_fg(char **argv, __attribute__((unused))
+								t_array *env)
 {
 	t_list_head	*list;
 	t_list_head	*curr;
-	t_job		*job;
-	t_dstr		*command_format;
 
 	if (!g_job_control_enabled)
 		return (2);
@@ -125,12 +133,7 @@ int					builtin_fg(char **argv,
 	curr = list->next;
 	while (curr && curr != list)
 	{
-		job = (t_job *)curr->data;
-		command_format = ft_dstr_new(32);
-		format_command(command_format, job->command);
-		ft_printf("%s\n", command_format->str);
-		ft_dstr_del(&command_format);
-		continue_job(job, false);
+		fg_or_bg_one_job(curr->data, false);
 		curr = curr->next;
 	}
 	while (list->next != list)

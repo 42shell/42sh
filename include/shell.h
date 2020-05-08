@@ -6,14 +6,12 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/07 16:11:45 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 17:22:31 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SHELL_H
 # define SHELL_H
-
-#include <stdio.h>
 
 # include <unistd.h>
 # include <sys/types.h>
@@ -78,7 +76,8 @@ typedef struct			s_var
 ** -others
 ** 		-flush cache table when PATH is modified.
 ** 		-check comments work properly
-** 		-in case of "ls | \n cat", newline is not removed from line before stored in history
+** 		-in case of "ls | \n cat", newline is not removed from line before
+**			stored in history
 **		 don t know if it is handled in expand()
 ** -leaks
 */
@@ -120,24 +119,26 @@ int						input_interactive(const char *prompt, bool heredoc);
 
 void					init_sig(void);
 
-void				import_env(char **env);
-t_var				*make_new_var(const char *name, const char *value,
-					const int attributes, t_var_value_func value_func);
-void				add_var(const char *name, const char *value,
-					const int attributes);
-void				free_var(void *var_ptr);
-char				*get_var_value(const char *name);
-void				set_var(const char *name, const char *value,
-					const int attributes);
-void				set_var_attributes(const char *name, const int attributes);
-char				*get_var_value(const char *name);
-t_array				*export_env(t_ht *map);
-void				unset_var(const char *name);
-bool				var_exists(const char *name);
-void				set_local_variables(t_simple_cmd *cmd);
-void				set_temp_env_variables(t_simple_cmd *cmd, t_array *temp_env);
-char				*get_last_exit_status(void);
-char				*get_shell_pid(void);
-char				*get_last_bg_job_pid(void);
+void					import_env(char **env);
+t_var					*make_new_var(const char *name, const char *value,
+						const int attributes, t_var_value_func value_func);
+void					add_var(const char *name, const char *value,
+						const int attributes);
+void					free_var(void *var_ptr);
+char					*get_var_value(const char *name);
+void					set_var(const char *name, const char *value,
+						const int attributes);
+void					set_var_attributes(const char *name,
+						const int attributes);
+char					*get_var_value(const char *name);
+t_array					*export_env(t_ht *map);
+void					unset_var(const char *name);
+bool					var_exists(const char *name);
+void					set_local_variables(t_simple_cmd *cmd);
+void					set_temp_env_variables(t_simple_cmd *cmd,
+						t_array *temp_env);
+char					*get_last_exit_status(void);
+char					*get_shell_pid(void);
+char					*get_last_bg_job_pid(void);
 
 #endif

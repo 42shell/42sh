@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:28:09 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/06 16:31:53 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 17:20:02 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "shell.h"
 
-t_array 			*env_dup(char **env);
+t_array				*env_dup(char **env);
 char				*get_env_var(char *var_name, t_array *env);
 void				add_env_var(char *var, char *value, t_array *env);
 void				replace_env_var(char *var, char *value, t_array *env);

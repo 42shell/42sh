@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 23:49:26 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 14:45:40 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 17:20:12 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ union							u_cmd_value
 	struct s_simple_cmd			*simple;
 	struct s_subshell			*subshell;
 };
-
 
 /*
 ** values for s_command->flags

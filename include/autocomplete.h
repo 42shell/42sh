@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:28:09 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 00:23:58 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 17:19:49 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 
 int					*g_comp_list_count;
 
-t_list_head			*get_autocomplete_list(char *context, size_t len, int *count);
+t_list_head			*get_autocomplete_list(char *context, size_t len,
+					int *count);
 t_list_head			*comp_get_command_list(char *partial);
 t_list_head			*get_file_list(char *partial, int flags);
 
