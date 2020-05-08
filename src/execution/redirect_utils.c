@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 16:48:51 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/29 16:16:34 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 18:23:02 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ static t_fd_backup	*fd_used_for_backup(int fildes)
 	return (NULL);
 }
 
-bool		is_valid_fd(int fd)
+bool				is_valid_fd(int fd)
 {
 	struct stat	buf;
 
 	return (!fd_used_for_backup(fd) && fstat(fd, &buf) != -1);
 }
 
-void		move_fd(int *fd)
+void				move_fd(int *fd)
 {
 	int		new;
 
@@ -46,7 +46,7 @@ void		move_fd(int *fd)
 	*fd = new;
 }
 
-int			dup2_and_backup(int fd_from, int fd_to, bool backup)
+int					dup2_and_backup(int fd_from, int fd_to, bool backup)
 {
 	t_fd_backup *backup_store;
 	t_fd_backup *backup_to_move;
@@ -69,7 +69,7 @@ int			dup2_and_backup(int fd_from, int fd_to, bool backup)
 ** so we close it. (ex: ls 5> file opens file at fd 5)
 */
 
-int			restore_fds(void)
+int					restore_fds(void)
 {
 	t_list_head *cur;
 	t_list_head *tmp;
