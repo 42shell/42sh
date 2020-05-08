@@ -115,10 +115,10 @@ SRC_PARSER      := and_or.c\
                    del.c
 SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
 
-SRC_SHELL       := del.c\
-                   init.c\
+SRC_SHELL       := init.c\
                    main.c\
 				   signal.c\
+				   file_is_binary.c\
 				   input.c
 SRC_SHELL       := $(addprefix shell/,$(SRC_SHELL))
 
