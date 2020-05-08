@@ -33,7 +33,6 @@ void	notif_jobs(void)
 		}
 		else if (job_is_stopped(job) && !job->notified)
 		{
-			ft_printf("\n");
 			update_curr_job(job);
 			print_job(job, true);
 			job->notified = true;
