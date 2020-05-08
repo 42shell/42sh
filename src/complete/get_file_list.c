@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/16 15:04:39 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/17 16:09:35 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 18:21:37 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ static t_list_head	*get_matches_in_cwd(DIR *dirp, char *partial, int flags)
 	return (comp_list);
 }
 
-static t_list_head	*get_matches_in_dir(DIR *dirp, char *dir, char *partial, int flags)
+static t_list_head	*get_matches_in_dir(DIR *dirp, char *dir, char *partial,
+										int flags)
 {
 	struct dirent	*dp;
 	char			*path;

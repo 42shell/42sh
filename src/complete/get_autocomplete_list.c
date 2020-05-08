@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 19:22:51 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 00:23:45 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 18:21:45 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,3 @@ t_list_head	*get_autocomplete_list(char *context, size_t len, int *count)
 		return (get_file_list(partial_word, DIRONLY));
 	return (get_file_list(partial_word, FILES));
 }
-
