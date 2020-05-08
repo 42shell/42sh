@@ -27,25 +27,29 @@ static void	increase_shlvl(void)
 	free(shlvl_str);
 }
 
-static int	check_bin_file(int fd, char *filename)
+static int	check_bin_file(char *filename)
 {
+	int		fd;
 	char	buf[80];
 	int		i;
 
 	i = 0;
-	if (read(fd, buf, 80) == -1)
+	if ((fd = open(filename, O_RDONLY)) == -1 || read(fd, buf, 80) == -1)
 	{
 		ft_dprintf(STDERR_FILENO, "42sh: %s: unable to read file\n");
+		close(fd);
 		return (-1);
 	}
-	while (i < 80 && buf[i] && buf[i] != '\n')
+	while (i < 79 && buf[i] && buf[i] != '\n')
 		i++;
 	if (buf[i] == 0)
 	{
 		ft_dprintf(STDERR_FILENO,
 		"42sh: %s: cannot execute binary file\n", filename);
+		close(fd);
 		return (-1);
 	}
+	close(fd);
 	return (0);
 }
 
@@ -55,14 +59,11 @@ static int	parse_args(int argc, char **argv)
 
 	if (argc > 0)
 	{
+		if (check_bin_file(argv[0]) == -1)
+			exit(1);
 		if ((fd = open(argv[0], O_RDONLY)) == -1)
 		{
 			write(STDERR_FILENO, "42sh: could not open file\n", 26);
-			exit(1);
-		}
-		else if (check_bin_file(fd, argv[0]) == -1)
-		{
-			close(fd);
 			exit(1);
 		}
 		g_shell.get_input = &input_batch;
@@ -103,7 +104,7 @@ int			init(int argc, char **argv)
 		g_shell.pgid = getpid();
 		if (setpgid (g_shell.pgid, g_shell.pgid) < 0)
 		{
-			ft_dprintf(2, "42sh: Couldn't put the shell in its own process group\n");
+			ft_dprintf(2, "42sh: couldn't put the shell in its own process group\n");
 			exit (1);
 		}
     	/* Grab control of the terminal. */
