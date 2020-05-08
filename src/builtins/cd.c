@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:50:00 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/07 16:28:19 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 18:02:02 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ bool	get_curpath_in_cdpath(char *dir, char **curpath, int *options)
 
 	if (ft_strequ(dir, ".") || ft_strequ(dir, "..")
 	|| (ft_strstr(dir, "./") == dir) || (ft_strstr(dir, "../") == dir)
-	|| (tmp = get_var_value("CDPATH")) == NULL)
+	|| (tmp = get_var_value("CDPATH")) == NULL || tmp[0] == '\0')
 		return (false);
 	cdpath = split_path(tmp);
 	i = 0;

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/06 11:10:04 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 17:37:43 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,9 @@ int			rl_init_term(void)
 {
 	if (tgetent(NULL, getenv("TERM")) != 1)
 	{
-		g_rl_error = RL_TERM_ERROR;
-		return (-1);
+		ft_putstr_fd("42sh: Could not find your terminal in terminfo database"
+						", try setting $TERM\n", 2);
+		exit(1);
 	}
 	tcgetattr(STDIN_FILENO, &g_rl_oldterm);
 	g_rl_term = g_rl_oldterm;

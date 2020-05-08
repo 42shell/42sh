@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/16 15:39:06 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 17:55:41 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int		tputstr(const char *str)
 	{
 		if (*str == '\n')
 			movcnl();
-		else if (write(STDOUT_FILENO, str, 1))
+		else if (write(STDIN_FILENO, str, 1))
 		{
 			if (g_rl_posx == g_rl_sizex - 1)
 				movcnl();

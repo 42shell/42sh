@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 17:03:57 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/06 16:42:53 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 22:35:59 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,7 @@ int		get_env_options(int argc, char **argv, int *options)
 		*options = (c == '\0' || c == 'i') ? EMPTY_ENV : 0;
 		if (c != '\0' && c != 'i' && ret == 1)
 		{
-			ft_putstr_fd("env: illegal option -- ", 2);
-			ft_putc(c);
-			ft_putc('\n');
+			ft_dprintf(2, "env: illegal option -- %c\n", c);
 			ret = 0;
 		}
 	}
