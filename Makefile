@@ -47,6 +47,7 @@ SRC_BUILTINS    :=	builtins.c\
 					cd_utils.c\
 					var_builtins.c\
 					jobs.c\
+					jobs_fgbg_utils.c\
 					env.c\
 					fgbg.c
 SRC_BUILTINS    := $(addprefix builtins/,$(SRC_BUILTINS))

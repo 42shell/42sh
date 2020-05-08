@@ -18,21 +18,25 @@
 #define JOBS_R	8
 #define JOBS_S	16
 
-static t_list_head	*get_jobs_list(int options)
+static t_list_head	*get_jobs_list(char **argv, int options)
 {
 	t_list_head	*list;
+	t_list_head	*curr;
 	t_job		*job;
 
-	list = ft_list_first_head(NULL);
-	job = g_shell.jobs->next;
-	while (job)
+	argv++;
+	while (*argv && **argv == '-')
+		argv++;
+	list = get_jobs_jobs_list(argv);
+	curr = list->next;
+	while (curr != list)
 	{
-		if (((options & JOBS_N) && job->notified == false)
-		|| ((options & JOBS_R) && !job_is_stopped(job) && !job_is_done(job))
-		|| ((options & JOBS_S) && job_is_stopped(job))
-		|| !(options & (JOBS_N | JOBS_R | JOBS_S)))
-			ft_list_add(job, list);
-		job = job->next;
+		job = (t_job *)curr->data;
+		if (((options & JOBS_N) && job->notified == true)
+		|| ((options & JOBS_R) && (job_is_stopped(job) || job_is_done(job)))
+		|| ((options & JOBS_S) && !job_is_stopped(job)))
+			ft_list_del(curr);
+		curr = curr->next;
 	}
 	return (list);
 }
@@ -75,7 +79,7 @@ static int			get_jobs_options(char **argv, int *options)
 	return (ret);
 }
 
-static void			print_one_job(t_job *job, int options)
+static int			print_one_job(t_job *job, int options)
 {
 	if (options & JOBS_L)
 		print_job_long(job);
@@ -84,6 +88,7 @@ static void			print_one_job(t_job *job, int options)
 	else
 		print_job(job, true);
 	job->notified = true;
+	return (0);
 }
 
 int					builtin_jobs(char **argv, __attribute__((unused))
@@ -93,19 +98,22 @@ int					builtin_jobs(char **argv, __attribute__((unused))
 	t_list_head	*curr;
 	int			options;
 
-	(void)argv;
 	options = 0;
-	if (!g_job_control_enabled || !g_shell.jobs)
-		return (0);
-	if (get_jobs_options(argv, &options) == -1)
+	if (!g_job_control_enabled || get_jobs_options(argv, &options) == -1)
 		return (2);
 	update_status();
-	list = get_jobs_list(options);
+	list = get_jobs_list(argv, options);
 	curr = list->next;
 	while (curr != list)
 	{
-		print_one_job(curr->data, options);
+		print_one_job((t_job *)curr->data, options);
 		curr = curr->next;
+	}
+	if (g_jobspec_error)
+	{
+		ft_dprintf(2, "42sh: jobs: %s: No such job\n", g_jobspec_error);
+		g_jobspec_error = NULL;
+		return (2);
 	}
 	while (list->next != list)
 		ft_list_del(list->next);
