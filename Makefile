@@ -101,6 +101,7 @@ SRC_LEXER       := append.c\
                    get_next_token.c\
                    quote.c\
                    token.c\
+				   lx_end.c\
                    utils.c
 SRC_LEXER       := $(addprefix lexer/,$(SRC_LEXER))
 

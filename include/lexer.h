@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 18:15:44 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 18:31:44 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ t_lexer				g_lexer;
 t_token				*get_next_token(void);
 int					reset_lexer(void);
 
+int					delim_token(void);
 int					lx_end(void);
 int					lx_operator_next(void);
 int					lx_operator_end(void);

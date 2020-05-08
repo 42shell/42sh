@@ -6,38 +6,24 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 00:14:55 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 18:31:35 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static int	delim_token()
+int			delim_token(void)
 {
 	if (g_lexer.token)
 	{
 		if (is_operator_start(*g_lexer.token->value->str))
 			g_lexer.token->type =
 			get_operator_type(g_lexer.token->value->str);
-		else if ((g_lexer.line[g_lexer.i] == '<' || g_lexer.line[g_lexer.i] == '>')
+		else if ((g_lexer.line[g_lexer.i] == '<'
+					|| g_lexer.line[g_lexer.i] == '>')
 		&& ft_strisnbr(g_lexer.token->value->str))
 			g_lexer.token->type = IO_NUMBER;
 		g_lexer.token_delimited = true;
-	}
-	return (0);
-}
-
-int			lx_end(void)
-{
-	if (!g_lexer.line[g_lexer.i])
-	{
-		g_lexer.end_of_input = 1;
-		if (g_lexer.token && !g_lexer.quote_st && g_lexer.nl_found)
-		{
-			delim_token();
-			g_lexer.nl_found = 0;
-		}
-		return (1);
 	}
 	return (0);
 }
@@ -72,8 +58,8 @@ int			lx_operator_new(void)
 
 /*
 ** the first time we process it, we delim the current token.
-** the second time we create a NEWLINE token, increase index, set nl_found to true
-** and delim the NEWLINE token to return it.
+** the second time we create a NEWLINE token, increase index, set nl_found to
+** true and delim the NEWLINE token to return it.
 */
 
 int			lx_newline(void)
