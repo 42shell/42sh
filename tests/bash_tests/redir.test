@@ -66,6 +66,12 @@ echo 'ls | asdfasdf 2>/dev/null'
 ls | asdfasdf 2>/dev/null
 echo '~~~'
 
+echo 'echo > lol >& 123'
+echo > lol >& 123
+echo oups
+rm lol
+echo '~~~'
+
 echo 'hard test'
 cd /tmp; sort << EOF | cat -e > sorted_poem ; sed -e 's/Roses/Turnips/' < sorted_poem > better_poem; cd -; echo "I prefer turnips anyway" >> /tmp/better_poem; cat /tmp/better_poem
 Roses are red

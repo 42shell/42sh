@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 18:46:04 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/18 15:06:31 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/02/20 20:28:01 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_ht		*ht_new(size_t size, t_ht_free_func free_value)
 
 	map = ft_xmalloc(sizeof(t_ht));
 	map->size = ft_next_power_of_two(size);
-	map->buckets = ft_xmalloc(map->size * sizeof(t_bucket));
+	map->buckets = ft_xmalloc(map->size * sizeof(t_pair));
 	map->free_value = free_value;
 	return (map);
 }
@@ -31,26 +31,26 @@ t_ht		*ht_new(size_t size, t_ht_free_func free_value)
 void		ht_delete(t_ht *map)
 {
 	size_t		i;
-	size_t		j;
-	t_bucket	*bucket;
 	t_pair		*pair;
+	t_pair		*tmp;
+	t_pair		*buckets;
 
 	if (map == NULL)
 		return ;
-	bucket = map->buckets;
 	i = 0;
+	buckets = map->buckets;
 	while (i < map->size)
 	{
-		pair = bucket->pairs;
-		j = 0;
-		while (j < bucket->size)
+		pair = buckets;
+		while (pair)
 		{
 			free(pair->key);
 			map->free_value(pair->value);
-			pair++;
-			j++;
+			tmp = pair;
+			pair = pair->next;
+			free(tmp);
 		}
-		free(bucket++->pairs);
+		buckets++;
 		i++;
 	}
 	free(map->buckets);
@@ -64,9 +64,8 @@ void		ht_delete(t_ht *map)
 int			ht_get_count(const t_ht *map)
 {
 	size_t		i;
-	size_t		j;
 	size_t		count;
-	t_bucket	*bucket;
+	t_pair		*bucket;
 	t_pair		*pair;
 
 	bucket = map->buckets;
@@ -74,13 +73,11 @@ int			ht_get_count(const t_ht *map)
 	count = 0;
 	while (i < map->size)
 	{
-		pair = bucket->pairs;
-		j = 0;
-		while (j < bucket->size)
+		pair = bucket;
+		while (pair && pair->key)
 		{
 			count++;
-			pair++;
-			j++;
+			pair = pair->next;
 		}
 		bucket++;
 		i++;
@@ -92,27 +89,59 @@ int			ht_get_count(const t_ht *map)
 ** Execute enum_func(key, value, obj) for each key=value pair in the hash table.
 */
 
-int			ht_enum(const t_ht *map, t_ht_enum_func enum_func, const void *obj)
+int			ht_enum(const t_ht *map, t_ht_enum_func enum_func, void *obj)
 {
 	size_t		i;
-	size_t		j;
-	t_bucket	*bucket;
+	t_pair		*bucket;
 	t_pair		*pair;
 
 	bucket = map->buckets;
 	i = 0;
 	while (i < map->size)
 	{
-		pair = bucket->pairs;
-		j = 0;
-		while (j < bucket->size)
+		pair = bucket;
+		while (pair && pair->key)
 		{
 			enum_func(pair->key, pair->value, obj);
-			pair++;
-			j++;
+			pair = pair->next;
 		}
 		bucket++;
 		i++;
 	}
 	return (1);
+}
+
+/*
+** Remove a pair from a hash table
+** if there is a pair after the one we want to delete, we copy the contents of
+** the next pair into the pair we want to delete and we free the next pair
+*/
+
+void		ht_remove(const t_ht *map, const char *key)
+{
+	t_pair *prev;
+	t_pair *pair;
+
+	pair = &(map->buckets[hash_string(key) % map->size]);
+	prev = NULL;
+	while (pair)
+	{
+		if (pair->key != NULL && ft_strcmp(pair->key, key) == 0)
+		{
+			ft_memdel((void **)&pair->key);
+			map->free_value(pair->value);
+			if (prev != NULL)
+				prev->next = pair->next;
+			if (prev != NULL)
+				return (free(pair));
+			else if (pair->next != NULL)
+			{
+				pair->value = pair->next->value;
+				pair->key = pair->next->key;
+				return (ft_memdel((void **)&pair->next));
+			}
+		}
+		prev = pair;
+		pair = pair->next;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:50:00 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/11 13:43:37 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 16:45:44 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,15 @@ static int			get_jobs_options(char **argv, int *options)
 	return (ret);
 }
 
-int					builtin_jobs(char **argv)
+int				builtin_jobs(char **argv,
+							__attribute__((unused)) t_array *env)
 {
 	t_list_head	*list;
 	t_list_head	*curr;
 	t_job		*job;
 	int			options;
 
+	(void)argv;
 	options = 0;
 	if (!g_job_control_enabled || !g_shell.jobs)
 		return (0);

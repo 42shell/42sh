@@ -1,0 +1,60 @@
+echo "ls"
+ls
+echo $?
+echo '~~~'
+
+echo "ls -#"
+ls -#
+echo $?
+echo '~~~'
+
+echo 'ls -# | cat'
+ls -# | cat 
+echo $?
+echo '~~~'
+
+echo 'exit 0 | exit 1 | exit 2'
+exit 0 | exit 1 | exit 2
+echo $?
+echo '~~~'
+
+echo 'exit 0 | exit 1 | exit 2 | exit 3'
+exit 0 | exit 1 | exit 2 | exit 3
+echo $?
+echo '~~~'
+
+echo 'ls -# && ls'
+ls -# && ls
+echo $?
+echo '~~~'
+
+echo 'ls -# || ls'
+ls -# || ls
+echo $?
+echo '~~~'
+
+echo 'ls && ls && ls -# && ls'
+ls && ls && ls -# && ls
+echo $?
+echo '~~~'
+
+echo 'ls && ls && ls -# || ls'
+ls && ls && ls -# || ls
+echo $?
+echo '~~~'
+
+echo 'Command not found'
+asdfasdf
+echo $?
+echo '~~~'
+
+echo 'Is a directory'
+/tmp 
+ehco $?
+echo '~~~'
+
+echo 'Permission denied'
+chmod -x 42sh
+./42sh
+chmod +x 42sh
+echo $?

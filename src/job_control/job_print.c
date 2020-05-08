@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 14:45:52 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 16:46:58 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void		print_job(t_job *job, bool print_command)
 	t_dstr	*command_format;
 	char	*job_format;
 	char	*curr;
-	
+
 	if (!job)
 		return ;
 	if (is_current_job(job))

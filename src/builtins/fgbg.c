@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:50:00 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/11 13:43:37 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 16:49:58 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ static t_list_head	*get_jobs_list(char **argv)
 	return (list);
 }
 
-int					builtin_bg(char **argv)
+int					builtin_bg(char **argv,
+								__attribute__((unused)) t_array *env)
 {
 	t_list_head	*list;
 	t_list_head	*curr;
@@ -104,7 +105,8 @@ int					builtin_bg(char **argv)
 	return (0);
 }
 
-int					builtin_fg(char **argv)
+int					builtin_fg(char **argv,
+								__attribute__((unused)) t_array *env)
 {
 	t_list_head	*list;
 	t_list_head	*curr;

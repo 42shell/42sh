@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:08:22 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/24 01:07:43 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/07 22:39:17 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 ** '~' should be expanded is if it's at the start of the word.
 */
 
-int		tilde_expand(t_dstr *str, char *home_dir)
+int			tilde_expand(t_dstr *str, char *home_dir)
 {
 	char	*new;
 
@@ -50,27 +50,58 @@ int		tilde_expand(t_dstr *str, char *home_dir)
 ** the token we expand, and we don't want to expand them
 */
 
-int		expand(t_simple_cmd *command, t_env *env)
+static void	expand_token(t_token *token, char *home_dir)
 {
-	int		pos;
-	char	*home_dir;
+	int	pos;
+
+	pos = tilde_expand(token->value, home_dir);
+	param_expand(token->value, pos, false);
+	path_expand(token);
+	remove_quotes(token->value);
+}
+
+static int	expand_token_list(t_token *token_list, char *home_dir)
+{
 	t_token	*cur;
 	t_token *next;
 
-	home_dir = get_env_var("HOME", env);
-	cur = command->args;
+	cur = token_list;
 	while (cur != NULL)
 	{
 		next = cur->next;
 		if (cur->type == WORD)
-		{
-			pos = tilde_expand(cur->value, home_dir);
-			param_expand(cur->value, pos, env, false);
-			path_expand(cur);
-			remove_quotes(cur->value);
-		}
+			expand_token(cur, home_dir);
 		cur = next;
 	}
+	return (0);
+}
+
+static int	expand_redir_list(t_redir *redir_list, char *home_dir)
+{
+	t_redir	*cur;
+	t_redir *next;
+
+	cur = redir_list;
+	while (cur != NULL)
+	{
+		next = cur->next;
+		if (cur->left_op && cur->operator->type != DLESS)
+			expand_token(cur->left_op, home_dir);
+		if (cur->right_op && cur->operator->type != DLESS)
+			expand_token(cur->right_op, home_dir);
+		cur = next;
+	}
+	return (0);
+}
+
+int			expand(t_simple_cmd *command)
+{
+	char *home_dir;
+
+	home_dir = get_var_value("HOME");
+	expand_token_list(command->args, home_dir);
+	expand_token_list(command->assigns, home_dir);
+	expand_redir_list(command->redirs, home_dir);
 	command->is_expand = true;
 	return (0);
 }

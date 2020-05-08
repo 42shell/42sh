@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 19:33:41 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/18 14:28:19 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/05 18:49:49 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,19 @@ size_t			hash_string(const char *s)
 ** Returns a pair from the bucket that matches key or NULL if no pair matches.
 */
 
-static t_pair	*get_pair(t_bucket *bucket, const char *key)
+t_pair			*get_pair(t_pair *bucket, const char *key)
 {
-	size_t	i;
 	t_pair	*pair;
 
-	if (bucket->size == 0)
+	if (bucket == NULL)
 		return (NULL);
-	pair = bucket->pairs;
-	i = 0;
-	while (i < bucket->size)
+	pair = bucket;
+	while (pair)
 	{
-		if (pair->key != NULL && pair->value != NULL)
+		if (pair->key != NULL)
 			if (ft_strcmp(pair->key, key) == 0)
 				return (pair);
-		pair++;
-		i++;
+		pair = pair->next;
 	}
 	return (NULL);
 }
@@ -63,7 +60,7 @@ static t_pair	*get_pair(t_bucket *bucket, const char *key)
 void			*ht_get(const t_ht *map, const char *key)
 {
 	size_t		index;
-	t_bucket	*bucket;
+	t_pair		*bucket;
 	t_pair		*pair;
 
 	index = hash_string(key) % map->size;
@@ -81,7 +78,7 @@ void			*ht_get(const t_ht *map, const char *key)
 bool			ht_exists(const t_ht *map, const char *key)
 {
 	size_t		index;
-	t_bucket	*bucket;
+	t_pair		*bucket;
 	t_pair		*pair;
 
 	index = hash_string(key) % map->size;
@@ -98,8 +95,7 @@ bool			ht_exists(const t_ht *map, const char *key)
 
 void			ht_put(t_ht *map, const char *key, void *value)
 {
-	t_bucket	*bkt;
-	t_pair		*tmp_pairs;
+	t_pair		*bkt;
 	t_pair		*pair;
 
 	bkt = &(map->buckets[hash_string(key) % map->size]);
@@ -109,18 +105,12 @@ void			ht_put(t_ht *map, const char *key, void *value)
 		pair->value = value;
 		return ;
 	}
-	if (bkt->size == 0)
+	if (bkt->key != NULL)
 	{
-		bkt->pairs = ft_xmalloc(sizeof(t_pair));
-		bkt->size = 1;
+		pair = ft_xmalloc(sizeof(t_pair));
+		*(pair) = *(bkt);
+		bkt->next = pair;
 	}
-	else
-	{
-		tmp_pairs = ft_xmalloc(++bkt->size * sizeof(t_pair));
-		ft_memcpy(tmp_pairs, bkt->pairs, (bkt->size - 1) * sizeof(t_pair));
-		bkt->pairs = tmp_pairs;
-	}
-	pair = &(bkt->pairs[bkt->size - 1]);
-	pair->key = ft_strdup(key);
-	pair->value = value;
+	bkt->key = ft_strdup(key);
+	bkt->value = value;
 }

@@ -94,6 +94,8 @@ for file in "$DIR/bash/setenv"*
 do
 	file="$(basename "$file")"
 	"$SED" -n -E -i "/test.*=/p" "$DIR/42sh/$file" "$DIR/bash/$file"
+	sort -o "$DIR/42sh/$file" "$DIR/42sh/$file"
+	sort -o "$DIR/bash/$file" "$DIR/bash/$file"
 done
 
 EXIT_ST=0

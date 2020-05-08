@@ -45,6 +45,7 @@ SRC_BUILTINS    :=	builtins.c\
 					builtin_utils.c\
 					cd.c\
 					cd_utils.c\
+					var_builtins.c\
 					jobs.c\
 					env.c\
 					fgbg.c
@@ -56,9 +57,13 @@ SRC_COMPLETE    := get_autocomplete_list.c\
                    utils.c
 SRC_COMPLETE    := $(addprefix complete/,$(SRC_COMPLETE))
 
-SRC_ENV		    := env_dup.c\
-                   env_utils.c
-SRC_ENV    		:= $(addprefix env/,$(SRC_ENV))
+SRC_VARIABLES	:= env_dup.c\
+                   env_utils.c\
+				   export_env.c\
+				   var_utils.c\
+				   special_params.c\
+				   variables.c
+SRC_VARIABLES	:= $(addprefix variables/,$(SRC_VARIABLES))
 
 SRC_EXEC        := eval_command.c\
 				   execute.c\
@@ -112,23 +117,22 @@ SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
 
 SRC_SHELL       := del.c\
                    init.c\
+                   main.c\
 				   signal.c\
-				   input.c\
-                   main.c
+				   input.c
 SRC_SHELL       := $(addprefix shell/,$(SRC_SHELL))
 
 SRC_UTILS      := str_utils.c\
 				  array_utils.c\
 				  path_utils.c\
                   ft_mktemp.c\
-                  get_opt.c\
-				  var_utils.c
+                  get_opt.c
 SRC_UTILS      := $(addprefix utils/,$(SRC_UTILS))
 
 SRC_PATH        := src
 SRC_NAME        := $(SRC_BUILTINS)\
 				   $(SRC_COMPLETE)\
-				   $(SRC_ENV)\
+				   $(SRC_VARIABLES)\
                    $(SRC_EXEC)\
                    $(SRC_JOB)\
                    $(SRC_EXPANSION)\

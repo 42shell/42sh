@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/11 13:51:04 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/06 22:15:43 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static char	*cache_search(char *command)
 	return (ret);
 }
 
-char		*get_exec_path(char *command, t_env *env)
+char		*get_exec_path(char *command, t_array *env)
 {
 	char		**path;
 	char		*ret;
@@ -44,8 +44,7 @@ char		*get_exec_path(char *command, t_env *env)
 	path = NULL;
 	if ((ret = cache_search(command)))
 		return (ft_strdup(ret));
-	else if (ft_strchr(command, '/')
-	&& (stat(command, &b) == 0 && (S_IXUSR & b.st_mode) && !S_ISDIR(b.st_mode)))
+	else if (ft_strchr(command, '/') && (stat(command, &b) == 0))
 		ret = ft_strdup(command);
 	else if ((path = split_path(get_env_var("PATH", env))))
 	{

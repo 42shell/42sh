@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 14:02:44 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/11 13:42:07 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/05 16:56:10 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*get_pwd(void)
 	static char	buf[PATH_MAX + 1];
 	char		*pwd;
 
-	pwd = get_env_var("PWD", g_env);
+	pwd = get_var_value("PWD");
 	if (pwd == NULL)
 	{
 		if (getcwd(buf, PATH_MAX + 1) == NULL)
@@ -38,7 +38,7 @@ char	*get_home_dir(void)
 {
 	char *home;
 
-	home = get_env_var("HOME", g_env);
+	home = get_var_value("HOME");
 	if (home == NULL)
 		write(2, "42sh: cd: HOME not set\n", 23);
 	return (ft_strdup(home));
