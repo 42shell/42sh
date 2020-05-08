@@ -17,9 +17,13 @@ addons:
       - gcc
       - libncurses-dev
       - tcsh
+      - ruby
+      - ruby-bundler
+      - ruby-dev
 
 install: make -j3
 script:
   - tests/test.sh
+  - tests/norminette.sh
   - gcov --version
 after_success: bash <(curl -s https://codecov.io/bash)
