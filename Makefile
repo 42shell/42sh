@@ -47,7 +47,8 @@ SRC_BUILTINS    :=	builtins.c\
 					cd_utils.c\
 					var_builtins.c\
 					jobs.c\
-					env.c
+					env.c\
+					fgbg.c
 SRC_BUILTINS    := $(addprefix builtins/,$(SRC_BUILTINS))
 
 SRC_COMPLETE    := get_autocomplete_list.c\
@@ -76,10 +77,12 @@ SRC_EXEC        := $(addprefix execution/,$(SRC_EXEC))
 
 SRC_JOB       	:= launch_job.c\
 				   launch_process.c\
+				   job_current.c\
 				   job_control.c\
 				   job_get_status.c\
 				   job_set_status.c\
 				   job_print.c\
+				   job_format.c\
 				   job_utils.c\
 				   job_new_del.c
 SRC_JOB			:= $(addprefix job_control/,$(SRC_JOB))

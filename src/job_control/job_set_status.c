@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/07 17:06:08 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 16:47:45 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,12 @@ void	mark_job_as_running(t_job *job)
 
 void	set_process_status(t_process *process, int status)
 {
-	int	signal;
-
 	process->status = status;
 	if (WIFSTOPPED(status))
-		process->stopped = 1;
+	{
+		process->stopped = true;
+		process->signaled = WSTOPSIG(process->status);
+	}
 	else
 	{
 		process->done = true;
@@ -45,10 +46,10 @@ void	set_process_status(t_process *process, int status)
 			g_last_exit_st = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
 		{
-			signal = WTERMSIG(status);
+			process->signaled = WTERMSIG(process->status);
 			if (process->stdout == 1)
-				g_last_exit_st = signal + 128;
-			if (signal != 13 && signal != 2)
+				g_last_exit_st = process->signaled + 128;
+			if (process->signaled != 13 && process->signaled != 2)
 				ft_dprintf(2, "%d: Terminated by signal %d.\n",
 				(int)process->pid, WTERMSIG(process->status));
 		}

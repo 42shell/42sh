@@ -23,6 +23,7 @@ typedef struct			s_process
 	int					stdin;
 	int					stdout;
 	int					status;
+	int					signaled;
 	bool				stopped;
 	bool				done;
 }						t_process;
@@ -41,6 +42,13 @@ typedef struct			s_job
 	bool				bg;
 	int					id;
 }						t_job;
+
+/*
+** A stack in which the first element is always the last job stopped
+** while it was in the foreground or started in the background
+*/
+
+t_list_head				*g_curr_job;
 
 /*
 ** launch job/process
@@ -76,10 +84,19 @@ bool				job_is_done(t_job *job);
 bool				job_is_stopped(t_job *job);
 
 /*
+** current job stack related
+*/
+
+bool				is_current_job(t_job *job);
+bool				is_previous_job(t_job *job);
+t_list_head			*get_job_current_list_elem(t_job *job);
+void				remove_current_list_elem(t_list_head *elem);
+void				update_curr_job(t_job *job);
+
+/*
 ** job utils
 */
 
-void				update_curr_ptr(t_job *job);
 t_job				*get_job(pid_t pgid);
 void				add_job(t_job *job);
 void				add_process(t_process *process);
@@ -89,8 +106,11 @@ void				remove_job_from_list(pid_t pgid);
 ** job display
 */
 
-t_dstr				*format_command(t_command *command, t_dstr *buf);
-void				print_job(t_job *job);
+char				*get_job_format(t_job *job);
+char				*get_process_format(t_process *process);
+t_dstr				*format_command(t_dstr *buf, t_command *command);
+void				format_simple_command(t_dstr *buf, t_simple_cmd *command);
+void				print_job(t_job *job, bool print_command);
 void				print_job_long(t_job *job);
 
 /*

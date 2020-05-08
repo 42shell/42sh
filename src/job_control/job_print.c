@@ -6,13 +6,13 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/06 18:12:03 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 16:46:58 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-static void	format_simple_command(t_simple_cmd *command, t_dstr *buf)
+void		format_simple_command(t_dstr *buf, t_simple_cmd *command)
 {
 	t_redir		*redir;
 	t_token		*arg;
@@ -36,7 +36,7 @@ static void	format_simple_command(t_simple_cmd *command, t_dstr *buf)
 	}
 }
 
-t_dstr		*format_command(t_command *command, t_dstr *buf)
+t_dstr		*format_command(t_dstr *buf, t_command *command)
 {
 	enum e_token_type connector;
 
@@ -44,7 +44,7 @@ t_dstr		*format_command(t_command *command, t_dstr *buf)
 		return (NULL);
 	if (command->type == CONNECTION)
 	{
-		format_command(command->value.connection->left, buf);
+		format_command(buf, command->value.connection->left);
 		connector = command->value.connection->connector;
 		if (connector == AND_IF)
 			ft_dstr_append(buf, " && ");
@@ -52,90 +52,61 @@ t_dstr		*format_command(t_command *command, t_dstr *buf)
 			ft_dstr_append(buf, " || ");
 		else if (connector == PIPE)
 			ft_dstr_append(buf, " | ");
-		format_command(command->value.connection->right, buf);
+		format_command(buf, command->value.connection->right);
 	}
 	else if (command->type == SIMPLE)
-		format_simple_command(command->value.simple, buf);
+		format_simple_command(buf, command->value.simple);
 	return (buf);
-}
-
-void		format_process_long(t_process *process, t_dstr *buf)
-{
-	char	pid[10];
-	char	sig[10];
-	char	exit_st[10];
-
-	ft_itoa(process->pid, pid);
-	ft_dstr_append(buf, pid);
-	ft_dstr_append(buf, " ");
-	if (WIFEXITED(process->status))
-	{
-		ft_itoa(WEXITSTATUS(process->status), exit_st);
-		ft_dstr_append(buf, "Exit ");
-		ft_dstr_append(buf, exit_st);
-		ft_dstr_append(buf, "       ");
-	}
-	else if (WIFSTOPPED(process->status))
-	{
-		ft_dstr_append(buf, "Stopped ");
-		ft_itoa(WSTOPSIG(process->status), sig);
-		ft_dstr_append(buf, sig);
-		ft_dstr_append(buf, "   ");
-	}
-	else
-		ft_dstr_append(buf, "Running       ");
-	if (process->stdin != 0)
-		ft_dstr_append(buf, "| ");
-	format_command(process->command, buf);
 }
 
 void		print_job_long(t_job *job)
 {
-	t_dstr		*buf;
+	t_dstr		*command_format;
+	char		*process_format;
 	t_process	*process;
-	char		*curr;
 
-	buf = ft_dstr_new(32);
+	if (!job)
+		return ;
+	print_job(job, false);
+	command_format = ft_dstr_new(64);
 	process = job->processes;
 	while (process)
 	{
-		format_process_long(process, buf);
-		if (process->next)
-			ft_dstr_append(buf, "\n       ");
+		process_format = get_process_format(process);
+		if (process->stdin != 0)
+			ft_dstr_append(command_format, "| ");
+		format_command(command_format, process->command);
+		ft_printf("     %-30s %s\n", process_format, command_format->str);
+		ft_dstr_clear(command_format, 64);
+		free(process_format);
 		process = process->next;
 	}
-	if (job == g_shell.curr_job)
-		curr = "+";
-	else if (job == g_shell.prev_job)
-		curr = "-";
-	else
-		curr = " ";
-	ft_printf("[%d]%s   %s\n", job->id + 1, curr, buf->str);
-	ft_dstr_del(&buf);
+	ft_dstr_del(&command_format);
 }
 
-
-void		print_job(t_job *job)
+void		print_job(t_job *job, bool print_command)
 {
-	t_dstr	*buf;
-	char	*status_str;
+	t_dstr	*command_format;
+	char	*job_format;
 	char	*curr;
-	
-	buf = ft_dstr_new(32);
-	status_str = NULL;
-	if (job_is_done(job))
-		status_str = "Done";
-	else if (job_is_stopped(job))
-		status_str = "Stopped";
-	else
-		status_str = "Running";
-	if (job == g_shell.curr_job)
+
+	if (!job)
+		return ;
+	if (is_current_job(job))
 		curr = "+";
-	else if (job == g_shell.prev_job)
+	else if (is_previous_job(job))
 		curr = "-";
 	else
 		curr = " ";
-	format_command(job->command, buf);
-	ft_printf("[%d]%s %-20s %s\n", job->id + 1, curr, status_str, buf->str);
-	ft_dstr_del(&buf);
+	job_format = get_job_format(job);
+	if (print_command)
+	{
+		command_format = ft_dstr_new(64);
+		format_command(command_format, job->command);
+	}
+	ft_printf("[%d]%s %-30s %s\n", job->id + 1, curr, job_format,
+	print_command ? command_format->str : "");
+	if (print_command)
+		ft_dstr_del(&command_format);
+	free(job_format);
 }

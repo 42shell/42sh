@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/07 16:16:35 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 16:49:12 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,43 @@ static void	increase_shlvl(void)
 	set_var("SHLVL", ft_itoa(shlvl_int, buf), V_EXPORT);
 }
 
+static int	check_bin_file(char *filename)
+{
+	int		fd;
+	char	buf[80];
+	int		i;
+
+	i = 0;
+	if ((fd = open(filename, O_RDONLY)) == -1 || read(fd, buf, 80) == -1)
+	{
+		ft_dprintf(STDERR_FILENO, "42sh: %s: unable to read file\n");
+		close(fd);
+		return (-1);
+	}
+	while (i < 79 && buf[i] && buf[i] != '\n')
+		i++;
+	if (buf[i] == 0)
+	{
+		ft_dprintf(STDERR_FILENO,
+		"42sh: %s: cannot execute binary file\n", filename);
+		close(fd);
+		return (-1);
+	}
+	close(fd);
+	return (0);
+}
+
 static int	parse_args(int argc, char **argv)
 {
 	int		fd;
 
 	if (argc > 0)
 	{
+		if (check_bin_file(argv[0]) == -1)
+			exit(1);
 		if ((fd = open(argv[0], O_RDONLY)) == -1)
 		{
-			write(STDERR_FILENO, "42sh: Could not open file\n", 26);
+			write(STDERR_FILENO, "42sh: could not open file\n", 26);
 			exit(1);
 		}
 		g_shell.get_input = &input_batch;
@@ -96,7 +124,6 @@ static void	init_builtins(void)
 
 int			init(int argc, char **argv)
 {
-
 	if (!isatty(STDIN_FILENO))
 	{
 		ft_dprintf(2, "42sh: stdin is not a tty\n");
@@ -109,11 +136,11 @@ int			init(int argc, char **argv)
 	{
 		g_job_control_enabled = true;
 		while (tcgetpgrp(STDIN_FILENO) != (g_shell.pgid = getpgrp()))
-    		kill(-g_shell.pgid, SIGTTIN);
+			kill(-g_shell.pgid, SIGTTIN);
 		init_sig();
 		/* Put ourselves in our own process group. */
 		g_shell.pgid = getpid();
-		if (setpgid (g_shell.pgid, g_shell.pgid) < 0)
+		if (setpgid(g_shell.pgid, g_shell.pgid) < 0)
 		{
 			ft_dprintf(2, "42sh: Couldn't put the shell in its own process group\n");
 			exit(1);

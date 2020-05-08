@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/07 15:32:39 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 16:46:19 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	notif_jobs(void)
 		if (job_is_done(job))
 		{
 			if (job->bg)
-				print_job(job);
+				print_job(job, true);
 			remove_job_from_list(job->id);
 			process_del(&job->processes);
 			command_del(&job->command);
@@ -33,9 +33,8 @@ void	notif_jobs(void)
 		}
 		else if (job_is_stopped(job) && !job->notified)
 		{
-			ft_printf("\n");
-			update_curr_ptr(job);
-			print_job(job);
+			update_curr_job(job);
+			print_job(job, true);
 			job->notified = true;
 		}
 		job = next;
@@ -82,7 +81,7 @@ void	put_job_bg(t_job *job, bool cont)
 
 	job->bg = true;
 	g_last_bg_job_pid = job->pgid;
-	update_curr_ptr(job);
+	update_curr_job(job);
 	if (cont)
 		kill(-job->pgid, SIGCONT);
 }

@@ -16,7 +16,7 @@
 ** add a new entry after the specified list head
 */
 
-void	ft_list_add(void *data, t_list_head *head)
+void	ft_list_add(void *data, t_list_head *head) //<->
 {
 	t_list_head *new;
 

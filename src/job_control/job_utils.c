@@ -12,14 +12,6 @@
 
 #include "shell.h"
 
-void		update_curr_ptr(t_job *job)
-{
-	if (g_shell.curr_job == job)
-		return ;
-	g_shell.prev_job = g_shell.curr_job;
-	g_shell.curr_job = job;
-}
-
 void		add_job(t_job *job)
 {
 	job->next = g_shell.jobs;
@@ -38,8 +30,9 @@ void		add_process(t_process *process)
 
 void		remove_job_from_list(int job_id)
 {
-	t_job	*job;
-	t_job	*prev;
+	t_job		*job;
+	t_job		*prev;
+	t_list_head	*curr;
 
 	prev = NULL;
 	job = g_shell.jobs;
@@ -47,13 +40,13 @@ void		remove_job_from_list(int job_id)
 	{
 		if (job->id == job_id)
 		{
-			if (g_shell.prev_job && g_shell.prev_job == job)
-				g_shell.prev_job = NULL;
-			if (g_shell.curr_job && g_shell.curr_job == job)
+			if ((curr = get_job_current_list_elem(job)))
 			{
-				g_shell.curr_job = g_shell.prev_job;
-				g_shell.prev_job = NULL;
+				remove_current_list_elem(curr);
+				free(curr);
 			}
+			if (g_curr_job && g_curr_job->next == g_curr_job)
+				ft_memdel((void **)&g_curr_job);
 			if (prev)
 				prev->next = job->next;
 			else

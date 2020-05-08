@@ -104,8 +104,6 @@ typedef struct			s_shell
 	bool				interactive_mode;
 	t_input_func		get_input;
 	t_job				*jobs;
-	t_job				*curr_job;
-	t_job				*prev_job;
 	pid_t				pgid;
 	struct termios		tmodes;
 	t_ht				*vars;
