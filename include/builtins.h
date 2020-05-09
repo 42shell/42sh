@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:28:09 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/07 16:25:00 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/09 15:27:38 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,6 @@ int			remove_dotdots(char *curpath);
 */
 
 bool		is_builtin(char *str);
+int			exec_command_env(char **argv, t_array *env);
 
 #endif

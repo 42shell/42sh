@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/24 01:05:43 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/09 15:25:18 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ static pid_t	fork_child(int in, int out, int fd_to_close)
 
 	if ((pid = fork()) == -1)
 	{
-		kill(0, SIGABRT);//printf
+		kill(0, SIGABRT);
+		ft_dprintf(2, "42sh: Failed to fork, aborting\n");
 		return (-1);
 	}
 	else if (pid == 0)

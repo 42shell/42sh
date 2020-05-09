@@ -1,41 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   job_get_status.c                                   :+:      :+:    :+:   */
+/*   exec_command_env.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/09 15:29:28 by fratajcz         ###   ########.fr       */
+/*   Created: 2020/05/09 15:30:17 by fratajcz          #+#    #+#             */
+/*   Updated: 2020/05/09 15:30:18 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-bool	job_is_stopped(t_job *job)
+int			exec_command_env(char **argv, t_array *env)
 {
-	t_process	*process;
+	pid_t		pid;
+	int			status;
 
-	process = job->processes;
-	while (process)
+	pid = fork();
+	if (pid == 0)
 	{
-		if (!process->done && !process->stopped)
-			return (false);
-		process = process->next;
+		if ((execve(argv[0], argv, (char **)env->array) == -1))
+		{
+			ft_dprintf(2, "env: %s: No such file or directory\n", argv[0]);
+			exit(g_last_exit_st);
+		}
+		exit(0);
 	}
-	return (true);
-}
-
-bool	job_is_done(t_job *job)
-{
-	t_process	*process;
-
-	process = job->processes;
-	while (process)
-	{
-		if (!process->done)
-			return (false);
-		process = process->next;
-	}
-	return (true);
+	wait(&status);
+	g_last_exit_st = WIFEXITED(status) ? WEXITSTATUS(status)
+		: g_last_exit_st;
+	return (g_last_exit_st);
 }

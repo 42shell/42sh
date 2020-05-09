@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:50:00 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 17:55:33 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/09 15:31:37 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ static int	get_jobs_options(char **argv, int *options)
 		}
 	}
 	return (ret);
-
 }
 
 static int	print_one_job(t_job *job, int options)

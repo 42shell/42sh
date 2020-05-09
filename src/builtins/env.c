@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 17:03:57 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/07 22:35:59 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/09 15:26:26 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,6 @@
 
 #define EMPTY_ENV 	1
 #define NEW_PATH	2
-
-int			exec_command_env(char **argv, t_array *env)
-{
-	pid_t		pid;
-	int			status;
-
-	pid = fork();
-	if (pid == 0)
-	{
-		if ((execve(argv[0], argv, (char **)env->array) == -1))
-		{
-			ft_dprintf(2, "env: %s: No such file or directory\n", argv[0]);
-			exit(g_last_exit_st);
-		}
-		exit(0);
-	}
-	wait(&status);
-	g_last_exit_st = WIFEXITED(status) ? WEXITSTATUS(status)
-		: g_last_exit_st;
-	return (g_last_exit_st);
-}
 
 int		get_env_options(int argc, char **argv, int *options)
 {

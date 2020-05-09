@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   jobs_utils.c                                       :+:      :+:    :+:   */
+/*   jobs_fgbg_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -25,8 +25,10 @@ t_job		*get_job_by_str(char *str)
 		else if (str[1] == '-')
 		{
 			if (g_curr_job && g_curr_job->next != g_curr_job)
+			{
 				return (g_curr_job->next->next != g_curr_job
 				? g_curr_job->next->next->data : g_curr_job->next->data);
+			}
 			return (NULL);
 		}
 		id = ft_atoi(++str) - 1;
