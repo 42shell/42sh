@@ -12,7 +12,7 @@
 
 #include "shell.h"
 
-static int			continue_and_notif_job(t_job *job, bool bg)
+static int	notif_and_continue_job(t_job *job, bool bg)
 {
 	t_dstr		*command_format;
 
@@ -24,43 +24,46 @@ static int			continue_and_notif_job(t_job *job, bool bg)
 	return (0);
 }
 
-static int			fgbg_internal(char **argv, bool bg)
-{
-	t_list_head	*list;
-	t_list_head	*curr;
+/*
+** argv = argv + 1
+*/
 
-	if (!g_job_control_enabled)
-		return (2);
-	update_status();
-	list = get_fgbg_jobs_list(argv + 1);
-	curr = list->next;
-	while (curr && curr != list)
+static int	fgbg_internal(char **argv, bool bg)
+{
+	t_job	*job;
+
+	if (!*argv)
 	{
-		continue_and_notif_job((t_job *)curr->data, bg);
-		update_status();
-		curr = curr->next;
+		if (!g_curr_job || g_curr_job->next == g_curr_job)
+		{
+			ft_dprintf(2, "42sh: %s: %s: No such job\n",
+			bg ? "bg" : "fg", "current");
+			return (2);
+		}
+		job = (t_job *)g_curr_job->next->data;
 	}
-	if (g_jobspec_error)
+	else if (!(job = get_job_by_str(*argv)))
 	{
 		ft_dprintf(2, "42sh: %s: %s: No such job\n",
-		bg ? "bg" : "fg", g_jobspec_error);
-		ft_memdel((void **)&g_jobspec_error);
-		return (1);
+		bg ? "bg" : "fg", *argv);
+		return (2);
 	}
-	while (list->next != list)
-		ft_list_del(list->next);
-	free(list);
+	notif_and_continue_job(job, bg);
 	return (0);
 }
 
-int					builtin_bg(char **argv, __attribute__((unused))
-								t_array *env)
+int			builtin_bg(char **argv, __attribute__((unused)) t_array *env)
 {
-	return (fgbg_internal(argv, true));
+	if (!g_job_control_enabled)
+		return (2);
+	update_status();
+	return (fgbg_internal(argv + 1, true));
 }
 
-int					builtin_fg(char **argv, __attribute__((unused))
-								t_array *env)
+int			builtin_fg(char **argv, __attribute__((unused)) t_array *env)
 {
-	return (fgbg_internal(argv, false));
+	if (!g_job_control_enabled)
+		return (2);
+	update_status();
+	return (fgbg_internal(argv + 1, false));
 }

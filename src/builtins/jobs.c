@@ -18,30 +18,9 @@
 #define JOBS_R	8
 #define JOBS_S	16
 
-static t_list_head	*get_jobs_list(char **argv, int options)
-{
-	t_list_head	*list;
-	t_list_head	*curr;
-	t_job		*job;
+bool		g_jobspec_error;
 
-	argv++;
-	while (*argv && **argv == '-')
-		argv++;
-	list = get_jobs_jobs_list(argv);
-	curr = list->next;
-	while (curr != list)
-	{
-		job = (t_job *)curr->data;
-		if (((options & JOBS_N) && job->notified == true)
-		|| ((options & JOBS_R) && (job_is_stopped(job) || job_is_done(job)))
-		|| ((options & JOBS_S) && !job_is_stopped(job)))
-			ft_list_del(curr);
-		curr = curr->next;
-	}
-	return (list);
-}
-
-static void			set_option(int *options, char c)
+static void	set_option(int *options, char c)
 {
 	if (c == 'l')
 		*options = ((*options | JOBS_L) & ~JOBS_P);
@@ -55,7 +34,7 @@ static void			set_option(int *options, char c)
 		*options = ((*options | JOBS_S) & ~(JOBS_R | JOBS_N));
 }
 
-static int			get_jobs_options(char **argv, int *options)
+static int	get_jobs_options(char **argv, int *options)
 {
 	int		argc;
 	int		ret;
@@ -77,46 +56,73 @@ static int			get_jobs_options(char **argv, int *options)
 		}
 	}
 	return (ret);
+
 }
 
-static int			print_one_job(t_job *job, int options)
+static int	print_one_job(t_job *job, int options)
 {
-	if (options & JOBS_L)
-		print_job_long(job);
-	else if (options & JOBS_P)
+	if (((options & JOBS_N) && job->notified)
+	|| ((options & JOBS_R) && (job_is_stopped(job) || job_is_done(job)))
+	|| ((options & JOBS_S) && !job_is_stopped(job)))
+		return (0);
+	if (options & JOBS_P)
 		ft_printf("%d\n", job->pgid);
+	else if (options & JOBS_L)
+		print_job_long(job);
 	else
 		print_job(job, true);
 	job->notified = true;
 	return (0);
 }
 
-int					builtin_jobs(char **argv, __attribute__((unused))
-								t_array *env)
+/*
+** argv = argv + number of option arguments
+*/
+
+static int	print_jobs(char **argv, int options)
 {
-	t_list_head	*list;
-	t_list_head	*curr;
+	t_job	*job;
+
+	if (!*argv)
+	{
+		job = g_shell.jobs->next;
+		while (job)
+		{
+			print_one_job(job, options);
+			job = job->next;
+		}
+		return (0);
+	}
+	while (*argv)
+	{
+		if (!(job = get_job_by_str(*argv)))
+		{
+			g_jobspec_error = true;
+			ft_dprintf(2, "42sh: jobs: %s: No such job\n", *argv);
+		}
+		else
+			print_one_job(job, options);
+		argv++;
+	}
+	return (0);
+}
+
+int			builtin_jobs(char **argv, __attribute__((unused)) t_array *env)
+{
 	int			options;
 
 	options = 0;
 	if (!g_job_control_enabled || get_jobs_options(argv, &options) == -1)
 		return (2);
 	update_status();
-	list = get_jobs_list(argv, options);
-	curr = list->next;
-	while (curr != list)
-	{
-		print_one_job((t_job *)curr->data, options);
-		curr = curr->next;
-	}
+	argv++;
+	while (*argv && **argv == '-')
+		argv++;
+	print_jobs(argv, options);
 	if (g_jobspec_error)
 	{
-		ft_dprintf(2, "42sh: jobs: %s: No such job\n", g_jobspec_error);
-		g_jobspec_error = NULL;
+		g_jobspec_error = 0;
 		return (2);
 	}
-	while (list->next != list)
-		ft_list_del(list->next);
-	free(list);
 	return (0);
 }

@@ -32,11 +32,7 @@ int			builtin_jobs(char **argv, t_array *env);
 ** jobs/fgbg utils
 */
 
-char		*g_jobspec_error;
-
 t_job		*get_job_by_str(char *str);
-t_list_head	*get_jobs_jobs_list(char **argv);
-t_list_head	*get_fgbg_jobs_list(char **argv);
 
 /*
 ** cd utils
