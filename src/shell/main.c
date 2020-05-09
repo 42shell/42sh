@@ -45,7 +45,7 @@ int				main_loop(void)
 
 	while (1)
 	{
-		if (g_job_control_enabled && g_shell.jobs)
+		if (g_shell.jobs)
 			notif_jobs();
 		g_parser.status = NOERR;
 		g_shell.get_input(PS1, false);
