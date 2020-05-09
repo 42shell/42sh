@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 16:46:19 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/09 15:26:00 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void	notif_jobs(void)
 		}
 		else if (job_is_stopped(job) && !job->notified)
 		{
-			update_curr_job(job);
 			print_job(job, true);
+			update_curr_job(job);
 			job->notified = true;
 		}
 		job = next;
@@ -72,7 +72,7 @@ void	continue_job(t_job *job, bool bg)
 	if (bg)
 		put_job_bg(job, true);
 	else
-    	put_job_fg(job, true);
+		put_job_fg(job, true);
 }
 
 void	put_job_bg(t_job *job, bool cont)

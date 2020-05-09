@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/06 22:15:43 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 18:22:33 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ char		*get_exec_path(char *command, t_array *env)
 	{
 		while (path && path[i] && (ret = append_filename(path[i++], command)))
 		{
-			if (stat(ret, &b) == 0 && (S_IXUSR & b.st_mode) && !S_ISDIR(b.st_mode))
+			if (stat(ret, &b) == 0 && (S_IXUSR & b.st_mode)
+					&& !S_ISDIR(b.st_mode))
 				break ;
 			ft_memdel((void **)&ret);
 		}

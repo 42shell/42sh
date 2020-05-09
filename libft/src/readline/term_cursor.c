@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 14:59:55 by fratajcz          #+#    #+#             */
-/*   Updated: 2019/12/06 15:01:10 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 18:46:57 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	movcright(void)
 {
 	if (g_rl_posx == g_rl_sizex - 1)
 	{
-		tputs(tgoto(g_rl_caps[C_CH], 0,  0), 1, ft_putc);
+		tputs(tgoto(g_rl_caps[C_CH], 0, 0), 1, ft_putc);
 		if (g_rl_posy < g_rl_sizey - 1)
 		{
 			tputs(g_rl_caps[C_SF], 1, ft_putc);
@@ -35,7 +35,7 @@ void	movcleft(void)
 {
 	if (g_rl_posx == 0)
 	{
-		tputs(tgoto(g_rl_caps[C_CH], 0,  g_rl_sizex - 1), 1, ft_putc);
+		tputs(tgoto(g_rl_caps[C_CH], 0, g_rl_sizex - 1), 1, ft_putc);
 		if (g_rl_posy > 0)
 		{
 			tputs(g_rl_caps[C_SR], 1, ft_putc);

@@ -6,12 +6,11 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 01:18:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2019/12/06 01:18:56 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 17:20:51 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "readline.h"
-#include <stdio.h>
 
 static int	get_prevline_len(void)
 {

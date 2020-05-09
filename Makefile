@@ -47,7 +47,9 @@ SRC_BUILTINS    :=	builtins.c\
 					cd_utils.c\
 					var_builtins.c\
 					jobs.c\
+					jobs_fgbg_utils.c\
 					env.c\
+				    exec_command_env.c\
 					fgbg.c
 SRC_BUILTINS    := $(addprefix builtins/,$(SRC_BUILTINS))
 
@@ -92,6 +94,7 @@ SRC_EXPANSION   := expand.c\
                    quotes.c\
 				   is_match.c\
 				   sort_matches.c\
+				   has_glob_char.c\
 				   path_exp.c
 SRC_EXPANSION   := $(addprefix expansion/,$(SRC_EXPANSION))
 
@@ -100,11 +103,13 @@ SRC_LEXER       := append.c\
                    get_next_token.c\
                    quote.c\
                    token.c\
+				   lx_end.c\
                    utils.c
 SRC_LEXER       := $(addprefix lexer/,$(SRC_LEXER))
 
 SRC_PARSER      := and_or.c\
 				   pipeline.c\
+				   simple_command.c\
 				   command.c\
 				   command_list.c\
                    io_redirect.c\
@@ -115,10 +120,10 @@ SRC_PARSER      := and_or.c\
                    del.c
 SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
 
-SRC_SHELL       := del.c\
-                   init.c\
+SRC_SHELL       := init.c\
                    main.c\
 				   signal.c\
+				   file_is_binary.c\
 				   input.c
 SRC_SHELL       := $(addprefix shell/,$(SRC_SHELL))
 

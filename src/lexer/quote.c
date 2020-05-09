@@ -6,27 +6,11 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 12:05:06 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/10 17:54:36 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 18:28:47 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-
-/*
-int		backslash_newline(void)
-{
-	if (!g_lexer.quote_st
-	&& g_lexer.line[g_lexer.i] == '\\' && g_lexer.line[g_lexer.i + 1] == '\n')
-	{
-		ft_memmove(&g_lexer.line[g_lexer.i],
-					&g_lexer.line[g_lexer.i + 2],
-					ft_strlen(&g_lexer.line[g_lexer.i + 2]) + 1);
-		g_lexer.line_cont = 1;
-		return (1);
-	}
-	return (0);
-}
-*/
 
 int		lx_backslash(void)
 {

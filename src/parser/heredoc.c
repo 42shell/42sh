@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 20:03:18 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/24 01:08:32 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 18:34:56 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static bool		line_eq(char *s1, char *s2)
 	while (*s1 && *s2 && *s1 != '\n' && *s2 != '\n')
 	{
 		if (*s1++ != *s2++)
-			return (false); 
+			return (false);
 	}
 	return (*s1 == *s2);
 }

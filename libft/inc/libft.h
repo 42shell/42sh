@@ -6,7 +6,7 @@
 /*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 16:27:46 by nbousset          #+#    #+#             */
-/*   Updated: 2020/05/06 18:08:49 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 18:51:48 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ void					ft_list_split(t_list_head *head,
 void					ft_list_sort(t_list_head **head,
 						int (*cmp)(void *a, void *b));
 
-
 /*
 **--------------------------Struct array----------------------------------
 */
@@ -64,7 +63,6 @@ typedef struct			s_array
 	size_t				size;
 	size_t				allocated;
 }						t_array;
-
 
 t_array					*array_new(size_t size);
 void					array_realloc(t_array *array);

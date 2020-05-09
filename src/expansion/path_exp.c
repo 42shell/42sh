@@ -12,32 +12,6 @@
 
 #include "shell.h"
 
-bool	has_glob_char(char *str)
-{
-	char	quote_status;
-	bool	bracket_open;
-	int		i;
-
-	quote_status = NONE;
-	i = -1;
-	while (str[++i])
-	{
-		if (quote_start(str, i, &quote_status))
-			continue ;
-		if (quote_status == NONE)
-		{
-			if (str[i] == '*' || str[i] == '?')
-				return (true);
-			if (str[i] == '[' && !bracket_open)
-				bracket_open = true;
-			if (str[i] == ']' && bracket_open)
-				return (true);
-		}
-		quote_stop(str, i, &quote_status);
-	}
-	return (false);
-}
-
 t_array	*get_matches_in_dirs(t_array *directories, char *filename, bool no_dir)
 {
 	DIR				*dirp;

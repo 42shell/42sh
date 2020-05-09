@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 04:05:12 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 21:40:22 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 18:34:00 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ static t_token	*parse_filename(void)
 	filename = g_parser.token;
 	g_parser.token = get_next_token();
 	return (filename);
-
 }
 
 /*

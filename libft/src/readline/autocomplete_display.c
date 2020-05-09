@@ -6,14 +6,14 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/06 11:10:04 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 18:46:27 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "readline.h"
 #include "ft_printf.h"
 
-static int	get_max_len()
+static int	get_max_len(void)
 {
 	int			max;
 	int			len;
@@ -41,11 +41,11 @@ static void	print_list_cols(int max_width, int skip_len)
 	nb_col = g_rl_sizex / max_width;
 	if (nb_col == 0)
 		nb_col = 1;
-	cur =  g_rl_complete.matches->next;
+	cur = g_rl_complete.matches->next;
 	while (cur != g_rl_complete.matches)
 	{
 		i = 0;
-		while (i < nb_col && cur !=  g_rl_complete.matches)
+		while (i < nb_col && cur != g_rl_complete.matches)
 		{
 			ft_printf("%-*s", max_width, (char *)cur->data + skip_len);
 			cur = cur->next;
@@ -72,7 +72,8 @@ void		rl_print_match_list(char *partial_word)
 	movcnl();
 	if (g_rl_complete.match_count >= 100)
 	{
-		ft_printf("Display all %d possibilities? (y or n)", g_rl_complete.match_count);
+		ft_printf("Display all %d possibilities? (y or n)"
+				, g_rl_complete.match_count);
 		if (!y_n_prompt())
 			return ;
 		movcnl();

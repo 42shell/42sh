@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/02 00:41:53 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 18:50:52 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 ** ret macros
 */
 
-# define RL_CONTINUE		0 
+# define RL_CONTINUE		0
 # define RL_INTERRUPT		3
 # define RL_EOF				4
 # define RL_ENTER			10
@@ -172,10 +172,11 @@ struct s_rl_line			g_rl_line;
 ** returns an array of matches which will be displayed.
 */
 
-typedef t_list_head			*(*t_complete_func)(char *context, size_t len, int *count);
+typedef t_list_head			*(*t_complete_func)(char *context, size_t len,
+							int *count);
 typedef	int					(*t_cmp_func)(void *a, void *b);
 
-struct 						s_rl_complete
+struct						s_rl_complete
 {
 	t_complete_func			get_matches;
 	t_list_head				*matches;

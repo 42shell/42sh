@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   autocomplete.h                                     :+:      :+:    :+:   */
+/*   lx_end.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/14 12:28:09 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 17:19:49 by fratajcz         ###   ########.fr       */
+/*   Created: 2020/05/08 18:31:05 by fratajcz          #+#    #+#             */
+/*   Updated: 2020/05/08 18:32:08 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef AUTOCOMPLETE_H
-# define AUTOCOMPLETE_H
+#include "shell.h"
 
-# include "shell.h"
-
-int					*g_comp_list_count;
-
-t_list_head			*get_autocomplete_list(char *context, size_t len,
-					int *count);
-t_list_head			*comp_get_command_list(char *partial);
-t_list_head			*get_file_list(char *partial, int flags);
-
-bool				is_cd(char *str, int i);
-bool				is_exec(char *path);
-bool				is_dir(char *path);
-
-#endif
+int			lx_end(void)
+{
+	if (!g_lexer.line[g_lexer.i])
+	{
+		g_lexer.end_of_input = 1;
+		if (g_lexer.token && !g_lexer.quote_st && g_lexer.nl_found)
+		{
+			delim_token();
+			g_lexer.nl_found = 0;
+		}
+		return (1);
+	}
+	return (0);
+}

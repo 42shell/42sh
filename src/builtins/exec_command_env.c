@@ -1,19 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   del.c                                              :+:      :+:    :+:   */
+/*   exec_command_env.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/25 16:54:19 by fratajcz         ###   ########.fr       */
+/*   Created: 2020/05/09 15:30:17 by fratajcz          #+#    #+#             */
+/*   Updated: 2020/05/09 15:30:18 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-void		del()
+int			exec_command_env(char **argv, t_array *env)
 {
-	//free_stuff()
-	rl_del();
+	pid_t		pid;
+	int			status;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		if ((execve(argv[0], argv, (char **)env->array) == -1))
+		{
+			ft_dprintf(2, "env: %s: No such file or directory\n", argv[0]);
+			exit(g_last_exit_st);
+		}
+		exit(0);
+	}
+	wait(&status);
+	g_last_exit_st = WIFEXITED(status) ? WEXITSTATUS(status)
+		: g_last_exit_st;
+	return (g_last_exit_st);
 }

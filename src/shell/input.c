@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 19:37:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/22 18:35:39 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 18:14:19 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,28 +25,22 @@ int			remove_escaped_newlines(char *line, bool ignore_quotes)
 		{
 			i++;
 			if (line[i] == '\n')
-				ft_memmove(&line[i - 1], &line[i + 1], ft_strlen(&line[i + 1]) + 1);
+				ft_memmove(&line[i - 1], &line[i + 1],
+						ft_strlen(&line[i + 1]) + 1);
 		}
-		else if (!ignore_quotes && line[i] == SQUOTE)
+		else if (!ignore_quotes && (line[i] == SQUOTE || line[i] == DQUOTE))
 		{
-			if (quote == SQUOTE)
-				quote = 0;
-			else if (quote == 0)
-				quote = SQUOTE;
-		}
-		else if (!ignore_quotes && line[i] == DQUOTE)
-		{
-			if (quote == DQUOTE)
-				quote = 0;
-			else if (quote == 0)
-				quote = DQUOTE;
+			if (quote == NONE)
+				quote = line[i];
+			else if (quote == line[i])
+				quote = NONE;
 		}
 		i++;
 	}
 	return (0);
 }
 
-char		*get_line()
+char		*get_line(void)
 {
 	char	c;
 	int		ret;
@@ -80,11 +74,11 @@ int			input_batch(const char *prompt, bool heredoc)
 	(void)prompt;
 	if (!(line = get_line()))
 		exit(1);
-	if (!*line)//ctrl-C || ctrl-D
+	if (!*line)
 	{
 		free(line);
 		if (!g_lexer.line)
-			exit(0);//builtin_exit()
+			builtin_exit(NULL, NULL);
 		return (INPUT_EOF);
 	}
 	if (g_lexer.line)
@@ -100,28 +94,30 @@ int			input_batch(const char *prompt, bool heredoc)
 	return (0);
 }
 
+static int	handle_ctrl_c_d(void)
+{
+	if (g_rl_last_ret == RL_INTERRUPT)
+	{
+		g_parser.status = USER_ABORT;
+		ft_memdel((void **)&g_lexer.line);
+	}
+	if (g_rl_last_ret == RL_EOF)
+		if (!g_lexer.line)
+			builtin_exit(NULL, NULL);
+	return (g_rl_last_ret == RL_EOF ? INPUT_EOF : INPUT_INT);
+}
+
 int			input_interactive(const char *prompt, bool heredoc)
 {
 	char	*line;
 	char	*tmp;
 
 	if (!(line = readline(prompt)))
-		exit(1);//error()
-	if (!*line)//ctrl-C || ctrl-D
+		exit(1);
+	if (!*line)
 	{
 		free(line);
-		if (g_rl_last_ret == RL_INTERRUPT)
-		{
-			g_parser.status = USER_ABORT;
-			ft_memdel((void **)&g_lexer.line);
-		}
-		if (g_rl_last_ret == RL_EOF)
-		{
-			//??
-			if (!g_lexer.line)
-				exit(0);//builtin_exit()
-		}
-		return (g_rl_last_ret == RL_EOF ? INPUT_EOF : INPUT_INT);
+		return (handle_ctrl_c_d());
 	}
 	if (g_lexer.line)
 	{

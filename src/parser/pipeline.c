@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 04:37:16 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 00:09:03 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 18:35:05 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** pipeline     : command
 **              | command pipe_list
 **
-** pipe_list    : '|' linebreak command pipe_list 
+** pipe_list    : '|' linebreak command pipe_list
 **              | EMPTY
 **
 **

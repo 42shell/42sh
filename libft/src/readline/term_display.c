@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/07 17:55:41 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 18:47:08 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** int		tputnstr(char *str, size_t n)
 ** {
 ** 	size_t	len;
-** 
+**
 ** 	len = 0;
 ** 	while (*str && n--)
 ** 	{

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/09 21:41:54 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/08 18:29:08 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static t_token	*return_token(void)
 {
 	t_token	*ret;
 
-	if (g_lexer.token_delimited) //a token has been delimited
+	if (g_lexer.token_delimited)
 	{
 		ret = g_lexer.token;
 		g_lexer.token = NULL;
@@ -53,15 +53,15 @@ static t_token	*return_token(void)
 		g_lexer.quote_st = 0;
 		return (ret);
 	}
-	else //end of input has been reached and last delimited token has been returned
+	else
 	{
 		g_lexer.end_of_input = false;
-		if (!g_lexer.nl_found) //escaped newline, quotes... the current token has not been delim
+		if (!g_lexer.nl_found)
 		{
 			g_lexer.line_cont = 1;
 			return (get_next_token());
 		}
-		g_lexer.nl_found = 0; //normal end of line
+		g_lexer.nl_found = 0;
 		g_lexer.quote_st = 0;
 		g_lexer.token = NULL;
 		return (NULL);
