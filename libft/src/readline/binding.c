@@ -14,12 +14,20 @@
 
 static void	init_keycaps(void)
 {
-	strcpy((char *)&g_rl_keys[K_DEL], tgetstr("kD", NULL));
-	strcpy((char *)&g_rl_keys[K_LEFT], tgetstr("kl", NULL));
-	strcpy((char *)&g_rl_keys[K_RIGHT], tgetstr("kr", NULL));
-	strcpy((char *)&g_rl_keys[K_UP], tgetstr("ku", NULL));
-	strcpy((char *)&g_rl_keys[K_DOWN], tgetstr("kd", NULL));
-	strcpy((char *)&g_rl_keys[K_HOME], tgetstr("kh", NULL));
+	char	*str;
+
+	if ((str = tgetstr("kD", NULL)))
+		strcpy((char *)&g_rl_keys[K_DEL], str);
+	if ((str = tgetstr("kl", NULL)))
+		strcpy((char *)&g_rl_keys[K_LEFT], str);
+	if ((str = tgetstr("kr", NULL)))
+		strcpy((char *)&g_rl_keys[K_RIGHT], str);
+	if ((str = tgetstr("ku", NULL)))
+		strcpy((char *)&g_rl_keys[K_UP], str);
+	if ((str = tgetstr("kd", NULL)))
+		strcpy((char *)&g_rl_keys[K_DOWN], str);
+	if ((str = tgetstr("kh", NULL)))
+		strcpy((char *)&g_rl_keys[K_HOME], str);
 }
 
 static void	init_keys(void)

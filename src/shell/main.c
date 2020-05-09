@@ -12,8 +12,6 @@
 
 #include "shell.h"
 
-extern int g_exec_status;
-
 t_command		*get_command_list(void)
 {
 	t_command *command_list;
@@ -51,9 +49,7 @@ int				main_loop(void)
 		g_shell.get_input(PS1, false);
 		if ((g_parser.token = get_next_token())
 		&& (command_list = get_command_list()))
-		{
 			eval_command_list(command_list);
-		}
 		if (g_shell.interactive_mode && g_lexer.line)
 		{
 			g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;

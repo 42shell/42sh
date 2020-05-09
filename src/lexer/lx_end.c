@@ -14,7 +14,7 @@
 
 int			lx_end(void)
 {
-	if (!g_lexer.line[g_lexer.i])
+	if (!g_lexer.line[g_lexer.i] || g_lexer.nl_found)
 	{
 		g_lexer.end_of_input = 1;
 		if (g_lexer.token && !g_lexer.quote_st && g_lexer.nl_found)
