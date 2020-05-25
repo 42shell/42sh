@@ -6,11 +6,13 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 18:22:33 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/25 02:46:23 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
+
+static t_ht	*g_binaries;
 
 static void	cache_add(char *command, char *path)
 {

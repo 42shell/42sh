@@ -6,11 +6,16 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/16 15:39:06 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/25 02:54:44 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "readline.h"
+
+size_t	g_rl_sizex;
+size_t	g_rl_sizey;
+size_t	g_rl_posx;
+size_t	g_rl_posy;
 
 int		get_cpos(void)
 {

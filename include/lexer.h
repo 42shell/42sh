@@ -81,7 +81,7 @@ typedef struct		s_lexer
 	size_t			i;
 }					t_lexer;
 
-t_lexer				g_lexer;
+extern t_lexer				g_lexer;
 
 t_token				*get_next_token(void);
 int					reset_lexer(void);

@@ -48,7 +48,7 @@ typedef struct			s_job
 ** while it was in the foreground or started in the background
 */
 
-t_list_head				*g_curr_job;
+extern t_list_head				*g_curr_job;
 
 /*
 ** launch job/process

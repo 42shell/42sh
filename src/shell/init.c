@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 18:19:03 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/25 03:05:04 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ static void	init_builtins(void)
 	ht_put(g_builtins, "bg", builtin_bg);
 	ht_put(g_builtins, "jobs", builtin_jobs);
 }
+
+bool		g_job_control_enabled;
 
 int			init(int argc, char **argv)
 {

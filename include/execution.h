@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:00:39 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 17:19:32 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/25 02:46:17 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,8 @@ typedef struct		s_fd_backup
 ** -the table is (should be) flushed when PATH is modified.
 */
 
-t_ht				*g_binaries;
-
-bool				g_job_control_enabled;
-bool				g_already_forked;
+extern bool			g_job_control_enabled;
+extern bool			g_already_forked;
 
 /*
 ** eval tree

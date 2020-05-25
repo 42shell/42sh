@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 18:19:44 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/25 02:51:54 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ typedef struct			s_var
 
 typedef int				(*t_input_func)(const char *, bool);
 
-int						g_last_exit_st;
+extern int						g_last_exit_st;
 
 typedef struct			s_shell
 {
@@ -108,8 +108,8 @@ typedef struct			s_shell
 	t_ht				*vars;
 }						t_shell;
 
-t_shell					g_shell;
-t_ht					*g_builtins;
+extern t_shell					g_shell;
+extern t_ht					*g_builtins;
 
 int						init(int argc, char **argv);
 void					del(void);

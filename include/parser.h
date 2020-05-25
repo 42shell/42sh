@@ -109,7 +109,7 @@ typedef struct					s_parser
 	enum e_parser_status		status;
 }								t_parser;
 
-t_parser						g_parser;
+extern t_parser						g_parser;
 
 t_command						*parse_and_or(void);
 t_command						*parse_pipeline(void);

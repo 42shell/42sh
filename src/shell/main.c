@@ -6,13 +6,17 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 19:37:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/06 19:25:55 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/25 02:50:17 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-extern int g_exec_status;
+int			g_last_exit_st;
+t_shell		g_shell;
+t_lexer		g_lexer;
+t_parser	g_parser;
+t_ht		*g_builtins;
 
 t_command		*get_command_list(void)
 {

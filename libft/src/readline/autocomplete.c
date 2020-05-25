@@ -6,11 +6,13 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/06 11:10:04 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/25 03:00:04 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "readline.h"
+
+struct s_rl_complete g_rl_complete;
 
 static void	free_comp_list(t_list_head **comp_list)
 {

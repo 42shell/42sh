@@ -6,11 +6,28 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 18:45:44 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/25 03:01:01 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "readline.h"
+
+char				*g_rl_caps[CAPS_SIZE];
+unsigned long		g_rl_keys[KEYS_SIZE];
+struct s_rl_key		g_rl_key;
+unsigned long		g_rl_oldkey;
+t_key_func			g_rl_keymap[255];
+struct s_rl_line	g_rl_line;
+const char			*g_rl_prompt;
+int					g_rl_prompt_len;
+bool				g_rl_is_init;
+int					g_rl_error;
+bool				g_rl_retain_nl;
+bool				g_rl_prompt_cr;
+bool				g_rl_line_limit;
+unsigned int		g_rl_line_size_max;
+int					g_rl_last_ret;
+bool				g_rl_hist_doubl;
 
 static char	*rl_return(int ret)
 {
