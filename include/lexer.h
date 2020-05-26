@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 18:31:44 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/26 02:26:04 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ int					lx_word_start(void);
 
 t_token				*token_new(int type);
 void				token_del(t_token **tok);
+void				token_list_del(t_token **token);
 
 bool				is_operator_start(char c);
 bool				is_operator_part(char c);
