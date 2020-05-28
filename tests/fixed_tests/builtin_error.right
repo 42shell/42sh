@@ -25,4 +25,8 @@ getcwd: could not get current dir
 cd: PWD not set
 getcwd: could not get current dir
 ~~~
+setenv PWD; cd .
+cd: PWD not set
+getcwd: could not get current dir
+~~~
 cd: OLDPWD not set
