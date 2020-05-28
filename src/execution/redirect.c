@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 14:52:04 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/03 22:09:01 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/28 21:10:55 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ static int	get_redirected_fd(t_redir *redir)
 	return (ft_atoi(redir->left_op->value->str));
 }
 
+extern char	*g_tmp_file;
+
 int			set_redir(t_simple_cmd *command, bool backup)
 {
 	t_redir	*redir;
@@ -90,6 +92,8 @@ int			set_redir(t_simple_cmd *command, bool backup)
 			return (redir_error(ERROR_REDIR_BAD_FD));
 		else if ((ret = redirect(redir, redirected_fd, backup)) < 0)
 			return (redir_error(ret));
+		if (redir->operator->type == DLESS)
+			unlink(g_tmp_file);
 		redir = redir->next;
 	}
 	return (0);
