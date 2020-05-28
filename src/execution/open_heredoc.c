@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/29 14:38:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/05 17:15:58 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/28 19:57:16 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,11 @@ int		open_heredoc(t_dstr *heredoc)
 	}
 	if (tmp_file == NULL)
 		return (-1);
-	param_expand(heredoc, 0, true);
+	if (param_expand(heredoc, 0, true) == 1)
+	{
+		free(tmp_file);
+		return (ERROR_REDIR_EXPAND);
+	}
 	remove_bslash(heredoc);
 	ft_putstr_fd(heredoc->str, fd);
 	close(fd);

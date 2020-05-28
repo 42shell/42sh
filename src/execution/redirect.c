@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 14:52:04 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/03 22:09:01 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/28 19:57:31 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,11 @@ static int	redirect(t_redir *redir, int redirected_fd, bool backup)
 	}
 	else if ((redirection_fd = get_redirection_fd(redir)) < 0
 	|| !is_valid_fd(redirection_fd))
+	{
+		if (redirection_fd == ERROR_REDIR_EXPAND)
+			return (ERROR_REDIR_EXPAND);
 		return (redirection_fd == -1 ? ERROR_REDIR_OPEN : ERROR_REDIR_BAD_FD);
+	}
 	if (redirected_fd == redirection_fd)
 		move_fd(&redirection_fd);
 	dup2_and_backup(redirection_fd, redirected_fd, backup);
