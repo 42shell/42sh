@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 19:37:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 18:14:19 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/29 14:46:26 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int			remove_escaped_newlines(char *line, bool ignore_quotes)
 	quote = 0;
 	while (line[i])
 	{
-		if (line[i] == BSLASH && (ignore_quotes ? 1 : quote != SQUOTE))
+		if (line[i] == BSLASH && (ignore_quotes ? 1 : quote != SQUOTE)
+				&& line[i + 1])
 		{
 			i++;
 			if (line[i] == '\n')
