@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 14:02:44 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/05 16:56:10 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/28 20:09:51 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ char	*get_pwd(void)
 	return (pwd);
 }
 
-char	*get_home_dir(void)
+char	*get_home_dir(t_array *env)
 {
 	char *home;
 
-	home = get_var_value("HOME");
+	home = get_env_var("HOME", env);
 	if (home == NULL)
 		write(2, "42sh: cd: HOME not set\n", 23);
 	return (ft_strdup(home));
