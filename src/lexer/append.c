@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 21:27:56 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/09 12:41:12 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/28 18:17:58 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int		lx_operator_next(void)
 {
-	if (g_lexer.token && !g_lexer.quote_st
+	if (g_lexer.token && !g_lexer.quote_st && !g_lexer.brace_open
 	&& (g_lexer.i != 0 ? is_operator_part(g_lexer.line[g_lexer.i - 1]) : 0)
 	&& is_operator_part(g_lexer.line[g_lexer.i])
 	&& is_operator_next(g_lexer.token->value->str, g_lexer.line[g_lexer.i]))
@@ -28,6 +28,19 @@ int		lx_operator_next(void)
 
 int		lx_word_next(void)
 {
+	if (g_lexer.brace_open)
+	{
+		if (g_lexer.line[g_lexer.i] == '}' && g_lexer.brace_quote_st == NONE)
+			g_lexer.brace_open = false;
+	}
+	else if (g_lexer.quote_st == NONE || g_lexer.quote_st == DQUOTE)
+	{
+		if (g_lexer.line[g_lexer.i] == '$'
+				&& g_lexer.line[g_lexer.i + 1] == '{')
+		{
+			g_lexer.brace_open = true;
+		}
+	}
 	if (g_lexer.token)
 	{
 		ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i]);
@@ -57,6 +70,14 @@ int		lx_comment(void)
 
 int		lx_word_start(void)
 {
+	if (g_lexer.quote_st == NONE || g_lexer.quote_st == DQUOTE)
+	{
+		if (g_lexer.line[g_lexer.i] == '$'
+				&& g_lexer.line[g_lexer.i + 1] == '{')
+		{
+			g_lexer.brace_open = true;
+		}
+	}
 	g_lexer.token = token_new(WORD);
 	ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i]);
 	g_lexer.i++;
