@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/25 02:51:22 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/28 18:22:11 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,16 @@
 
 static char		*get_prompt(void)
 {
-	if (g_lexer.quote_st == SQUOTE)
+	if (g_lexer.brace_open)
+	{
+		if (g_lexer.brace_quote_st == SQUOTE)
+			return (PSQ);
+		else if (g_lexer.brace_quote_st == DQUOTE)
+			return (PSD);
+		else
+			return (PSB);
+	}
+	else if (g_lexer.quote_st == SQUOTE)
 		return (PSQ);
 	else if (g_lexer.quote_st == DQUOTE)
 		return (PSD);
