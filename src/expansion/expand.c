@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:08:22 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/07 22:39:17 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/28 19:25:21 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,16 @@ int			tilde_expand(t_dstr *str, char *home_dir)
 ** the token we expand, and we don't want to expand them
 */
 
-static void	expand_token(t_token *token, char *home_dir)
+static int	expand_token(t_token *token, char *home_dir)
 {
 	int	pos;
 
 	pos = tilde_expand(token->value, home_dir);
-	param_expand(token->value, pos, false);
+	if (param_expand(token->value, pos, false) == 1)
+		return (1);
 	path_expand(token);
 	remove_quotes(token->value);
+	return (0);
 }
 
 static int	expand_token_list(t_token *token_list, char *home_dir)
@@ -70,7 +72,8 @@ static int	expand_token_list(t_token *token_list, char *home_dir)
 	{
 		next = cur->next;
 		if (cur->type == WORD)
-			expand_token(cur, home_dir);
+			if (expand_token(cur, home_dir) == 1)
+				return (1);
 		cur = next;
 	}
 	return (0);
@@ -86,22 +89,30 @@ static int	expand_redir_list(t_redir *redir_list, char *home_dir)
 	{
 		next = cur->next;
 		if (cur->left_op && cur->operator->type != DLESS)
-			expand_token(cur->left_op, home_dir);
+			if (expand_token(cur->left_op, home_dir) == 1)
+				return (1);
 		if (cur->right_op && cur->operator->type != DLESS)
-			expand_token(cur->right_op, home_dir);
+			if (expand_token(cur->right_op, home_dir) == 1)
+				return (1);
 		cur = next;
 	}
 	return (0);
 }
+
+extern char *g_expand_error_token;
 
 int			expand(t_simple_cmd *command)
 {
 	char *home_dir;
 
 	home_dir = get_var_value("HOME");
-	expand_token_list(command->args, home_dir);
-	expand_token_list(command->assigns, home_dir);
-	expand_redir_list(command->redirs, home_dir);
+	if (expand_token_list(command->args, home_dir) == 1
+		|| expand_token_list(command->assigns, home_dir) == 1
+		|| expand_redir_list(command->redirs, home_dir) == 1)
+	{
+		ft_dprintf(2, "42sh: %s: bad substitution\n", g_expand_error_token);
+		return (1);
+	}
 	command->is_expand = true;
 	return (0);
 }
