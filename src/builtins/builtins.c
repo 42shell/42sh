@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:07:29 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/07 16:27:35 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/29 02:25:59 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ int		builtin_unsetenv(char **argv, __attribute__((unused)) t_array *env)
 	while (argv[i])
 	{
 		if ((var = ht_get(g_shell.vars, argv[i])) && var->attributes & V_EXPORT)
-			unset_var(argv[i++]);
+			unset_var(argv[i]);
+		i++;
 	}
 	return (0);
 }
