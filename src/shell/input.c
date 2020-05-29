@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 19:37:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/29 14:46:26 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/29 15:46:40 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int			input_batch(const char *prompt, bool heredoc)
 	else
 		g_lexer.line = ft_strdup(line);
 	remove_escaped_newlines(g_lexer.line, heredoc);
+	normalize_lexer_line();
 	free(line);
 	return (0);
 }
@@ -129,6 +130,7 @@ int			input_interactive(const char *prompt, bool heredoc)
 	else
 		g_lexer.line = ft_strdup(line);
 	remove_escaped_newlines(g_lexer.line, heredoc);
+	normalize_lexer_line();
 	free(line);
 	return (0);
 }

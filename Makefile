@@ -123,7 +123,7 @@ SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
 SRC_SHELL       := init.c\
                    main.c\
 				   signal.c\
-				   file_is_binary.c\
+				   utils.c\
 				   input.c
 SRC_SHELL       := $(addprefix shell/,$(SRC_SHELL))
 
