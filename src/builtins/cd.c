@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:50:00 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/07 18:02:02 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/29 02:19:03 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int		get_cd_options(char **argv, int *options)
 {
 	int		argc;
 	int		ret;
-	char	c;
+	int		c;
 
 	argc = 0;
 	ret = 0;
