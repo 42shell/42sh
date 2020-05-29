@@ -63,6 +63,7 @@ int			rl_complete(void)
 	char	*partial_word;
 	char	*lcp;
 
+	lcp = NULL;
 	if (!g_rl_complete.get_matches)
 		return (0);
 	partial_word = get_partial_word();
