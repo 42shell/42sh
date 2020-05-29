@@ -75,3 +75,6 @@ echo '~~~'
 echo 'echo */*/*/*.[co]'
 echo */*/*/*.[co]
 echo '~~~'
+
+echo 'echo **************'
+echo *****************

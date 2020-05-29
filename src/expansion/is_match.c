@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/16 08:31:17 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/17 15:05:50 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/29 14:33:48 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,10 @@ bool		is_match(char *str, char *pat, char quote, bool is_first_char)
 		return (is_match(str + 1, pat + k, quote, false));
 	if (*pat == '*' && quote == NONE)
 	{
-		return (*str == '\0'
-			? is_match(str, pat + 1, quote, is_first_char)
-			: is_match(str, pat + 1, quote, is_first_char)
-				|| is_match(str + 1, pat, quote, false));
+		while (*(pat + 1) == '*')
+			pat++;
+		return (is_match(str, pat + 1, quote, is_first_char)
+				|| (*str != '\0' ? is_match(str + 1, pat, quote, false) : 0));
 	}
 	if (*pat == '?' && quote == NONE)
 		return (*str != '\0' && is_match(str + 1, pat + 1, quote, false));
