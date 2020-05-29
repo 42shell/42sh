@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 17:03:57 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/09 15:26:26 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/29 13:34:33 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,10 @@ int		finish_env(char **argv, int i, t_array *new_env)
 
 	ret = 0;
 	if (argv[i] == NULL)
+	{
 		ret = 127;
+		argv[i] = ft_strdup("");
+	}
 	else if (access(argv[i], F_OK) == -1)
 	{
 		ret = 127;
