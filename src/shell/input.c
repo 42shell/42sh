@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 19:37:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/29 15:46:40 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/29 22:27:29 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ char		*get_line(void)
 	t_dstr	*line;
 
 	line = ft_dstr_new(64);
+	c = 0;
 	while (1)
 	{
 		if ((ret = readc(STDIN_FILENO, &c)) == -1)

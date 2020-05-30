@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 16:36:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/28 19:42:14 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/29 22:46:52 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int			param_expand(t_dstr *str, int start, bool heredoc)
 	g_expand_error_token = ft_strdup(str->str);
 	i = start - 1;
 	quote_status = NONE;
+	var_name = NULL;
 	while (str->str[++i])
 	{
 		if (quote_start(str->str, i, &quote_status))
