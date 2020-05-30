@@ -1,0 +1,2 @@
+42sh: warning: here-document delimited by end-of-file (wanted 'EOF')
+cat: ''$'\n''\'$'\n''ab\'$'\n''cd\'$'\n''a': No such file or directory

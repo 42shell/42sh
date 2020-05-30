@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 20:03:18 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 18:34:56 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/31 00:18:57 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ static int		line_get(void)
 	while (!ft_strchr(g_heredoc_ptr, '\n'))
 	{
 		i = g_heredoc_ptr - g_lexer.line;
+		if (i > ft_strlen(g_lexer.line))
+			i = 0;
 		if ((ret = g_shell.get_input(PSH, true)))
 			return (ret);
 		g_heredoc_ptr = &g_lexer.line[i];
