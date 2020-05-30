@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:08:22 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/28 19:25:21 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/31 00:10:51 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,8 @@ extern char *g_expand_error_token;
 
 int			expand(t_simple_cmd *command)
 {
-	char *home_dir;
+	char	*home_dir;
+	t_redir	*cur;
 
 	home_dir = get_var_value("HOME");
 	if (expand_token_list(command->args, home_dir) == 1
@@ -112,6 +113,17 @@ int			expand(t_simple_cmd *command)
 	{
 		ft_dprintf(2, "42sh: %s: bad substitution\n", g_expand_error_token);
 		return (1);
+	}
+	cur = command->redirs;
+	while (cur)
+	{
+		if (cur->right_op && cur->right_op->next)
+		{
+			token_list_del(&cur->right_op->next);
+			ft_dprintf(2, "42sh: ambiguous redirect\n");
+			return (1);
+		}
+		cur = cur->next;
 	}
 	command->is_expand = true;
 	return (0);

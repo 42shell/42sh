@@ -34,10 +34,13 @@ echo '~~~'
 unsetenv HOME; cd
 echo '~~~'
 
+echo "not a builtin error but whatever"
+cat < *
+echo '~~~'
+
 mkdir error; cd error; rm -rf ../error; cd .; cd ..; unsetenv PWD; cd .; cd ..
 echo '~~~'
 
-echo "setenv PWD; cd ."
 setenv PWD; cd .
 setenv PWD $PWD
 echo '~~~'
