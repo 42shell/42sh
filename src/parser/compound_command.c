@@ -39,16 +39,16 @@ t_command		*parse_term(void)
 {
 	t_command	*term;
 	t_command	*command;
-	int			nl_index;
+	int			sep_index;
 
 	term = parse_and_or();
 	command = term;
 	while (command)
 	{
-		nl_index = g_lexer.i - 1;
+		sep_index = g_lexer.i - 1;
 		command->sep = parse_separator();
 		if (command->sep == NEWLINE)
-			lx_line_insert_char(';', nl_index);
+			lx_line_insert_char(';', sep_index);
 		if (command->sep)
 			command->next = parse_and_or();
 		command = command->next;

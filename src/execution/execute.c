@@ -108,3 +108,10 @@ int		exec_subshell(t_command *command)
 	restore_fds();
 	return (0);
 }
+
+/*
+int		exec_command(t_command *command, int in, int out, int fd_to_close)
+{
+
+}
+*/

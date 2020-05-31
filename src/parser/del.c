@@ -43,7 +43,6 @@ int			command_del(t_command **command)
 {
 	if (!command || !*command)
 		return (0);
-	command_del(&(*command)->next);
 	if ((*command)->type == SIMPLE)
 	{
 		redir_del(&(*command)->value.simple->redirs);
@@ -58,9 +57,9 @@ int			command_del(t_command **command)
 		command_del(&(*command)->value.connection->right);
 		ft_memdel((void **)&(*command)->value.connection);
 	}
-	else if ((*command)->type == SUBSHELL)
+	else if ((*command)->type == SUBSHELL) //compound
 		ft_memdel((void **)&(*command)->value.subshell);
-	redir_del(&(*command)->redir_list);
+	redir_del(&((*command)->redir_list));
 	ft_memdel((void **)command);
 	return (0);
 }

@@ -94,7 +94,8 @@ int				launch_process(t_process *process, int fd_to_close)
 {
 	pid_t	pid;
 
-	if (process->command->type == CONNECTION || process->command->next)
+	if (process->command->type == CONNECTION
+	|| (process->command->flags & CMD_SUBSHELL))
 		return (launch_subshell(process, fd_to_close));
 	if ((pid = fork_child(process->stdin, process->stdout, fd_to_close)) == -1)
 		return (-1);
