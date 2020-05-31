@@ -43,6 +43,11 @@
 # define V_HIDDEN	4
 # define V_SPECIAL	8
 
+/*
+** fix ls |$ cat history
+*/
+int		g_fucking_subshell;
+
 typedef char *(*t_var_value_func)(void);
 typedef int(*t_builtin_func)(char **argv, t_array *temp_env);
 
@@ -60,39 +65,39 @@ typedef struct			s_var
 }						t_var;
 
 /*
+** -recall line with heredoc from history do parse error.
+** -unsetenv boucle inf when unseting non existing var
+** -initialize lcp in rl_complete
+** -pipe line continuation remove \n
+** -env dup invalid read
+** -autcomplete vim /t doesnt complete files ?
+** -readline bindings if term=dumb
+**  term=vt100... disable line edit if term is shit
+**
 ** -fix readline problems
-** 		-rl_del??
 **		-env/termcaps...
 **		-write on 2 ? sounds weird to do that in readline,
 **		 maybe dup2 in shell.get_input
 **		-rigorous testing
 ** -proper init handling
-**		-tty stuff, empty env, job control...
-** -input
-**		-redo input_interactive() properly, EOF and INT handling...
-** -error handling
-**		-^C ^D
-**		-last exit status, close fds... assert everything is perfect
+**		-cleanup ?
 ** -others
-** 		-flush cache table when PATH is modified.
 ** 		-check comments work properly
-** 		-in case of "ls | \n cat", newline is not removed from line before
-**			stored in history
-**		 don t know if it is handled in expand()
-** -leaks
+** -leaks/invalid reads/still reachable
 */
 
 # define INPUT_INT		3
 # define INPUT_EOF		4
 
-# define PS1			"$> "
-# define PS2			"> "
-# define PSQ			"q> "
-# define PSD			"d> "
-# define PSA			"a> "
-# define PSO			"o> "
-# define PSP			"p> "
-# define PSH			"h> "
+# define PS1			"42sh$> "
+# define PS2			"\\$> "
+# define PSQ			"'$> "
+# define PSD			"\"$> "
+# define PSA			"&&$> "
+# define PSO			"||$> "
+# define PSP			"|$> "
+# define PSH			"<<$> "
+# define PSB			"($> "
 
 typedef int				(*t_input_func)(const char *, bool);
 

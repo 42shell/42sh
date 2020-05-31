@@ -13,49 +13,43 @@
 #include "shell.h"
 
 /*
-** and_or       : pipeline and_or_list
-**
-** and_or_list  : AND_IF linebreak pipeline and_or_list
-**              | OR_IF linebreak pipeline and_or_list
-**              | EMPTY
-**
-**
-**                 &&
-**               /   \
-**             ||    test
-**           /    \
-**         ls     cat
+** and_or          :                         pipeline
+**                 | and_or AND_IF linebreak pipeline
+**                 | and_or OR_IF  linebreak pipeline
 */
 
-t_command	*parse_and_or_list(t_command *left_operand)
-{
-	t_command	*and_or;
-	t_command	*right_operand;
-	int			type;
-
-	if (g_parser.token == NULL
-			|| left_operand == NULL
-			|| ((type = g_parser.token->type) != AND_IF && type != OR_IF))
-		return (left_operand);
-	token_del(&g_parser.token);
-	g_parser.token = get_next_token();
-	parse_linebreak(type);
-	right_operand = parse_pipeline();
-	if (right_operand == NULL)
-	{
-		if (g_parser.status == NOERR)
-			g_parser.status = UNEXPECTED_TOKEN;
-		command_del(&left_operand);
-		return (NULL);
-	}
-	and_or = command_new(CONNECTION);
-	and_or->value.connection->connector = type;
-	and_or->value.connection->left = left_operand;
-	and_or->value.connection->right = right_operand;
-	return (parse_and_or_list(and_or));
-}
+/*
+** unexpected token 'EOF' linebreak (null) ?
+*/
 
 t_command	*parse_and_or(void)
 {
-	return (parse_and_or_list(parse_pipeline()));
+	t_command		*and_or;
+	t_command		*node;
+	int				old_linebreak_type;
+
+	if (!(and_or = parse_pipeline()))
+		return (NULL);
+	while (g_parser.token &&
+	(g_parser.token->type == AND_IF || g_parser.token->type == OR_IF))
+	{
+		node = command_new(CONNECTION);
+		node->value.connection->connector = g_parser.token->type;
+		node->value.connection->left = and_or;
+		token_del(&g_parser.token);
+		g_parser.token = get_next_token();
+		old_linebreak_type = g_linebreak_type;
+		g_linebreak_type = node->value.connection->connector;
+		parse_linebreak();
+		g_linebreak_type = old_linebreak_type;
+		if (!(node->value.connection->right = parse_pipeline()))
+		{
+			if (!g_parser.status)
+				g_parser.status = UNEXPECTED_TOKEN;//set_parser_status(int status)
+			command_del(&node);
+			return (NULL);
+		}
+		and_or = node;
+	}
+	return (and_or);	
 }

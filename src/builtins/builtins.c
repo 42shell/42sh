@@ -57,7 +57,8 @@ int		builtin_unsetenv(char **argv, __attribute__((unused)) t_array *env)
 	while (argv[i])
 	{
 		if ((var = ht_get(g_shell.vars, argv[i])) && var->attributes & V_EXPORT)
-			unset_var(argv[i++]);
+			unset_var(argv[i]);
+		i++;
 	}
 	return (0);
 }

@@ -77,13 +77,13 @@ static int	get_redirected_fd(t_redir *redir)
 	return (ft_atoi(redir->left_op->value->str));
 }
 
-int			set_redir(t_simple_cmd *command, bool backup)
+int			set_redir(t_redir *redir_list, bool backup)
 {
 	t_redir	*redir;
 	int		redirected_fd;
 	int		ret;
 
-	redir = command->redirs;
+	redir = redir_list;
 	while (redir)
 	{
 		if ((redirected_fd = get_redirected_fd(redir)) > 255)

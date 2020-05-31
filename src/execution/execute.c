@@ -44,20 +44,23 @@ int			exec_binary(char **argv, t_array *temp_env)
 		ft_dprintf(2, "42sh: %s: command not found\n", argv[0]);
 		exit(127);
 	}
-	if (!(S_IXUSR & b.st_mode))
-		ft_dprintf(2, "42sh: %s: Permission denied\n", argv[0]);
-	else if (S_ISDIR(b.st_mode))
+	if (S_ISDIR(b.st_mode))
 		ft_dprintf(2, "42sh: %s: Is a directory\n", argv[0]);
+	else if (!(S_IXUSR & b.st_mode))
+		ft_dprintf(2, "42sh: %s: Permission denied\n", argv[0]);
 	else
 		ft_dprintf(2, "42sh: %s: cannot execute command\n", argv[0]);
 	exit(126);
 }
 
-int			exec_simple_command(t_simple_cmd *simple)
+int			exec_simple_command(t_command *command)
 {
-	t_array *temp_env;
+	t_simple_cmd	*simple;
+	t_array 		*temp_env;
 
-	if (set_redir(simple, true) != 0)
+	simple = command->value.simple;
+	if (set_redir(command->redir_list, true) != 0
+	|| set_redir(simple->redirs, true) != 0)
 	{
 		restore_fds();
 		return (g_last_exit_st = 1);
@@ -76,6 +79,31 @@ int			exec_simple_command(t_simple_cmd *simple)
 	{
 		set_local_variables(simple);
 		g_last_exit_st = 0;
+	}
+	restore_fds();
+	return (0);
+}
+
+int		exec_subshell(t_command *command)
+{
+	t_command	*ptr;
+	t_job		*job;
+
+	command->flags &= ~CMD_SUBSHELL;
+	if (set_redir(command->redir_list, true) != 0)
+	{
+		restore_fds();
+		return (g_last_exit_st = 1);
+	}
+	ptr = command;
+	while (ptr)
+	{
+		job = job_new(ptr, STDIN_FILENO, STDOUT_FILENO);
+		job->pgid = g_shell.jobs->pgid;
+		add_job(job);
+		eval_command(ptr);
+		wait_for_job(job);
+		ptr = ptr->next;
 	}
 	restore_fds();
 	return (0);

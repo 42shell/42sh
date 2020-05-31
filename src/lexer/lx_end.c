@@ -20,7 +20,7 @@ int			lx_end(void)
 		if (g_lexer.token && !g_lexer.quote_st && g_lexer.nl_found)
 		{
 			delim_token();
-			g_lexer.nl_found = 0;
+			//g_lexer.nl_found = 0;
 		}
 		return (1);
 	}

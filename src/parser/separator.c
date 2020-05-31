@@ -15,21 +15,12 @@
 /*
 ** linebreak		: newline_list
 ** 					| EMPTY
-**
-** get input if empty, last_token_type determine the prompt that
-** readline will display
 */
 
-void		parse_linebreak(int last_token_type)
+int			parse_linebreak(void)
 {
 	parse_newline_list();
-	while (g_parser.status == NOERR && g_parser.token == NULL)
-	{
-		g_lexer.line_cont = last_token_type;
-		g_parser.token = get_next_token();
-		if (g_parser.token != NULL && g_parser.token->type == NEWLINE)
-			token_del(&g_parser.token);
-	}
+	return (0);
 }
 
 /*
@@ -39,40 +30,78 @@ void		parse_linebreak(int last_token_type)
 ** returns true if there was a newline_list, false otherwise
 */
 
-bool		parse_newline_list(void)
+int			parse_newline_list(void)
 {
-	if (g_parser.status != NOERR || g_parser.token == NULL)
-		return (false);
-	while (g_parser.token && g_parser.token->type == NEWLINE)
+	int		nl_index;
+	int		nl_replaced;
+
+	nl_replaced = 0;
+	if (!g_parser.token
+	|| g_parser.token->type != NEWLINE)
+		return (0);
+	while (g_parser.status == NOERR
+	&& g_parser.token && g_parser.token->type == NEWLINE)
 	{
 		token_del(&g_parser.token);
-		g_parser.token = get_next_token();
+		if (g_linebreak_type)
+		{
+			g_lexer.line_cont = g_linebreak_type;
+			nl_index = g_lexer.i - 1;
+		}
+		if ((g_parser.token = get_next_token()) && g_linebreak_type)
+		{
+			if (!nl_replaced)
+			{
+				g_lexer.line[nl_index] = ' ';
+				nl_replaced = 1;
+			}
+			else
+			{
+				ft_memmove(&g_lexer.line[nl_index],
+							&g_lexer.line[nl_index + 1],
+							ft_strlen(&g_lexer.line[nl_index]));
+				g_lexer.i--;
+			}
+		}
 	}
-	return (true);
+	return (1);
 }
 
 /*
-** separator		: separator_op newline_list
+** separator_op     : '&'
+**                  | ';'
+*/
+
+int			parse_separator_op(void)
+{
+	enum	e_token_type type;
+
+	if (!g_parser.token
+	|| (g_parser.token->type != AMPERSAND && g_parser.token->type != SEMI))
+		return (0);
+	type = g_parser.token->type;
+	token_del(&g_parser.token);
+	g_parser.token = get_next_token();
+	return (type);
+}
+
+/*
+** separator		: separator_op linebreak
 ** 					| newline_list
-**
-** returns the separator token type or -1 if error or no separator
 */
 
 int			parse_separator(void)
 {
-	enum e_token_type type;
+	enum	e_token_type type;
 
-	if (g_parser.status != NOERR || g_parser.token == NULL)
-		return (-1);
-	type = g_parser.token->type;
-	if (type != AMPERSAND && type != SEMI)
-		return (-1);
-	token_del(&g_parser.token);
-	g_parser.token = get_next_token();
-	if (parse_newline_list() == false)
+	if (g_parser.token == NULL)
+		return (0);
+	if ((type = parse_separator_op()))
 	{
-		g_parser.status = UNEXPECTED_TOKEN;
-		return (-1);
+		parse_linebreak();
+		return (type);
 	}
-	return (type);
+	if (parse_newline_list())
+		return (NEWLINE);
+	return (0);
 }

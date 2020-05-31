@@ -12,34 +12,29 @@
 
 #include "shell.h"
 
-t_command		*get_command_list(void)
+t_command		*get_complete_command(void)
 {
-	t_command *command_list;
+	t_command	*complete_command;
 
-	command_list = parse_command_list();
-	parse_newline_list();
-	if (g_parser.status != NOERR || g_parser.token != NULL)
+	complete_command = parse_complete_command();
+	if (g_parser.status != NOERR)
 	{
-		parse_error(g_parser.token ? g_parser.token->value->str : "(null)");
-		while (g_parser.token != NULL)
-		{
+		parse_error(g_parser.token ? g_parser.token->value->str : "EOF");
+		complete_command_del(&complete_command);
+		if (g_parser.token != NULL)
 			token_del(&g_parser.token);
-			g_parser.token = get_next_token();
-		}
-		g_parser.status = NOERR;
-		command_list_del(&command_list);
 		g_parser.heredocs = NULL;
+		g_parser.status = NOERR;
 		return (NULL);
 	}
-	if (command_list != NULL && get_all_heredocs() == NOERR)
-		return (command_list);
-	command_list_del(&command_list);
-	return (NULL);
+	if (complete_command && get_all_heredocs() != NOERR)
+		complete_command_del(&complete_command);
+	return (complete_command);
 }
 
 int				main_loop(void)
 {
-	t_command *command_list;
+	t_command	*complete_command;
 
 	while (1)
 	{
@@ -48,8 +43,8 @@ int				main_loop(void)
 		g_parser.status = NOERR;
 		g_shell.get_input(PS1, false);
 		if ((g_parser.token = get_next_token())
-		&& (command_list = get_command_list()))
-			eval_command_list(command_list);
+		&& (complete_command = get_complete_command()))
+			eval_complete_command(complete_command);
 		if (g_shell.interactive_mode && g_lexer.line)
 		{
 			g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;

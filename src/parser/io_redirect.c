@@ -62,7 +62,8 @@ static t_redir	*parse_io_file(t_token *io_number)
 	g_parser.token = get_next_token();
 	if (!(redir->right_op = parse_filename()))
 	{
-		g_parser.status = UNEXPECTED_TOKEN;
+		if (!g_parser.status)
+			g_parser.status = UNEXPECTED_TOKEN;
 		redir_del(&redir);
 		return (NULL);
 	}
@@ -78,7 +79,8 @@ static t_redir	*parse_io_here(t_token *io_number)
 	redir->operator = g_parser.token;
 	if (!(g_parser.token = get_next_token()) || g_parser.token->type != WORD)
 	{
-		g_parser.status = UNEXPECTED_TOKEN;
+		if (!g_parser.status)
+			g_parser.status = UNEXPECTED_TOKEN;
 		redir_del(&redir);
 		return (NULL);
 	}
@@ -92,6 +94,8 @@ t_redir			*parse_io_redirect(void)
 {
 	t_token *io_number;
 
+	if (!g_parser.token)
+		return (NULL);
 	if (g_parser.token->type == IO_NUMBER)
 	{
 		io_number = g_parser.token;

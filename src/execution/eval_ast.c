@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   eval_command.c                                     :+:      :+:    :+:   */
+/*   eval_ast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -22,7 +22,7 @@ int			eval_simple_command(t_command *command)
 	{
 		expand(simple);
 		if (!(simple->argv = get_argv(simple)))
-			return (exec_simple_command(simple));
+			return (exec_simple_command(command));
 	}
 	if (!g_already_forked
 	&& (!is_builtin(simple->argv[0])
@@ -31,7 +31,7 @@ int			eval_simple_command(t_command *command)
 		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
 		return (launch_process(process, 0));
 	}
-	return (exec_simple_command(simple));
+	return (exec_simple_command(command));
 }
 
 /*
@@ -59,7 +59,8 @@ int			eval_pipeline(t_command *command, int in, int out)
 	process = process_new(pipeline->right, fd[0], out);
 	launch_process(process, fd[1]);
 	if (pipeline->left->type == CONNECTION
-	&& pipeline->left->value.connection->connector == PIPE)
+	&& pipeline->left->value.connection->connector == PIPE
+	&& !(command->flags & CMD_SUBSHELL))
 		return (eval_pipeline(pipeline->left, in, fd[1]));
 	process = process_new(pipeline->left, in, fd[1]);
 	launch_process(process, fd[0]);
@@ -72,7 +73,7 @@ int			eval_and_or(t_command *command)
 
 	and_or = command->value.connection;
 	eval_command(and_or->left);
-	if (g_shell.jobs->bg)
+	if (g_shell.jobs->bg || !g_job_control_enabled)
 		wait_for_job(g_shell.jobs);
 	else
 		put_job_fg(g_shell.jobs, false);
@@ -84,6 +85,13 @@ int			eval_and_or(t_command *command)
 
 int			eval_command(t_command *command)
 {
+	t_process	*process;
+
+	if (command->flags & CMD_SUBSHELL)
+	{
+		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
+		return (launch_process(process, 0));
+	}
 	if (command->type == CONNECTION)
 	{
 		if (command->value.connection->connector == OR_IF
@@ -97,17 +105,17 @@ int			eval_command(t_command *command)
 	return (0);
 }
 
-int			eval_command_list(t_command *command_list)
+int			eval_complete_command(t_command *complete_command)
 {
 	t_command	*command;
 	t_job		*job;
 
-	command = command_list;
+	command = complete_command;
 	while (command != NULL)
 	{
 		job = job_new(command, STDIN_FILENO, STDOUT_FILENO);
 		add_job(job);
-		if (command->flags & CMD_AMPERSAND)
+		if (command->sep == AMPERSAND)
 			job->bg = true;
 		launch_job(g_shell.jobs);
 		command = command->next;

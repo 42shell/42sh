@@ -19,9 +19,11 @@ bool	file_is_binary(char *filename)
 	int		i;
 
 	i = 0;
+	if (!filename)
+		return (false);
 	if ((fd = open(filename, O_RDONLY)) == -1 || read(fd, buf, 80) == -1)
 	{
-		ft_dprintf(STDERR_FILENO, "42sh: %s: unable to read file\n");
+		ft_dprintf(STDERR_FILENO, "42sh: %s: unable to read file\n", filename);
 		close(fd);
 		return (true);
 	}

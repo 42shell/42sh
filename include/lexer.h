@@ -22,8 +22,8 @@
 **
 ** %token  DLESS  DGREAT  LESSAND  GREATAND  LESSGREAT  DLESSDASH  AMPERSAND
 **         '<<'   '>>'    '<&'     '>&'      '<>'         <<-        '&'
-**		  SEMI    PIPE    LESS   GREAT
-**		   ';'	   '|'     '<'    '>'
+**		  SEMI    PIPE    LESS   GREAT	OBRACKET	CBRACKET
+**		   ';'	   '|'     '<'    '>'     '('		   ')'
 */
 
 enum				e_token_type
@@ -46,6 +46,8 @@ enum				e_token_type
 	AND_IF,
 	OR_IF,
 	BANG,
+	OBRACKET,
+	CBRACKET,
 	PATTERN
 };
 

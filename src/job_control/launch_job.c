@@ -29,12 +29,16 @@ int				launch_job(t_job *job)
 		else
 			eval_command(job->command);
 		put_job_bg(job, false);
-		ft_printf("[%d] %d\n", job->id + 1, job->pgid);
+		if (g_job_control_enabled)
+			ft_printf("[%d] %d\n", job->id + 1, job->pgid);
 	}
 	else
 	{
 		eval_command(job->command);
-		put_job_fg(job, false);
+		if (g_job_control_enabled)
+			put_job_fg(job, false);
+		else
+			wait_for_job(job);
 	}
 	return (0);
 }

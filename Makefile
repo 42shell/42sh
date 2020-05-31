@@ -31,7 +31,7 @@ LFLAGS          := -ltermcap
 #------------------------------------------------#
 
 CC              := clang
-CFLAGS          := -Wall -Wextra #-Werror
+CFLAGS          := -Wall -Wextra -g3 -fsanitize=address #-Werror
 ifeq ($(BUILDTYPE), debug)
 	CFLAGS := $(CFLAGS) $(DBG_FLAGS)
 endif
@@ -67,7 +67,7 @@ SRC_VARIABLES	:= env_dup.c\
 				   variables.c
 SRC_VARIABLES	:= $(addprefix variables/,$(SRC_VARIABLES))
 
-SRC_EXEC        := eval_command.c\
+SRC_EXEC        := eval_ast.c\
 				   execute.c\
 				   get_argv.c\
 				   get_exec_path.c\
@@ -111,7 +111,8 @@ SRC_PARSER      := and_or.c\
 				   pipeline.c\
 				   simple_command.c\
 				   command.c\
-				   command_list.c\
+				   complete_command.c\
+				   compound_command.c\
                    io_redirect.c\
 				   separator.c\
 				   heredoc.c\

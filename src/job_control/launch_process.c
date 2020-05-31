@@ -60,7 +60,7 @@ static void		set_child_attr(t_process *process)
 
 static int		launch_subshell(t_process *process, int fd_to_close)
 {
-	pid_t	pid;
+	pid_t		pid;
 
 	if ((pid = fork_child(process->stdin, process->stdout, fd_to_close)) == -1)
 		return (-1);
@@ -69,8 +69,14 @@ static int		launch_subshell(t_process *process, int fd_to_close)
 		set_child_attr(process);
 		reset_signals();
 		g_job_control_enabled = false;
-		eval_command(process->command);
-		wait_for_job(g_shell.jobs);
+		g_fucking_subshell = true;
+		if (process->command->flags & CMD_SUBSHELL)
+			exec_subshell(process->command);
+		else
+		{
+			eval_command(process->command);
+			wait_for_job(g_shell.jobs);
+		}
 		exit(0);
 	}
 	else
@@ -88,7 +94,7 @@ int				launch_process(t_process *process, int fd_to_close)
 {
 	pid_t	pid;
 
-	if (process->command->type == CONNECTION)
+	if (process->command->type == CONNECTION || process->command->next)
 		return (launch_subshell(process, fd_to_close));
 	if ((pid = fork_child(process->stdin, process->stdout, fd_to_close)) == -1)
 		return (-1);

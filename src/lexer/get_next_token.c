@@ -24,6 +24,8 @@ static char		*get_prompt(void)
 		return (PSA);
 	else if (g_lexer.line_cont == OR_IF)
 		return (PSO);
+	else if (g_lexer.line_cont == OBRACKET)
+		return (PSB);
 	return (PS2);
 }
 
@@ -72,8 +74,10 @@ t_token			*get_next_token(void)
 {
 	if (g_parser.status != NOERR || !g_lexer.line)
 		return (NULL);
-	if (g_lexer.line_cont || g_lexer.quote_st)
+	if (g_lexer.line_cont || g_lexer.quote_st) // || !g_lexer.line ?
 	{
+		g_lexer.nl_found = 0;
+		g_lexer.end_of_input = 0;
 		if (g_shell.get_input(get_prompt(), false) != 0)
 			return (NULL);
 		g_lexer.line_cont = 0;

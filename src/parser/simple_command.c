@@ -84,15 +84,10 @@ static int		set_tokens(t_simple_cmd *simple)
 }
 
 /*
-** for the moment,
-** command ≃ simple_command
-**
-** command			: WORD
+** simple_command	: WORD
 ** 					| WORD command
 **					| io_redir
 **					| io_redir command
-**
-** returns a t_command containing argv array and a list of redirections.
 */
 
 t_command		*parse_simple_command(void)
@@ -100,14 +95,12 @@ t_command		*parse_simple_command(void)
 	t_command		*cmd;
 
 	if (g_parser.token == NULL
-		|| (g_parser.token->type != WORD && g_parser.token->type != IO_NUMBER
-			&& !is_redir(g_parser.token)))
+	|| g_parser.token->type == NEWLINE)
+		return (NULL);
+	else if (g_parser.token->type != WORD && g_parser.token->type != IO_NUMBER
+	&& !is_redir(g_parser.token))
 		return (NULL);
 	cmd = command_new(SIMPLE);
-	if (set_tokens(cmd->value.simple) == -1)
-	{
-		command_del(&cmd);
-		return (NULL);
-	}
+	set_tokens(cmd->value.simple);
 	return (cmd);
 }

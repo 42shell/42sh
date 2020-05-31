@@ -48,17 +48,18 @@ bool				g_already_forked;
 ** eval tree
 */
 
-int					eval_command_list(t_command *command_list);
+int					eval_complete_command(t_command *command);
 int					eval_command(t_command *command);
 int					eval_and_or(t_command *command);
 int					eval_pipeline(t_command *command, int in, int out);
-int					eval_simple_command(t_command *commande);
+int					eval_simple_command(t_command *command);
 
 /*
 ** execution
 */
 
-int					exec_simple_command(t_simple_cmd *simple);
+int					exec_simple_command(t_command *command);
+int					exec_subshell(t_command *command);
 int					exec_builtin(char **argv, t_array *temp_env);
 int					exec_binary(char **argv, t_array *temp_env);
 char				**get_argv(t_simple_cmd *command);
@@ -68,7 +69,7 @@ char				*get_exec_path(char *command, t_array *env);
 ** redirections
 */
 
-int					set_redir(t_simple_cmd *command, bool backup);
+int					set_redir(t_redir *redirs, bool backup);
 int					open_heredoc(t_dstr *heredoc);
 int					dup2_and_backup(int fildes1, int fildes2, bool backup);
 bool				is_valid_fd(int fd);

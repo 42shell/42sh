@@ -43,6 +43,7 @@ int			command_del(t_command **command)
 {
 	if (!command || !*command)
 		return (0);
+	command_del(&(*command)->next);
 	if ((*command)->type == SIMPLE)
 	{
 		redir_del(&(*command)->value.simple->redirs);
@@ -59,19 +60,20 @@ int			command_del(t_command **command)
 	}
 	else if ((*command)->type == SUBSHELL)
 		ft_memdel((void **)&(*command)->value.subshell);
+	redir_del(&(*command)->redir_list);
 	ft_memdel((void **)command);
 	return (0);
 }
 
-void		command_list_del(t_command **command_list)
+void		complete_command_del(t_command **complete_command)
 {
 	t_command	*next;
 
-	while (*command_list)
+	while (*complete_command)
 	{
-		next = (*command_list)->next;
-		command_del(command_list);
-		*command_list = next;
+		next = (*complete_command)->next;
+		command_del(complete_command);
+		*complete_command = next;
 	}
-	*command_list = NULL;
+	*complete_command = NULL;
 }

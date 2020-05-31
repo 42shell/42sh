@@ -14,7 +14,8 @@
 
 bool	is_operator_start(char c)
 {
-	return (c == '<' || c == '>' || c == '&' || c == ';' || c == '|');
+	return (c == '<' || c == '>' || c == '&' || c == ';' || c == '|'
+	|| c == '(' || c == ')');
 }
 
 bool	is_operator_part(char c)
@@ -71,5 +72,9 @@ int		get_operator_type(char *ope)
 		return (OR_IF);
 	if (ft_strequ(ope, ";"))
 		return (SEMI);
+	if (ft_strequ(ope, "("))
+		return (OBRACKET);
+	if (ft_strequ(ope, ")"))
+		return (CBRACKET);
 	return (0);
 }
