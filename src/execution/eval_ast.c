@@ -12,7 +12,7 @@
 
 #include "shell.h"
 
-int			eval_simple_command(t_command *command)
+int			eval_simple_command(t_command *command) //exec_command()
 {
 	t_process		*process;
 	t_simple_cmd	*simple;
@@ -24,28 +24,13 @@ int			eval_simple_command(t_command *command)
 		if (!(simple->argv = get_argv(simple)))
 			return (exec_simple_command(command));
 	}
-	if (!g_already_forked
-	&& (!is_builtin(simple->argv[0])
-		|| (g_job_control_enabled && g_shell.jobs->bg)))
+	if (!g_already_forked && !is_builtin(simple->argv[0]))
 	{
 		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
 		return (launch_process(process, 0));
 	}
 	return (exec_simple_command(command));
 }
-
-/*
-** -if we are executing a pipeline, no matter if the command is a builtin
-** or not, we don't want to fork cause the pipeline function has already
-** call launch_process, so we are in the child.
-** -else if the command is not a builtin, or the command is a builtin
-** but we are executing an async command, we fork.
-** -for async commands, launch_job create a child only if the command is an
-** and_or command.
-** "ls &" will create 1 child, and execute the command, as for "ls".
-** "ls && ls &" will create 1 child, which will fork 2 more childs.
-** it allows us to wait for the first 'ls' to finish in the background.
-*/
 
 int			eval_pipeline(t_command *command, int in, int out)
 {
@@ -60,7 +45,7 @@ int			eval_pipeline(t_command *command, int in, int out)
 	launch_process(process, fd[1]);
 	if (pipeline->left->type == CONNECTION
 	&& pipeline->left->value.connection->connector == PIPE
-	&& !(command->flags & CMD_SUBSHELL))
+	&& !(pipeline->left->flags & CMD_GROUP))
 		return (eval_pipeline(pipeline->left, in, fd[1]));
 	process = process_new(pipeline->left, in, fd[1]);
 	launch_process(process, fd[0]);
@@ -73,7 +58,7 @@ int			eval_and_or(t_command *command)
 
 	and_or = command->value.connection;
 	eval_command(and_or->left);
-	if (g_shell.jobs->bg || !g_job_control_enabled)
+	if (!g_job_control_enabled)
 		wait_for_job(g_shell.jobs);
 	else
 		put_job_fg(g_shell.jobs, false);
@@ -83,7 +68,7 @@ int			eval_and_or(t_command *command)
 	return (0);
 }
 
-int			eval_command(t_command *command)
+int			eval_group_command(t_command *command)
 {
 	t_process	*process;
 
@@ -92,6 +77,29 @@ int			eval_command(t_command *command)
 		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
 		return (launch_process(process, 0));
 	}
+	command->flags &= ~CMD_GROUP;
+	if (set_redir(command->redir_list, true) != 0)
+	{
+		restore_fds();
+		return (g_last_exit_st = 1);
+	}
+	while (command)
+	{
+		eval_command(command);
+		if (!g_job_control_enabled) //bg
+			wait_for_job(g_shell.jobs);
+		else
+			put_job_fg(g_shell.jobs, false);
+		command = command->next;
+	}
+	restore_fds();
+	return (0);
+}
+
+int			eval_command(t_command *command)
+{
+	if (command->flags & CMD_GROUP)
+		return (eval_group_command(command));
 	if (command->type == CONNECTION)
 	{
 		if (command->value.connection->connector == OR_IF
@@ -114,10 +122,9 @@ int			eval_complete_command(t_command *complete_command)
 	while (command != NULL)
 	{
 		job = job_new(command, STDIN_FILENO, STDOUT_FILENO);
-		add_job(job);
 		if (command->sep == AMPERSAND)
 			job->bg = true;
-		launch_job(g_shell.jobs);
+		launch_job(job);
 		command = command->next;
 	}
 	return (0);

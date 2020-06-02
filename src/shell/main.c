@@ -45,7 +45,7 @@ int				main_loop(void)
 		if ((g_parser.token = get_next_token())
 		&& (complete_command = get_complete_command()))
 			eval_complete_command(complete_command);
-		if (g_shell.interactive_mode && g_lexer.line)
+		if (g_shell.interactive_mode && g_lexer.line && *g_lexer.line != '\n')
 		{
 			g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;
 			rl_add_history(g_lexer.line);

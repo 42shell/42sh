@@ -50,6 +50,7 @@ static pid_t	fork_child(int in, int out, int fd_to_close)
 
 static void		set_child_attr(t_process *process)
 {
+	process_del(&g_shell.jobs->processes);
 	process->pid = getpid();
 	if (!g_shell.jobs->pgid)
 		g_shell.jobs->pgid = process->pid;
@@ -58,54 +59,23 @@ static void		set_child_attr(t_process *process)
 		tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
 }
 
-static int		launch_subshell(t_process *process, int fd_to_close)
-{
-	pid_t		pid;
-
-	if ((pid = fork_child(process->stdin, process->stdout, fd_to_close)) == -1)
-		return (-1);
-	else if (pid == 0)
-	{
-		set_child_attr(process);
-		reset_signals();
-		g_job_control_enabled = false;
-		g_fucking_subshell = true;
-		if (process->command->flags & CMD_SUBSHELL)
-			exec_subshell(process->command);
-		else
-		{
-			eval_command(process->command);
-			wait_for_job(g_shell.jobs);
-		}
-		exit(0);
-	}
-	else
-	{
-		process->pid = pid;
-		if (!g_shell.jobs->pgid)
-			g_shell.jobs->pgid = pid;
-		setpgid(process->pid, g_shell.jobs->pgid);
-		add_process(process);
-	}
-	return (pid);
-}
-
 int				launch_process(t_process *process, int fd_to_close)
 {
 	pid_t	pid;
 
-	if (process->command->type == CONNECTION
-	|| (process->command->flags & CMD_SUBSHELL))
-		return (launch_subshell(process, fd_to_close));
 	if ((pid = fork_child(process->stdin, process->stdout, fd_to_close)) == -1)
 		return (-1);
 	if (pid == 0)
 	{
 		set_child_attr(process);
 		reset_signals();
-		g_already_forked = true;
+		if (process->command->flags & CMD_SUBSHELL)
+			process->command->flags &= ~CMD_SUBSHELL;
+		else
+			g_already_forked = true;
 		g_job_control_enabled = false;
-		eval_simple_command(process->command);
+		eval_command(process->command);
+		wait_for_job(g_shell.jobs);
 		exit(0);
 	}
 	else

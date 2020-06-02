@@ -59,8 +59,7 @@ int			exec_simple_command(t_command *command)
 	t_array 		*temp_env;
 
 	simple = command->value.simple;
-	if (set_redir(command->redir_list, true) != 0
-	|| set_redir(simple->redirs, true) != 0)
+	if (set_redir(simple->redirs, true) != 0)
 	{
 		restore_fds();
 		return (g_last_exit_st = 1);
@@ -83,35 +82,3 @@ int			exec_simple_command(t_command *command)
 	restore_fds();
 	return (0);
 }
-
-int		exec_subshell(t_command *command)
-{
-	t_command	*ptr;
-	t_job		*job;
-
-	command->flags &= ~CMD_SUBSHELL;
-	if (set_redir(command->redir_list, true) != 0)
-	{
-		restore_fds();
-		return (g_last_exit_st = 1);
-	}
-	ptr = command;
-	while (ptr)
-	{
-		job = job_new(ptr, STDIN_FILENO, STDOUT_FILENO);
-		job->pgid = g_shell.jobs->pgid;
-		add_job(job);
-		eval_command(ptr);
-		wait_for_job(job);
-		ptr = ptr->next;
-	}
-	restore_fds();
-	return (0);
-}
-
-/*
-int		exec_command(t_command *command, int in, int out, int fd_to_close)
-{
-
-}
-*/

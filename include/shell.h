@@ -43,11 +43,6 @@
 # define V_HIDDEN	4
 # define V_SPECIAL	8
 
-/*
-** fix ls |$ cat history
-*/
-int		g_fucking_subshell;
-
 typedef char *(*t_var_value_func)(void);
 typedef int(*t_builtin_func)(char **argv, t_array *temp_env);
 

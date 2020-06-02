@@ -31,7 +31,7 @@ LFLAGS          := -ltermcap
 #------------------------------------------------#
 
 CC              := clang
-CFLAGS          := -Wall -Wextra -ggdb -fsanitize=address #-Werror
+CFLAGS          := -Wall -Wextra #-Werror
 ifeq ($(BUILDTYPE), debug)
 	CFLAGS := $(CFLAGS) $(DBG_FLAGS)
 endif

@@ -22,7 +22,8 @@
 # define CMD_INVERT_RETURN		0x01
 # define CMD_AMPERSAND			0x02
 # define CMD_LASTPIPE			0x04
-# define CMD_SUBSHELL			0x08
+# define CMD_GROUP				0x08
+# define CMD_SUBSHELL			0x10
 
 enum							e_parser_status
 {
@@ -89,9 +90,8 @@ typedef struct					s_simple_cmd
 
 typedef struct					s_subshell //maybe use this
 {
-	struct s_command			*left;
-	struct s_command			*right;
-	enum e_token_type			connector;
+	struct s_command			*command;
+	int							subshell;
 }								t_subshell;
 
 union							u_cmd_value

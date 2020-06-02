@@ -16,18 +16,16 @@ int				launch_job(t_job *job)
 {
 	t_process	*process;
 
+	add_job(job);
 	if (job->bg)
 	{
 		g_last_exit_st = 0;
 		if (job->command->type == CONNECTION
-			&& (job->command->value.connection->connector == AND_IF
+		&& (job->command->value.connection->connector == AND_IF
 			|| job->command->value.connection->connector == OR_IF))
-		{
-			process = process_new(job->command, STDIN_FILENO, STDOUT_FILENO);
-			launch_process(process, 0);
-		}
-		else
-			eval_command(job->command);
+			job->command->flags |= CMD_SUBSHELL;
+		process = process_new(job->command, STDIN_FILENO, STDOUT_FILENO);
+		launch_process(process, 0);
 		put_job_bg(job, false);
 		if (g_job_control_enabled)
 			ft_printf("[%d] %d\n", job->id + 1, job->pgid);
