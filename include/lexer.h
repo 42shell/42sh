@@ -112,5 +112,6 @@ bool				is_operator_part(char c);
 bool				is_operator_next(char *ope, char c);
 bool				is_redir(t_token *token);
 int					get_operator_type(char *ope);
+int					lx_line_insert_char(char c, int index);
 
 #endif

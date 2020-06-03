@@ -44,8 +44,7 @@ int			eval_pipeline(t_command *command, int in, int out)
 	process = process_new(pipeline->right, fd[0], out);
 	launch_process(process, fd[1]);
 	if (pipeline->left->type == CONNECTION
-	&& pipeline->left->value.connection->connector == PIPE
-	&& !(pipeline->left->flags & CMD_GROUP))
+	&& pipeline->left->value.connection->connector == PIPE)
 		return (eval_pipeline(pipeline->left, in, fd[1]));
 	process = process_new(pipeline->left, in, fd[1]);
 	launch_process(process, fd[0]);
@@ -71,26 +70,29 @@ int			eval_and_or(t_command *command)
 int			eval_group_command(t_command *command)
 {
 	t_process	*process;
+	t_group_cmd	*group;
+	t_command	*cmd;
 
-	if (command->flags & CMD_SUBSHELL)
+	group = command->value.group;
+	if (group->subshell)
 	{
 		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
 		return (launch_process(process, 0));
 	}
-	command->flags &= ~CMD_GROUP;
 	if (set_redir(command->redir_list, true) != 0)
 	{
 		restore_fds();
 		return (g_last_exit_st = 1);
 	}
-	while (command)
+	cmd = group->list;
+	while (cmd)
 	{
-		eval_command(command);
-		if (!g_job_control_enabled) //bg
+		eval_command(cmd);
+		if (!g_job_control_enabled)
 			wait_for_job(g_shell.jobs);
 		else
 			put_job_fg(g_shell.jobs, false);
-		command = command->list;
+		cmd = cmd->next;
 	}
 	restore_fds();
 	return (0);
@@ -98,7 +100,7 @@ int			eval_group_command(t_command *command)
 
 int			eval_command(t_command *command)
 {
-	if (command->flags & CMD_GROUP)
+	if (command->type == GROUP)
 		return (eval_group_command(command));
 	if (command->type == CONNECTION)
 	{

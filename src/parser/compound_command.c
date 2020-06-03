@@ -12,23 +12,6 @@
 
 #include "shell.h"
 
-int				lx_line_insert_char(char c, int index) //lexer folder
-{
-	char		*tmp;
-
-	tmp = g_lexer.line;
-	g_lexer.line = ft_memrealloc(g_lexer.line,
-								ft_strlen(g_lexer.line) + 1,
-								ft_strlen(g_lexer.line) + 2);
-	free(tmp);
-	ft_memmove(&g_lexer.line[index + 1],
-				&g_lexer.line[index],
-				ft_strlen(&g_lexer.line[index]));
-	g_lexer.line[index] = c;
-	g_lexer.i++;
-	return (0);
-}
-
 /*
 ** term             : term separator and_or
 **                  | term separator
@@ -50,8 +33,8 @@ t_command		*parse_term(void)
 		if (command->sep == NEWLINE)
 			lx_line_insert_char(';', sep_index);
 		if (command->sep)
-			command->list = parse_and_or();
-		command = command->list;
+			command->next = parse_and_or();
+		command = command->next;
 	}
 	if (g_parser.status != NOERR)
 		complete_command_del(&term);
@@ -72,8 +55,8 @@ t_command		*parse_compound_list(void)
 	if (!(compound_list = parse_term()))
 		return (NULL);
 	last = compound_list;
-	while (last->list)
-		last = last->list;
+	while (last->next)
+		last = last->next;
 	if (!last->sep)
 		last->sep = parse_separator();
 	return (compound_list);
@@ -85,7 +68,8 @@ t_command		*parse_compound_list(void)
 
 t_command		*parse_subshell(void)
 {
-	t_command	*subshell;
+	t_command	*group;
+	t_command	*compound_list;
 	int			old_linebreak_type;
 
 	if (!g_parser.token || g_parser.token->type != LBRACKET)
@@ -93,20 +77,22 @@ t_command		*parse_subshell(void)
 	old_linebreak_type = g_linebreak_type;
 	g_linebreak_type = LBRACKET;
 	g_parser.token = get_next_token();
-	if (!(subshell = parse_compound_list()))
+	if (!(compound_list = parse_compound_list()))
 		return (NULL);
 	if (!g_parser.token || g_parser.token->type != RBRACKET)
 	{
 		if (!g_parser.status)
 			g_parser.status = UNEXPECTED_TOKEN;
-		command_del(&subshell); //complete
+		complete_command_del(&compound_list);
 		return (NULL);
 	}
+	group = command_new(GROUP);
+	group->value.group->list = compound_list;
 	token_del(&g_parser.token);
 	g_parser.token = get_next_token();
-	subshell->flags |= (CMD_GROUP | CMD_SUBSHELL);
+	group->value.group->subshell = true;
 	g_linebreak_type = old_linebreak_type;
-	return (subshell);
+	return (group);
 }
 
 /*
@@ -115,7 +101,8 @@ t_command		*parse_subshell(void)
 
 t_command		*parse_brace_group(void)
 {
-	t_command	*brace_group;
+	t_command	*group;
+	t_command	*compound_list;
 	int			old_linebreak_type;
 
 	if (!g_parser.token || g_parser.token->type != LBRACE)
@@ -123,20 +110,21 @@ t_command		*parse_brace_group(void)
 	old_linebreak_type = g_linebreak_type;
 	g_linebreak_type = LBRACE;
 	g_parser.token = get_next_token();
-	if (!(brace_group = parse_compound_list()))
+	if (!(compound_list = parse_compound_list()))
 		return (NULL);
 	if (!g_parser.token || g_parser.token->type != RBRACE)
 	{
 		if (!g_parser.status)
 			g_parser.status = UNEXPECTED_TOKEN;
-		command_del(&brace_group); //complete
+		complete_command_del(&compound_list);
 		return (NULL);
 	}
+	group = command_new(GROUP);
+	group->value.group->list = compound_list;
 	token_del(&g_parser.token);
 	g_parser.token = get_next_token();
-	brace_group->flags |= CMD_GROUP;
 	g_linebreak_type = old_linebreak_type;
-	return (brace_group);
+	return (group);
 }
 
 

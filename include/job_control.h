@@ -56,6 +56,7 @@ t_list_head				*g_curr_job;
 
 int						launch_job(t_job *job);
 int						launch_process(t_process *process, int fd_to_close);
+bool					subshell_is_needed(t_command *command);
 
 /*
 ** job control

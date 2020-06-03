@@ -37,6 +37,7 @@
 # include "autocomplete.h"
 # include "utils.h"
 
+//vars.h
 # define V_NOATTR	0
 # define V_RDONLY	1
 # define V_EXPORT	2
@@ -59,7 +60,17 @@ typedef struct			s_var
 	t_var_value_func	value_func;
 }						t_var;
 
+
 /*
+** -$> { ls ; ls -z } 2>& | cat -e
+**  42sh: syntax error near unexpected token 'EOF'
+** -( ) { } :
+**  	-batch mode
+** 		-update jobs display
+** -assert lexer works properly in line continuations,
+**  history heredocs and quoted newlines...
+**
+** old problems:
 ** -recall line with heredoc from history do parse error.
 ** -unsetenv boucle inf when unseting non existing var
 ** -initialize lcp in rl_complete
@@ -81,6 +92,7 @@ typedef struct			s_var
 ** -leaks/invalid reads/still reachable
 */
 
+//lexer
 # define INPUT_INT		3
 # define INPUT_EOF		4
 

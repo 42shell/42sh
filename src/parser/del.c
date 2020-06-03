@@ -22,8 +22,8 @@ t_command	*command_new(enum e_cmd_type type)
 		command->value.simple = ft_xmalloc(sizeof(t_simple_cmd));
 	else if (type == CONNECTION)
 		command->value.connection = ft_xmalloc(sizeof(t_connection));
-	else if (type == SUBSHELL)
-		command->value.subshell = ft_xmalloc(sizeof(t_subshell));
+	else if (type == GROUP)
+		command->value.group = ft_xmalloc(sizeof(t_group_cmd));
 	return (command);
 }
 
@@ -43,7 +43,6 @@ int			command_del(t_command **command)
 {
 	if (!command || !*command)
 		return (0);
-	command_del(&(*command)->list);
 	if ((*command)->type == SIMPLE)
 	{
 		redir_del(&(*command)->value.simple->redirs);
@@ -58,8 +57,11 @@ int			command_del(t_command **command)
 		command_del(&(*command)->value.connection->right);
 		ft_memdel((void **)&(*command)->value.connection);
 	}
-	else if ((*command)->type == SUBSHELL) //compound
-		ft_memdel((void **)&(*command)->value.subshell);
+	else if ((*command)->type == GROUP)
+	{
+		command_del(&(*command)->value.group->list);
+		ft_memdel((void **)&(*command)->value.group);
+	}
 	redir_del(&((*command)->redir_list));
 	ft_memdel((void **)command);
 	return (0);

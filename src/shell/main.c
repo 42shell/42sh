@@ -43,6 +43,7 @@ int				main_loop(void)
 	{
 		if (g_shell.jobs)
 			notif_jobs();
+		g_parser.status = NOERR;
 		g_shell.get_input(PS1, false);
 		if ((g_parser.token = get_next_token())
 		&& (complete_command = get_complete_command()))

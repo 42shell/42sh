@@ -79,7 +79,24 @@ int		get_operator_type(char *ope)
 	return (0);
 }
 
-int			is_reserved_word(char *word)
+int		lx_line_insert_char(char c, int index)
+{
+	char		*tmp;
+
+	tmp = g_lexer.line;
+	g_lexer.line = ft_memrealloc(g_lexer.line,
+								ft_strlen(g_lexer.line) + 1,
+								ft_strlen(g_lexer.line) + 2);
+	free(tmp);
+	ft_memmove(&g_lexer.line[index + 1],
+				&g_lexer.line[index],
+				ft_strlen(&g_lexer.line[index]));
+	g_lexer.line[index] = c;
+	g_lexer.i++;
+	return (0);
+}
+
+int		is_reserved_word(char *word)
 {
 	if (ft_strequ(word, "{"))
 		return (LBRACE);

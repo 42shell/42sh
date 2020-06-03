@@ -22,8 +22,6 @@
 # define CMD_INVERT_RETURN		0x01
 # define CMD_AMPERSAND			0x02
 # define CMD_LASTPIPE			0x04
-# define CMD_GROUP				0x08
-# define CMD_SUBSHELL			0x10
 
 enum							e_parser_status
 {
@@ -36,7 +34,7 @@ enum							e_cmd_type
 {
 	CONNECTION,
 	SIMPLE,
-	SUBSHELL
+	GROUP
 };
 
 /*
@@ -88,17 +86,17 @@ typedef struct					s_simple_cmd
 	bool						is_expand;
 }								t_simple_cmd;
 
-typedef struct					s_subshell //maybe use this
+typedef struct					s_group_cmd
 {
-	struct s_command			*command;
-	int							subshell;
-}								t_subshell;
+	struct s_command			*list;
+	bool						subshell;
+}								t_group_cmd;
 
 union							u_cmd_value
 {
 	struct s_connection			*connection;
 	struct s_simple_cmd			*simple;
-	struct s_subshell			*subshell;
+	struct s_group_cmd			*group;
 };
 
 typedef struct					s_command
@@ -107,7 +105,6 @@ typedef struct					s_command
 	int							flags;
 	union u_cmd_value			value;
 	struct s_command			*next;
-	struct s_command			*list;
 	t_redir						*redir_list;
 	int							sep;
 }								t_command;
