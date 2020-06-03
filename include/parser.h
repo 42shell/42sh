@@ -107,6 +107,7 @@ typedef struct					s_command
 	int							flags;
 	union u_cmd_value			value;
 	struct s_command			*next;
+	struct s_command			*list;
 	t_redir						*redir_list;
 	int							sep;
 }								t_command;
@@ -123,6 +124,8 @@ t_command						*parse_and_or(void);
 t_command						*parse_pipeline(void);
 t_command						*parse_command(void);
 t_command						*parse_compound_command(void);
+t_command						*parse_brace_group(void);
+t_command						*parse_subshell(void);
 t_command						*parse_simple_command(void);
 
 t_redir							*parse_io_redirect(void);

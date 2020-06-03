@@ -24,8 +24,10 @@ static char		*get_prompt(void)
 		return (PSA);
 	else if (g_lexer.line_cont == OR_IF)
 		return (PSO);
-	else if (g_lexer.line_cont == OBRACKET)
+	else if (g_lexer.line_cont == LBRACKET)
 		return (PSB);
+	else if (g_lexer.line_cont == LBRACE)
+		return (PSC);
 	return (PS2);
 }
 

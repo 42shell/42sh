@@ -84,15 +84,16 @@ typedef struct			s_var
 # define INPUT_INT		3
 # define INPUT_EOF		4
 
-# define PS1			"42sh$> "
-# define PS2			"\\$> "
-# define PSQ			"'$> "
-# define PSD			"\"$> "
-# define PSA			"&&$> "
-# define PSO			"||$> "
-# define PSP			"|$> "
-# define PSH			"<<$> "
-# define PSB			"($> "
+# define PS1			"$> "
+# define PS2			"\\... "
+# define PSQ			"'... "
+# define PSD			"\"... "
+# define PSA			"&&... "
+# define PSO			"||... "
+# define PSP			"|... "
+# define PSH			"<<... "
+# define PSB			"(... "
+# define PSC			"{... "
 
 typedef int				(*t_input_func)(const char *, bool);
 

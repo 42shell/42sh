@@ -50,30 +50,32 @@ static pid_t	fork_child(int in, int out, int fd_to_close)
 
 static void		set_child_attr(t_process *process)
 {
-	process_del(&g_shell.jobs->processes);
 	process->pid = getpid();
 	if (!g_shell.jobs->pgid)
 		g_shell.jobs->pgid = process->pid;
 	setpgid(process->pid, g_shell.jobs->pgid);
 	if (!g_shell.jobs->bg)
 		tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
+	process_del(&g_shell.jobs->processes);
+	if (process->command->flags & CMD_SUBSHELL)
+		process->command->flags &= ~CMD_SUBSHELL;
+	else
+		g_already_forked = true;
+	g_job_control_enabled = false;
 }
 
 int				launch_process(t_process *process, int fd_to_close)
 {
 	pid_t	pid;
 
+	if (process->command->flags & CMD_GROUP)
+		process->command->flags |= CMD_SUBSHELL;
 	if ((pid = fork_child(process->stdin, process->stdout, fd_to_close)) == -1)
 		return (-1);
 	if (pid == 0)
 	{
 		set_child_attr(process);
 		reset_signals();
-		if (process->command->flags & CMD_SUBSHELL)
-			process->command->flags &= ~CMD_SUBSHELL;
-		else
-			g_already_forked = true;
-		g_job_control_enabled = false;
 		eval_command(process->command);
 		wait_for_job(g_shell.jobs);
 		exit(0);

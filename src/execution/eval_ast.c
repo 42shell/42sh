@@ -90,7 +90,7 @@ int			eval_group_command(t_command *command)
 			wait_for_job(g_shell.jobs);
 		else
 			put_job_fg(g_shell.jobs, false);
-		command = command->next;
+		command = command->list;
 	}
 	restore_fds();
 	return (0);

@@ -43,6 +43,7 @@ int			command_del(t_command **command)
 {
 	if (!command || !*command)
 		return (0);
+	command_del(&(*command)->list);
 	if ((*command)->type == SIMPLE)
 	{
 		redir_del(&(*command)->value.simple->redirs);

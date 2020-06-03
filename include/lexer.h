@@ -46,8 +46,10 @@ enum				e_token_type
 	AND_IF,
 	OR_IF,
 	BANG,
-	OBRACKET,
-	CBRACKET,
+	LBRACKET,
+	RBRACKET,
+	LBRACE,
+	RBRACE,
 	PATTERN
 };
 
@@ -104,6 +106,7 @@ int					lx_word_start(void);
 t_token				*token_new(int type);
 void				token_del(t_token **tok);
 
+int					is_reserved_word(char *word);
 bool				is_operator_start(char c);
 bool				is_operator_part(char c);
 bool				is_operator_next(char *ope, char c);

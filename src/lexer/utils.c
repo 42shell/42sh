@@ -73,8 +73,17 @@ int		get_operator_type(char *ope)
 	if (ft_strequ(ope, ";"))
 		return (SEMI);
 	if (ft_strequ(ope, "("))
-		return (OBRACKET);
+		return (LBRACKET);
 	if (ft_strequ(ope, ")"))
-		return (CBRACKET);
+		return (RBRACKET);
+	return (0);
+}
+
+int			is_reserved_word(char *word)
+{
+	if (ft_strequ(word, "{"))
+		return (LBRACE);
+	if (ft_strequ(word, "}"))
+		return (RBRACE);
 	return (0);
 }
