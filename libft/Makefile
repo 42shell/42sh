@@ -1,5 +1,5 @@
 NAME = libft.a
-CC = gcc
+CC = clang
 CFLAGS = -Wall -Wextra -Werror $(DBG_FLAGS)
 DIR_SRC = src/
 DIR_OBJ = obj/
