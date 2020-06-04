@@ -41,6 +41,7 @@ int				reset_lexer(void)
 	g_lexer.nl_found = 0;
 	g_lexer.end_of_input = 0;
 	g_lexer.quote_st = 0;
+	g_lexer.expect_reserv_word = false;
 	g_lexer.i = 0;
 	return (0);
 }

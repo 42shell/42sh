@@ -62,13 +62,17 @@ typedef struct			s_var
 
 
 /*
+** -bangs
+** 
+** -store parse errors in history ?
 ** -$> { ls ; ls -z } 2>& | cat -e
 **  42sh: syntax error near unexpected token 'EOF'
 ** -( ) { } :
 **  	-batch mode
-** 		-update jobs display
+** 		-update jobs display (+ redir_lists)
 ** -assert lexer works properly in line continuations,
 **  history heredocs and quoted newlines...
+** -prompt when executing tests
 **
 ** old problems:
 ** -recall line with heredoc from history do parse error.

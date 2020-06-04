@@ -30,6 +30,9 @@ t_command	*parse_complete_command(void)
 	t_command	*command;
 
 	parse_linebreak();
+	g_lexer.expect_reserv_word = true;
+	if (!(g_parser.token = get_next_token()))
+		return (NULL);
 	list = parse_and_or();
 	command = list;
 	while (command)

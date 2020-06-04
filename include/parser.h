@@ -89,6 +89,7 @@ typedef struct					s_simple_cmd
 typedef struct					s_group_cmd
 {
 	struct s_command			*list;
+	t_redir						*redir_list;
 	bool						subshell;
 }								t_group_cmd;
 
@@ -105,7 +106,6 @@ typedef struct					s_command
 	int							flags;
 	union u_cmd_value			value;
 	struct s_command			*next;
-	t_redir						*redir_list;
 	int							sep;
 }								t_command;
 

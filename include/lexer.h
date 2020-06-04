@@ -66,52 +66,53 @@ enum				e_quote_st
 ** -the lexer do not chain them.
 */
 
-typedef struct		s_token
+typedef struct			s_token
 {
 	struct s_token		*next;
 	t_dstr				*value;
 	enum e_token_type	type;
-}					t_token;
+}						t_token;
 
-typedef struct		s_lexer
+typedef struct			s_lexer
 {
-	char			*line;
-	t_token			*token;
-	char			token_delimited;
-	char			line_cont;
-	char			quote_st;
-	char			nl_found;
-	char			end_of_input;
-	size_t			i;
-}					t_lexer;
+	char				*line;
+	t_token				*token;
+	char				token_delimited;
+	char				line_cont;
+	char				quote_st;
+	char				nl_found;
+	char				end_of_input;
+	bool				expect_reserv_word;
+	size_t				i;
+}						t_lexer;
 
-t_lexer				g_lexer;
+t_lexer					g_lexer;
 
-t_token				*get_next_token(void);
-int					reset_lexer(void);
+t_token					*get_next_token(void);
+int						reset_lexer(void);
 
-int					delim_token(void);
-int					lx_end(void);
-int					lx_operator_next(void);
-int					lx_operator_end(void);
-int					lx_backslash(void);
-int					lx_quote(void);
-int					lx_operator_new(void);
-int					lx_newline(void);
-int					lx_blank(void);
-int					lx_word_next(void);
-int					lx_comment(void);
-int					lx_word_start(void);
+int						delim_token(void);
+int						lx_end(void);
+int						lx_operator_next(void);
+int						lx_operator_end(void);
+int						lx_backslash(void);
+int						lx_quote(void);
+int						lx_operator_new(void);
+int						lx_newline(void);
+int						lx_blank(void);
+int						lx_word_next(void);
+int						lx_comment(void);
+int						lx_word_start(void);
 
-t_token				*token_new(int type);
-void				token_del(t_token **tok);
+t_token					*token_new(int type);
+void					token_del(t_token **tok);
 
-int					is_reserved_word(char *word);
-bool				is_operator_start(char c);
-bool				is_operator_part(char c);
-bool				is_operator_next(char *ope, char c);
-bool				is_redir(t_token *token);
-int					get_operator_type(char *ope);
-int					lx_line_insert_char(char c, int index);
+int						is_reserved_word(char *word);
+bool					is_operator_start(char c);
+bool					is_operator_part(char c);
+bool					is_operator_next(char *ope, char c);
+bool					is_redir(t_token *token);
+int						get_operator_type(char *ope);
+int						lx_line_insert_char(char c, int index);
 
 #endif

@@ -48,6 +48,7 @@ int			parse_newline_list(void)
 			g_lexer.line_cont = g_linebreak_type;
 			nl_index = g_lexer.i - 1;
 		}
+		g_lexer.expect_reserv_word = true;
 		if ((g_parser.token = get_next_token()) && g_linebreak_type)
 		{
 			if (!nl_replaced)
@@ -64,7 +65,7 @@ int			parse_newline_list(void)
 			}
 		}
 	}
-	return (1);
+	return (NEWLINE);
 }
 
 /*
@@ -81,6 +82,7 @@ int			parse_separator_op(void)
 		return (0);
 	type = g_parser.token->type;
 	token_del(&g_parser.token);
+	g_lexer.expect_reserv_word = true;
 	g_parser.token = get_next_token();
 	return (type);
 }

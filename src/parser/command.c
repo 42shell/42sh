@@ -48,7 +48,11 @@ t_command		*parse_command(void)
 	if (!(command = parse_simple_command()))
 	{
 		if ((command = parse_compound_command()))
-			command->redir_list = parse_redirect_list();
+		{
+			//for the moment compound_command can only be a group command.
+			//t_compound_command should be added
+			command->value.group->redir_list = parse_redirect_list();
+		}
 	}
 	return (command);
 }

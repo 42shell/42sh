@@ -12,31 +12,39 @@
 
 #include "shell.h"
 
+static t_command	*build_pipe_and_advance(t_command *left)
+{
+	t_command	*node;
+	int			old_linebreak_type;
+
+	node = command_new(CONNECTION);
+	node->value.connection->connector = PIPE;
+	node->value.connection->left = left;
+	token_del(&g_parser.token);
+	g_parser.token = get_next_token();
+	old_linebreak_type = g_linebreak_type;
+	g_linebreak_type = PIPE;
+	parse_linebreak();
+	g_linebreak_type = old_linebreak_type;
+	return (node);
+}
+
 /*
 ** pipe_sequence    :                             command
 **                  | pipe_sequence '|' linebreak command
 */
 
-t_command	*parse_pipeline(void)
+t_command		*parse_pipeline(void)
 {
 	t_command		*pipeline;
 	t_command		*node;
-	int				old_linebreak_type;
 
 	if (!(pipeline = parse_command()))
 		return (NULL);
 	while (g_parser.token
 	&& g_parser.token->type == PIPE)
 	{
-		node = command_new(CONNECTION);
-		node->value.connection->connector = PIPE;
-		node->value.connection->left = pipeline;
-		token_del(&g_parser.token);
-		g_parser.token = get_next_token();
-		old_linebreak_type = g_linebreak_type;
-		g_linebreak_type = PIPE;
-		parse_linebreak();
-		g_linebreak_type = old_linebreak_type;
+		node = build_pipe_and_advance(pipeline);
 		if (!(node->value.connection->right = parse_command()))
 		{
 			if (!g_parser.status)

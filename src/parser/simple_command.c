@@ -92,7 +92,7 @@ static int		set_tokens(t_simple_cmd *simple)
 
 t_command		*parse_simple_command(void)
 {
-	t_command		*cmd;
+	t_command	*cmd;
 
 	if (g_parser.token == NULL
 	|| g_parser.token->type == NEWLINE)

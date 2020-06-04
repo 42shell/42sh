@@ -79,7 +79,7 @@ int			eval_group_command(t_command *command)
 		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
 		return (launch_process(process, 0));
 	}
-	if (set_redir(command->redir_list, true) != 0)
+	if (set_redir(command->value.group->redir_list, true) != 0)
 	{
 		restore_fds();
 		return (g_last_exit_st = 1);

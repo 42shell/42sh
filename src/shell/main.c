@@ -45,8 +45,7 @@ int				main_loop(void)
 			notif_jobs();
 		g_parser.status = NOERR;
 		g_shell.get_input(PS1, false);
-		if ((g_parser.token = get_next_token())
-		&& (complete_command = get_complete_command()))
+		if ((complete_command = get_complete_command()))
 			eval_complete_command(complete_command);
 		if (g_shell.interactive_mode
 		&& g_lexer.line && *g_lexer.line != '\n')
