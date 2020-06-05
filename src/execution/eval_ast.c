@@ -88,6 +88,8 @@ int			eval_group_command(t_command *command)
 	cmd = group->list;
 	while (cmd)
 	{
+		if (cmd->next)
+			g_already_forked = false;
 		eval_command(cmd);
 		if (!g_job_control_enabled)
 			wait_for_job(g_shell.jobs);
