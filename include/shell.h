@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/28 18:21:57 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/05 16:29:22 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ typedef struct			s_var
 # define PS2			"> "
 # define PSQ			"q> "
 # define PSB			"b> "
+# define PSDP			"dp> "
 # define PSD			"d> "
 # define PSA			"a> "
 # define PSO			"o> "
