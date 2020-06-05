@@ -90,7 +90,10 @@ t_command		*parse_subshell(void)
 	group->value.group->list = compound_list;
 	token_del(&g_parser.token);
 	g_parser.token = get_next_token();
-	if (group->value.group->list->type != GROUP)
+	//if the compound list is also a subshell, we have useless parens ( (ls) 2>&1 ) 3>&1
+	//We dont set the subshell flag to convert it into {()}, to avoid useless fork
+	if (!(group->value.group->list->type == GROUP
+	&& group->value.group->list->value.group->subshell))
 		group->value.group->subshell = true;
 	g_linebreak_type = old_linebreak_type;
 	return (group);
