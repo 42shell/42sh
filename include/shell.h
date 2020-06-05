@@ -77,7 +77,6 @@ typedef struct			s_var
 ** old problems:
 ** -recall line with heredoc from history do parse error.
 ** -unsetenv boucle inf when unseting non existing var
-** -initialize lcp in rl_complete
 ** -pipe line continuation remove \n
 ** -env dup invalid read
 ** -autcomplete vim /t doesnt complete files ?
