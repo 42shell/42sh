@@ -63,6 +63,7 @@ typedef struct			s_var
 
 /*
 ** -bangs
+** -parens limit
 ** -check job control (especially subshells with &)
 ** -async in subshells
 **

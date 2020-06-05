@@ -75,10 +75,15 @@ int			eval_group_command(t_command *command)
 	t_command	*cmd;
 
 	group = command->value.group;
-	if (group->subshell && !g_already_forked)
+	if (group->subshell)
 	{
-		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
-		return (launch_process(process, 0));
+		if (!g_already_forked)
+		{
+			process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
+			return (launch_process(process, 0));
+		}
+		if (group->list->next)
+			g_already_forked = false;
 	}
 	if (set_redir(command->value.group->redir_list, true) != 0)
 	{
@@ -88,8 +93,6 @@ int			eval_group_command(t_command *command)
 	cmd = group->list;
 	while (cmd)
 	{
-		if (cmd->next)
-			g_already_forked = false;
 		eval_command(cmd);
 		if (!g_job_control_enabled)
 			wait_for_job(g_shell.jobs);
