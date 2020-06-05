@@ -74,7 +74,7 @@ int			eval_group_command(t_command *command)
 	t_command	*cmd;
 
 	group = command->value.group;
-	if (group->subshell)
+	if (group->subshell && !g_already_forked)
 	{
 		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
 		return (launch_process(process, 0));

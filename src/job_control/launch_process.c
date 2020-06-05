@@ -63,6 +63,8 @@ static void		set_child_attr(t_process *process)
 	//the simple commands to be forked if necessary.
 	if (!subshell_is_needed(process->command))
 		g_already_forked = true;
+	//else
+	//	g_already_forked = false;
 	//if we have a group_command, it may be a real subshell or a piped brace_group.
 	//We set subshell=false to make sure the command is executed as a simple brace_group
 	//in both cases

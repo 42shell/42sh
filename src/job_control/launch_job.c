@@ -15,7 +15,8 @@
 bool			subshell_is_needed(t_command *command)
 {
 	return ((command->type == GROUP
-		&& command->value.group->list->next)
+		&& (command->value.group->list->next
+			|| subshell_is_needed(command->value.group->list)))
 	|| (command->type == CONNECTION
 		&& (command->value.connection->connector == AND_IF
 			|| command->value.connection->connector == OR_IF)));

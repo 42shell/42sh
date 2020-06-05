@@ -63,6 +63,7 @@ typedef struct			s_var
 
 /*
 ** -bangs
+** -check job control (especially subshells with &)
 ** 
 ** -store parse errors in history ?
 ** -$> { ls ; ls -z } 2>& | cat -e
