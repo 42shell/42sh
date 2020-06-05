@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 12:05:06 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/28 18:20:00 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/05 23:46:45 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ int		lx_backslash(void)
 {
 	char	*quote_st;
 
-	quote_st = g_lexer.brace_open ? &g_lexer.inner_quote_st
-										: &g_lexer.quote_st;
+	quote_st = get_bracket_status(g_lexer.brack_stack) != '\0'
+		? &g_lexer.inner_quote_st : &g_lexer.quote_st;
 	if (g_lexer.line[g_lexer.i] == BSLASH && *quote_st != SQUOTE)
 	{
 		if (!g_lexer.token)
@@ -36,8 +36,8 @@ int		lx_quote(void)
 
 	if (g_lexer.line[g_lexer.i] == SQUOTE || g_lexer.line[g_lexer.i] == DQUOTE)
 	{
-		quote_st = g_lexer.brace_open ? &g_lexer.inner_quote_st
-											: &g_lexer.quote_st;
+		quote_st = get_bracket_status(g_lexer.brack_stack) != '\0'
+			? &g_lexer.inner_quote_st : &g_lexer.quote_st;
 		if (!g_lexer.token)
 			g_lexer.token = token_new(WORD);
 		if (!*quote_st)

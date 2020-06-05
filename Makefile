@@ -131,6 +131,7 @@ SRC_UTILS      := str_utils.c\
 				  array_utils.c\
 				  path_utils.c\
                   ft_mktemp.c\
+                  brack_stack.c\
                   get_opt.c
 SRC_UTILS      := $(addprefix utils/,$(SRC_UTILS))
 
