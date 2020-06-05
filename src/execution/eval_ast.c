@@ -55,6 +55,7 @@ int			eval_and_or(t_command *command)
 {
 	t_connection	*and_or;
 
+	g_already_forked = false;
 	and_or = command->value.connection;
 	eval_command(and_or->left);
 	if (!g_job_control_enabled)

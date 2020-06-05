@@ -50,7 +50,7 @@ t_command		*parse_compound_list(void)
 {
 	t_command	*compound_list;
 	t_command	*last;
-	
+
 	parse_linebreak();
 	if (!(compound_list = parse_term()))
 		return (NULL);
@@ -90,7 +90,8 @@ t_command		*parse_subshell(void)
 	group->value.group->list = compound_list;
 	token_del(&g_parser.token);
 	g_parser.token = get_next_token();
-	group->value.group->subshell = true;
+	if (group->value.group->list->type != GROUP)
+		group->value.group->subshell = true;
 	g_linebreak_type = old_linebreak_type;
 	return (group);
 }
