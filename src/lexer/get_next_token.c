@@ -16,9 +16,9 @@ static char		*get_prompt(void)
 {
 	if (g_lexer.brace_open)
 	{
-		if (g_lexer.brace_quote_st == SQUOTE)
+		if (g_lexer.inner_quote_st == SQUOTE)
 			return (PSQ);
-		else if (g_lexer.brace_quote_st == DQUOTE)
+		else if (g_lexer.inner_quote_st == DQUOTE)
 			return (PSD);
 		else
 			return (PSB);

@@ -16,7 +16,7 @@ int		lx_backslash(void)
 {
 	char	*quote_st;
 
-	quote_st = g_lexer.brace_open ? &g_lexer.brace_quote_st
+	quote_st = g_lexer.brace_open ? &g_lexer.inner_quote_st
 										: &g_lexer.quote_st;
 	if (g_lexer.line[g_lexer.i] == BSLASH && *quote_st != SQUOTE)
 	{
@@ -36,7 +36,7 @@ int		lx_quote(void)
 
 	if (g_lexer.line[g_lexer.i] == SQUOTE || g_lexer.line[g_lexer.i] == DQUOTE)
 	{
-		quote_st = g_lexer.brace_open ? &g_lexer.brace_quote_st
+		quote_st = g_lexer.brace_open ? &g_lexer.inner_quote_st
 											: &g_lexer.quote_st;
 		if (!g_lexer.token)
 			g_lexer.token = token_new(WORD);

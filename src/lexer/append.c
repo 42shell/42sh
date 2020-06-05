@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 21:27:56 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/28 18:17:58 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/05 16:06:06 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,9 @@ int		lx_operator_next(void)
 
 int		lx_word_next(void)
 {
-	if (g_lexer.brace_open)
-	{
-		if (g_lexer.line[g_lexer.i] == '}' && g_lexer.brace_quote_st == NONE)
+	if (g_lexer.brace_open 
+		&& (g_lexer.line[g_lexer.i] == '}' && g_lexer.inner_quote_st == NONE))
 			g_lexer.brace_open = false;
-	}
 	else if (g_lexer.quote_st == NONE || g_lexer.quote_st == DQUOTE)
 	{
 		if (g_lexer.line[g_lexer.i] == '$'

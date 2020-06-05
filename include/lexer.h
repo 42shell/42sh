@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/28 17:56:14 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/05 16:08:45 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,10 @@ typedef struct		s_token
 	enum e_token_type	type;
 }					t_token;
 
+/*
+** inner_quote_st is the quote status inside ${} and $(()) blocks
+*/
+
 typedef struct		s_lexer
 {
 	char			*line;
@@ -76,7 +80,7 @@ typedef struct		s_lexer
 	char			token_delimited;
 	char			line_cont;
 	char			quote_st;
-	char			brace_quote_st;
+	char			inner_quote_st;
 	bool			brace_open;
 	char			nl_found;
 	char			end_of_input;
