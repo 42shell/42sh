@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:08:22 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/28 19:25:21 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/05 23:23:14 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	expand_token(t_token *token, char *home_dir)
 	int	pos;
 
 	pos = tilde_expand(token->value, home_dir);
-	if (param_expand(token->value, pos, false) == 1)
+	if (dollar_expand(token->value, pos, false) == 1)
 		return (1);
 	path_expand(token);
 	remove_quotes(token->value);

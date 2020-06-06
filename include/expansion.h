@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 16:11:34 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/28 17:41:23 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/05 23:27:45 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 # include "shell.h"
 
 int		expand(t_simple_cmd *command);
-int		param_expand(t_dstr *str, int start, bool heredoc);
+int		dollar_expand(t_dstr *str, int start, bool heredoc);
+int		param_expand(t_dstr *str, int *i, bool brace);
 void	path_expand(t_token *token);
 t_array	*get_matches(char *path);
 bool	is_match(char *str, char *pat, char quote, bool is_first_char);

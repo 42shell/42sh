@@ -90,6 +90,7 @@ SRC_JOB       	:= launch_job.c\
 SRC_JOB			:= $(addprefix job_control/,$(SRC_JOB))
 
 SRC_EXPANSION   := expand.c\
+                   dollar_exp.c\
                    param_exp.c\
                    quotes.c\
 				   is_match.c\
