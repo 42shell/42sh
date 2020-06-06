@@ -1,35 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command.c                                          :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 19:46:45 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 18:35:38 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/04/10 00:08:46 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-/*
-** command         : simple_command
-**                 | compound_command
-**                 | compound_command redirect_list
-*/
-
-t_command		*parse_command(void)
+void		add_heredoc(t_token *heredoc)
 {
-	t_command	*command;
+	t_token		*ptr;
 
-	if (!(command = parse_simple_command()))
+	if (!g_parser.heredocs)
+		g_parser.heredocs = heredoc;
+	else
 	{
-		if ((command = parse_compound_command()))
-		{
-			//for the moment compound_command can only be a group command.
-			//t_compound_command should be added
-			command->value.group->redir_list = parse_redirect_list();
-		}
+		ptr = g_parser.heredocs;
+		while (ptr->next)
+			ptr = ptr->next;
+		ptr->next = heredoc;
 	}
-	return (command);
+}
+
+int			handle_heredoc_eof(char *delim)
+{
+	ft_dprintf(2,
+	"42sh: warning: here-document delimited by end-of-file (wanted '%.*s')\n",
+	(int)(ft_strlen(delim) - 1), delim);
+	g_parser.status = NOERR;
+	return (0);
 }

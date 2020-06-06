@@ -12,21 +12,6 @@
 
 #include "shell.h"
 
-static void		parse_add_heredoc(t_token *heredoc)
-{
-	t_token		*ptr;
-
-	if (!g_parser.heredocs)
-		g_parser.heredocs = heredoc;
-	else
-	{
-		ptr = g_parser.heredocs;
-		while (ptr->next)
-			ptr = ptr->next;
-		ptr->next = heredoc;
-	}
-}
-
 /*
 **	filename         : WORD
 */
@@ -85,7 +70,7 @@ static t_redir	*parse_io_here(t_token *io_number)
 		return (NULL);
 	}
 	redir->right_op = g_parser.token;
-	parse_add_heredoc(redir->right_op);
+	add_heredoc(redir->right_op);
 	g_parser.token = get_next_token();
 	return (redir);
 }
@@ -109,4 +94,27 @@ t_redir			*parse_io_redirect(void)
 	if (g_parser.token->type == DLESS)
 		return (parse_io_here(NULL));
 	return (parse_io_file(NULL));
+}
+
+t_redir			*parse_redirect_list(void)
+{
+	t_redir		*list;
+	t_redir		*curr;
+	t_redir		*redir;
+
+	list = NULL;
+	while ((redir = parse_io_redirect()))
+	{
+		if (!list)
+		{
+			list = redir;
+			curr = list;
+		}
+		else
+		{
+			curr->next = redir;
+			curr = curr->next;
+		}
+	}
+	return (list);
 }

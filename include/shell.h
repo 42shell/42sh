@@ -62,8 +62,9 @@ typedef struct			s_var
 
 
 /*
-** -bangs
 ** -parens limit
+** -handle consecutive reserved_words in lexer
+** -bangs
 ** -check job control (especially subshells with &)
 ** -async in subshells
 **

@@ -12,22 +12,19 @@
 
 #include "shell.h"
 
-int		parse_heredoc_eof(char *delim)
-{
-	ft_dprintf(2,
-	"42sh: warning: here-document delimited by end-of-file (wanted '%.*s')\n",
-	(int)(ft_strlen(delim) - 1), delim);
-	g_parser.status = NOERR;
-	return (0);
-}
-
 int		parse_error(char *near)
 {
 	g_last_exit_st = 2;
 	if (g_parser.status != USER_ABORT)
-		ft_dprintf(2,
-		"42sh: syntax error near unexpected token '%s'\n",
-		near);
+	{
+		if (g_parser.status == BRACKET_NEST_LIMIT_REACHED)
+			ft_dprintf(2,
+			"42sh: too many nested brackets, aborting\n");
+		else
+			ft_dprintf(2,
+			"42sh: syntax error near unexpected token '%s'\n",
+			near);
+	}
 	g_parser.status = NOERR;
 	return (0);
 }

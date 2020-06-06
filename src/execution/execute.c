@@ -53,12 +53,10 @@ int			exec_binary(char **argv, t_array *temp_env)
 	exit(126);
 }
 
-int			exec_simple_command(t_command *command)
+int			exec_simple_command(t_simple_cmd *simple)
 {
-	t_simple_cmd	*simple;
 	t_array 		*temp_env;
 
-	simple = command->value.simple;
 	if (set_redir(simple->redirs, true) != 0)
 	{
 		restore_fds();
@@ -80,5 +78,22 @@ int			exec_simple_command(t_command *command)
 		g_last_exit_st = 0;
 	}
 	restore_fds();
+	return (0);
+}
+
+int			exec_group_command(t_group_cmd *group)
+{
+	t_command	*cmd;
+
+	cmd = group->list;
+	while (cmd)
+	{
+		eval_command(cmd);
+		if (!g_job_control_enabled)
+			wait_for_job(g_shell.jobs);
+		else
+			put_job_fg(g_shell.jobs, false);
+		cmd = cmd->next;
+	}
 	return (0);
 }

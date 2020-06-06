@@ -67,7 +67,8 @@ SRC_VARIABLES	:= env_dup.c\
 				   variables.c
 SRC_VARIABLES	:= $(addprefix variables/,$(SRC_VARIABLES))
 
-SRC_EXEC        := eval_ast.c\
+SRC_EXEC        := eval_command.c\
+				   eval_operator.c\
 				   execute.c\
 				   get_argv.c\
 				   get_exec_path.c\
@@ -113,12 +114,15 @@ SRC_PARSER      := and_or.c\
 				   command.c\
 				   complete_command.c\
 				   compound_command.c\
+				   group_command.c\
+				   compound_list.c\
                    io_redirect.c\
 				   separator.c\
 				   heredoc.c\
 				   error.c\
 				   debug.c\
-                   del.c
+                   new_del.c\
+				   utils.c
 SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
 
 SRC_SHELL       := init.c\

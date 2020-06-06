@@ -44,6 +44,7 @@ int				main_loop(void)
 		if (g_shell.jobs)
 			notif_jobs();
 		g_parser.status = NOERR;
+		g_parser.bracket_lvl = 0;
 		g_shell.get_input(PS1, false);
 		if ((complete_command = get_complete_command()))
 			eval_complete_command(complete_command);

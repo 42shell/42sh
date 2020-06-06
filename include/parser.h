@@ -15,6 +15,8 @@
 #include <stdio.h>
 # include "shell.h"
 
+# define BRACKET_NEST_LIMIT		1024
+
 /*
 ** values for s_command->flags
 */
@@ -27,7 +29,8 @@ enum							e_parser_status
 {
 	USER_ABORT = -1,
 	NOERR = 0,
-	UNEXPECTED_TOKEN
+	UNEXPECTED_TOKEN,
+	BRACKET_NEST_LIMIT_REACHED
 };
 
 enum							e_cmd_type
@@ -36,31 +39,6 @@ enum							e_cmd_type
 	SIMPLE,
 	GROUP
 };
-
-/*
-** parser:
-** -heredocs is a pointer to the right operand token of the
-**  first io_here redir struct.
-**  The tokens are chained if there are more than 1 heredocs,
-**  and they are unchained in get_all_heredocs to avoid segfaults in
-**  token_del()
-*/
-
-typedef struct					s_parser
-{
-	t_token						*token;
-	t_token						*heredocs;
-	enum e_parser_status		status;
-}								t_parser;
-
-t_parser						g_parser;
-
-/*
-** -A single redir is returned by parse_io_redirect()
-** -it contains 3 tokens corresponding to the operator and
-**  the 2 operands of a redirection (2 >& 1)
-** -the left operand can be NULL
-*/
 
 typedef struct					s_redir
 {
@@ -110,8 +88,29 @@ typedef struct					s_command
 }								t_command;
 
 /*
+** parser:
+** -heredocs is a pointer to the right operand token of the
+**  first io_here redir struct.
+**  The tokens are chained if there are more than 1 heredocs,
+**  and they are unchained in get_all_heredocs to avoid segfaults in
+**  token_del()
+*/
+
+typedef struct					s_parser
+{
+	t_token						*token;
+	t_token						*heredocs;
+	enum e_parser_status		status;
+	int							bracket_lvl;
+}								t_parser;
+
+t_parser						g_parser;
+
+/*
 ** in case of line continuation
 ** -g_linebreak_type type determine the prompt displayed |, &&, ||, ( ...
+** -when changing g_linebreak_type in a function the old linebreak type
+**  is stored internally and reset after the line continuation
 */
 
 int								g_linebreak_type;
@@ -120,20 +119,25 @@ t_command						*parse_complete_command(void);
 t_command						*parse_and_or(void);
 t_command						*parse_pipeline(void);
 t_command						*parse_command(void);
+t_command						*parse_simple_command(void);
 t_command						*parse_compound_command(void);
 t_command						*parse_brace_group(void);
 t_command						*parse_subshell(void);
-t_command						*parse_simple_command(void);
-
+t_command						*parse_compound_list(void);
+t_command						*parse_term(void);
+t_redir							*parse_redirect_list(void);
 t_redir							*parse_io_redirect(void);
+
 int								parse_separator(void);
 int								parse_separator_op(void);
 int								parse_newline_list(void);
 int								parse_linebreak(void);
 
 int								get_all_heredocs(void);
+void							add_heredoc(t_token *heredoc);
+int								handle_heredoc_eof(char *delim);
+
 int								parse_error(char *near);
-int								parse_heredoc_eof(char *delim);
 
 t_command						*command_new(enum e_cmd_type type);
 int								command_del(t_command **command);

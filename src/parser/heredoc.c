@@ -75,7 +75,7 @@ static t_dstr	*get_heredoc(char *delim)
 			}
 			else if (ret == INPUT_EOF)
 			{
-				parse_heredoc_eof(delim);
+				handle_heredoc_eof(delim);
 				g_heredoc_eof = true;
 			}
 		}

@@ -19,14 +19,6 @@
 # define ERROR_REDIR_OPEN		-1
 # define ERROR_REDIR_BAD_FD		-2
 
-# define EXEC_ASYNC				1
-# define EXEC_AND_OR			2
-# define EXEC_PIPELINE			4
-# define EXEC_ALREADY_FORKED	8
-
-# define JOB_DONE				1
-# define JOB_STOPPED			2
-
 typedef struct		s_fd_backup
 {
 	int				backup;
@@ -59,7 +51,8 @@ int					eval_simple_command(t_command *command);
 ** execution
 */
 
-int					exec_simple_command(t_command *command);
+int					exec_group_command(t_group_cmd *group);
+int					exec_simple_command(t_simple_cmd *simple);
 int					exec_builtin(char **argv, t_array *temp_env);
 int					exec_binary(char **argv, t_array *temp_env);
 char				**get_argv(t_simple_cmd *command);
