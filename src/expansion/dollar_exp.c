@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 23:12:16 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/06/06 16:21:21 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/06 16:49:35 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ static int	do_one_expansion(t_dstr *str, int *i)
 {
 	if (str->str[*i + 1] == '{')
 		return (param_expand(str, i, true));
+	if (str->str[*i + 1] == '(' && str->str[*i + 2] == '(')
+		return (arith_expand(str, i));
 	return (param_expand(str, i, false));
 }
 

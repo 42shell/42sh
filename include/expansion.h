@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 16:11:34 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/06/05 23:27:45 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/11 02:17:02 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 
 int		expand(t_simple_cmd *command);
 int		dollar_expand(t_dstr *str, int start, bool heredoc);
+int		arith_expand(t_dstr *str, int *i);
+long	eval_expr(const char *str);
 int		param_expand(t_dstr *str, int *i, bool brace);
 void	path_expand(t_token *token);
 t_array	*get_matches(char *path);

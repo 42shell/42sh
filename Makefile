@@ -92,6 +92,20 @@ SRC_JOB			:= $(addprefix job_control/,$(SRC_JOB))
 SRC_EXPANSION   := expand.c\
                    dollar_exp.c\
                    param_exp.c\
+				   arith_exp.c\
+				   arith/eval.c\
+				   arith/eval_arith_op.c\
+				   arith/eval_logic_op.c\
+				   arith/eval_rel_op.c\
+				   arith/eval_assign_op.c\
+				   arith/eval_plusplus_op.c\
+				   arith/lexer.c\
+				   arith/init_lexer.c\
+				   arith/parse_expr1.c\
+				   arith/parse_expr2.c\
+				   arith/parse_factor.c\
+				   arith/parser_utils.c\
+				   arith/token_utils.c\
                    quotes.c\
 				   is_match.c\
 				   sort_matches.c\
