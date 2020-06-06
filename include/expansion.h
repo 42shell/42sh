@@ -29,4 +29,6 @@ void	remove_quotes(t_dstr *str);
 void	remove_bslash(t_dstr *str);
 void	sort_matches(char **array, int size);
 
+int		get_end_of_braces(const char *str);
+
 #endif

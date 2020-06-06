@@ -6,13 +6,41 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 23:12:16 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/06/06 15:53:40 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/06 16:21:21 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
 char	*g_expand_error_token = NULL;
+
+/*
+** the first char of str should be a $
+** Probably should never return -1 since lexer enforces brace termination
+*/
+
+int			get_end_of_braces(const char *str)
+{
+	int		i;
+	t_array	*brack_stack;
+	int		flags;
+
+	brack_stack = array_new(4);
+	flags = BRACK_CAN_OPEN | BRACK_CAN_CLOSE;
+	i = 0;
+	while (str[i])
+	{
+		set_bracket_status(str, i, brack_stack, flags);
+		if (brack_stack->size == 0)
+		{
+			array_destroy(brack_stack);
+			return (i);
+		}
+		i++;
+	}
+	array_destroy(brack_stack);
+	return (-1);
+}
 
 static bool	should_expand(char *str, int i, char quote_status, bool heredoc)
 {

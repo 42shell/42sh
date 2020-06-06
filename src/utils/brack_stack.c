@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 22:26:59 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/06/08 16:25:24 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/08 16:25:53 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,13 @@ void			pop_bracket_from_stack(t_array *stack)
 }
 
 /*
-** in case of $(()) inside a $(), we don't want to close the $() with the second** paren of the )) that close the $(( so we use g_just_closed_dparen.
+** in case of $(()) inside a $(), we don't want to close the $() with the second
+** paren of the )) that close the $(( so we use g_just_closed_dparen.
 ** flags: BRACK_CAN_OPEN, BRACK_CAN_CLOSE.
 */
 
-void			set_bracket_status(char *str, int i, t_array *stack, int flags)
+void			set_bracket_status(const char *str, int i, t_array *stack,
+									int flags)
 {
 	enum e_bracket	brack_status;
 

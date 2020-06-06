@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/06/05 23:44:17 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/06 16:07:27 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,15 +123,5 @@ bool				is_operator_part(char c);
 bool				is_operator_next(char *ope, char c);
 bool				is_redir(t_token *token);
 int					get_operator_type(char *ope);
-
-# define BRACK_CAN_OPEN		0x1
-# define BRACK_CAN_CLOSE	0x2
-
-enum e_bracket		get_bracket_status(t_array *stack);
-void				set_bracket_status(char *str, int i, t_array *stack,
-					int flags);
-void				add_bracket_to_stack(t_array *stack,
-					enum e_bracket bracket);
-void				pop_bracket_from_stack(t_array *stack);
 
 #endif

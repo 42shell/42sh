@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/06/05 16:29:22 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/08 17:56:14 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,5 +143,16 @@ void					set_temp_env_variables(t_simple_cmd *cmd,
 char					*get_last_exit_status(void);
 char					*get_shell_pid(void);
 char					*get_last_bg_job_pid(void);
+
+# define BRACK_CAN_OPEN		0x1
+# define BRACK_CAN_CLOSE	0x2
+
+enum e_bracket			get_bracket_status(t_array *stack);
+void					set_bracket_status(const char *str, int i,
+						t_array *stack,
+						int flags);
+void					add_bracket_to_stack(t_array *stack,
+						enum e_bracket bracket);
+void					pop_bracket_from_stack(t_array *stack);
 
 #endif
