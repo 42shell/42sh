@@ -16,6 +16,10 @@ int			mandatory_reserv_word(int expect_type)
 {
 	int		type;
 
+	if (!g_parser.token)
+		return (0);
+	if (g_parser.token->type == expect_type)
+		return (expect_type);
 	if ((type = is_reserved_word(g_parser.token->value->str))
 	&& type == expect_type)
 		return (g_parser.token->type = type);
