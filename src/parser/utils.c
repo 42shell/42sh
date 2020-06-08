@@ -12,6 +12,16 @@
 
 #include "shell.h"
 
+int			mandatory_reserv_word(int expect_type)
+{
+	int		type;
+
+	if ((type = is_reserved_word(g_parser.token->value->str))
+	&& type == expect_type)
+		return (g_parser.token->type = type);
+	return (0);
+}
+
 void		add_heredoc(t_token *heredoc)
 {
 	t_token		*ptr;

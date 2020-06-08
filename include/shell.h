@@ -60,14 +60,22 @@ typedef struct			s_var
 	t_var_value_func	value_func;
 }						t_var;
 
+/*
+$> (echo lol;(ls}))
+lol
+42sh: ls}: command not found
+$> {ls;{ls}}
+42sh: {ls: command not found
+42sh: {ls}}: command not found
+*/
 
 /*
-** -parens limit
-** -handle consecutive reserved_words in lexer
-** -bangs
-** -check job control (especially subshells with &)
+** -tests/-check job control (especially subshells with &)
 ** -async in subshells
-**
+** -bangs
+** -retests
+** -handle consecutive reserved_words in lexer ?
+** 
 ** -store parse errors in history ?
 ** -$> { ls ; ls -z } 2>& | cat -e
 **  42sh: syntax error near unexpected token 'EOF'

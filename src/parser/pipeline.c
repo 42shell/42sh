@@ -21,6 +21,7 @@ static t_command	*build_pipe_and_advance(t_command *left)
 	node->value.connection->connector = PIPE;
 	node->value.connection->left = left;
 	token_del(&g_parser.token);
+	g_lexer.expect_reserv_word = true;
 	g_parser.token = get_next_token();
 	old_linebreak_type = g_linebreak_type;
 	g_linebreak_type = PIPE;

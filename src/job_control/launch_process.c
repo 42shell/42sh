@@ -75,7 +75,7 @@ int				launch_process(t_process *process, int fd_to_close)
 		reset_signals();
 		eval_command(process->command);
 		wait_for_job(g_shell.jobs);
-		exit(0);
+		builtin_exit(NULL, NULL);
 	}
 	else
 	{

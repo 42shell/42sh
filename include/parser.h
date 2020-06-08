@@ -134,8 +134,13 @@ int								parse_newline_list(void);
 int								parse_linebreak(void);
 
 int								get_all_heredocs(void);
+
+/*
+** utils
+*/
 void							add_heredoc(t_token *heredoc);
 int								handle_heredoc_eof(char *delim);
+int								mandatory_reserv_word(int expect_type);
 
 int								parse_error(char *near);
 
