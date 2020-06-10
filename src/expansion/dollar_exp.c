@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 23:12:16 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/06/06 16:49:35 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/10 18:31:10 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,15 @@ int			get_end_of_braces(const char *str)
 {
 	int		i;
 	t_array	*brack_stack;
-	int		flags;
 
 	brack_stack = array_new(4);
-	flags = BRACK_CAN_OPEN | BRACK_CAN_CLOSE;
 	i = 0;
 	while (str[i])
 	{
-		set_bracket_status(str, i, brack_stack, flags);
+		if (str[i] == '\\'
+			&& (str[i + 1] == '\"' || str[i + 1] == '\'' || str[i + 1] == '\\'))
+			i += 2;
+		set_bracket_status(str, i, brack_stack, true);
 		if (brack_stack->size == 0)
 		{
 			array_destroy(brack_stack);

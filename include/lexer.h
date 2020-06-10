@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/06/06 16:07:27 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/10 16:07:17 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,15 @@ enum				e_token_type
 	PATTERN
 };
 
-enum				e_bracket
-{
-	DPAREN,
-	PAREN,
-	BRACE
-};
-
 enum				e_quote_st
 {
 	NONE = 0,
 	BSLASH = '\\',
 	SQUOTE = '\'',
-	DQUOTE = '"'
+	DQUOTE = '"',
+	PAREN,
+	DPAREN,
+	BRACE
 };
 
 /*
@@ -77,9 +73,8 @@ typedef struct		s_token
 }					t_token;
 
 /*
-** inner_quote_st is the quote status inside ${} and $(()) blocks
-** brack_stack is a stack containing enum e_brackets to keep track of ${} $()
-** and $(()) closing brackets for line continuation
+** brack_stack is a stack containing enum e_quote_st to keep track of ${} $()
+** and $(()) closing brackets and inner quotes for line continuation
 */
 
 typedef struct		s_lexer
@@ -89,7 +84,6 @@ typedef struct		s_lexer
 	char			token_delimited;
 	char			line_cont;
 	char			quote_st;
-	char			inner_quote_st;
 	t_array			*brack_stack;
 	char			nl_found;
 	char			end_of_input;

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 21:27:56 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/06/05 23:44:35 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/10 16:15:18 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,13 @@ int		lx_operator_next(void)
 
 int		lx_word_next(void)
 {
-	int flags;
+	bool can_open;
 
 	if (g_lexer.token)
 	{
-		flags = 0;
-		if (g_lexer.quote_st == NONE || g_lexer.quote_st == DQUOTE)
-			flags |= BRACK_CAN_OPEN;
-		if (g_lexer.inner_quote_st == NONE)
-			flags |= BRACK_CAN_CLOSE;
-		set_bracket_status(g_lexer.line, g_lexer.i, g_lexer.brack_stack, flags);
+		can_open = (g_lexer.quote_st == NONE || g_lexer.quote_st == DQUOTE);
+		set_bracket_status(g_lexer.line, g_lexer.i, g_lexer.brack_stack,
+							can_open);
 		ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i]);
 		if (g_lexer.quote_st == BSLASH)
 			g_lexer.quote_st &= ~BSLASH;
@@ -66,14 +63,10 @@ int		lx_comment(void)
 
 int		lx_word_start(void)
 {
-	int flags;
+	bool can_open;
 
-	flags = 0;
-	if (g_lexer.quote_st == NONE || g_lexer.quote_st == DQUOTE)
-		flags |= BRACK_CAN_OPEN;
-	if (g_lexer.inner_quote_st == NONE)
-		flags |= BRACK_CAN_CLOSE;
-	set_bracket_status(g_lexer.line, g_lexer.i, g_lexer.brack_stack, flags);
+	can_open = (g_lexer.quote_st == NONE || g_lexer.quote_st == DQUOTE);
+	set_bracket_status(g_lexer.line, g_lexer.i, g_lexer.brack_stack, can_open);
 	g_lexer.token = token_new(WORD);
 	ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i]);
 	g_lexer.i++;

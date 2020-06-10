@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/06/08 17:56:14 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/10 16:09:17 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,12 +147,11 @@ char					*get_last_bg_job_pid(void);
 # define BRACK_CAN_OPEN		0x1
 # define BRACK_CAN_CLOSE	0x2
 
-enum e_bracket			get_bracket_status(t_array *stack);
+enum e_quote_st			get_bracket_status(t_array *stack);
 void					set_bracket_status(const char *str, int i,
-						t_array *stack,
-						int flags);
+						t_array *stack, bool can_open);
 void					add_bracket_to_stack(t_array *stack,
-						enum e_bracket bracket);
+						enum e_quote_st bracket);
 void					pop_bracket_from_stack(t_array *stack);
 
 #endif

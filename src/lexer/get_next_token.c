@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/06/08 17:53:33 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/10 17:36:29 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 static char		*get_prompt(void)
 {
-	enum e_bracket bracket_status;
+	enum e_quote_st	bracket_status;
 
-	if (g_lexer.quote_st == SQUOTE || g_lexer.inner_quote_st == SQUOTE)
-		return (PSQ);
 	bracket_status = get_bracket_status(g_lexer.brack_stack);
+	if (g_lexer.quote_st == SQUOTE || bracket_status == SQUOTE)
+		return (PSQ);
 	if (bracket_status == BRACE)
 		return (PSB);
 	if (bracket_status == DPAREN)
 		return (PSDP);
 	if (bracket_status == PAREN)
 		return (PSP);
-	if (g_lexer.quote_st == DQUOTE || g_lexer.inner_quote_st == DQUOTE)
+	if (g_lexer.quote_st == DQUOTE || bracket_status == DQUOTE)
 		return (PSD);
 	if (g_lexer.line_cont == PIPE)
 		return (PSP);
