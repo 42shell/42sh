@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 16:36:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/06/08 16:38:12 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/11 01:18:32 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,14 @@ int			param_expand(t_dstr *str, int *i, bool brace)
 
 	var_name = get_var_name(str->str + *i, brace);
 	if (var_name == NULL)
-		return (brace ? 1 : 0);
+	{
+		if (brace)
+		{
+			ft_dprintf(2, "42sh: %s: bad substitution\n", str->str + *i);
+			return (1);
+		}
+		return (0);
+	}
 	var_value = get_var_value(var_name);
 	ft_dstr_remove(str, *i, ft_strlen(var_name) + (brace ? 3 : 1));
 	ft_dstr_insert(str, *i, var_value, ft_strlen(var_value));

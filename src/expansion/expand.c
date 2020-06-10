@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:08:22 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/06/05 23:23:14 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/11 01:16:37 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,7 @@ int			expand(t_simple_cmd *command)
 	if (expand_token_list(command->args, home_dir) == 1
 		|| expand_token_list(command->assigns, home_dir) == 1
 		|| expand_redir_list(command->redirs, home_dir) == 1)
-	{
-		ft_dprintf(2, "42sh: %s: bad substitution\n", g_expand_error_token);
 		return (1);
-	}
 	command->is_expand = true;
 	return (0);
 }
