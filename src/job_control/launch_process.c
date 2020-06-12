@@ -14,7 +14,7 @@
 
 static void		reset_signals(void)
 {
-	prctl(PR_SET_PDEATHSIG, SIGTERM);
+	//prctl(PR_SET_PDEATHSIG, SIGTERM);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGTTIN, SIG_DFL);
@@ -57,8 +57,8 @@ static void		set_child_attr(t_process *process)
 	if (!g_shell.jobs->bg)
 		tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
 	//case "(ls && subshell) | cat" g_shell.jobs contains cat process
-	//and we dont want to wait for it in the subshell
-	process_del(&g_shell.jobs->processes);
+	//and we dont want to wait for it in the subshell //handle this in group cmd with new job
+	//process_del(&g_shell.jobs->processes);
 	g_job_control_enabled = false;
 	g_already_forked = true;
 }
@@ -74,7 +74,6 @@ int				launch_process(t_process *process, int fd_to_close)
 		set_child_attr(process);
 		reset_signals();
 		eval_command(process->command);
-		wait_for_job(g_shell.jobs);
 		builtin_exit(NULL, NULL);
 	}
 	else

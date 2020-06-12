@@ -36,7 +36,7 @@ int			eval_group_command(t_command *command)
 {
 	t_process	*process;
 	t_group_cmd	*group;
-
+	
 	group = command->value.group;
 	if (group->subshell)
 	{
@@ -61,7 +61,9 @@ int			eval_group_command(t_command *command)
 int			eval_command(t_command *command)
 {
 	if (command->type == GROUP)
+	{
 		return (eval_group_command(command));
+	}
 	if (command->type == CONNECTION)
 	{
 		if (command->value.connection->connector == OR_IF

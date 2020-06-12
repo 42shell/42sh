@@ -65,7 +65,7 @@ int		rl_add_history(char *str)
 		}
 		g_rl_hist.ptr = g_rl_hist.head;
 	}
-	else if ((entry = g_rl_hist.head->prev)
+	else if ((entry = g_rl_hist.head->next)
 	&& !(g_rl_hist_doubl) && ft_strequ((char *)entry->data, str))
 		return (0);
 	if (!(dup = ft_strdup(str)))

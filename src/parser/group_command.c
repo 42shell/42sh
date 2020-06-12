@@ -58,6 +58,7 @@ t_command			*parse_subshell(void)
 		return (NULL);
 	old_linebreak_type = g_linebreak_type;
 	g_linebreak_type = LBRACKET;
+	token_del(&g_parser.token);
 	//first word of command
 	g_lexer.expect_reserv_word = true;
 	g_parser.token = get_next_token();
@@ -104,12 +105,13 @@ t_command			*parse_brace_group(void)
 		return (NULL);
 	old_linebreak_type = g_linebreak_type;
 	g_linebreak_type = LBRACE;
+	token_del(&g_parser.token);
 	//maybe handle consecutive reserved_words in lexer
 	g_lexer.expect_reserv_word = true;
 	g_parser.token = get_next_token();
 	if (!(compound_list = parse_compound_list()))
 		return (NULL);
-	if (!mandatory_reserv_word(RBRACE)))
+	if (!mandatory_reserv_word(RBRACE))
 	{
 		if (!g_parser.status)
 			g_parser.status = UNEXPECTED_TOKEN;

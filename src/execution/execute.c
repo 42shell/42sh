@@ -81,19 +81,50 @@ int			exec_simple_command(t_simple_cmd *simple)
 	return (0);
 }
 
+static int	exec_bg_cmd(t_command *command)
+{
+	t_process	*process;
+	int			fd;
+
+	fd = open("/dev/null", O_RDONLY);
+	process = process_new(command, fd, STDOUT_FILENO);
+	launch_process(process, 0);
+	if (g_job_control_enabled)
+	{
+		put_job_bg(g_shell.jobs, false);
+		ft_printf("[%d] %d\n", g_shell.jobs->id + 1, g_shell.jobs->pgid);
+	}
+	else
+		process->done = true;
+	close(fd);
+	return (0);
+}
+
+///{ ((ls | cat-e) 2>&1 && echo ok); echo ok 1>&2; } | cat -e
+
 int			exec_group_command(t_group_cmd *group)
 {
-	t_command	*cmd;
+	t_job		*job;
 
-	cmd = group->list;
-	while (cmd)
+	while (group->list)
 	{
-		eval_command(cmd);
-		if (!g_job_control_enabled)
-			wait_for_job(g_shell.jobs);
+		job = job_new(group->list, STDIN_FILENO, STDOUT_FILENO);
+		job->pgid = g_shell.jobs->pgid;
+		add_job(job);
+		if (group->list->sep == AMPERSAND)
+		{
+			job->bg = true;
+			exec_bg_cmd(group->list);
+		}
 		else
-			put_job_fg(g_shell.jobs, false);
-		cmd = cmd->next;
+		{
+			eval_command(group->list);
+			if (!g_job_control_enabled)
+				wait_for_job(g_shell.jobs);
+			else
+				put_job_fg(g_shell.jobs, false);
+		}
+		group->list = group->list->next;
 	}
 	return (0);
 }

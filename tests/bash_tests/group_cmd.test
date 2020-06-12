@@ -70,8 +70,8 @@ echo '{(ls | cat -e)}'
 {(ls | cat -e)}
 echo '~~~'
 
-echo '{ ((ls | cat-e) 2>&1 && echo ok); echo ok 1>&2; } | cat -e'
-{ ((ls | cat-e) 2>&1 && echo ok); echo ok 1>&2; } | cat -e
+echo '{ ((ls | cat -e) 2>&1 && echo ok); echo ok 1>&2; } | cat -e'
+{ ((ls | cat -e) 2>&1 && echo ok); echo ok 1>&2; } | cat -e
 echo '~~~'
 
 echo '{ (ls -z || ls) && echo ok; } 2>&1'
