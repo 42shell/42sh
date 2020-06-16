@@ -5,16 +5,16 @@ dist: xenial
 
 language: c
 
-compiler: gcc
+compiler: clang
 
 env:
-  - DBG_FLAGS="-fsanitize=address -ggdb -O0 -coverage"
+  - DBG_FLAGS="-fsanitize=address -ggdb -O0 -coverage" ASAN_OPTIONS="detect_odr_violation=0"
 
 addons:
   apt:
     packages:
       - make
-      - gcc
+      - clang
       - libncurses-dev
       - tcsh
       - ruby
