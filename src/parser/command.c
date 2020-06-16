@@ -26,7 +26,7 @@ t_command		*parse_command(void)
 	if ((command = parse_simple_command()))
 		return (command);
 	if (g_parser.status == NOERR
-	&&& (command = parse_compound_command()))
+	&& (command = parse_compound_command()))
 	{
 		command->value.group->redir_list = parse_redirect_list();
 		if (g_parser.status != NOERR)
