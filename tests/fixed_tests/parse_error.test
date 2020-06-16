@@ -85,3 +85,6 @@ echo '~~~'
 echo '~~~'
 
 {ls;{ls}}
+echo '~~~'
+
+{ ls ; ls -z } 2>& | cat -e

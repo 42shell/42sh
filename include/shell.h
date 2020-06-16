@@ -12,7 +12,7 @@
 
 #ifndef SHELL_H
 # define SHELL_H
-
+#include <stdio.h>
 # include <unistd.h>
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -72,11 +72,9 @@ typedef struct			s_var
 ** -bangs/shell script
 **
 ** problems:
-** -$> { ls ; ls -z } 2>& | cat -e
-**  42sh: syntax error near unexpected token 'EOF'
-** -$> { ls ; ls -z } | 2>& cat -e
-**  {... ^C
-**  segv
+** -maybe add if (g_parser.status != NOERR return NULL
+**  at the beginning of each parsing function
+** -store aborted lines in history ?
 ** -assert lexer works properly in line continuations,
 **  history heredocs and quoted newlines...
 ** -prompt when executing tests ?

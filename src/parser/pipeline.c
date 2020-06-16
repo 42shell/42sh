@@ -42,8 +42,8 @@ t_command			*parse_pipeline(void)
 
 	if (!(pipeline = parse_command()))
 		return (NULL);
-	while (g_parser.token
-	&& g_parser.token->type == PIPE)
+	while (g_parser.status == NOERR
+	&& g_parser.token && g_parser.token->type == PIPE)
 	{
 		node = build_pipe_and_advance(pipeline);
 		if (!(node->value.connection->right = parse_command()))
@@ -55,5 +55,7 @@ t_command			*parse_pipeline(void)
 		}
 		pipeline = node;
 	}
+	if (g_parser.status != NOERR)
+		command_del(&pipeline);
 	return (pipeline);
 }
