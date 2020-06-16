@@ -30,6 +30,8 @@ t_command		*parse_term(void)
 	{
 		sep_index = g_lexer.i - 1;
 		command->sep = parse_separator();
+		if (g_parser.status != NOERR)
+			break ;
 		if (command->sep == NEWLINE)
 			lx_line_insert_char(';', sep_index);
 		if (command->sep)

@@ -51,6 +51,11 @@ static void	remove_newline(int nl_index, bool nl_replaced)
 	}
 }
 
+/*
+** /!\ g_parser.status should be checked after using these functions,
+** as they do not return special values in case of error (user abort)
+*/
+
 int			parse_newline_list(void)
 {
 	int		nl_index;

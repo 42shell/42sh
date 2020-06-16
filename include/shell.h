@@ -74,6 +74,9 @@ typedef struct			s_var
 ** problems:
 ** -$> { ls ; ls -z } 2>& | cat -e
 **  42sh: syntax error near unexpected token 'EOF'
+** -$> { ls ; ls -z } | 2>& cat -e
+**  {... ^C
+**  segv
 ** -assert lexer works properly in line continuations,
 **  history heredocs and quoted newlines...
 ** -prompt when executing tests ?
