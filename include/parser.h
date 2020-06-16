@@ -12,7 +12,6 @@
 
 #ifndef PARSER_H
 # define PARSER_H
-#include <stdio.h>
 # include "shell.h"
 
 # define BRACKET_NEST_LIMIT		1024
@@ -147,6 +146,7 @@ int								parse_error(char *near);
 t_command						*command_new(enum e_cmd_type type);
 int								command_del(t_command **command);
 int								redir_del(t_redir **redir);
-void							complete_command_del(t_command **complete_command);
+void							complete_command_del(t_command
+								**complete_command);
 
 #endif

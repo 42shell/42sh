@@ -14,7 +14,6 @@
 
 static void		reset_signals(void)
 {
-	//prctl(PR_SET_PDEATHSIG, SIGTERM);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGTTIN, SIG_DFL);
@@ -57,7 +56,7 @@ static void		set_child_attr(t_process *process)
 	if (!g_shell.jobs->bg)
 		tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
 	g_job_control_enabled = false;
-	g_already_forked = true; 
+	g_already_forked = true;
 }
 
 int				launch_process(t_process *process, int fd_to_close)

@@ -23,16 +23,21 @@ static int			check_bracket_lvl(void)
 	return (0);
 }
 
+/*
+** if there is only a subshell in the compound list, we have useless parens
+** like in "((ls))". We dont set the subshell flag to convert it into { (ls) },
+** to avoid useless fork.
+** This way is easier than deleting the useless node cause we need to keep
+** eventual redirections.
+** ex : ((ls) 2>&1) >file  ->   { (ls) 2>&1 } >file
+*/
+
 static t_command	*build_subshell_and_advance(t_command *compound_list)
 {
 	t_command		*subshell;
 
 	subshell = command_new(GROUP);
 	subshell->value.group->list = compound_list;
-	//if there is only a subshell in the compound list, we have useless parens ((ls))
-	//We dont set the subshell flag to convert it into {()}, to avoid useless fork.
-	//This way is easier than deleting the useless node cause we need to keep eventual
-	//redirections. ex : ( (ls) 2>&1 ) >file   ->     { (ls) 2>&1 } >file
 	if (!(subshell->value.group->list->type == GROUP
 	&& subshell->value.group->list->value.group->subshell
 	&& !subshell->value.group->list->next))
@@ -59,7 +64,6 @@ t_command			*parse_subshell(void)
 	old_linebreak_type = g_linebreak_type;
 	g_linebreak_type = LBRACKET;
 	token_del(&g_parser.token);
-	//first word of command
 	g_lexer.expect_reserv_word = true;
 	g_parser.token = get_next_token();
 	if (!(compound_list = parse_compound_list()))
@@ -83,7 +87,6 @@ static t_command	*build_brace_group_and_advance(t_command *compound_list)
 	group = command_new(GROUP);
 	group->value.group->list = compound_list;
 	token_del(&g_parser.token);
-	//maybe handle consecutive reserved_words in lexer
 	g_lexer.expect_reserv_word = true;
 	g_parser.token = get_next_token();
 	--g_parser.bracket_lvl;
@@ -106,7 +109,6 @@ t_command			*parse_brace_group(void)
 	old_linebreak_type = g_linebreak_type;
 	g_linebreak_type = LBRACE;
 	token_del(&g_parser.token);
-	//maybe handle consecutive reserved_words in lexer
 	g_lexer.expect_reserv_word = true;
 	g_parser.token = get_next_token();
 	if (!(compound_list = parse_compound_list()))

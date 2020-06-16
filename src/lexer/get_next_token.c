@@ -77,7 +77,7 @@ t_token			*get_next_token(void)
 {
 	if (g_parser.status != NOERR || !g_lexer.line)
 		return (NULL);
-	if (g_lexer.line_cont || g_lexer.quote_st) // || !g_lexer.line ?
+	if (g_lexer.line_cont || g_lexer.quote_st)
 	{
 		g_lexer.nl_found = 0;
 		g_lexer.end_of_input = 0;

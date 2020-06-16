@@ -60,7 +60,6 @@ void	wait_for_job(t_job *job)
 		}
 		else if (pid < 0)
 		{
-
 			ft_dprintf(2, "42sh: waitpid: unexpected error.\n", pid);
 			break ;
 		}
@@ -82,7 +81,8 @@ void	put_job_bg(t_job *job, bool cont)
 
 	job->bg = true;
 	g_last_bg_job_pid = job->pgid;
-	update_curr_job(job);//if enabled
+	if (g_job_control_enabled)
+		update_curr_job(job);
 	if (cont)
 		kill(-job->pgid, SIGCONT);
 }

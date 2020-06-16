@@ -37,7 +37,10 @@
 # include "autocomplete.h"
 # include "utils.h"
 
-//vars.h
+/*
+** vars.h
+*/
+
 # define V_NOATTR	0
 # define V_RDONLY	1
 # define V_EXPORT	2
@@ -61,41 +64,29 @@ typedef struct			s_var
 }						t_var;
 
 /*
-** -bangs
-** -handle consecutive reserved_words in lexer ?
+** todo:
+** -handle job control on exit
+** -( ) { } :
+**  	-check batch mode
+** 		-update jobs display
+** -bangs/shell script
 ** 
-** -store parse errors in history ?
+** problems:
 ** -$> { ls ; ls -z } 2>& | cat -e
 **  42sh: syntax error near unexpected token 'EOF'
-** -( ) { } :
-**  	-batch mode
-** 		-update jobs display (+ redir_lists)
 ** -assert lexer works properly in line continuations,
 **  history heredocs and quoted newlines...
-** -prompt when executing tests
+** -prompt when executing tests ?
 **
 ** old problems:
-** -recall line with heredoc from history do parse error.
-** -unsetenv boucle inf when unseting non existing var
-** -pipe line continuation remove \n
-** -env dup invalid read
+** -unsetenv boucle inf when unseting non existing var ?
+** -env dup invalid read ?
 ** -autcomplete vim /t doesnt complete files ?
-** -readline bindings if term=dumb
-**  term=vt100... disable line edit if term is shit
-**
-** -fix readline problems
-**		-env/termcaps...
-**		-write on 2 ? sounds weird to do that in readline,
-**		 maybe dup2 in shell.get_input
-**		-rigorous testing
-** -proper init handling
-**		-cleanup ?
 ** -others
 ** 		-check comments work properly
 ** -leaks/invalid reads/still reachable
 */
 
-//lexer
 # define INPUT_INT		3
 # define INPUT_EOF		4
 

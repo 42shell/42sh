@@ -27,17 +27,37 @@ int			parse_linebreak(void)
 ** newline_list		: NEWLINE
 ** 					| NEWLINE newline_list
 **
-** returns true if there was a newline_list, false otherwise
+** returns true if there was a newline_list, false otherwise,
+** replace the first newline with a space if we are in a line continuation,
+** remove the following ones
+** ex : ls |$  ->  ls | cat
+**      $
+**      cat
 */
+
+static void	remove_newline(int nl_index, bool nl_replaced)
+{
+	if (!nl_replaced)
+	{
+		g_lexer.line[nl_index] = ' ';
+		nl_replaced = 1;
+	}
+	else
+	{
+		ft_memmove(&g_lexer.line[nl_index],
+					&g_lexer.line[nl_index + 1],
+					ft_strlen(&g_lexer.line[nl_index]));
+		g_lexer.i--;
+	}
+}
 
 int			parse_newline_list(void)
 {
 	int		nl_index;
-	int		nl_replaced;
+	bool	nl_replaced;
 
 	nl_replaced = 0;
-	if (!g_parser.token
-	|| g_parser.token->type != NEWLINE)
+	if (!g_parser.token || g_parser.token->type != NEWLINE)
 		return (0);
 	while (g_parser.status == NOERR
 	&& g_parser.token && g_parser.token->type == NEWLINE)
@@ -50,20 +70,7 @@ int			parse_newline_list(void)
 		}
 		g_lexer.expect_reserv_word = true;
 		if ((g_parser.token = get_next_token()) && g_linebreak_type)
-		{
-			if (!nl_replaced)
-			{
-				g_lexer.line[nl_index] = ' ';
-				nl_replaced = 1;
-			}
-			else
-			{
-				ft_memmove(&g_lexer.line[nl_index],
-							&g_lexer.line[nl_index + 1],
-							ft_strlen(&g_lexer.line[nl_index]));
-				g_lexer.i--;
-			}
-		}
+			remove_newline(nl_index, nl_replaced);
 	}
 	return (NEWLINE);
 }
@@ -75,7 +82,7 @@ int			parse_newline_list(void)
 
 int			parse_separator_op(void)
 {
-	enum	e_token_type type;
+	enum e_token_type	type;
 
 	if (!g_parser.token
 	|| (g_parser.token->type != AMPERSAND && g_parser.token->type != SEMI))
@@ -94,7 +101,7 @@ int			parse_separator_op(void)
 
 int			parse_separator(void)
 {
-	enum	e_token_type type;
+	enum e_token_type	type;
 
 	if (g_parser.token == NULL)
 		return (0);

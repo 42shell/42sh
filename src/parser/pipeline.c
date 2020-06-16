@@ -35,7 +35,7 @@ static t_command	*build_pipe_and_advance(t_command *left)
 **                  | pipe_sequence '|' linebreak command
 */
 
-t_command		*parse_pipeline(void)
+t_command			*parse_pipeline(void)
 {
 	t_command		*pipeline;
 	t_command		*node;
@@ -55,5 +55,5 @@ t_command		*parse_pipeline(void)
 		}
 		pipeline = node;
 	}
-	return (pipeline);	
+	return (pipeline);
 }

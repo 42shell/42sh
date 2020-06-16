@@ -25,7 +25,7 @@ t_command		*parse_term(void)
 	int			sep_index;
 
 	term = parse_and_or();
-	command = term; 
+	command = term;
 	while (command)
 	{
 		sep_index = g_lexer.i - 1;

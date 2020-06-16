@@ -14,8 +14,8 @@
 
 static t_command	*build_and_or_and_advance(t_command *left)
 {
-	t_command	*node;
-	int			old_linebreak_type;
+	t_command		*node;
+	int				old_linebreak_type;
 
 	node = command_new(CONNECTION);
 	node->value.connection->connector = g_parser.token->type;
@@ -36,11 +36,7 @@ static t_command	*build_and_or_and_advance(t_command *left)
 **                 | and_or OR_IF  linebreak pipeline
 */
 
-/*
-** unexpected token 'EOF' linebreak (null) ?
-*/
-
-t_command	*parse_and_or(void)
+t_command			*parse_and_or(void)
 {
 	t_command		*and_or;
 	t_command		*node;
@@ -54,7 +50,7 @@ t_command	*parse_and_or(void)
 		if (!(node->value.connection->right = parse_pipeline()))
 		{
 			if (!g_parser.status)
-				g_parser.status = UNEXPECTED_TOKEN;//set_parser_status(int status)
+				g_parser.status = UNEXPECTED_TOKEN;
 			command_del(&node);
 			return (NULL);
 		}

@@ -55,7 +55,7 @@ int			exec_binary(char **argv, t_array *temp_env)
 
 int			exec_simple_command(t_simple_cmd *simple)
 {
-	t_array 		*temp_env;
+	t_array		*temp_env;
 
 	if (set_redir(simple->redirs, true) != 0)
 	{

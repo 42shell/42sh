@@ -36,7 +36,7 @@ int			eval_group_command(t_command *command)
 {
 	t_process	*process;
 	t_group_cmd	*group;
-	
+
 	group = command->value.group;
 	if (group->subshell)
 	{

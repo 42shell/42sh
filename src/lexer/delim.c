@@ -12,6 +12,10 @@
 
 #include "shell.h"
 
+/*
+** -maybe handle consecutive reserved words here
+*/
+
 int			delim_token(void)
 {
 	int		type;
@@ -53,9 +57,6 @@ int			lx_operator_new(void)
 	if (g_lexer.token && !g_lexer.quote_st
 	&& is_operator_start(g_lexer.line[g_lexer.i]))
 	{
-		//if ((g_lexer.line[g_lexer.i] == '<' || g_lexer.line[g_lexer.i] == '>')
-		//&& ft_strisnbr(g_lexer.token->value->str))
-		//	g_lexer.token->type = IO_NUMBER;
 		delim_token();
 		return (1);
 	}
