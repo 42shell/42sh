@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/25 03:05:04 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/05 17:16:01 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ static void	init_vars(void)
 	extern char	g_shell_pid[10];
 	t_var		*var;
 
+	g_lexer.brack_stack = array_new(4);
 	ft_itoa(getpid(), g_shell_pid);
 	g_shell.vars = ht_new(1024, free_var);
 	import_env(environ);

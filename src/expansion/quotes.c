@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 18:17:30 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/17 13:14:56 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/28 17:41:30 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static bool g_dquote = false;
 
-bool		quote_stop(char *str, int i, char *quote_status)
+bool		quote_stop(const char *str, int i, char *quote_status)
 {
 	if (*quote_status == BSLASH)
 	{
@@ -30,7 +30,7 @@ bool		quote_stop(char *str, int i, char *quote_status)
 	return (true);
 }
 
-bool		quote_start(char *str, int i, char *quote_status)
+bool		quote_start(const char *str, int i, char *quote_status)
 {
 	if (str[i] == BSLASH)
 	{

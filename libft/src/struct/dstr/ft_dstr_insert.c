@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 23:03:42 by fratajcz          #+#    #+#             */
-/*   Updated: 2019/11/21 23:05:58 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/08 16:14:28 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int		ft_dstr_insert(t_dstr *dstr, size_t i, char *str, size_t len)
 		free(tmp);
 	}
 	ptr = dstr->str + i;
-	ft_memmove(ptr + len, ptr, ft_strlen(ptr) + 1);
+	ft_memmove(ptr + len, ptr, dstr->len - i + 1);
 	ft_memcpy(ptr, str, len);
 	dstr->len += len;
 	return (len);

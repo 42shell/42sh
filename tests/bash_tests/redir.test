@@ -80,3 +80,7 @@ All my base are belong to you
 I love you
 EOF
 exit
+
+echo 'Bad expansion'
+ls > ${@asdfasdf}
+echo '~~~'

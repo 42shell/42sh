@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/26 02:26:04 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/10 16:07:17 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,10 @@ enum				e_quote_st
 	NONE = 0,
 	BSLASH = '\\',
 	SQUOTE = '\'',
-	DQUOTE = '"'
+	DQUOTE = '"',
+	PAREN,
+	DPAREN,
+	BRACE
 };
 
 /*
@@ -69,6 +72,11 @@ typedef struct		s_token
 	enum e_token_type	type;
 }					t_token;
 
+/*
+** brack_stack is a stack containing enum e_quote_st to keep track of ${} $()
+** and $(()) closing brackets and inner quotes for line continuation
+*/
+
 typedef struct		s_lexer
 {
 	char			*line;
@@ -76,6 +84,7 @@ typedef struct		s_lexer
 	char			token_delimited;
 	char			line_cont;
 	char			quote_st;
+	t_array			*brack_stack;
 	char			nl_found;
 	char			end_of_input;
 	size_t			i;

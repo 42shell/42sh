@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 21:27:56 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/09 12:41:12 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/10 16:15:18 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int		lx_operator_next(void)
 {
 	if (g_lexer.token && !g_lexer.quote_st
+	&& get_bracket_status(g_lexer.brack_stack) == '\0'
 	&& (g_lexer.i != 0 ? is_operator_part(g_lexer.line[g_lexer.i - 1]) : 0)
 	&& is_operator_part(g_lexer.line[g_lexer.i])
 	&& is_operator_next(g_lexer.token->value->str, g_lexer.line[g_lexer.i]))
@@ -28,8 +29,13 @@ int		lx_operator_next(void)
 
 int		lx_word_next(void)
 {
+	bool can_open;
+
 	if (g_lexer.token)
 	{
+		can_open = (g_lexer.quote_st == NONE || g_lexer.quote_st == DQUOTE);
+		set_bracket_status(g_lexer.line, g_lexer.i, g_lexer.brack_stack,
+							can_open);
 		ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i]);
 		if (g_lexer.quote_st == BSLASH)
 			g_lexer.quote_st &= ~BSLASH;
@@ -57,6 +63,10 @@ int		lx_comment(void)
 
 int		lx_word_start(void)
 {
+	bool can_open;
+
+	can_open = (g_lexer.quote_st == NONE || g_lexer.quote_st == DQUOTE);
+	set_bracket_status(g_lexer.line, g_lexer.i, g_lexer.brack_stack, can_open);
 	g_lexer.token = token_new(WORD);
 	ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i]);
 	g_lexer.i++;

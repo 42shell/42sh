@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:00:39 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/25 02:46:17 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/28 19:56:52 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 # define ERROR_REDIR_OPEN		-1
 # define ERROR_REDIR_BAD_FD		-2
+# define ERROR_REDIR_EXPAND		-3
 
 # define EXEC_ASYNC				1
 # define EXEC_AND_OR			2
