@@ -1,0 +1,5 @@
+cat << EOF
+bad expansion in heredoc
+${@asdf}
+lol
+EOF
