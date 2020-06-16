@@ -36,6 +36,15 @@ int		lx_line_insert_char(char c, int index)
 	return (0);
 }
 
+int		lx_line_del_char(int index)
+{
+	ft_memmove(&g_lexer.line[index],
+				&g_lexer.line[index + 1],
+				ft_strlen(&g_lexer.line[index]));
+	g_lexer.i--;
+	return (0);
+}
+
 int		is_reserved_word(char *word)
 {
 	if (ft_strequ(word, "{"))

@@ -35,22 +35,6 @@ int			parse_linebreak(void)
 **      cat
 */
 
-static void	remove_newline(int nl_index, bool nl_replaced)
-{
-	if (!nl_replaced)
-	{
-		g_lexer.line[nl_index] = ' ';
-		nl_replaced = 1;
-	}
-	else
-	{
-		ft_memmove(&g_lexer.line[nl_index],
-					&g_lexer.line[nl_index + 1],
-					ft_strlen(&g_lexer.line[nl_index]));
-		g_lexer.i--;
-	}
-}
-
 /*
 ** /!\ g_parser.status should be checked after using these functions,
 ** as they do not return special values in case of error (user abort)
@@ -61,7 +45,7 @@ int			parse_newline_list(void)
 	int		nl_index;
 	bool	nl_replaced;
 
-	nl_replaced = 0;
+	nl_replaced = false;
 	if (!g_parser.token || g_parser.token->type != NEWLINE)
 		return (0);
 	while (g_parser.status == NOERR
@@ -75,7 +59,12 @@ int			parse_newline_list(void)
 		}
 		g_lexer.expect_reserv_word = true;
 		if ((g_parser.token = get_next_token()) && g_linebreak_type)
-			remove_newline(nl_index, nl_replaced);
+		{
+			if (!nl_replaced && (g_lexer.line[nl_index] = ' '))
+				nl_replaced = true;
+			else
+				lx_line_del_char(nl_index);
+		}
 	}
 	return (NEWLINE);
 }
