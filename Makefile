@@ -30,7 +30,9 @@ LFLAGS          := -ltermcap
 #                     FLAGS                      |
 #------------------------------------------------#
 
+ifeq ($(CC),cc)
 CC              := clang
+endif
 CFLAGS          := -Wall -Wextra #-Werror
 ifeq ($(BUILDTYPE), debug)
 	CFLAGS := $(CFLAGS) $(DBG_FLAGS)
