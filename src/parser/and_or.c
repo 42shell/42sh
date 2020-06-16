@@ -43,7 +43,7 @@ t_command			*parse_and_or(void)
 
 	if (!(and_or = parse_pipeline()))
 		return (NULL);
-	while (g_parser.status == NOERR && g_parser.token
+	while (g_parser.token
 	&& (g_parser.token->type == AND_IF || g_parser.token->type == OR_IF))
 	{
 		node = build_and_or_and_advance(and_or);
@@ -56,7 +56,5 @@ t_command			*parse_and_or(void)
 		}
 		and_or = node;
 	}
-	if (g_parser.status != NOERR)
-		command_del(&and_or);
 	return (and_or);
 }

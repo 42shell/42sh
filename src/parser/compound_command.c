@@ -21,8 +21,10 @@ t_command		*parse_compound_command(void)
 {
 	t_command	*compound_command;
 
-	if (!(compound_command = parse_brace_group())
-	&& !(compound_command = parse_subshell()))
-		return (NULL);
-	return (compound_command);
+	if ((compound_command = parse_brace_group()))
+		return (compound_command);
+	if (g_parser.status == NOERR
+	&& (compound_command = parse_subshell()))
+		return (compound_command);
+	return (NULL);
 }

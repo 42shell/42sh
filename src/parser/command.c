@@ -22,10 +22,19 @@ t_command		*parse_command(void)
 {
 	t_command	*command;
 
-	if (!(command = parse_simple_command()))
+	command = NULL;
+	if ((command = parse_simple_command()))
+		return (command);
+	if (g_parser.status == NOERR
+	&&& (command = parse_compound_command()))
 	{
-		if ((command = parse_compound_command()))
-			command->value.group->redir_list = parse_redirect_list();
+		command->value.group->redir_list = parse_redirect_list();
+		if (g_parser.status != NOERR)
+		{
+			complete_command_del(&command);
+			return (NULL);
+		}
+		return (command);
 	}
-	return (command);
+	return (NULL);
 }
