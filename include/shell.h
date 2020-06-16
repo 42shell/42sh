@@ -70,7 +70,7 @@ typedef struct			s_var
 **  	-check batch mode
 ** 		-update jobs display
 ** -bangs/shell script
-** 
+**
 ** problems:
 ** -$> { ls ; ls -z } 2>& | cat -e
 **  42sh: syntax error near unexpected token 'EOF'

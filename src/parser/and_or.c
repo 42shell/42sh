@@ -56,5 +56,5 @@ t_command			*parse_and_or(void)
 		}
 		and_or = node;
 	}
-	return (and_or);	
+	return (and_or);
 }

@@ -15,7 +15,7 @@
 /*
 ** command         : simple_command
 **                 | compound_command
-**                 | compound_command redirect_list 
+**                 | compound_command redirect_list
 */
 
 t_command		*parse_command(void)
