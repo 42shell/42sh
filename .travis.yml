@@ -18,6 +18,7 @@ addons:
       - gcc
       - libncurses-dev
       - tcsh
+      - coreutils
       - ruby
       - ruby-bundler
       - ruby-dev
