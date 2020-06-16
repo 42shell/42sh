@@ -100,8 +100,6 @@ static int	exec_bg_cmd(t_command *command)
 	return (0);
 }
 
-///{ ((ls | cat-e) 2>&1 && echo ok); echo ok 1>&2; } | cat -e
-
 int			exec_group_command(t_group_cmd *group)
 {
 	t_job		*job;

@@ -44,8 +44,8 @@
 # define V_HIDDEN	4
 # define V_SPECIAL	8
 
-typedef char *(*t_var_value_func)(void);
-typedef int(*t_builtin_func)(char **argv, t_array *temp_env);
+typedef char	*(*t_var_value_func)(void);
+typedef int		(*t_builtin_func)(char **argv, t_array *temp_env);
 
 /*
 ** value_func is used to get the values of special variables like $$.
@@ -61,19 +61,7 @@ typedef struct			s_var
 }						t_var;
 
 /*
-$> (echo lol;(ls}))
-lol
-42sh: ls}: command not found
-$> {ls;{ls}}
-42sh: {ls: command not found
-42sh: {ls}}: command not found
-*/
-
-/*
-** -tests/-check job control (especially subshells with &)
-** -async in subshells
 ** -bangs
-** -retests
 ** -handle consecutive reserved_words in lexer ?
 ** 
 ** -store parse errors in history ?

@@ -59,7 +59,7 @@ int			command_del(t_command **command)
 	}
 	else if ((*command)->type == GROUP)
 	{
-		command_del(&(*command)->value.group->list);
+		complete_command_del(&(*command)->value.group->list);
 		redir_del(&((*command)->value.group->redir_list));
 		ft_memdel((void **)&(*command)->value.group);
 	}
