@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 20:03:18 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/31 00:18:57 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 05:05:39 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ static void		line_add(t_dstr *heredoc)
 
 static int		line_get(void)
 {
-	int		ret;
-	int		i;
+	int				ret;
+	unsigned int	i;
 
 	while (!ft_strchr(g_heredoc_ptr, '\n'))
 	{
