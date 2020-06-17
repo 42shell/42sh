@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 15:58:15 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/06/11 02:42:30 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 14:15:46 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,17 @@ static void	remove_dquotes(t_dstr *str, int start)
 
 extern int g_arith_status;
 
+/*
+** get_end of braces returns the index of the second closing parenthesis, so we
+** need to substract 1 to end
+*/
+
 int			arith_expand(t_dstr *str, int *i)
 {
 	int		end;
 	char	*buf;
 
-	end = get_end_of_braces(str->str + *i);
+	end = get_end_of_braces(str->str + *i) - 1;
 	str->str[end + *i] = '\0';
 	remove_dquotes(str, *i + 3);
 	if (dollar_expand(str, *i + 3, false) == 1)

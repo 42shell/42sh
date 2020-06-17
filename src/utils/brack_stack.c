@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 22:26:59 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/06/16 17:48:27 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 14:14:23 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static bool		should_pop(const char *str, int i, enum e_quote_st brack_status
 {
 	return (
 	(brack_status == BRACE && str[i] == '}')
-	|| (brack_status == DPAREN && str[i] == ')' && str[i + 1] == ')'
+	|| (brack_status == DPAREN && str[i] == ')' && i > 0 && str[i - 1] == ')'
 				&& !just_closed_dparen)
 	|| (brack_status == PAREN && str[i] == ')' && !just_closed_dparen)
 	|| ((str[i] == DQUOTE || str[i] == SQUOTE)
