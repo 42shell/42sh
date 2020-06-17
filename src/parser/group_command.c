@@ -113,7 +113,7 @@ t_command			*parse_brace_group(void)
 	g_parser.token = get_next_token();
 	if (!(compound_list = parse_compound_list()))
 		return (NULL);
-	if (!mandatory_reserv_word(RBRACE))
+	if (!get_required_reserv_word(RBRACE))
 	{
 		if (!g_parser.status)
 			g_parser.status = UNEXPECTED_TOKEN;

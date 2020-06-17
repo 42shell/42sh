@@ -12,7 +12,7 @@
 
 #include "shell.h"
 
-int			mandatory_reserv_word(int expect_type)
+int			get_required_reserv_word(int expect_type)
 {
 	int		type;
 

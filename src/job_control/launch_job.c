@@ -12,29 +12,39 @@
 
 #include "shell.h"
 
-int		launch_job(t_job *job)
+static int	launch_job_bg(t_job *job)
 {
 	t_process	*process;
+	int			fd_in;
+
+	fd_in = STDIN_FILENO;
+	g_last_exit_st = 0;
+	if (!g_job_control_enabled)
+		fd_in = open("/dev/null", O_RDONLY);
+	process = process_new(job->command, fd_in, STDOUT_FILENO);
+	launch_process(process, 0);
+	if (g_job_control_enabled)
+	{
+		put_job_bg(job, false);
+		ft_printf("[%d] %d\n", job->id + 1, job->pgid);
+	}
+	else
+		process->done = true;
+	if (fd_in != STDIN_FILENO)
+		close(fd_in);
+	return (0);
+}
+
+int			launch_job(t_job *job)
+{
 
 	add_job(job);
 	if (job->bg)
-	{
-		g_last_exit_st = 0;
-		process = process_new(job->command, STDIN_FILENO, STDOUT_FILENO);
-		launch_process(process, 0);
-		if (g_job_control_enabled)
-		{
-			put_job_bg(job, false);
-			ft_printf("[%d] %d\n", job->id + 1, job->pgid);
-		}
-	}
+		return (launch_job_bg(job));
+	eval_command(job->command);
+	if (g_job_control_enabled)
+		put_job_fg(job, false);
 	else
-	{
-		eval_command(job->command);
-		if (g_job_control_enabled)
-			put_job_fg(job, false);
-		else
-			wait_for_job(job);
-	}
+		wait_for_job(job);
 	return (0);
 }

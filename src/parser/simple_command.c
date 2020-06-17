@@ -94,12 +94,10 @@ t_command		*parse_simple_command(void)
 {
 	t_command	*cmd;
 
-	if (g_parser.token == NULL
-	|| g_parser.token->type == NEWLINE)
-		return (NULL);
-	else if (g_parser.token->type != WORD
-	&& g_parser.token->type != IO_NUMBER
-	&& !is_redir(g_parser.token))
+	if (!g_parser.token
+	|| !(g_parser.token->type == WORD
+		|| g_parser.token->type == IO_NUMBER
+		|| is_redir(g_parser.token)))
 		return (NULL);
 	cmd = command_new(SIMPLE);
 	set_tokens(cmd->value.simple);

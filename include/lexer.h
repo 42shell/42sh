@@ -22,7 +22,7 @@
 **
 ** %token  DLESS  DGREAT  LESSAND  GREATAND  LESSGREAT  DLESSDASH  AMPERSAND
 **         '<<'   '>>'    '<&'     '>&'      '<>'         <<-        '&'
-**		  SEMI    PIPE    LESS   GREAT	OBRACKET	CBRACKET
+**		  SEMI    PIPE    LESS   GREAT	LBRACKET	RBRACKET
 **		   ';'	   '|'     '<'    '>'     '('		   ')'
 */
 

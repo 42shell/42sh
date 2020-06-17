@@ -139,7 +139,7 @@ int								get_all_heredocs(void);
 */
 void							add_heredoc(t_token *heredoc);
 int								handle_heredoc_eof(char *delim);
-int								mandatory_reserv_word(int expect_type);
+int								get_required_reserv_word(int expect_type);
 
 int								parse_error(char *near);
 
