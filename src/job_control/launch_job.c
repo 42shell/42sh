@@ -37,7 +37,6 @@ static int	launch_job_bg(t_job *job)
 
 int			launch_job(t_job *job)
 {
-
 	add_job(job);
 	if (job->bg)
 		return (launch_job_bg(job));
