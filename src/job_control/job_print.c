@@ -43,7 +43,22 @@ t_dstr		*format_command(t_dstr *buf, t_command *command)
 
 	if (!command || !buf)
 		return (NULL);
-	if (command->type == CONNECTION)
+	if (command->type == GROUP)
+	{
+		ft_dstr_append(buf, command->value.group->subshell ? "( " : "{ ");
+		ptr = command->value.group->list;
+		while (ptr)
+		{
+			format_command(buf, ptr);
+			if (command->sep == AMPERSAND)
+				ft_dstr_append(buf, " & ");
+			else if (ptr->next)
+				ft_dstr_append(buf, "; ");
+			ptr = ptr->next;
+		}
+		ft_dstr_append(buf, command->value.group->subshell ? " )" : " }");
+	}
+	else if (command->type == CONNECTION)
 	{
 		format_command(buf, command->value.connection->left);
 		connector = command->value.connection->connector;
@@ -77,7 +92,8 @@ void		print_job_long(t_job *job)
 		if (process->stdin != 0)
 			ft_dstr_append(command_format, "| ");
 		format_command(command_format, process->command);
-		ft_printf("     %-30s %s\n", process_format, command_format->str);
+		ft_printf("     %-30s %s%s\n", process_format, command_format->str,
+		(!process->next && job->bg) ? " &" : "");
 		ft_dstr_clear(command_format, 64);
 		free(process_format);
 		process = process->next;
@@ -104,6 +120,8 @@ void		print_job(t_job *job, bool print_command)
 	{
 		command_format = ft_dstr_new(64);
 		format_command(command_format, job->command);
+		if (job->bg)
+			ft_dstr_append(command_format, " &");
 	}
 	ft_printf("[%d]%s %-30s %s\n", job->id + 1, curr, job_format,
 	print_command ? command_format->str : "");

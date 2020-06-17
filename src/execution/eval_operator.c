@@ -27,8 +27,7 @@ int			eval_pipeline(t_command *command, int in, int out)
 	&& pipeline->left->value.connection->connector == PIPE)
 		return (eval_pipeline(pipeline->left, in, fd[1]));
 	process = process_new(pipeline->left, in, fd[1]);
-	launch_process(process, fd[0]);
-	return (0);
+	return (launch_process(process, fd[0]));
 }
 
 int			eval_and_or(t_command *command)
