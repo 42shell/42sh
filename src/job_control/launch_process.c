@@ -53,7 +53,7 @@ static void		set_child_attr(t_process *process)
 	if (!g_shell.jobs->pgid)
 		g_shell.jobs->pgid = process->pid;
 	setpgid(process->pid, g_shell.jobs->pgid);
-	if (!g_shell.jobs->bg)
+	if (!g_shell.jobs->bg && g_job_control_enabled)
 		tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
 	g_job_control_enabled = false;
 	g_already_forked = true;

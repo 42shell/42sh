@@ -12,6 +12,8 @@
 
 #include "shell.h"
 
+//ls\n
+//ls\0
 int			lx_end(void)
 {
 	if (!g_lexer.line[g_lexer.i] || g_lexer.nl_found)

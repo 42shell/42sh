@@ -64,7 +64,12 @@ static t_token	*return_token(void)
 		if (!g_lexer.nl_found)
 		{
 			g_lexer.line_cont = 1;
-			return (get_next_token());
+			if (!(ret = get_next_token()))
+			{
+				g_lexer.token_delimited = true;
+				return (return_token());
+			}
+			return (ret);
 		}
 		g_lexer.nl_found = 0;
 		g_lexer.quote_st = 0;

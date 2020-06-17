@@ -65,16 +65,14 @@ typedef struct			s_var
 
 /*
 ** todo:
-** -handle job control on exit
 ** -( ) { } :
-**  	-check batch mode
-** 		-update jobs display
+** 		-update jobs display/ add &
+** 		-check batch mode
+** -handle job control on exit
 ** -bangs/shell script
 **
 ** problems:
-** -maybe add if (g_parser.status != NOERR return NULL
-**  at the beginning of each parsing function
-** -store aborted lines in history ?
+** -store aborted multi-lines in history ?
 ** -assert lexer works properly in line continuations,
 **  history heredocs and quoted newlines...
 ** -prompt when executing tests ?

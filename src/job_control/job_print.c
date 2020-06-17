@@ -38,7 +38,8 @@ void		format_simple_command(t_dstr *buf, t_simple_cmd *command)
 
 t_dstr		*format_command(t_dstr *buf, t_command *command)
 {
-	enum e_token_type connector;
+	enum e_token_type	connector;
+	t_command			*ptr;
 
 	if (!command || !buf)
 		return (NULL);
