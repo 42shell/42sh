@@ -8,7 +8,8 @@ language: c
 compiler: gcc
 
 env:
-  - DBG_FLAGS="-fsanitize=address -ggdb -O0 -coverage"
+  - TEST=test.sh DBG_FLAGS="-fsanitize=address -ggdb -O0 -coverage"
+  - TEST=norminette.sh
 
 addons:
   apt:
@@ -17,13 +18,17 @@ addons:
       - gcc
       - libncurses-dev
       - tcsh
+      - coreutils
       - ruby
       - ruby-bundler
       - ruby-dev
 
-install: make -j3
+install: 
+  - test "$TEST" == "test.sh" && wget http://mirrors.kernel.org/ubuntu/pool/main/b/bash/bash_5.0-6ubuntu1_amd64.deb http://mirrors.kernel.org/ubuntu/pool/main/n/ncurses/libtinfo6_6.2-0ubuntu2_amd64.deb && sudo dpkg -i libtinfo*.deb && sudo dpkg -i bash*.deb || test "$TEST" != "test.sh" 
+  - test "$TEST" == "test.sh" && make -j3 || test "$TEST" != "test.sh"
+
 script:
-  - tests/test.sh
-  - tests/norminette.sh
+  - tests/"$TEST"
   - gcov --version
-after_success: bash <(curl -s https://codecov.io/bash)
+
+after_success: test "$TEST" == "test.sh" && bash <(curl -s https://codecov.io/bash)

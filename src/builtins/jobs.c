@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:50:00 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/09 15:31:37 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 05:04:32 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int	get_jobs_options(char **argv, int *options)
 	ret = 0;
 	while (argv[argc])
 		argc++;
-	while ((c = get_opt(argc, argv)) != -1)
+	while ((c = get_opt(argc, (unsigned char **)argv)) != -1)
 	{
 		if (ret == 0
 				&& (c == 'l' || c == 'n' || c == 'p' || c == 'r' || c == 's'))

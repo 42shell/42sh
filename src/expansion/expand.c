@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/07 17:08:22 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/31 00:10:51 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 04:56:02 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static int	expand_token(t_token *token, char *home_dir)
 	int	pos;
 
 	pos = tilde_expand(token->value, home_dir);
-	if (param_expand(token->value, pos, false) == 1)
+	if (dollar_expand(token->value, pos, false) == 1)
 		return (1);
 	path_expand(token);
 	remove_quotes(token->value);
@@ -110,10 +110,7 @@ int			expand(t_simple_cmd *command)
 	if (expand_token_list(command->args, home_dir) == 1
 		|| expand_token_list(command->assigns, home_dir) == 1
 		|| expand_redir_list(command->redirs, home_dir) == 1)
-	{
-		ft_dprintf(2, "42sh: %s: bad substitution\n", g_expand_error_token);
 		return (1);
-	}
 	cur = command->redirs;
 	while (cur)
 	{

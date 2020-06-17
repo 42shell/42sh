@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 11:56:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/29 02:08:04 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 05:06:05 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int			get_opt(int argc, unsigned char *argv[])
 				&& argv[max_opt_argv][1] != '\0')
 			max_opt_argv++;
 	}
-	if (av_i == max_opt_argv || ft_strcmp(argv[av_i], "--") == 0)
+	if (av_i == max_opt_argv || ft_strcmp((char *)argv[av_i], "--") == 0)
 		return (reset_get_opt(&av_i, &j, &max_opt_argv));
 	if (argv[av_i][0] != '-' || (argv[av_i][j] == '\0' && j != 1))
 	{

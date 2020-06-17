@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/28 18:13:35 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 04:58:00 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int			delim_token(void)
 
 int			lx_operator_end(void)
 {
-	if (g_lexer.token && !g_lexer.quote_st && !g_lexer.brace_open
+	if (g_lexer.token && !g_lexer.quote_st && g_lexer.brack_stack->size == 0
 	&& (is_operator_start(*g_lexer.token->value->str)
 	&& (g_lexer.i > 0 ? is_operator_part(g_lexer.line[g_lexer.i - 1]) : 0))
 	&& (!is_operator_part(g_lexer.line[g_lexer.i])
@@ -44,8 +44,8 @@ int			lx_operator_end(void)
 
 int			lx_operator_new(void)
 {
-	if (g_lexer.token && !g_lexer.quote_st && !g_lexer.brace_open
-	&& is_operator_start(g_lexer.line[g_lexer.i]))
+	if (g_lexer.token && !g_lexer.quote_st && g_lexer.brack_stack->size == 0
+		&& is_operator_start(g_lexer.line[g_lexer.i]))
 	{
 		if ((g_lexer.line[g_lexer.i] == '<' || g_lexer.line[g_lexer.i] == '>')
 		&& ft_strisnbr(g_lexer.token->value->str))
@@ -64,7 +64,7 @@ int			lx_operator_new(void)
 
 int			lx_newline(void)
 {
-	if (!g_lexer.quote_st && !g_lexer.brace_open
+	if (!g_lexer.quote_st && g_lexer.brack_stack->size == 0
 			&& g_lexer.line[g_lexer.i] == '\n')
 	{
 		if (!g_lexer.token)
@@ -82,7 +82,7 @@ int			lx_newline(void)
 
 int			lx_blank(void)
 {
-	if (!g_lexer.quote_st && !g_lexer.brace_open
+	if (!g_lexer.quote_st && g_lexer.brack_stack->size == 0
 	&& (g_lexer.line[g_lexer.i] == '\t'
 	|| g_lexer.line[g_lexer.i] == ' '))
 	{

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/09 12:05:06 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/28 18:20:00 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 04:58:43 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,8 @@
 
 int		lx_backslash(void)
 {
-	char	*quote_st;
-
-	quote_st = g_lexer.brace_open ? &g_lexer.brace_quote_st
-										: &g_lexer.quote_st;
-	if (g_lexer.line[g_lexer.i] == BSLASH && *quote_st != SQUOTE)
+	if (g_lexer.line[g_lexer.i] == BSLASH && g_lexer.quote_st != SQUOTE
+			&& get_bracket_status(g_lexer.brack_stack) != SQUOTE)
 	{
 		if (!g_lexer.token)
 			g_lexer.token = token_new(WORD);
@@ -32,18 +29,15 @@ int		lx_backslash(void)
 
 int		lx_quote(void)
 {
-	char	*quote_st;
-
-	if (g_lexer.line[g_lexer.i] == SQUOTE || g_lexer.line[g_lexer.i] == DQUOTE)
+	if ((g_lexer.line[g_lexer.i] == SQUOTE || g_lexer.line[g_lexer.i] == DQUOTE)
+			&& g_lexer.brack_stack->size == 0)
 	{
-		quote_st = g_lexer.brace_open ? &g_lexer.brace_quote_st
-											: &g_lexer.quote_st;
 		if (!g_lexer.token)
 			g_lexer.token = token_new(WORD);
-		if (!*quote_st)
-			*quote_st = g_lexer.line[g_lexer.i];
-		else if (*quote_st == g_lexer.line[g_lexer.i])
-			*quote_st = 0;
+		if (!g_lexer.quote_st)
+			g_lexer.quote_st = g_lexer.line[g_lexer.i];
+		else if (g_lexer.quote_st == g_lexer.line[g_lexer.i])
+			g_lexer.quote_st = NONE;
 		ft_dstr_add(g_lexer.token->value, g_lexer.line[g_lexer.i++]);
 		return (1);
 	}

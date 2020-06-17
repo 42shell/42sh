@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/29 15:46:19 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 04:53:40 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ typedef struct			s_var
 # define PS2			"> "
 # define PSQ			"q> "
 # define PSB			"b> "
+# define PSDP			"dp> "
 # define PSD			"d> "
 # define PSA			"a> "
 # define PSO			"o> "
@@ -143,5 +144,15 @@ void					set_temp_env_variables(t_simple_cmd *cmd,
 char					*get_last_exit_status(void);
 char					*get_shell_pid(void);
 char					*get_last_bg_job_pid(void);
+
+# define BRACK_CAN_OPEN		0x1
+# define BRACK_CAN_CLOSE	0x2
+
+enum e_quote_st			get_bracket_status(t_array *stack);
+void					set_bracket_status(const char *str, int i,
+						t_array *stack, bool can_open);
+void					add_bracket_to_stack(t_array *stack,
+						enum e_quote_st bracket);
+void					pop_bracket_from_stack(t_array *stack);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 17:03:57 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/29 13:34:33 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 05:04:09 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int		get_env_options(int argc, char **argv, int *options)
 	int		ret;
 
 	ret = 1;
-	while ((c = get_opt(argc, argv)) != -1)
+	while ((c = get_opt(argc, (unsigned char **)argv)) != -1)
 	{
 		*options = (c == '\0' || c == 'i') ? EMPTY_ENV : 0;
 		if (c != '\0' && c != 'i' && ret == 1)

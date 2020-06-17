@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 12:28:09 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/09 15:27:38 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/28 20:10:11 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_job		*get_job_by_str(char *str);
 */
 
 char		*get_pwd();
-char		*get_home_dir();
+char		*get_home_dir(t_array *env);
 void		append_curpath_to_pwd(char **curpath);
 void		remove_dots(char *curpath);
 int			remove_dotdots(char *curpath);

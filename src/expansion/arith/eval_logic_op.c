@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lx_end.c                                           :+:      :+:    :+:   */
+/*   eval_logic_op.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/08 18:31:05 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/06/17 04:58:23 by fratajcz         ###   ########.fr       */
+/*   Created: 2020/06/06 19:24:02 by fratajcz          #+#    #+#             */
+/*   Updated: 2020/06/11 01:44:39 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "shell.h"
+#include "arith.h"
 
-int			lx_end(void)
+long		eval_or_node(t_node *node)
 {
-	if (!g_lexer.line[g_lexer.i])
-	{
-		g_lexer.end_of_input = 1;
-		if (g_lexer.token && !g_lexer.quote_st
-				&& get_bracket_status(g_lexer.brack_stack) == '\0'
-				&& g_lexer.nl_found)
-		{
-			delim_token();
-			g_lexer.nl_found = 0;
-		}
-		return (1);
-	}
-	return (0);
+	return (eval_arith_ast(node->left) || eval_arith_ast(node->right));
+}
+
+long		eval_and_node(t_node *node)
+{
+	return (eval_arith_ast(node->left) && eval_arith_ast(node->right));
+}
+
+long		eval_not_node(t_node *node)
+{
+	return (!eval_arith_ast(node->right));
 }

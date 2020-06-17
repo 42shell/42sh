@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:50:00 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/29 02:19:03 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 05:04:49 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int		get_cd_options(char **argv, int *options)
 	ret = 0;
 	while (argv[argc])
 		argc++;
-	while ((c = get_opt(argc, argv)) != -1)
+	while ((c = get_opt(argc, (unsigned char **)argv)) != -1)
 	{
 		*options = (c == 'P') ? CD_P : *options;
 		*options = (c == 'L') ? 0 : *options;
@@ -130,7 +130,7 @@ int		finish_cd(char *curpath, char *dir, int options)
 	return (ret);
 }
 
-int		builtin_cd(char **argv, __attribute__((unused)) t_array *env)
+int		builtin_cd(char **argv, t_array *env)
 {
 	char	*dir;
 	char	*curpath;
@@ -143,7 +143,7 @@ int		builtin_cd(char **argv, __attribute__((unused)) t_array *env)
 		return (1);
 	if (dir == NULL)
 	{
-		dir = get_home_dir();
+		dir = get_home_dir(env);
 		if (dir == NULL)
 			return (1);
 	}

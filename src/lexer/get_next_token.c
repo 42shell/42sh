@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/28 18:22:11 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 04:58:14 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,24 @@
 
 static char		*get_prompt(void)
 {
-	if (g_lexer.brace_open)
-	{
-		if (g_lexer.brace_quote_st == SQUOTE)
-			return (PSQ);
-		else if (g_lexer.brace_quote_st == DQUOTE)
-			return (PSD);
-		else
-			return (PSB);
-	}
-	else if (g_lexer.quote_st == SQUOTE)
+	enum e_quote_st	bracket_status;
+
+	bracket_status = get_bracket_status(g_lexer.brack_stack);
+	if (g_lexer.quote_st == SQUOTE || bracket_status == SQUOTE)
 		return (PSQ);
-	else if (g_lexer.quote_st == DQUOTE)
-		return (PSD);
-	else if (g_lexer.line_cont == PIPE)
+	if (bracket_status == BRACE)
+		return (PSB);
+	if (bracket_status == DPAREN)
+		return (PSDP);
+	if (bracket_status == PAREN)
 		return (PSP);
-	else if (g_lexer.line_cont == AND_IF)
+	if (g_lexer.quote_st == DQUOTE || bracket_status == DQUOTE)
+		return (PSD);
+	if (g_lexer.line_cont == PIPE)
+		return (PSP);
+	if (g_lexer.line_cont == AND_IF)
 		return (PSA);
-	else if (g_lexer.line_cont == OR_IF)
+	if (g_lexer.line_cont == OR_IF)
 		return (PSO);
 	return (PS2);
 }
@@ -40,6 +40,8 @@ int				reset_lexer(void)
 {
 	token_del(&g_lexer.token);
 	free(g_lexer.line);
+	array_destroy(g_lexer.brack_stack);
+	g_lexer.brack_stack = array_new(4);
 	g_lexer.line = NULL;
 	g_lexer.line_cont = 0;
 	g_lexer.token_delimited = 0;
