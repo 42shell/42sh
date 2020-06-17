@@ -6,11 +6,13 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 19:22:51 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 18:21:45 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/25 02:44:13 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
+
+int	*g_comp_list_count;
 
 t_list_head	*get_autocomplete_list(char *context, size_t len, int *count)
 {

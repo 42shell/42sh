@@ -6,11 +6,13 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/07 16:37:15 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/25 02:47:41 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
+
+bool g_already_forked;
 
 int			exec_builtin(char **argv, t_array *temp_env)
 {

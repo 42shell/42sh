@@ -6,11 +6,14 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/07 17:37:43 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/25 02:53:41 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "readline.h"
+
+struct termios	g_rl_term;
+struct termios	g_rl_oldterm;
 
 static void	init_caps(void)
 {

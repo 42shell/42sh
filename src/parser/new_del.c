@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/08 19:46:45 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/10 14:46:00 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/26 02:27:24 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ int			command_del(t_command **command)
 	if ((*command)->type == SIMPLE)
 	{
 		redir_del(&(*command)->value.simple->redirs);
-		token_del(&(*command)->value.simple->assigns);
-		token_del(&(*command)->value.simple->args);
+		token_list_del(&(*command)->value.simple->assigns);
+		token_list_del(&(*command)->value.simple->args);
 		free_arr((*command)->value.simple->argv);
 		ft_memdel((void **)&(*command)->value.simple);
 	}
