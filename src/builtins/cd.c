@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:50:00 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/28 20:10:22 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 05:04:49 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,13 @@ int		get_cd_options(char **argv, int *options)
 {
 	int		argc;
 	int		ret;
-	char	c;
+	int		c;
 
 	argc = 0;
 	ret = 0;
 	while (argv[argc])
 		argc++;
-	while ((c = get_opt(argc, argv)) != -1)
+	while ((c = get_opt(argc, (unsigned char **)argv)) != -1)
 	{
 		*options = (c == 'P') ? CD_P : *options;
 		*options = (c == 'L') ? 0 : *options;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   file_is_binary.c                                   :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/05/08 18:38:11 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 18:38:12 by fratajcz         ###   ########.fr       */
+/*   Created: 2020/05/29 15:52:10 by fratajcz          #+#    #+#             */
+/*   Updated: 2020/05/29 15:52:12 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,13 @@ bool	file_is_binary(char *filename)
 	}
 	close(fd);
 	return (false);
+}
+
+void	normalize_lexer_line(void)
+{
+	size_t	len;
+
+	len = ft_strlen(g_lexer.line);
+	if (g_lexer.i > len)
+		g_lexer.i = len;
 }

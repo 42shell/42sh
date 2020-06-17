@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 14:02:44 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/28 20:09:51 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 04:54:19 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*get_pwd(void)
 	char		*pwd;
 
 	pwd = get_var_value("PWD");
-	if (pwd == NULL)
+	if (pwd == NULL || *pwd == '\0')
 	{
 		if (getcwd(buf, PATH_MAX + 1) == NULL)
 		{

@@ -143,3 +143,4 @@ cd var
 echo $PWD
 echo $OLDPWD
 /bin/pwd
+echo '~~~'

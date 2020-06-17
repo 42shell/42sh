@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/02 00:15:06 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/02 00:26:35 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/29 16:31:25 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,7 @@ ssize_t	readc(int fd, void *ptr)
 		chars_in_buf = ret;
 	}
 	*(unsigned char *)ptr = buf[i++];
+	if (*(unsigned char *)ptr == '\0')
+		return (readc(fd, ptr));
 	return (1);
 }

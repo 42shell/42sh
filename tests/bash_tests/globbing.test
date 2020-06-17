@@ -75,3 +75,20 @@ echo '~~~'
 echo 'echo */*/*/*.[co]'
 echo */*/*/*.[co]
 echo '~~~'
+
+echo 'echo **************'
+echo *****************
+echo '~~~'
+
+echo 'echo *[a-c'
+echo *[a-c
+echo '~~~'
+
+echo 'echo *["a-c"]'
+touch bonjour-
+echo *["a-c"]
+echo '~~~'
+
+echo 'echo *[a-]'
+echo *[a-]
+rm bonjour-

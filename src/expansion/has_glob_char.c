@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/08 18:27:39 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 18:27:41 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/29 22:49:11 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ bool	has_glob_char(char *str)
 
 	quote_status = NONE;
 	i = -1;
+	bracket_open = false;
 	while (str[++i])
 	{
 		if (quote_start(str, i, &quote_status))
