@@ -1,0 +1,22 @@
+echo 'ls &'
+ls & sleep 1
+echo '~~~'
+
+echo 'ls | cat -e &'
+ls | cat -e & sleep 1
+echo '~~~'
+
+echo '(ls | cat) &'
+(ls | cat) & sleep 1
+echo '~~~'
+
+echo '{ ls | cat; } &'
+{ ls | cat; } & sleep 1
+echo '~~~'
+
+echo '( ls | cat -e & ls ) &'
+( ls | cat -e & sleep 1; ls ) & sleep 1
+echo '~~~'
+
+echo '{ ls | cat -e & ls; } &'
+{ ls | cat -e & sleep 1; ls; } & sleep 1

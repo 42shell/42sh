@@ -12,7 +12,7 @@
 
 #ifndef SHELL_H
 # define SHELL_H
-
+#include <stdio.h>
 # include <unistd.h>
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -64,9 +64,11 @@ typedef struct			s_var
 }						t_var;
 
 /*
-** todo:
+( ls | cat && { ls | cat -e; } ) &
+( ls | cat && { ls | cat -e & } ) &
+** TODO:
+** -commands which read stdin in batch mode
 ** -( ) { } :
-** 		-update jobs display/ add &
 ** 		-check batch mode
 ** -handle job control on exit
 ** -bangs/shell script

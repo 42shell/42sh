@@ -87,7 +87,8 @@ SRC_JOB       	:= launch_job.c\
 				   job_get_status.c\
 				   job_set_status.c\
 				   job_print.c\
-				   job_format.c\
+				   format_job.c\
+				   format_command.c\
 				   job_utils.c\
 				   job_new_del.c
 SRC_JOB			:= $(addprefix job_control/,$(SRC_JOB))

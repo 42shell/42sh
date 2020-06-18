@@ -21,15 +21,19 @@ static int	launch_job_bg(t_job *job)
 	g_last_exit_st = 0;
 	if (!g_job_control_enabled)
 		fd_in = open("/dev/null", O_RDONLY);
-	process = process_new(job->command, fd_in, STDOUT_FILENO);
-	launch_process(process, 0);
+	if (job->command->type == CONNECTION && job->command->value.connection->connector == PIPE)
+		eval_command(job->command);
+	else
+	{
+		process = process_new(job->command, fd_in, STDOUT_FILENO);
+		launch_process(process, 0);
+	}
 	if (g_job_control_enabled)
 	{
 		put_job_bg(job, false);
-		ft_printf("[%d] %d\n", job->id + 1, job->pgid);
+		if (g_shell.interactive_mode)
+			ft_dprintf(2, "[%d] %d\n", job->id + 1, job->pgid);
 	}
-	else
-		process->done = true;
 	if (fd_in != STDIN_FILENO)
 		close(fd_in);
 	return (0);

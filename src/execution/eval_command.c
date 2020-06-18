@@ -45,8 +45,6 @@ int			eval_group_command(t_command *command)
 			process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
 			return (launch_process(process, 0));
 		}
-		if (group->list->next)
-			g_already_forked = false;
 	}
 	if (set_redir(command->value.group->redir_list, true) != 0)
 	{
@@ -61,9 +59,7 @@ int			eval_group_command(t_command *command)
 int			eval_command(t_command *command)
 {
 	if (command->type == GROUP)
-	{
 		return (eval_group_command(command));
-	}
 	if (command->type == CONNECTION)
 	{
 		if (command->value.connection->connector == OR_IF

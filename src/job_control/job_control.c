@@ -24,7 +24,7 @@ void	notif_jobs(void)
 		next = job->next;
 		if (job_is_done(job))
 		{
-			if (job->bg)
+			if (job->bg && g_shell.interactive_mode)
 				print_job(job, true);
 			remove_job_from_list(job->id);
 			process_del(&job->processes);
@@ -33,7 +33,8 @@ void	notif_jobs(void)
 		}
 		else if (job_is_stopped(job) && !job->notified)
 		{
-			print_job(job, true);
+			if (g_shell.interactive_mode)
+				print_job(job, true);
 			update_curr_job(job);
 			job->notified = true;
 		}
@@ -55,6 +56,7 @@ void	wait_for_job(t_job *job)
 		pid = waitpid(WAIT_ANY, &status, WUNTRACED);
 		if (pid > 0 && mark_status(pid, status) < 0)
 		{
+			printf("wait %s\n", job->command->value.simple->argv[0]);
 			ft_dprintf(2, "42sh: process %d not found.\n", pid);
 			break ;
 		}

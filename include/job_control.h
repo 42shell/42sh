@@ -57,7 +57,6 @@ t_list_head				*g_curr_job;
 int						launch_job(t_job *job);
 int						launch_job_in_subshell(t_job *job);
 int						launch_process(t_process *process, int fd_to_close);
-bool					subshell_is_needed(t_command *command);
 
 /*
 ** job control
@@ -110,9 +109,7 @@ void					remove_job_from_list(pid_t pgid);
 
 char					*get_job_format(t_job *job);
 char					*get_process_format(t_process *process);
-t_dstr					*format_command(t_dstr *buf, t_command *command);
-void					format_simple_command(t_dstr *buf,
-						t_simple_cmd *command);
+void					format_command(t_dstr *buf, t_command *command);
 void					print_job(t_job *job, bool print_command);
 void					print_job_long(t_job *job);
 

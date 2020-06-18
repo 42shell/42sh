@@ -85,6 +85,8 @@ int			exec_group_command(t_group_cmd *group)
 {
 	t_job		*job;
 
+	if (group->list && group->list->next)
+		g_already_forked = false;
 	while (group->list)
 	{
 		job = job_new(group->list, STDIN_FILENO, STDOUT_FILENO);

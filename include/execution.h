@@ -37,6 +37,13 @@ bool				g_job_control_enabled;
 bool				g_already_forked;
 
 /*
+** to know if we are in backgroud or not during
+** execution.
+*/
+
+bool				g_bg;
+
+/*
 ** eval tree
 */
 
