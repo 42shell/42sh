@@ -83,8 +83,7 @@ void	put_job_bg(t_job *job, bool cont)
 
 	job->bg = true;
 	g_last_bg_job_pid = job->pgid;
-	if (g_job_control_enabled)
-		update_curr_job(job);
+	update_curr_job(job);
 	if (cont)
 		kill(-job->pgid, SIGCONT);
 }

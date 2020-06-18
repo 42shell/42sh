@@ -64,12 +64,9 @@ typedef struct			s_var
 }						t_var;
 
 /*
-( ls | cat && { ls | cat -e; } ) &
-( ls | cat && { ls | cat -e & } ) &
 ** TODO:
-** -commands which read stdin in batch mode
-** -( ) { } :
-** 		-check batch mode
+** -lexer better fix + norme
+** -commands reading from stdin in batch mode
 ** -handle job control on exit
 ** -bangs/shell script
 **
