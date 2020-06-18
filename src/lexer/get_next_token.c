@@ -77,6 +77,28 @@ static t_token	*return_token(void)
 	return (NULL);
 }
 
+static t_token	*end_of_input(int ret)
+{
+	char		*err;
+
+	if (ret == INPUT_EOF)
+	{
+		if (g_lexer.quote_st != 0 || g_lexer.brack_stack->size != 0)
+		{
+			err = get_quote_string(g_lexer.brack_stack->size ?
+						*(enum e_quote_st *)g_lexer.brack_stack->array[0] :
+						g_lexer.quote_st);
+			ft_dprintf(2, "42sh: unexpected EOF while looking for"
+						"matching '%s'\n", err);
+			free(err);
+			return (NULL);
+		}
+		g_lexer.token_delimited = true;
+		return (return_token());
+	}
+	return (NULL);
+}
+
 t_token			*get_next_token(void)
 {
 	int		ret;
@@ -89,14 +111,7 @@ t_token			*get_next_token(void)
 		g_lexer.end_of_input = 0;
 		g_lexer.line_cont = 0;
 		if ((ret = g_shell.get_input(get_prompt(), false)) != 0)
-		{
-			if (ret == INPUT_EOF)
-			{
-				g_lexer.token_delimited = true;
-				return (return_token());
-			}
-			return (NULL);
-		}
+			return (end_of_input(ret));
 	}
 	while (!g_lexer.end_of_input && !g_lexer.token_delimited)
 	{

@@ -71,6 +71,7 @@ typedef struct			s_var
 ** -bangs/shell script
 **
 ** problems:
+** -file_is_binary "ls"
 ** -watch deceitful lexer
 ** -store aborted multi-lines in history ? bash does
 ** -prompt when executing tests ?

@@ -12,6 +12,21 @@
 
 #include "shell.h"
 
+char	*get_quote_string(enum e_quote_st quote)
+{
+	if (quote == BSLASH)
+		return (ft_strdup("\\"));
+	if (quote == SQUOTE)
+		return (ft_strdup("'"));
+	if (quote == DQUOTE)
+		return (ft_strdup("\""));
+	if (quote == PAREN)
+		return (ft_strdup("("));
+	if (quote == DPAREN)
+		return (ft_strdup("$(("));
+	return (ft_strdup("${"));
+}
+
 bool	is_redir(t_token *token)
 {
 	if (LESS <= token->type && token->type <= GREATAND)
