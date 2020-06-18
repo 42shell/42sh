@@ -12,7 +12,7 @@
 
 #ifndef SHELL_H
 # define SHELL_H
-#include <stdio.h>
+
 # include <unistd.h>
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -71,9 +71,8 @@ typedef struct			s_var
 ** -bangs/shell script
 **
 ** problems:
-** -store aborted multi-lines in history ?
-** -assert lexer works properly in line continuations,
-**  history heredocs and quoted newlines...
+** -watch deceitful lexer
+** -store aborted multi-lines in history ? bash does
 ** -prompt when executing tests ?
 **
 ** old problems:

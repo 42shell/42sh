@@ -56,7 +56,6 @@ void	wait_for_job(t_job *job)
 		pid = waitpid(WAIT_ANY, &status, WUNTRACED);
 		if (pid > 0 && mark_status(pid, status) < 0)
 		{
-			printf("wait %s\n", job->command->value.simple->argv[0]);
 			ft_dprintf(2, "42sh: process %d not found.\n", pid);
 			break ;
 		}
