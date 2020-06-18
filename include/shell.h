@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 18:19:44 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 04:53:40 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,12 @@ typedef struct			s_var
 # define PSP			"|... "
 # define PSH			"<<... "
 # define PSB			"(... "
+# define PSDP			"((... "
 # define PSC			"{... "
 
 typedef int				(*t_input_func)(const char *, bool);
 
-int						g_last_exit_st;
+extern int						g_last_exit_st;
 
 typedef struct			s_shell
 {
@@ -112,8 +113,8 @@ typedef struct			s_shell
 	t_ht				*vars;
 }						t_shell;
 
-t_shell					g_shell;
-t_ht					*g_builtins;
+extern t_shell					g_shell;
+extern t_ht					*g_builtins;
 
 int						init(int argc, char **argv);
 void					del(void);
@@ -121,6 +122,7 @@ void					del(void);
 int						input_batch(const char *prompt, bool heredoc);
 int						input_interactive(const char *prompt, bool heredoc);
 bool					file_is_binary(char *filename);
+void					normalize_lexer_line(void);
 
 void					init_sig(void);
 
@@ -145,5 +147,15 @@ void					set_temp_env_variables(t_simple_cmd *cmd,
 char					*get_last_exit_status(void);
 char					*get_shell_pid(void);
 char					*get_last_bg_job_pid(void);
+
+# define BRACK_CAN_OPEN		0x1
+# define BRACK_CAN_CLOSE	0x2
+
+enum e_quote_st			get_bracket_status(t_array *stack);
+void					set_bracket_status(const char *str, int i,
+						t_array *stack, bool can_open);
+void					add_bracket_to_stack(t_array *stack,
+						enum e_quote_st bracket);
+void					pop_bracket_from_stack(t_array *stack);
 
 #endif

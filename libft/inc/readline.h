@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 20:09:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 18:50:52 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/25 02:52:58 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,12 +105,12 @@ enum						e_keys
 ** term mode, backup, window size and cursor position
 */
 
-struct termios				g_rl_term;
-struct termios				g_rl_oldterm;
-size_t						g_rl_sizex;
-size_t						g_rl_sizey;
-size_t						g_rl_posx;
-size_t						g_rl_posy;
+extern struct termios				g_rl_term;
+extern struct termios				g_rl_oldterm;
+extern size_t						g_rl_sizex;
+extern size_t						g_rl_sizey;
+extern size_t						g_rl_posx;
+extern size_t						g_rl_posy;
 
 /*
 ** arrays (termcaps, keymap, key buffer)
@@ -120,8 +120,8 @@ size_t						g_rl_posy;
 ** caps in term.h
 */
 
-char						*g_rl_caps[CAPS_SIZE];
-unsigned long				g_rl_keys[KEYS_SIZE];
+extern char						*g_rl_caps[CAPS_SIZE];
+extern unsigned long				g_rl_keys[KEYS_SIZE];
 
 struct						s_rl_key
 {
@@ -129,15 +129,15 @@ struct						s_rl_key
 	size_t					i;
 };
 
-struct s_rl_key				g_rl_key;
-unsigned long				g_rl_oldkey;
+extern struct s_rl_key				g_rl_key;
+extern unsigned long				g_rl_oldkey;
 
 /*
 ** function table
 */
 
 typedef int					(*t_key_func)(void);
-t_key_func					g_rl_keymap[255];
+extern t_key_func					g_rl_keymap[255];
 
 /*
 ** history list
@@ -149,7 +149,7 @@ struct						s_rl_hist
 	t_list_head				*ptr;
 };
 
-struct s_rl_hist			g_rl_hist;
+extern struct s_rl_hist			g_rl_hist;
 
 /*
 ** the line
@@ -164,7 +164,7 @@ struct						s_rl_line
 	size_t					i;
 };
 
-struct s_rl_line			g_rl_line;
+extern struct s_rl_line			g_rl_line;
 
 /*
 ** the function used to autocomplete,
@@ -184,27 +184,27 @@ struct						s_rl_complete
 	bool					first_tab;
 };
 
-struct s_rl_complete		g_rl_complete;
+extern struct s_rl_complete		g_rl_complete;
 
 /*
 ** the prompt
 */
 
-const char					*g_rl_prompt;
-int							g_rl_prompt_len;
+extern const char					*g_rl_prompt;
+extern int							g_rl_prompt_len;
 
 /*
 ** bool set to true when rl_init is called
 */
 
-bool						g_rl_is_init;
+extern bool						g_rl_is_init;
 
 /*
 ** error status, if set, readline will return NULL
 ** and all the allocated memory will be freed, history included.
 */
 
-int							g_rl_error;
+extern int							g_rl_error;
 
 /*
 ** options
@@ -214,17 +214,17 @@ int							g_rl_error;
 ** -line_limit: if set, readline will read, at max, line_size_max characters.
 */
 
-bool						g_rl_retain_nl;
-bool						g_rl_prompt_cr;
-bool						g_rl_hist_doubl;
-bool						g_rl_line_limit;
-unsigned int				g_rl_line_size_max;
+extern bool						g_rl_retain_nl;
+extern bool						g_rl_prompt_cr;
+extern bool						g_rl_hist_doubl;
+extern bool						g_rl_line_limit;
+extern unsigned int				g_rl_line_size_max;
 
 /*
 ** ret
 */
 
-int							g_rl_last_ret;
+extern int							g_rl_last_ret;
 
 /*
 ** initialization

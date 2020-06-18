@@ -6,7 +6,7 @@
 /*   By: fratajcz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 16:41:57 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/24 01:49:19 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/05 16:48:52 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,21 @@ void		array_append(t_array *array, void *data)
 	if (array->size == array->allocated)
 		array_realloc(array);
 	array->array[array->size++] = data;
+}
+
+/*
+** Note that the popped value is NOT freed
+*/
+
+void		*array_pop(t_array *array)
+{
+	void	*ret;
+
+	if (array->size == 0)
+		return (NULL);
+	ret = array->array[--array->size];
+	array->array[array->size] = NULL;
+	return (ret);
 }
 
 void		array_destroy(t_array *array)

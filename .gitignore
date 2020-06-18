@@ -72,6 +72,7 @@ tags
 
 # History list file
 .42sh_history
+.gdb_history
 
 tests/*.21sh
 tests/*.42sh

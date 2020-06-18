@@ -6,7 +6,7 @@
 /*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 16:27:46 by nbousset          #+#    #+#             */
-/*   Updated: 2020/05/08 18:51:48 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/05 17:12:11 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ t_array					*array_new(size_t size);
 void					array_realloc(t_array *array);
 void					array_append(t_array *array, void *data);
 void					array_destroy(t_array *array);
+void					*array_pop(t_array *array);
 
 /*
 **------------------------------Hash table-------------------------------------

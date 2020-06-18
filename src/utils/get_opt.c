@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 11:56:52 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/01/14 12:12:29 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 05:06:05 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static char	reset_get_opt(int *av_i, int *j, int *max_opt_argv)
 	return (-1);
 }
 
-char		get_opt(int argc, char *argv[])
+int			get_opt(int argc, unsigned char *argv[])
 {
 	static int	av_i = 1;
 	static int	j = 1;
@@ -33,7 +33,7 @@ char		get_opt(int argc, char *argv[])
 				&& argv[max_opt_argv][1] != '\0')
 			max_opt_argv++;
 	}
-	if (av_i == max_opt_argv || ft_strcmp(argv[av_i], "--") == 0)
+	if (av_i == max_opt_argv || ft_strcmp((char *)argv[av_i], "--") == 0)
 		return (reset_get_opt(&av_i, &j, &max_opt_argv));
 	if (argv[av_i][0] != '-' || (argv[av_i][j] == '\0' && j != 1))
 	{
@@ -41,5 +41,5 @@ char		get_opt(int argc, char *argv[])
 		j = 1;
 		return (get_opt(argc, argv));
 	}
-	return (argv[av_i][j++]);
+	return ((int)argv[av_i][j++]);
 }

@@ -6,11 +6,17 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:52:31 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/02/07 00:36:28 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 05:02:41 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
+
+extern char	*g_expand_error_token;
+
+/*
+** if code == ERROR_REDIR_EXPAND, the error message is already printed in expand
+*/
 
 int		redir_error(int code)
 {

@@ -103,7 +103,7 @@ typedef struct					s_parser
 	int							bracket_lvl;
 }								t_parser;
 
-t_parser						g_parser;
+extern t_parser						g_parser;
 
 /*
 ** in case of line continuation

@@ -15,7 +15,7 @@
 
 # include "shell.h"
 
-int					*g_comp_list_count;
+extern int					*g_comp_list_count;
 
 t_list_head			*get_autocomplete_list(char *context, size_t len,
 					int *count);

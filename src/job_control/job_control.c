@@ -6,11 +6,13 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/09 15:26:00 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/25 02:48:20 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
+
+t_list_head *g_curr_job;
 
 void	notif_jobs(void)
 {

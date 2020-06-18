@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 14:52:04 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/04/03 22:09:01 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 04:54:52 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,11 @@ static int	redirect(t_redir *redir, int redirected_fd, bool backup)
 	}
 	else if ((redirection_fd = get_redirection_fd(redir)) < 0
 	|| !is_valid_fd(redirection_fd))
+	{
+		if (redirection_fd == ERROR_REDIR_EXPAND)
+			return (ERROR_REDIR_EXPAND);
 		return (redirection_fd == -1 ? ERROR_REDIR_OPEN : ERROR_REDIR_BAD_FD);
+	}
 	if (redirected_fd == redirection_fd)
 		move_fd(&redirection_fd);
 	dup2_and_backup(redirection_fd, redirected_fd, backup);
@@ -77,20 +81,22 @@ static int	get_redirected_fd(t_redir *redir)
 	return (ft_atoi(redir->left_op->value->str));
 }
 
+extern char	*g_tmp_file;
+
 int			set_redir(t_redir *redir_list, bool backup)
 {
-	t_redir	*redir;
 	int		redirected_fd;
 	int		ret;
 
-	redir = redir_list;
-	while (redir)
+	while (redir_list)
 	{
-		if ((redirected_fd = get_redirected_fd(redir)) > 255)
+		if ((redirected_fd = get_redirected_fd(redir_list)) > 255)
 			return (redir_error(ERROR_REDIR_BAD_FD));
-		else if ((ret = redirect(redir, redirected_fd, backup)) < 0)
+		else if ((ret = redirect(redir_list, redirected_fd, backup)) < 0)
 			return (redir_error(ret));
-		redir = redir->next;
+		if (redir_list->operator->type == DLESS)
+			unlink(g_tmp_file);
+		redir_list = redir_list->next;
 	}
 	return (0);
 }

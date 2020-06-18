@@ -18,6 +18,9 @@ cd: error
 ~~~
 42sh: cd: HOME not set
 ~~~
+not a builtin error but whatever
+42sh: ambiguous redirect
+~~~
 cd: error
 cd: error
 cd: PWD not set
@@ -25,4 +28,12 @@ getcwd: could not get current dir
 cd: PWD not set
 getcwd: could not get current dir
 ~~~
+cd: PWD not set
+getcwd: could not get current dir
+~~~
 cd: OLDPWD not set
+~~~
+cd -\255 getopt bug
+cd: illegal option -- Ã
+cd: PWD not set
+getcwd: could not get current dir

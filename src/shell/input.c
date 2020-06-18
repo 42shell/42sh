@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 19:37:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 18:14:19 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/29 22:27:29 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int			remove_escaped_newlines(char *line, bool ignore_quotes)
 	quote = 0;
 	while (line[i])
 	{
-		if (line[i] == BSLASH && (ignore_quotes ? 1 : quote != SQUOTE))
+		if (line[i] == BSLASH && (ignore_quotes ? 1 : quote != SQUOTE)
+				&& line[i + 1])
 		{
 			i++;
 			if (line[i] == '\n')
@@ -48,6 +49,7 @@ char		*get_line(void)
 	t_dstr	*line;
 
 	line = ft_dstr_new(64);
+	c = 0;
 	while (1)
 	{
 		if ((ret = readc(STDIN_FILENO, &c)) == -1)
@@ -90,6 +92,7 @@ int			input_batch(const char *prompt, bool heredoc)
 	else
 		g_lexer.line = ft_strdup(line);
 	remove_escaped_newlines(g_lexer.line, heredoc);
+	normalize_lexer_line();
 	free(line);
 	return (0);
 }
@@ -128,6 +131,7 @@ int			input_interactive(const char *prompt, bool heredoc)
 	else
 		g_lexer.line = ft_strdup(line);
 	remove_escaped_newlines(g_lexer.line, heredoc);
+	normalize_lexer_line();
 	free(line);
 	return (0);
 }

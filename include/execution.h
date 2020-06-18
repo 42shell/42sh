@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 15:00:39 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 17:19:32 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/28 19:56:52 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 # define ERROR_REDIR_OPEN		-1
 # define ERROR_REDIR_BAD_FD		-2
+# define ERROR_REDIR_EXPAND		-3
 
 typedef struct		s_fd_backup
 {
@@ -31,10 +32,8 @@ typedef struct		s_fd_backup
 ** -the table is (should be) flushed when PATH is modified.
 */
 
-t_ht				*g_binaries;
-
-bool				g_job_control_enabled;
-bool				g_already_forked;
+extern bool			g_job_control_enabled;
+extern bool			g_already_forked;
 
 /*
 ** to know if we are in backgroud or not during
