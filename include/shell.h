@@ -65,11 +65,11 @@ typedef struct			s_var
 
 /*
 ** TODO:
+** -tests ./42sh < file
 ** -handle job control on exit
 ** -bangs/shell script
 **
 ** problems:
-** -file_is_binary "ls"
 ** -watch deceitful lexer
 ** -store aborted multi-lines in history ? bash does
 ** -prompt when executing tests ?
@@ -110,7 +110,6 @@ typedef struct			s_shell
 	pid_t				pgid;
 	struct termios		tmodes;
 	t_ht				*vars;
-	int					stdin;
 	int					input_file_fd;
 }						t_shell;
 

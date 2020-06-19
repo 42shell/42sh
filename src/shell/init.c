@@ -89,19 +89,18 @@ static int	init_interactive_mode(void)
 
 int			init(int argc, char **argv)
 {
-	g_shell.stdin = STDIN_FILENO;
-	g_shell.input_file_fd = STDIN_FILENO;
 	g_shell.interactive_mode = true;
 	if (!isatty(STDIN_FILENO))
 	{
-		g_shell.interactive_mode = false;
+		g_shell.input_file_fd = STDIN_FILENO;
 		g_shell.get_input = &input_batch;
+		g_shell.interactive_mode = false;
 	}
 	if (argc > 0)
 	{
 		set_input_fd(argv[0]);
-		g_shell.interactive_mode = false;
 		g_shell.get_input = &input_batch;
+		g_shell.interactive_mode = false;
 	}
 	if (g_shell.interactive_mode)
 		init_interactive_mode();
