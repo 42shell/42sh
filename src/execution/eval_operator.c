@@ -37,16 +37,16 @@ int			eval_and_or(t_command *command)
 	g_already_forked = false;
 	and_or = command->value.connection;
 	eval_command(and_or->left);
-	if (!g_job_control_enabled)
-		wait_for_job(g_shell.jobs);
-	else
+	if (g_job_control_enabled)
 		put_job_fg(g_shell.jobs, false);
+	else
+		wait_for_job(g_shell.jobs);
 	if ((and_or->connector == AND_IF && g_last_exit_st == 0)
 	|| (and_or->connector == OR_IF && g_last_exit_st != 0))
 		eval_command(and_or->right);
-	if (!g_job_control_enabled)
-		wait_for_job(g_shell.jobs);
-	else
+	if (g_job_control_enabled)
 		put_job_fg(g_shell.jobs, false);
+	else
+		wait_for_job(g_shell.jobs);
 	return (0);
 }

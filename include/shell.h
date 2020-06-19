@@ -111,6 +111,7 @@ typedef struct			s_shell
 	pid_t				pgid;
 	struct termios		tmodes;
 	t_ht				*vars;
+	int					stdin;
 }						t_shell;
 
 extern t_shell			g_shell;
