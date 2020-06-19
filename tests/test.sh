@@ -43,7 +43,7 @@ done
 for file in "$DIR/bash_tests/"*.test
 do
 	test_name=$(basename "$file" | cut -d '.' -f 1)
-	./42sh "$file" > "$DIR/$test_name.42sh" 2>&1
+	./42sh "$file" > "$DIR/$test_name.42sh" 2>&1;
 	bash "$file" > "$DIR/$test_name.bash" 2>&1
 done
 
@@ -55,7 +55,7 @@ rm -rf glob
 for file in "$DIR/fixed_tests/"*.test
 do
 	test_name=$(basename "$file" | cut -d '.' -f 1)
-	./42sh "$file" > "$DIR/$test_name.42sh" 2>&1
+	./42sh "$file" > "$DIR/$test_name.42sh" 2>&1;
 	cp "$DIR/fixed_tests/$test_name.right" "$DIR/$test_name.bash"
 done
 

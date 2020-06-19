@@ -21,6 +21,15 @@ static void		reset_signals(void)
 	signal(SIGTSTP, SIG_DFL);
 }
 
+static void		set_stdin(void)
+{
+	if (g_shell.stdin != STDIN_FILENO)
+	{
+		dup2(g_shell.stdin, STDIN_FILENO);
+		g_shell.stdin = 0;
+	}
+}
+
 static pid_t	fork_child(int in, int out, int fd_to_close)
 {
 	pid_t	pid;
@@ -33,6 +42,7 @@ static pid_t	fork_child(int in, int out, int fd_to_close)
 	}
 	else if (pid == 0)
 	{
+		set_stdin();
 		if (fd_to_close)
 			close(fd_to_close);
 		if (in != STDIN_FILENO)
@@ -63,9 +73,11 @@ static void		set_child_attr(t_process *process)
 	process->pid = getpid();
 	if (!g_shell.jobs->pgid)
 		g_shell.jobs->pgid = process->pid;
-	setpgid(process->pid, g_shell.jobs->pgid);
-	if (!g_bg)
+	if (!g_bg && g_job_control_enabled)
+	{
+		setpgid(process->pid, g_shell.jobs->pgid);
 		tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
+	}
 	g_job_control_enabled = false;
 	g_already_forked = true;
 }
@@ -88,7 +100,8 @@ int				launch_process(t_process *process, int fd_to_close)
 		process->pid = pid;
 		if (!g_shell.jobs->pgid)
 			g_shell.jobs->pgid = pid;
-		setpgid(process->pid, g_shell.jobs->pgid);
+		if (g_job_control_enabled)
+			setpgid(process->pid, g_shell.jobs->pgid);
 		add_process(process);
 	}
 	return (pid);

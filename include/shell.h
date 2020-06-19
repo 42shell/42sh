@@ -65,7 +65,6 @@ typedef struct			s_var
 
 /*
 ** TODO:
-** -commands reading from stdin in batch mode
 ** -handle job control on exit
 ** -bangs/shell script
 **
@@ -112,6 +111,7 @@ typedef struct			s_shell
 	struct termios		tmodes;
 	t_ht				*vars;
 	int					stdin;
+	int					input_file_fd;
 }						t_shell;
 
 extern t_shell			g_shell;
@@ -123,6 +123,7 @@ void					del(void);
 int						input_batch(const char *prompt, bool heredoc);
 int						input_interactive(const char *prompt, bool heredoc);
 bool					file_may_be_binary(char *filename);
+void					increase_shlvl(void);
 void					normalize_lexer_line(void);
 
 void					init_sig(void);

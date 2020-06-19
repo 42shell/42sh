@@ -19,7 +19,7 @@
 
 ssize_t	readc(int fd, void *ptr)
 {
-	static char		buf[4];
+	static char		buf[512];
 	static size_t	i;
 	static size_t	chars_in_buf;
 	ssize_t			ret;

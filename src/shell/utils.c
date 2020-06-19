@@ -12,6 +12,26 @@
 
 #include "shell.h"
 
+void	increase_shlvl(void)
+{
+	char	*shlvl_str;
+	char	buf[10];
+	int		shlvl_int;
+
+	shlvl_str = get_var_value("SHLVL");
+	if (shlvl_str != NULL)
+		shlvl_int = ft_atoi(shlvl_str) + 1;
+	else
+		shlvl_int = 1;
+	if (shlvl_int >= 1000)
+	{
+		ft_dprintf(2, "42sh: warning: shell level (%d) too high, resetting to 1"
+				, shlvl_int);
+		shlvl_int = 1;
+	}
+	set_var("SHLVL", ft_itoa(shlvl_int, buf), V_EXPORT);
+}
+
 bool	file_may_be_binary(char *filename)
 {
 	int		fd;
