@@ -76,7 +76,7 @@ typedef struct			s_var
 ** -prompt when executing tests ?
 **
 ** old problems:
-** -unsetenv boucle inf when unseting non existing var ?
+** -unsetenv infinite loop when unseting non existing var ?
 ** -env dup invalid read ?
 ** -autcomplete vim /t doesnt complete files ?
 ** -others
@@ -121,7 +121,7 @@ void					del(void);
 
 int						input_batch(const char *prompt, bool heredoc);
 int						input_interactive(const char *prompt, bool heredoc);
-bool					file_is_binary(char *filename);
+bool					file_may_be_binary(char *filename);
 void					normalize_lexer_line(void);
 
 void					init_sig(void);

@@ -12,31 +12,32 @@
 
 #include "shell.h"
 
-bool	file_is_binary(char *filename)
+bool	file_may_be_binary(char *filename)
 {
 	int		fd;
 	char	buf[80];
+	int		ret;
 	int		i;
 
 	i = 0;
 	if (!filename)
 		return (false);
-	if ((fd = open(filename, O_RDONLY)) == -1 || read(fd, buf, 80) == -1)
+	if ((fd = open(filename, O_RDONLY)) < 0 || (ret = read(fd, buf, 80)) < 0)
 	{
+		close(fd);
 		ft_dprintf(STDERR_FILENO, "42sh: %s: unable to read file\n", filename);
-		close(fd);
-		return (true);
-	}
-	while (i < 80 && buf[i] && buf[i] != '\n')
-		i++;
-	if (i < 80 && buf[i] == 0)
-	{
-		ft_dprintf(STDERR_FILENO,
-		"42sh: %s: cannot execute binary file\n", filename);
-		close(fd);
 		return (true);
 	}
 	close(fd);
+	while (i < ret && buf[i] != '\n')
+	{
+		if (buf[i++] == '\0')
+		{
+			ft_dprintf(STDERR_FILENO,
+			"42sh: %s: cannot execute binary file\n", filename);
+			return (true);
+		}
+	}
 	return (false);
 }
 

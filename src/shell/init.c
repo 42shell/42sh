@@ -38,7 +38,7 @@ static int	parse_args(int argc, char **argv)
 
 	if (argc > 0)
 	{
-		if (file_is_binary(argv[0]))
+		if (file_may_be_binary(argv[0]))
 			exit(1);
 		if ((fd = open(argv[0], O_RDONLY)) == -1)
 		{
