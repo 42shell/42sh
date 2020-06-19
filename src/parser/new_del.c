@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   del.c                                              :+:      :+:    :+:   */
+/*   new_del.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -22,8 +22,8 @@ t_command	*command_new(enum e_cmd_type type)
 		command->value.simple = ft_xmalloc(sizeof(t_simple_cmd));
 	else if (type == CONNECTION)
 		command->value.connection = ft_xmalloc(sizeof(t_connection));
-	else if (type == SUBSHELL)
-		command->value.subshell = ft_xmalloc(sizeof(t_subshell));
+	else if (type == GROUP)
+		command->value.group = ft_xmalloc(sizeof(t_group_cmd));
 	return (command);
 }
 
@@ -57,21 +57,25 @@ int			command_del(t_command **command)
 		command_del(&(*command)->value.connection->right);
 		ft_memdel((void **)&(*command)->value.connection);
 	}
-	else if ((*command)->type == SUBSHELL)
-		ft_memdel((void **)&(*command)->value.subshell);
+	else if ((*command)->type == GROUP)
+	{
+		complete_command_del(&(*command)->value.group->list);
+		redir_del(&((*command)->value.group->redir_list));
+		ft_memdel((void **)&(*command)->value.group);
+	}
 	ft_memdel((void **)command);
 	return (0);
 }
 
-void		command_list_del(t_command **command_list)
+void		complete_command_del(t_command **complete_command)
 {
 	t_command	*next;
 
-	while (*command_list)
+	while (*complete_command)
 	{
-		next = (*command_list)->next;
-		command_del(command_list);
-		*command_list = next;
+		next = (*complete_command)->next;
+		command_del(complete_command);
+		*complete_command = next;
 	}
-	*command_list = NULL;
+	*complete_command = NULL;
 }

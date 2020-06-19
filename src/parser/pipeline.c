@@ -12,49 +12,48 @@
 
 #include "shell.h"
 
-/*
-** pipeline     : command
-**              | command pipe_list
-**
-** pipe_list    : '|' linebreak command pipe_list
-**              | EMPTY
-**
-**
-**                 |
-**               /   \
-**              |    test
-**           /     \
-**         ls      cat
-*/
-
-t_command	*parse_pipe_list(t_command *left_operand)
+static t_command	*build_pipe_and_advance(t_command *left)
 {
-	t_command	*pipeline;
-	t_command	*right_operand;
-	int			type;
+	t_command	*node;
+	int			old_linebreak_type;
 
-	if (g_parser.token == NULL || (type = g_parser.token->type) != PIPE
-			|| left_operand == NULL)
-		return (left_operand);
+	node = command_new(CONNECTION);
+	node->value.connection->connector = PIPE;
+	node->value.connection->left = left;
 	token_del(&g_parser.token);
+	g_lexer.expect_reserv_word = true;
 	g_parser.token = get_next_token();
-	parse_linebreak(type);
-	right_operand = parse_command();
-	if (right_operand == NULL)
-	{
-		if (g_parser.status == NOERR)
-			g_parser.status = UNEXPECTED_TOKEN;
-		command_del(&left_operand);
-		return (NULL);
-	}
-	pipeline = command_new(CONNECTION);
-	pipeline->value.connection->connector = type;
-	pipeline->value.connection->left = left_operand;
-	pipeline->value.connection->right = right_operand;
-	return (parse_pipe_list(pipeline));
+	old_linebreak_type = g_linebreak_type;
+	g_linebreak_type = PIPE;
+	parse_linebreak();
+	g_linebreak_type = old_linebreak_type;
+	return (node);
 }
 
-t_command	*parse_pipeline(void)
+/*
+** pipe_sequence    :                             command
+**                  | pipe_sequence '|' linebreak command
+*/
+
+t_command			*parse_pipeline(void)
 {
-	return (parse_pipe_list(parse_command()));
+	t_command		*pipeline;
+	t_command		*node;
+
+	if (!(pipeline = parse_command()))
+		return (NULL);
+	while (g_parser.token
+	&& g_parser.token->type == PIPE)
+	{
+		node = build_pipe_and_advance(pipeline);
+		if (!(node->value.connection->right = parse_command()))
+		{
+			if (!g_parser.status)
+				g_parser.status = UNEXPECTED_TOKEN;
+			command_del(&node);
+			return (NULL);
+		}
+		pipeline = node;
+	}
+	return (pipeline);
 }

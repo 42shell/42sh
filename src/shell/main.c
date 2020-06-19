@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/21 19:37:33 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/25 02:50:17 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/06/17 14:05:57 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,47 +18,44 @@ t_lexer		g_lexer;
 t_parser	g_parser;
 t_ht		*g_builtins;
 
-t_command		*get_command_list(void)
+t_command		*get_complete_command(void)
 {
-	t_command *command_list;
+	t_command	*complete_command;
 
-	command_list = parse_command_list();
-	parse_newline_list();
-	if (g_parser.status != NOERR || g_parser.token != NULL)
+	complete_command = parse_complete_command();
+	if (g_parser.status != NOERR)
 	{
-		parse_error(g_parser.token ? g_parser.token->value->str : "(null)");
+		parse_error(g_parser.token ? g_parser.token->value->str : "EOF");
+		complete_command_del(&complete_command);
 		while (g_parser.token != NULL)
 		{
 			token_del(&g_parser.token);
 			g_parser.token = get_next_token();
 		}
-		g_parser.status = NOERR;
-		command_list_del(&command_list);
 		g_parser.heredocs = NULL;
+		g_linebreak_type = 0;
 		return (NULL);
 	}
-	if (command_list != NULL && get_all_heredocs() == NOERR)
-		return (command_list);
-	command_list_del(&command_list);
-	return (NULL);
+	if (complete_command && get_all_heredocs() != NOERR)
+		complete_command_del(&complete_command);
+	return (complete_command);
 }
 
 int				main_loop(void)
 {
-	t_command *command_list;
+	t_command	*complete_command;
 
 	while (1)
 	{
 		if (g_shell.jobs)
 			notif_jobs();
 		g_parser.status = NOERR;
+		g_parser.bracket_lvl = 0;
 		g_shell.get_input(PS1, false);
-		if ((g_parser.token = get_next_token())
-		&& (command_list = get_command_list()))
-		{
-			eval_command_list(command_list);
-		}
-		if (g_shell.interactive_mode && g_lexer.line)
+		if ((complete_command = get_complete_command()))
+			eval_complete_command(complete_command);
+		if (g_shell.interactive_mode
+		&& g_lexer.line && *g_lexer.line != '\n')
 		{
 			g_lexer.line[ft_strlen(g_lexer.line) - 1] = 0;
 			rl_add_history(g_lexer.line);

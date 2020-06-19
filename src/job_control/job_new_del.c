@@ -38,7 +38,7 @@ void		process_del(t_process **process)
 {
 	t_process	*next;
 
-	while (*process)
+	while (process && *process)
 	{
 		next = (*process)->next;
 		free(*process);
@@ -50,7 +50,7 @@ void		job_del(t_job **job)
 {
 	t_job	*next;
 
-	while (*job)
+	while (job && *job)
 	{
 		process_del(&(*job)->processes);
 		command_del(&(*job)->command);

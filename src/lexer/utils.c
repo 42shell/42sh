@@ -12,14 +12,19 @@
 
 #include "shell.h"
 
-bool	is_operator_start(char c)
+char	*get_quote_string(enum e_quote_st quote)
 {
-	return (c == '<' || c == '>' || c == '&' || c == ';' || c == '|');
-}
-
-bool	is_operator_part(char c)
-{
-	return ((is_operator_start(c)) || c == '-');
+	if (quote == BSLASH)
+		return (ft_strdup("\\"));
+	if (quote == SQUOTE)
+		return (ft_strdup("'"));
+	if (quote == DQUOTE)
+		return (ft_strdup("\""));
+	if (quote == PAREN)
+		return (ft_strdup("("));
+	if (quote == DPAREN)
+		return (ft_strdup("$(("));
+	return (ft_strdup("${"));
 }
 
 bool	is_redir(t_token *token)
@@ -29,47 +34,37 @@ bool	is_redir(t_token *token)
 	return (false);
 }
 
-bool	is_operator_next(char *ope, char c)
+int		lx_line_insert_char(char c, int index)
 {
-	if (is_operator_part(c))
-	{
-		if (c == '<')
-			return (ft_strequ(ope, "<"));
-		else if (c == '>')
-			return (ft_strequ(ope, ">"));
-		else if (c == '&')
-			return (ft_strequ(ope, "<")
-			|| ft_strequ(ope, ">")
-			|| ft_strequ(ope, "&"));
-		else if (c == '|')
-			return (ft_strequ(ope, "|"));
-	}
+	char	*tmp;
+	int		size;
+
+	tmp = g_lexer.line;
+	size = ft_strlen(g_lexer.line) + 1;
+	g_lexer.line = ft_memrealloc(g_lexer.line, size, size + 1);
+	ft_memmove(&g_lexer.line[index + 1],
+				&g_lexer.line[index],
+				ft_strlen(&g_lexer.line[index]));
+	g_lexer.line[index] = c;
+	g_lexer.i++;
+	free(tmp);
 	return (0);
 }
 
-int		get_operator_type(char *ope)
+int		lx_line_del_char(int index)
 {
-	if (ft_strequ(ope, "<"))
-		return (LESS);
-	if (ft_strequ(ope, ">"))
-		return (GREAT);
-	if (ft_strequ(ope, "<<"))
-		return (DLESS);
-	if (ft_strequ(ope, ">>"))
-		return (DGREAT);
-	if (ft_strequ(ope, "<&"))
-		return (LESSAND);
-	if (ft_strequ(ope, ">&"))
-		return (GREATAND);
-	if (ft_strequ(ope, "&"))
-		return (AMPERSAND);
-	if (ft_strequ(ope, "&&"))
-		return (AND_IF);
-	if (ft_strequ(ope, "|"))
-		return (PIPE);
-	if (ft_strequ(ope, "||"))
-		return (OR_IF);
-	if (ft_strequ(ope, ";"))
-		return (SEMI);
+	ft_memmove(&g_lexer.line[index],
+				&g_lexer.line[index + 1],
+				ft_strlen(&g_lexer.line[index]));
+	g_lexer.i--;
+	return (0);
+}
+
+int		is_reserved_word(char *word)
+{
+	if (ft_strequ(word, "{"))
+		return (LBRACE);
+	if (ft_strequ(word, "}"))
+		return (RBRACE);
 	return (0);
 }

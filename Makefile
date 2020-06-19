@@ -30,7 +30,9 @@ LFLAGS          := -ltermcap
 #                     FLAGS                      |
 #------------------------------------------------#
 
-CC              := gcc
+ifeq ($(CC),cc)
+CC              := clang
+endif
 CFLAGS          := -Wall -Wextra #-Werror
 ifeq ($(BUILDTYPE), debug)
 	CFLAGS := $(CFLAGS) $(DBG_FLAGS)
@@ -68,6 +70,7 @@ SRC_VARIABLES	:= env_dup.c\
 SRC_VARIABLES	:= $(addprefix variables/,$(SRC_VARIABLES))
 
 SRC_EXEC        := eval_command.c\
+				   eval_operator.c\
 				   execute.c\
 				   get_argv.c\
 				   get_exec_path.c\
@@ -84,7 +87,8 @@ SRC_JOB       	:= launch_job.c\
 				   job_get_status.c\
 				   job_set_status.c\
 				   job_print.c\
-				   job_format.c\
+				   format_job.c\
+				   format_command.c\
 				   job_utils.c\
 				   job_new_del.c
 SRC_JOB			:= $(addprefix job_control/,$(SRC_JOB))
@@ -119,6 +123,7 @@ SRC_LEXER       := append.c\
                    quote.c\
                    token.c\
 				   lx_end.c\
+				   utils_operator.c\
                    utils.c
 SRC_LEXER       := $(addprefix lexer/,$(SRC_LEXER))
 
@@ -126,13 +131,17 @@ SRC_PARSER      := and_or.c\
 				   pipeline.c\
 				   simple_command.c\
 				   command.c\
-				   command_list.c\
+				   complete_command.c\
+				   compound_command.c\
+				   group_command.c\
+				   compound_list.c\
                    io_redirect.c\
 				   separator.c\
 				   heredoc.c\
 				   error.c\
 				   debug.c\
-                   del.c
+                   new_del.c\
+				   utils.c
 SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
 
 SRC_SHELL       := init.c\

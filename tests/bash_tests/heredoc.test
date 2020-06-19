@@ -64,3 +64,26 @@ echo ~~~~
 cat << EOF
 \
 EOF
+echo ~~~~
+
+cat << EOF
+blabla
+EO\
+F
+echo ~~~~
+
+cat << EOF
+blabla
+E\
+O\
+F
+echo ~~~~
+
+cat << EOF
+blabla
+E\
+O\
+F\
+F
+E\
+OF

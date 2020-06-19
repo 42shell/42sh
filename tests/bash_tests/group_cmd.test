@@ -1,0 +1,81 @@
+echo '(ls | cat)'
+(ls | cat)
+echo '~~~'
+
+echo '(ls && ls)'
+(ls && ls)
+echo '~~~'
+
+echo '(ls && echo ok)'
+(ls && echo ok)
+echo '~~~'
+
+echo '(echo test | cat)'
+(echo test | cat)
+echo '~~~'
+
+echo '(ls && ls -z) 2>&1 | cat -e'
+(ls && ls -z) 2>&1 | cat -e
+echo '~~~'
+
+echo '(ls -z 2>&1 && ls) 1>tmp | cat -e; rm tmp'
+(ls -z 2>&1 && ls) 1>tmp | cat -e; rm tmp
+echo '~~~'
+
+echo '(ls -z && ls) 2>&1 | (wc | cat -e) | (wc | cat)'
+(ls -z && ls) 2>&1 | (wc | cat -e) | (wc | cat)
+echo '~~~'
+
+echo '(ls; (ls -#; (ls; (ls -#; (ls; (ls -#; (ls; ( ls -#; )) 1>file)))))) 2>&1; rm file'
+(ls; (ls -#; (ls; (ls -#; (ls; (ls -#; (ls; ( ls -#; )) 1>file)))))) 2>&1; rm file
+echo '~~~'
+
+echo '{ ls | cat; } | cat -e'
+{ ls | cat; } | cat -e
+echo '~~~'
+
+echo '{ ls && commandnotfound; } 2>&1 | cat -e'
+{ ls && commandnotfound; } 2>&1 | cat -e
+echo '~~~'
+
+echo '{ ls -z && no; } | cat -e'
+{ ls -z && no; } | cat -e
+echo '~~~'
+
+echo '{ ls -z || { ls && fail; } 2>&1; } | cat -e'
+{ ls -z || { ls && fail; } 2>&1; } | cat -e
+echo '~~~'
+
+echo '{ ls; { ls } }
+}
+}'
+{ ls; { ls } }
+}
+}
+echo '~~~'
+
+echo '{ ls -z 2>&1 && ls; } 1>tmp | cat -e; rm tmp'
+{ ls -z 2>&1 && ls; } 1>tmp | cat -e; rm tmp
+echo '~~~'
+
+echo '{ ls -z && ls; } 2>&1 | { wc | cat -e; } | { wc | cat; }'
+{ ls -z && ls; } 2>&1 | { wc | cat -e; } | { wc | cat; }
+echo '~~~'
+
+echo '{ ls; { ls -#; { ls; { ls -#; { ls; { ls -#; { ls; { ls -#; } ; } 1>file; }; }; }; }; }; } 2>&1; rm file'
+{ ls; { ls -#; { ls; { ls -#; { ls; { ls -#; { ls; { ls -#; } ; } 1>file; }; }; }; }; }; } 2>&1; rm file
+echo '~~~'
+
+echo '{(ls | cat -e)}'
+{(ls | cat -e)}
+echo '~~~'
+
+echo '{ ((ls | cat -e) 2>&1 && echo ok); echo ok 1>&2; } | cat -e'
+{ ((ls | cat -e) 2>&1 && echo ok); echo ok 1>&2; } | cat -e
+echo '~~~'
+
+echo '{ (ls -z || ls) && echo ok; } 2>&1'
+{ (ls -z || ls) && echo ok; } 2>&1
+
+echo '{ (ls && ls -z) && echo ok; } 2>&1'
+{ (ls && ls -z) && echo ok; } 2>&1

@@ -37,14 +37,18 @@
 # include "autocomplete.h"
 # include "utils.h"
 
+/*
+** vars.h
+*/
+
 # define V_NOATTR	0
 # define V_RDONLY	1
 # define V_EXPORT	2
 # define V_HIDDEN	4
 # define V_SPECIAL	8
 
-typedef char *(*t_var_value_func)(void);
-typedef int(*t_builtin_func)(char **argv, t_array *temp_env);
+typedef char	*(*t_var_value_func)(void);
+typedef int		(*t_builtin_func)(char **argv, t_array *temp_env);
 
 /*
 ** value_func is used to get the values of special variables like $$.
@@ -60,45 +64,44 @@ typedef struct			s_var
 }						t_var;
 
 /*
-** -fix readline problems
-** 		-rl_del??
-**		-env/termcaps...
-**		-write on 2 ? sounds weird to do that in readline,
-**		 maybe dup2 in shell.get_input
-**		-rigorous testing
-** -proper init handling
-**		-tty stuff, empty env, job control...
-** -input
-**		-redo input_interactive() properly, EOF and INT handling...
-** -error handling
-**		-^C ^D
-**		-last exit status, close fds... assert everything is perfect
+** TODO:
+** -commands reading from stdin in batch mode
+** -handle job control on exit
+** -bangs/shell script
+**
+** problems:
+** -file_is_binary "ls"
+** -watch deceitful lexer
+** -store aborted multi-lines in history ? bash does
+** -prompt when executing tests ?
+**
+** old problems:
+** -unsetenv boucle inf when unseting non existing var ?
+** -env dup invalid read ?
+** -autcomplete vim /t doesnt complete files ?
 ** -others
-** 		-flush cache table when PATH is modified.
 ** 		-check comments work properly
-** 		-in case of "ls | \n cat", newline is not removed from line before
-**			stored in history
-**		 don t know if it is handled in expand()
-** -leaks
+** -leaks/invalid reads/still reachable
 */
 
 # define INPUT_INT		3
 # define INPUT_EOF		4
 
 # define PS1			"$> "
-# define PS2			"> "
-# define PSQ			"q> "
-# define PSB			"b> "
-# define PSDP			"dp> "
-# define PSD			"d> "
-# define PSA			"a> "
-# define PSO			"o> "
-# define PSP			"p> "
-# define PSH			"h> "
+# define PS2			"\\... "
+# define PSQ			"'... "
+# define PSD			"\"... "
+# define PSA			"&&... "
+# define PSO			"||... "
+# define PSP			"|... "
+# define PSH			"<<... "
+# define PSB			"(... "
+# define PSDP			"((... "
+# define PSC			"{... "
 
 typedef int				(*t_input_func)(const char *, bool);
 
-extern int						g_last_exit_st;
+extern int				g_last_exit_st;
 
 typedef struct			s_shell
 {
@@ -110,8 +113,8 @@ typedef struct			s_shell
 	t_ht				*vars;
 }						t_shell;
 
-extern t_shell					g_shell;
-extern t_ht					*g_builtins;
+extern t_shell			g_shell;
+extern t_ht				*g_builtins;
 
 int						init(int argc, char **argv);
 void					del(void);

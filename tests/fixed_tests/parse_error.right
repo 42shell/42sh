@@ -33,3 +33,25 @@ lol
 lol
 ~~~
 42sh: syntax error near unexpected token '>'
+~~~
+42sh: syntax error near unexpected token ')'
+~~~
+42sh: syntax error near unexpected token '}'
+~~~
+42sh: syntax error near unexpected token ')'
+~~~
+42sh: syntax error near unexpected token ')'
+~~~
+42sh: syntax error near unexpected token '}'
+~~~
+42sh: syntax error near unexpected token ')'
+~~~
+42sh: too many nested brackets, aborting
+~~~
+lol
+42sh: ls}: command not found
+~~~
+42sh: {ls: command not found
+42sh: {ls}}: command not found
+~~~
+42sh: syntax error near unexpected token '|'

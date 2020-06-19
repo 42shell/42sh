@@ -83,22 +83,20 @@ static int	get_redirected_fd(t_redir *redir)
 
 extern char	*g_tmp_file;
 
-int			set_redir(t_simple_cmd *command, bool backup)
+int			set_redir(t_redir *redir_list, bool backup)
 {
-	t_redir	*redir;
 	int		redirected_fd;
 	int		ret;
 
-	redir = command->redirs;
-	while (redir)
+	while (redir_list)
 	{
-		if ((redirected_fd = get_redirected_fd(redir)) > 255)
+		if ((redirected_fd = get_redirected_fd(redir_list)) > 255)
 			return (redir_error(ERROR_REDIR_BAD_FD));
-		else if ((ret = redirect(redir, redirected_fd, backup)) < 0)
+		else if ((ret = redirect(redir_list, redirected_fd, backup)) < 0)
 			return (redir_error(ret));
-		if (redir->operator->type == DLESS)
+		if (redir_list->operator->type == DLESS)
 			unlink(g_tmp_file);
-		redir = redir->next;
+		redir_list = redir_list->next;
 	}
 	return (0);
 }

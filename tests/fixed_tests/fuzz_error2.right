@@ -1,1 +1,3 @@
 crash
+42sh: unexpected EOF while looking for matching '"'
+42sh: syntax error near unexpected token 'EOF'

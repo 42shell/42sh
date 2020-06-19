@@ -12,22 +12,32 @@
 
 #ifndef PARSER_H
 # define PARSER_H
-
 # include "shell.h"
+
+# define BRACKET_NEST_LIMIT		1024
+
+/*
+** values for s_command->flags
+*/
+
+# define CMD_INVERT_RETURN		0x01
+# define CMD_AMPERSAND			0x02
+# define CMD_LASTPIPE			0x04
 
 enum							e_parser_status
 {
 	USER_ABORT = -1,
 	NOERR = 0,
-	UNEXPECTED_TOKEN
+	UNEXPECTED_TOKEN,
+	BRACKET_NEST_LIMIT_REACHED
 };
 
-/*
-** -A single redir is returned by parse_io_redirect()
-** -it contains 3 tokens corresponding to the operator and
-**  the 2 operands of a redirection (2 >& 1)
-** -the left operand can be NULL
-*/
+enum							e_cmd_type
+{
+	CONNECTION,
+	SIMPLE,
+	GROUP
+};
 
 typedef struct					s_redir
 {
@@ -36,13 +46,6 @@ typedef struct					s_redir
 	t_token						*operator;
 	t_token						*right_op;
 }								t_redir;
-
-enum							e_cmd_type
-{
-	CONNECTION,
-	SIMPLE,
-	SUBSHELL
-};
 
 typedef struct					s_connection
 {
@@ -60,30 +63,19 @@ typedef struct					s_simple_cmd
 	bool						is_expand;
 }								t_simple_cmd;
 
-/*
-** maybe useless
-*/
-
-typedef struct					s_subshell
+typedef struct					s_group_cmd
 {
-	int							flags;
-	struct s_command			*command;
-}								t_subshell;
+	struct s_command			*list;
+	t_redir						*redir_list;
+	bool						subshell;
+}								t_group_cmd;
 
 union							u_cmd_value
 {
 	struct s_connection			*connection;
 	struct s_simple_cmd			*simple;
-	struct s_subshell			*subshell;
+	struct s_group_cmd			*group;
 };
-
-/*
-** values for s_command->flags
-*/
-
-# define CMD_INVERT_RETURN		0x01
-# define CMD_AMPERSAND			0x02
-# define CMD_LASTPIPE			0x04
 
 typedef struct					s_command
 {
@@ -91,6 +83,7 @@ typedef struct					s_command
 	int							flags;
 	union u_cmd_value			value;
 	struct s_command			*next;
+	int							sep;
 }								t_command;
 
 /*
@@ -107,28 +100,53 @@ typedef struct					s_parser
 	t_token						*token;
 	t_token						*heredocs;
 	enum e_parser_status		status;
+	int							bracket_lvl;
 }								t_parser;
 
 extern t_parser						g_parser;
 
+/*
+** in case of line continuation
+** -g_linebreak_type type determine the prompt displayed |, &&, ||, ( ...
+** -when changing g_linebreak_type in a function the old linebreak type
+**  is stored internally and reset after the line continuation
+*/
+
+int								g_linebreak_type;
+
+t_command						*parse_complete_command(void);
 t_command						*parse_and_or(void);
 t_command						*parse_pipeline(void);
-t_command						*parse_pipe_sequence(void);
 t_command						*parse_command(void);
 t_command						*parse_simple_command(void);
-t_command						*parse_command_list(void);
+t_command						*parse_compound_command(void);
+t_command						*parse_brace_group(void);
+t_command						*parse_subshell(void);
+t_command						*parse_compound_list(void);
+t_command						*parse_term(void);
+t_redir							*parse_redirect_list(void);
 t_redir							*parse_io_redirect(void);
+
 int								parse_separator(void);
-bool							parse_newline_list(void);
-void							parse_linebreak(int last_token_type);
+int								parse_separator_op(void);
+int								parse_newline_list(void);
+int								parse_linebreak(void);
+
 int								get_all_heredocs(void);
 
+/*
+** utils
+*/
+void							add_heredoc(t_token *heredoc);
+int								handle_heredoc_eof(char *delim);
+int								get_required_reserv_word(int expect_type);
+
 int								parse_error(char *near);
-int								parse_heredoc_eof(char *delim);
 
 t_command						*command_new(enum e_cmd_type type);
 int								command_del(t_command **command);
 int								redir_del(t_redir **redir);
-void							command_list_del(t_command **command_list);
+void							complete_command_del(t_command
+								**complete_command);
 
 #endif

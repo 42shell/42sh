@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command.c                                          :+:      :+:    :+:   */
+/*   compound_command.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,28 +13,18 @@
 #include "shell.h"
 
 /*
-** command         : simple_command
-**                 | compound_command
-**                 | compound_command redirect_list
+** compound_command : brace_group
+**                  | subshell
 */
 
-t_command		*parse_command(void)
+t_command		*parse_compound_command(void)
 {
-	t_command	*command;
+	t_command	*compound_command;
 
-	command = NULL;
-	if ((command = parse_simple_command()))
-		return (command);
+	if ((compound_command = parse_brace_group()))
+		return (compound_command);
 	if (g_parser.status == NOERR
-	&& (command = parse_compound_command()))
-	{
-		command->value.group->redir_list = parse_redirect_list();
-		if (g_parser.status != NOERR)
-		{
-			complete_command_del(&command);
-			return (NULL);
-		}
-		return (command);
-	}
+	&& (compound_command = parse_subshell()))
+		return (compound_command);
 	return (NULL);
 }

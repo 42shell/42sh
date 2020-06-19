@@ -14,7 +14,6 @@
 
 static void		reset_signals(void)
 {
-	prctl(PR_SET_PDEATHSIG, SIGTERM);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGTTIN, SIG_DFL);
@@ -48,58 +47,41 @@ static pid_t	fork_child(int in, int out, int fd_to_close)
 	return (pid);
 }
 
+/*
+** in case of async group command, jobs corresponding to the compound list are added to
+** g_shell.jobs.
+** we can't set job->bg = true, otherwise the subshell will not wait for it to complete.
+** g_bg allows us to keep trace of the background state.
+** ex: (ls | cat) &
+** g_bg is set to true when we fork the "(ls | cat) &" job
+** and allows us to know that we are in the background in further forks,
+** even if a foreground "ls | cat" job has been added to g_shell.jobs.
+*/
+
 static void		set_child_attr(t_process *process)
 {
 	process->pid = getpid();
 	if (!g_shell.jobs->pgid)
 		g_shell.jobs->pgid = process->pid;
 	setpgid(process->pid, g_shell.jobs->pgid);
-	if (!g_shell.jobs->bg)
+	if (!g_bg)
 		tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
-}
-
-static int		launch_subshell(t_process *process, int fd_to_close)
-{
-	pid_t	pid;
-
-	if ((pid = fork_child(process->stdin, process->stdout, fd_to_close)) == -1)
-		return (-1);
-	else if (pid == 0)
-	{
-		set_child_attr(process);
-		reset_signals();
-		g_job_control_enabled = false;
-		eval_command(process->command);
-		wait_for_job(g_shell.jobs);
-		exit(0);
-	}
-	else
-	{
-		process->pid = pid;
-		if (!g_shell.jobs->pgid)
-			g_shell.jobs->pgid = pid;
-		setpgid(process->pid, g_shell.jobs->pgid);
-		add_process(process);
-	}
-	return (pid);
+	g_job_control_enabled = false;
+	g_already_forked = true;
 }
 
 int				launch_process(t_process *process, int fd_to_close)
 {
 	pid_t	pid;
 
-	if (process->command->type == CONNECTION)
-		return (launch_subshell(process, fd_to_close));
 	if ((pid = fork_child(process->stdin, process->stdout, fd_to_close)) == -1)
 		return (-1);
 	if (pid == 0)
 	{
 		set_child_attr(process);
 		reset_signals();
-		g_already_forked = true;
-		g_job_control_enabled = false;
-		eval_simple_command(process->command);
-		exit(0);
+		eval_command(process->command);
+		builtin_exit(NULL, NULL);
 	}
 	else
 	{

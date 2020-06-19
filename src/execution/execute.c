@@ -46,10 +46,10 @@ int			exec_binary(char **argv, t_array *temp_env)
 		ft_dprintf(2, "42sh: %s: command not found\n", argv[0]);
 		exit(127);
 	}
-	if (!(S_IXUSR & b.st_mode))
-		ft_dprintf(2, "42sh: %s: Permission denied\n", argv[0]);
-	else if (S_ISDIR(b.st_mode))
+	if (S_ISDIR(b.st_mode))
 		ft_dprintf(2, "42sh: %s: Is a directory\n", argv[0]);
+	else if (!(S_IXUSR & b.st_mode))
+		ft_dprintf(2, "42sh: %s: Permission denied\n", argv[0]);
 	else
 		ft_dprintf(2, "42sh: %s: cannot execute command\n", argv[0]);
 	exit(126);
@@ -57,9 +57,9 @@ int			exec_binary(char **argv, t_array *temp_env)
 
 int			exec_simple_command(t_simple_cmd *simple)
 {
-	t_array *temp_env;
+	t_array		*temp_env;
 
-	if (set_redir(simple, true) != 0)
+	if (set_redir(simple->redirs, true) != 0)
 	{
 		restore_fds();
 		return (g_last_exit_st = 1);
@@ -80,5 +80,23 @@ int			exec_simple_command(t_simple_cmd *simple)
 		g_last_exit_st = 0;
 	}
 	restore_fds();
+	return (0);
+}
+
+int			exec_group_command(t_group_cmd *group)
+{
+	t_job		*job;
+
+	if (group->list && group->list->next)
+		g_already_forked = false;
+	while (group->list)
+	{
+		job = job_new(group->list, STDIN_FILENO, STDOUT_FILENO);
+		job->pgid = g_shell.jobs->pgid;
+		if (group->list->sep == AMPERSAND)
+			job->bg = true;
+		launch_job(job);
+		group->list = group->list->next;
+	}
 	return (0);
 }

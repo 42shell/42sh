@@ -12,17 +12,27 @@
 
 #include "shell.h"
 
+/*
+** -maybe handle consecutive reserved words here
+*/
+
 int			delim_token(void)
 {
+	int		type;
+
 	if (g_lexer.token)
 	{
-		if (is_operator_start(*g_lexer.token->value->str))
+		if (g_lexer.expect_reserv_word
+		&& (type = is_reserved_word(g_lexer.token->value->str)))
+			g_lexer.token->type = type;
+		else if (is_operator_start(*g_lexer.token->value->str))
 			g_lexer.token->type =
 			get_operator_type(g_lexer.token->value->str);
 		else if ((g_lexer.line[g_lexer.i] == '<'
-					|| g_lexer.line[g_lexer.i] == '>')
+				|| g_lexer.line[g_lexer.i] == '>')
 		&& ft_strisnbr(g_lexer.token->value->str))
 			g_lexer.token->type = IO_NUMBER;
+		g_lexer.expect_reserv_word = false;
 		g_lexer.token_delimited = true;
 	}
 	return (0);
@@ -47,9 +57,6 @@ int			lx_operator_new(void)
 	if (g_lexer.token && !g_lexer.quote_st && g_lexer.brack_stack->size == 0
 		&& is_operator_start(g_lexer.line[g_lexer.i]))
 	{
-		if ((g_lexer.line[g_lexer.i] == '<' || g_lexer.line[g_lexer.i] == '>')
-		&& ft_strisnbr(g_lexer.token->value->str))
-			g_lexer.token->type = IO_NUMBER;
 		delim_token();
 		return (1);
 	}

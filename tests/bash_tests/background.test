@@ -1,0 +1,41 @@
+echo 'ls &'
+ls & sleep .2
+echo '~~~'
+
+echo 'ls | cat -e &'
+ls | cat -e & sleep .2
+echo '~~~'
+
+echo '(ls | cat) &'
+(ls | cat) & sleep .2
+echo '~~~'
+
+echo '{ ls | cat; } &'
+{ ls | cat; } & sleep .2
+echo '~~~'
+
+echo '( ls | cat -e & ls ) &'
+( ls | cat -e & sleep .2 ) & sleep .2
+echo '~~~'
+
+echo '{ ls | cat -e & ls; } &'
+{ ls | cat -e & sleep .2; } & sleep .2
+echo '~~~'
+
+echo '( ls | cat & { ls | cat -e & } ) & cat << EOF &'
+( ls | cat & sleep .2; { ls | cat -e & sleep .2; } & sleep .4 ) & sleep .6; cat << EOF & sleep .6
+blabla
+EOF
+echo '~~~'
+
+echo 'cd .. & pwd;'
+cd .. & sleep .2; pwd;
+echo '~~~'
+
+echo 'cd .. && pwd & pwd;'
+cd .. && pwd & sleep .2; pwd;
+echo '~~~'
+
+echo '(cd .. && pwd; cd - && pwd) & pwd;'
+(cd .. && pwd; cd - && pwd) & sleep .2; pwd;
+echo '~~~'

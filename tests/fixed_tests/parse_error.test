@@ -50,3 +50,41 @@ echo lol
 echo '~~~'
 
 ls <> test
+echo '~~~'
+
+(ls;(ls)))
+echo '~~~'
+
+(ls;(ls)})
+echo '~~~'
+
+{ ls; { ls ;} ;)
+echo '~~~'
+
+({ ls | cat -e })
+echo '~~~'
+
+(
+	ls |
+	cat
+	\)
+}
+echo '~~~'
+
+{
+	ls |
+	cat
+	\}
+)
+echo '~~~'
+
+(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;(ls;)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
+echo '~~~'
+
+(echo lol;(ls}))
+echo '~~~'
+
+{ls;{ls}}
+echo '~~~'
+
+{ ls ; ls -z } 2>& | cat -e

@@ -26,7 +26,7 @@ void	notif_jobs(void)
 		next = job->next;
 		if (job_is_done(job))
 		{
-			if (job->bg)
+			if (job->bg && g_shell.interactive_mode)
 				print_job(job, true);
 			remove_job_from_list(job->id);
 			process_del(&job->processes);
@@ -35,7 +35,8 @@ void	notif_jobs(void)
 		}
 		else if (job_is_stopped(job) && !job->notified)
 		{
-			print_job(job, true);
+			if (g_shell.interactive_mode)
+				print_job(job, true);
 			update_curr_job(job);
 			job->notified = true;
 		}

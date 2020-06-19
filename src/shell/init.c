@@ -118,7 +118,7 @@ int			init(int argc, char **argv)
 		if (setpgid(g_shell.pgid, g_shell.pgid) < 0)
 		{
 			ft_dprintf(2,
-					"42sh: Couldn't put the shell in its own process group\n");
+			"42sh: Couldn't put the shell in its own process group\n");
 			exit(1);
 		}
 		tcgetattr(STDIN_FILENO, &g_shell.tmodes);

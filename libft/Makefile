@@ -1,5 +1,7 @@
 NAME = libft.a
-CC = gcc
+ifeq ($(CC),cc)
+CC              := clang
+endif
 CFLAGS = -Wall -Wextra -Werror $(DBG_FLAGS)
 DIR_SRC = src/
 DIR_OBJ = obj/

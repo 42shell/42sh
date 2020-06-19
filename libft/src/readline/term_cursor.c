@@ -35,7 +35,7 @@ void	movcleft(void)
 {
 	if (g_rl_posx == 0)
 	{
-		tputs(tgoto(g_rl_caps[C_CH], 0, g_rl_sizex - 1), 1, ft_putc);
+		tputs(tgoto(g_rl_caps[C_CH], 0, g_rl_sizex - 1), 20, ft_putc);
 		if (g_rl_posy > 0)
 		{
 			tputs(g_rl_caps[C_SR], 1, ft_putc);
@@ -52,8 +52,8 @@ void	movcleft(void)
 
 void	movcnl(void)
 {
-	tputs(g_rl_caps[C_SF], 1, ft_putc);
-	tputs(g_rl_caps[C_CR], 1, ft_putc);
+	tputs(g_rl_caps[C_SF], 20, ft_putc);
+	tputs(g_rl_caps[C_CR], 20, ft_putc);
 	if (g_rl_posy < g_rl_sizey - 1)
 		g_rl_posy++;
 	g_rl_posx = 0;
