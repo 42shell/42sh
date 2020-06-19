@@ -65,7 +65,6 @@ typedef struct			s_var
 
 /*
 ** TODO:
-** -lexer better fix + norme
 ** -commands reading from stdin in batch mode
 ** -handle job control on exit
 ** -bangs/shell script
@@ -102,7 +101,7 @@ typedef struct			s_var
 
 typedef int				(*t_input_func)(const char *, bool);
 
-extern int						g_last_exit_st;
+extern int				g_last_exit_st;
 
 typedef struct			s_shell
 {
@@ -114,8 +113,8 @@ typedef struct			s_shell
 	t_ht				*vars;
 }						t_shell;
 
-extern t_shell					g_shell;
-extern t_ht					*g_builtins;
+extern t_shell			g_shell;
+extern t_ht				*g_builtins;
 
 int						init(int argc, char **argv);
 void					del(void);

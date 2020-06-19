@@ -64,11 +64,12 @@ t_node	*parse_immutable(void)
 }
 
 /*
-** factor:	immutable | mutable
-**				| mutable PLUSPLUS
-**				| mutable MINMIN
-**				| PLUSPLUS mutable
-**				| MINMIN mutable
+** factor:	immutable
+**			| mutable
+**			| mutable PLUSPLUS
+**			| mutable MINMIN
+**			| PLUSPLUS mutable
+**			| MINMIN mutable
 */
 
 t_node	*parse_factor(void)

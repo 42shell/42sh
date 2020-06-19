@@ -88,8 +88,9 @@ static t_token	*end_of_input(int ret)
 			err = get_quote_string(g_lexer.brack_stack->size ?
 						*(enum e_quote_st *)g_lexer.brack_stack->array[0] :
 						g_lexer.quote_st);
-			ft_dprintf(2, "42sh: unexpected EOF while looking for"
+			ft_dprintf(2, "42sh: unexpected EOF while looking for "
 						"matching '%s'\n", err);
+			g_parser.status = UNEXPECTED_TOKEN;
 			free(err);
 			return (NULL);
 		}

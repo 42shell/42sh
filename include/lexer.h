@@ -83,16 +83,16 @@ typedef struct	s_token
 
 typedef struct	s_lexer
 {
-	char			*line;
-	t_token			*token;
-	char			token_delimited;
-	char			line_cont;
-	char			quote_st;
-	t_array			*brack_stack;
-	char			nl_found;
-	char			end_of_input;
-	bool			expect_reserv_word;
-	size_t			i;
+	char		*line;
+	t_token		*token;
+	char		token_delimited;
+	char		line_cont;
+	char		quote_st;
+	t_array		*brack_stack;
+	char		nl_found;
+	char		end_of_input;
+	bool		expect_reserv_word;
+	size_t		i;
 }				t_lexer;
 
 extern t_lexer	g_lexer;
