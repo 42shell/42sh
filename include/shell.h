@@ -65,13 +65,11 @@ typedef struct			s_var
 
 /*
 ** TODO:
-** -tests ./42sh < file
 ** -bangs/shell script
 **
 ** problems:
 ** -watch deceitful lexer
 ** -store aborted multi-lines in history ? bash does
-** -prompt when executing tests ?
 **
 ** old problems:
 ** -unsetenv infinite loop when unseting non existing var ?
