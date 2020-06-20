@@ -16,7 +16,8 @@ bool	job_is_stopped(t_job *job)
 {
 	t_process	*process;
 
-	process = job->processes;
+	if (!job || !(process = job->processes))
+		return (true);
 	while (process)
 	{
 		if (!process->done && !process->stopped)

@@ -84,6 +84,8 @@ static int	init_interactive_mode(void)
 	g_rl_complete.get_matches = &get_autocomplete_list;
 	g_rl_hist_doubl = false;
 	g_rl_retain_nl = true;
+	g_shell.get_input = &input_interactive;
+	g_rl_retain_nl = true;
 	return (0);
 }
 

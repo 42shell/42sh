@@ -66,7 +66,6 @@ typedef struct			s_var
 /*
 ** TODO:
 ** -tests ./42sh < file
-** -handle job control on exit
 ** -bangs/shell script
 **
 ** problems:
