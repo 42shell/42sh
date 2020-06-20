@@ -20,9 +20,9 @@ void	sighup_handler(int sig)
 	job = g_shell.jobs;
 	while (job)
 	{
+		kill(-job->pgid, SIGHUP);
 		if (job_is_stopped(job))
 			kill(-job->pgid, SIGCONT);
-		kill(-job->pgid, SIGHUP);
 		job = job->next;
 	}
 	if (g_shell.interactive_mode)

@@ -64,14 +64,6 @@ typedef struct			s_var
 }						t_var;
 
 /*
-echo '~~~'
-
-echo 'Permission denied'
-chmod -x 42sh
-./42sh
-chmod +x 42sh
-echo $?
-
 ** TODO:
 ** -tests ./42sh < file
 ** -bangs/shell script
