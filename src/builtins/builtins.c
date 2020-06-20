@@ -92,7 +92,7 @@ void		builtin_exit(char **argv,
 {
 	int status;
 
-	if (there_are_stopped_jobs())
+	if (g_job_control_enabled && there_are_stopped_jobs())
 		return ;
 	if (!argv || argv[1] == NULL)
 		status = g_last_exit_st;

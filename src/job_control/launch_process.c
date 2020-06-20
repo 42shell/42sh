@@ -19,6 +19,7 @@ static void		reset_signals(void)
 	signal(SIGTTIN, SIG_DFL);
 	signal(SIGTTOU, SIG_DFL);
 	signal(SIGTSTP, SIG_DFL);
+	signal(SIGHUP, SIG_DFL);
 }
 
 static pid_t	fork_child(int in, int out, int fd_to_close)
