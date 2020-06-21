@@ -45,7 +45,7 @@ int			launch_job(t_job *job)
 	if (job->bg)
 		return (launch_job_bg(job));
 	eval_command(job->command);
-	if (g_job_control_enabled)
+	if (!g_bg && g_job_control_enabled)
 		put_job_fg(job, false);
 	else
 		wait_for_job(job);

@@ -19,6 +19,7 @@ static void		reset_signals(void)
 	signal(SIGTTIN, SIG_DFL);
 	signal(SIGTTOU, SIG_DFL);
 	signal(SIGTSTP, SIG_DFL);
+	signal(SIGHUP, SIG_DFL);
 }
 
 static pid_t	fork_child(int in, int out, int fd_to_close)
@@ -63,9 +64,11 @@ static void		set_child_attr(t_process *process)
 	process->pid = getpid();
 	if (!g_shell.jobs->pgid)
 		g_shell.jobs->pgid = process->pid;
-	setpgid(process->pid, g_shell.jobs->pgid);
-	if (!g_bg)
+	if (!g_bg && g_job_control_enabled)
+	{
+		setpgid(process->pid, g_shell.jobs->pgid);
 		tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
+	}
 	g_job_control_enabled = false;
 	g_already_forked = true;
 }
@@ -88,7 +91,8 @@ int				launch_process(t_process *process, int fd_to_close)
 		process->pid = pid;
 		if (!g_shell.jobs->pgid)
 			g_shell.jobs->pgid = pid;
-		setpgid(process->pid, g_shell.jobs->pgid);
+		if (g_job_control_enabled)
+			setpgid(process->pid, g_shell.jobs->pgid);
 		add_process(process);
 	}
 	return (pid);

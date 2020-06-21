@@ -1,0 +1,1 @@
+cat && sleep 10 & kill -HUP $$

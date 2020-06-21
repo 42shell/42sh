@@ -52,9 +52,10 @@ char		*get_line(void)
 	c = 0;
 	while (1)
 	{
-		if ((ret = readc(STDIN_FILENO, &c)) == -1)
+		if ((ret = read(g_shell.input_file_fd, &c, 1)) == -1)
 		{
 			ft_dstr_del(&line);
+			close(g_shell.input_file_fd);
 			return (NULL);
 		}
 		if (ret > 0)

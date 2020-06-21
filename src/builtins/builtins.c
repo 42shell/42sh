@@ -12,7 +12,7 @@
 
 #include "shell.h"
 
-int		builtin_echo(char **argv, __attribute__((unused)) t_array *env)
+int			builtin_echo(char **argv, __attribute__((unused)) t_array *env)
 {
 	int i;
 
@@ -32,7 +32,7 @@ int		builtin_echo(char **argv, __attribute__((unused)) t_array *env)
 ** "42sh: error" its not a binary
 */
 
-int		builtin_setenv(char **argv, t_array *env)
+int			builtin_setenv(char **argv, t_array *env)
 {
 	if (argv[1] == NULL)
 		return (builtin_env(argv, env));
@@ -48,7 +48,8 @@ int		builtin_setenv(char **argv, t_array *env)
 	return (1);
 }
 
-int		builtin_unsetenv(char **argv, __attribute__((unused)) t_array *env)
+int			builtin_unsetenv(char **argv,
+			__attribute__((unused)) t_array *env)
 {
 	int		i;
 	t_var	*var;
@@ -56,35 +57,58 @@ int		builtin_unsetenv(char **argv, __attribute__((unused)) t_array *env)
 	i = 1;
 	while (argv[i])
 	{
-		if ((var = ht_get(g_shell.vars, argv[i])) && var->attributes & V_EXPORT)
+		if ((var = ht_get(g_shell.vars, argv[i]))
+		&& var->attributes & V_EXPORT)
 			unset_var(argv[i]);
 		i++;
 	}
 	return (0);
 }
 
-void	builtin_exit(char **argv, __attribute__((unused)) t_array *env)
+static bool	there_are_stopped_jobs(void)
 {
-	int i;
+	t_job		*job;
+	static bool	notif = false;
 
-	if (!argv)
-		exit(g_last_exit_st);
-	if (argv[1] == NULL)
-		exit(g_last_exit_st);
-	i = 0;
-	while (argv[1][i])
+	update_status();
+	if (!g_shell.jobs)
+		return (false);
+	job = g_shell.jobs->next;
+	while (job)
 	{
-		if (!ft_isdigit(argv[1][i++]))
+		if (job_is_stopped(job) && !notif)
 		{
-			write(2, "42sh: exit: numeric argument required\n", 38);
-			return ;
+			notif = true;
+			ft_dprintf(2, "42sh: exit: There are stopped jobs.\n");
+			return (true);
 		}
+		job = job->next;
 	}
-	if (argv[2] != NULL)
+	return (false);
+}
+
+void		builtin_exit(char **argv,
+			__attribute__((unused)) t_array *env)
+{
+	int status;
+
+	if (g_job_control_enabled && there_are_stopped_jobs())
+		return ;
+	if (!argv || argv[1] == NULL)
+		status = g_last_exit_st;
+	else if (argv[2] != NULL)
 	{
 		write(2, "42sh: exit: too many arguments\n", 31);
 		return ;
 	}
-	i = ft_atoi(argv[1]);
-	exit(i);
+	else if (!ft_strisnbr(argv[1]))
+	{
+		write(2, "42sh: exit: numeric argument required\n", 38);
+		return ;
+	}
+	else
+		status = ft_atoi(argv[1]);
+	if (g_shell.interactive_mode)
+		tcsetattr(STDIN_FILENO, TCSADRAIN, &g_shell.tmodes);
+	exit(status);
 }

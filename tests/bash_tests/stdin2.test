@@ -1,0 +1,14 @@
+echo 'ls
+cat src/shell/main.cat
+ls'
+ls
+cat src/shell/main.cat
+ls
+echo '~~~'
+
+echo 'ls
+cat
+ls'
+ls
+cat
+ls

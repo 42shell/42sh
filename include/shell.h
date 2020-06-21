@@ -65,18 +65,14 @@ typedef struct			s_var
 
 /*
 ** TODO:
-** -commands reading from stdin in batch mode
-** -handle job control on exit
 ** -bangs/shell script
 **
 ** problems:
-** -file_is_binary "ls"
 ** -watch deceitful lexer
 ** -store aborted multi-lines in history ? bash does
-** -prompt when executing tests ?
 **
 ** old problems:
-** -unsetenv boucle inf when unseting non existing var ?
+** -unsetenv infinite loop when unseting non existing var ?
 ** -env dup invalid read ?
 ** -autcomplete vim /t doesnt complete files ?
 ** -others
@@ -111,6 +107,7 @@ typedef struct			s_shell
 	pid_t				pgid;
 	struct termios		tmodes;
 	t_ht				*vars;
+	int					input_file_fd;
 }						t_shell;
 
 extern t_shell			g_shell;
@@ -121,7 +118,8 @@ void					del(void);
 
 int						input_batch(const char *prompt, bool heredoc);
 int						input_interactive(const char *prompt, bool heredoc);
-bool					file_is_binary(char *filename);
+bool					file_may_be_binary(char *filename);
+void					increase_shlvl(void);
 void					normalize_lexer_line(void);
 
 void					init_sig(void);
