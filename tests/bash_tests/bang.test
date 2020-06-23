@@ -1,0 +1,43 @@
+echo '! ls; echo $?'
+! ls; echo $?
+echo '~~~'
+
+echo 'ls !; echo $?'
+ls !; echo $?
+echo '~~~'
+
+echo '! ! ls; echo $?'
+! ! ls; echo $?
+echo '~~~'
+
+echo '! ! ls -z; echo $?'
+! ! ls -z; echo $?
+echo '~~~'
+
+echo '! ls && echo ok; echo $?'
+! ls && echo ok; echo $?
+echo '~~~'
+
+echo '! ls -z && echo ok; echo $?'
+! ls -z && echo ok; echo $?
+echo '~~~'
+
+echo '! ls || echo ok; echo $?'
+! ls || echo ok; echo $?
+echo '~~~'
+
+echo '! ls -z || echo ok; echo $?'
+! ls -z || echo ok; echo $?
+echo '~~~'
+
+echo 'ls && ! echo ok || echo $?; echo $?'
+ls && ! echo ok || echo $?; echo $?
+echo '~~~'
+
+echo '! ls -z && ! echo ok || echo $?; echo $?'
+! ls -z && ! echo ok || echo $?; echo $?
+echo '~~~'
+
+echo '! ls -z && ! echo ok || ls && ! echo ok || ! echo ok || ls; echo $?'
+! ls -z && ! echo ok || ls && ! echo ok || ! echo ok || ls; echo $?
+echo '~~~'

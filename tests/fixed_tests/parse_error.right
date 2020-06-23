@@ -55,3 +55,11 @@ lol
 42sh: {ls}}: command not found
 ~~~
 42sh: syntax error near unexpected token '|'
+~~~
+42sh: syntax error near unexpected token '!'
+~~~
+42sh: !ls: command not found
+~~~
+42sh: syntax error near unexpected token '}'
+~~~
+42sh: !!: command not found

@@ -88,3 +88,15 @@ echo '~~~'
 echo '~~~'
 
 { ls ; ls -z } 2>& | cat -e
+echo '~~~'
+
+ls | ! cat
+echo '~~~'
+
+!ls
+echo '~~~'
+
+!{ ls; }
+echo '~~~'
+
+!! ls
