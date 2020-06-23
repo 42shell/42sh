@@ -67,6 +67,8 @@ void	wait_for_job(t_job *job)
 			break ;
 		}
 	}
+	if (job_is_done(job) && job->command->flags & CMD_INVERT_RETURN)
+		g_last_exit_st = g_last_exit_st ? 0 : 1;
 }
 
 void	continue_job(t_job *job, bool bg)

@@ -30,6 +30,17 @@ int			eval_pipeline(t_command *command, int in, int out)
 	return (launch_process(process, fd[0]));
 }
 
+static int	wait_for_and_or(t_connection *and_or)
+{
+	if (!g_bg && g_job_control_enabled)
+		put_job_fg(g_shell.jobs, false);
+	else
+		wait_for_job(g_shell.jobs);
+	if (and_or->left->flags & CMD_INVERT_RETURN)
+		g_last_exit_st = g_last_exit_st ? 0 : 1;
+	return (g_last_exit_st);
+}
+
 int			eval_and_or(t_command *command)
 {
 	t_connection	*and_or;
@@ -37,16 +48,10 @@ int			eval_and_or(t_command *command)
 	g_already_forked = false;
 	and_or = command->value.connection;
 	eval_command(and_or->left);
-	if (!g_bg && g_job_control_enabled)
-		put_job_fg(g_shell.jobs, false);
-	else
-		wait_for_job(g_shell.jobs);
+	wait_for_and_or(and_or);
 	if ((and_or->connector == AND_IF && g_last_exit_st == 0)
 	|| (and_or->connector == OR_IF && g_last_exit_st != 0))
 		eval_command(and_or->right);
-	if (!g_bg && g_job_control_enabled)
-		put_job_fg(g_shell.jobs, false);
-	else
-		wait_for_job(g_shell.jobs);
+	wait_for_and_or(and_or);
 	return (0);
 }

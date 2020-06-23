@@ -62,6 +62,8 @@ int		lx_line_del_char(int index)
 
 int		is_reserved_word(char *word)
 {
+	if (ft_strequ(word, "!"))
+		return (BANG);
 	if (ft_strequ(word, "{"))
 		return (LBRACE);
 	if (ft_strequ(word, "}"))

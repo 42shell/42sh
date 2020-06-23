@@ -51,10 +51,3 @@ echo '~~~'
 echo 'Is a directory'
 /tmp 
 echo $?
-echo '~~~'
-
-echo 'Permission denied'
-chmod -x 42sh
-./42sh
-chmod +x 42sh
-echo $?
