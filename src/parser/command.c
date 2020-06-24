@@ -32,8 +32,8 @@ t_command		*parse_command(void)
 	if (g_parser.status == NOERR
 	&& (command = parse_compound_command()))
 	{
-		if (command->type != IF_CLAUSE)
-			command->value.group->redir_list = parse_redirect_list();
+		command->flags |= CMD_COMPOUND;
+		command->redir_list = parse_redirect_list();
 		if (g_parser.status != NOERR)
 		{
 			complete_command_del(&command);

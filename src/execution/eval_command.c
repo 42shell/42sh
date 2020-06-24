@@ -47,7 +47,7 @@ int			eval_group_command(t_command *command)
 			return (launch_process(process, 0));
 		}
 	}
-	if (set_redir(command->value.group->redir_list, true) != 0)
+	if (set_redir(command->redir_list, true) != 0)
 	{
 		restore_fds();
 		return (g_last_exit_st = 1);
@@ -57,10 +57,19 @@ int			eval_group_command(t_command *command)
 	return (0);
 }
 
-int			eval_command(t_command *command)
+int			eval_compound_command(t_command *command)
 {
 	if (command->type == GROUP)
 		return (eval_group_command(command));
+	if (command->type == IF_CLAUSE)
+		return (eval_if_clause(command));
+	return (0);
+}
+
+int			eval_command(t_command *command)
+{
+	if (command->flags & CMD_COMPOUND)
+		return (eval_compound_command(command));
 	if (command->type == CONNECTION)
 	{
 		if (command->value.connection->connector == OR_IF
@@ -69,8 +78,6 @@ int			eval_command(t_command *command)
 		if (command->value.connection->connector == PIPE)
 			return (eval_pipeline(command, STDIN_FILENO, STDOUT_FILENO));
 	}
-	if (command->type == IF_CLAUSE)
-		return (eval_if_clause(command));
 	if (command->type == SIMPLE)
 		return (eval_simple_command(command));
 	return (0);

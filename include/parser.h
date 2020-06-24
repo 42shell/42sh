@@ -23,6 +23,7 @@
 # define CMD_INVERT_RETURN		0x01
 # define CMD_AMPERSAND			0x02
 # define CMD_LASTPIPE			0x04
+# define CMD_COMPOUND			0x08
 
 enum							e_parser_status
 {
@@ -36,6 +37,7 @@ enum							e_cmd_type
 {
 	CONNECTION,
 	SIMPLE,
+	COMPOUND,
 	GROUP,
 	IF_CLAUSE
 };
@@ -67,7 +69,6 @@ typedef struct					s_simple_cmd
 typedef struct					s_group_cmd
 {
 	struct s_command			*list;
-	t_redir						*redir_list;
 	bool						subshell;
 }								t_group_cmd;
 
@@ -92,6 +93,7 @@ typedef struct					s_command
 	int							flags;
 	union u_cmd_value			value;
 	struct s_command			*next;
+	t_redir						*redir_list;
 	int							sep;
 }								t_command;
 

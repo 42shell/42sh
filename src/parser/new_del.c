@@ -62,7 +62,6 @@ int			command_del(t_command **command)
 	else if ((*command)->type == GROUP)
 	{
 		complete_command_del(&(*command)->value.group->list);
-		redir_del(&((*command)->value.group->redir_list));
 		ft_memdel((void **)&(*command)->value.group);
 	}
 	else if ((*command)->type == IF_CLAUSE)
@@ -72,6 +71,7 @@ int			command_del(t_command **command)
 		complete_command_del(&(*command)->value.if_clause->else_part);
 		ft_memdel((void **)&(*command)->value.if_clause);
 	}
+	redir_del(&((*command)->redir_list));
 	ft_memdel((void **)command);
 	return (0);
 }
