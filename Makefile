@@ -70,6 +70,7 @@ SRC_VARIABLES	:= env_dup.c\
 SRC_VARIABLES	:= $(addprefix variables/,$(SRC_VARIABLES))
 
 SRC_EXEC        := eval_command.c\
+				   eval_compound.c\
 				   eval_operator.c\
 				   eval_script.c\
 				   execute.c\

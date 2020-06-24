@@ -12,6 +12,14 @@
 
 #include "shell.h"
 
+/*
+** If the command is not expanded, we expand it.
+** If the expansion result in no argv (only redirs), we can execute it.
+** If the command is not a builtin and we are not in a fork yet, we fork.
+** This function will be called again in the fork and skip expansion and
+** forking if statements.
+*/
+
 int			eval_simple_command(t_command *command)
 {
 	t_process		*process;
@@ -31,39 +39,6 @@ int			eval_simple_command(t_command *command)
 		return (launch_process(process, 0));
 	}
 	return (exec_simple_command(simple));
-}
-
-int			eval_group_command(t_command *command)
-{
-	t_process	*process;
-	t_group_cmd	*group;
-
-	group = command->value.group;
-	if (group->subshell)
-	{
-		if (!g_already_forked)
-		{
-			process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
-			return (launch_process(process, 0));
-		}
-	}
-	if (set_redir(command->redir_list, true) != 0)
-	{
-		restore_fds();
-		return (g_last_exit_st = 1);
-	}
-	exec_group_command(group);
-	restore_fds();
-	return (0);
-}
-
-int			eval_compound_command(t_command *command)
-{
-	if (command->type == GROUP)
-		return (eval_group_command(command));
-	if (command->type == IF_CLAUSE)
-		return (eval_if_clause(command));
-	return (0);
 }
 
 int			eval_command(t_command *command)

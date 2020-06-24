@@ -18,10 +18,6 @@
 **                 | compound_command redirect_list
 */
 
-/*
-** need fucking t_compound_command
-*/
-
 t_command		*parse_command(void)
 {
 	t_command	*command;

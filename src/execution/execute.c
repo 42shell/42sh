@@ -82,21 +82,3 @@ int			exec_simple_command(t_simple_cmd *simple)
 	restore_fds();
 	return (0);
 }
-
-int			exec_group_command(t_group_cmd *group)
-{
-	t_job		*job;
-
-	if (group->list && group->list->next)
-		g_already_forked = false;
-	while (group->list)
-	{
-		job = job_new(group->list, STDIN_FILENO, STDOUT_FILENO);
-		job->pgid = g_shell.jobs->pgid;
-		if (group->list->sep == AMPERSAND)
-			job->bg = true;
-		launch_job(job);
-		group->list = group->list->next;
-	}
-	return (0);
-}
