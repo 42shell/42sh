@@ -23,6 +23,8 @@ t_command		*parse_command(void)
 	t_command	*command;
 
 	command = NULL;
+	if (!g_parser.token)
+		return (NULL);
 	if ((command = parse_simple_command()))
 		return (command);
 	if (g_parser.status == NOERR

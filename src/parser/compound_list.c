@@ -24,6 +24,8 @@ t_command		*parse_term(void)
 	t_command	*command;
 	int			sep_index;
 
+	if (!g_parser.token)
+		return (NULL);
 	term = parse_and_or();
 	command = term;
 	while (command)
@@ -53,9 +55,9 @@ t_command		*parse_compound_list(void)
 	t_command	*compound_list;
 	t_command	*last;
 
-	parse_linebreak();
 	if (!g_parser.token)
 		return (NULL);
+	parse_linebreak();
 	if (!(compound_list = parse_term()))
 		return (NULL);
 	last = compound_list;

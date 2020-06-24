@@ -41,7 +41,7 @@ t_command			*parse_and_or(void)
 	t_command		*and_or;
 	t_command		*node;
 
-	if (!(and_or = parse_pipeline()))
+	if (!g_parser.token || !(and_or = parse_pipeline()))
 		return (NULL);
 	while (g_parser.token
 	&& (g_parser.token->type == AND_IF || g_parser.token->type == OR_IF))

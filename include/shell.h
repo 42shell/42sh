@@ -73,6 +73,7 @@ chmod +x 42sh
 echo $?
 ** TODO:
 ** -bangs/shell script
+** -add tests for parse errors like "ls;" ?
 **
 ** problems:
 ** -watch deceitful lexer

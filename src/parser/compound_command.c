@@ -22,6 +22,8 @@ t_command		*parse_compound_command(void)
 {
 	t_command	*compound_command;
 
+	if (!g_parser.token)
+		return (NULL);
 	if ((compound_command = parse_brace_group()))
 		return (compound_command);
 	if (g_parser.status == NOERR

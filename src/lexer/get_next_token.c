@@ -33,9 +33,9 @@ static char		*get_prompt(void)
 		return (PSA);
 	if (g_lexer.line_cont == OR_IF)
 		return (PSO);
-	else if (g_lexer.line_cont == LBRACKET)
+	if (g_lexer.line_cont == LBRACKET)
 		return (PSB);
-	else if (g_lexer.line_cont == LBRACE)
+	if (g_lexer.line_cont == LBRACE)
 		return (PSC);
 	return (PS2);
 }
@@ -110,9 +110,9 @@ t_token			*get_next_token(void)
 	{
 		g_lexer.nl_found = 0;
 		g_lexer.end_of_input = 0;
-		g_lexer.line_cont = 0;
 		if ((ret = g_shell.get_input(get_prompt(), false)) != 0)
 			return (end_of_input(ret));
+		g_lexer.line_cont = 0;
 	}
 	while (!g_lexer.end_of_input && !g_lexer.token_delimited)
 	{

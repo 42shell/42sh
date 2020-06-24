@@ -71,6 +71,9 @@ void	print_command(t_command *command, int indent)
 			print_command(command->value.group->list, indent);
 			command->value.group->list = command->value.group->list->next;
 		}
+		i = 0;
+		while (i++ < indent)
+			printf("    ");
 		printf("%s ", command->value.group->subshell ? ")\n" : "}\n");
 		return ;
 	}

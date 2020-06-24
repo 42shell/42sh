@@ -40,7 +40,7 @@ static t_command	*parse_pipe_sequence(void)
 	t_command		*pipe_sequence;
 	t_command		*node;
 
-	if (!(pipe_sequence = parse_command()))
+	if (!g_parser.token || !(pipe_sequence = parse_command()))
 		return (NULL);
 	while (g_parser.token
 	&& g_parser.token->type == PIPE)
