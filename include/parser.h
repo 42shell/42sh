@@ -149,19 +149,22 @@ int								parse_linebreak(void);
 
 int								get_all_heredocs(void);
 
+int								parse_error(char *near);
+
 /*
 ** utils
 */
+
 void							add_heredoc(t_token *heredoc);
 int								handle_heredoc_eof(char *delim);
 int								get_required_reserv_word(int expect_type);
-
-int								parse_error(char *near);
 
 t_command						*command_new(enum e_cmd_type type);
 int								command_del(t_command **command);
 int								redir_del(t_redir **redir);
 void							complete_command_del(t_command
 								**complete_command);
+void							print_command(t_command *command,
+								int indent);
 
 #endif
