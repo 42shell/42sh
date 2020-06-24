@@ -49,10 +49,10 @@ static pid_t	fork_child(int in, int out, int fd_to_close)
 }
 
 /*
-** in case of async group command, jobs corresponding to the compound list are added to
-** g_shell.jobs.
-** we can't set job->bg = true, otherwise the subshell will not wait for it to complete.
-** g_bg allows us to keep trace of the background state.
+** in case of async group command, jobs corresponding to the compound list
+** are added to g_shell.jobs.
+** We can't set job->bg = true, otherwise the subshell will not wait for it to
+** complete. g_bg allows us to keep trace of the background state.
 ** ex: (ls | cat) &
 ** g_bg is set to true when we fork the "(ls | cat) &" job
 ** and allows us to know that we are in the background in further forks,
