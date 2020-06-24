@@ -69,6 +69,8 @@ int			eval_command(t_command *command)
 		if (command->value.connection->connector == PIPE)
 			return (eval_pipeline(command, STDIN_FILENO, STDOUT_FILENO));
 	}
+	if (command->type == IF_CLAUSE)
+		return (eval_if_clause(command));
 	if (command->type == SIMPLE)
 		return (eval_simple_command(command));
 	return (0);

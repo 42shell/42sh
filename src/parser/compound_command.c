@@ -15,6 +15,7 @@
 /*
 ** compound_command : brace_group
 **                  | subshell
+** 					| if_clause
 */
 
 t_command		*parse_compound_command(void)
@@ -25,6 +26,9 @@ t_command		*parse_compound_command(void)
 		return (compound_command);
 	if (g_parser.status == NOERR
 	&& (compound_command = parse_subshell()))
+		return (compound_command);
+	if (g_parser.status == NOERR
+	&& (compound_command = parse_if_clause()))
 		return (compound_command);
 	return (NULL);
 }

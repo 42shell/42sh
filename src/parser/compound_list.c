@@ -54,6 +54,8 @@ t_command		*parse_compound_list(void)
 	t_command	*last;
 
 	parse_linebreak();
+	if (!g_parser.token)
+		return (NULL);
 	if (!(compound_list = parse_term()))
 		return (NULL);
 	last = compound_list;

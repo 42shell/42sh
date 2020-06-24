@@ -50,7 +50,12 @@ enum			e_token_type
 	RBRACKET,
 	LBRACE,
 	RBRACE,
-	PATTERN
+	PATTERN,
+	IF,
+	THEN,
+	ELIF,
+	ELSE,
+	FI
 };
 
 enum			e_quote_st

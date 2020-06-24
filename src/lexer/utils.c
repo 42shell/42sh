@@ -68,5 +68,15 @@ int		is_reserved_word(char *word)
 		return (LBRACE);
 	if (ft_strequ(word, "}"))
 		return (RBRACE);
+	if (ft_strequ(word, "if"))
+		return (IF);
+	if (ft_strequ(word, "then"))
+		return (THEN);
+	if (ft_strequ(word, "elif"))
+		return (ELIF);
+	if (ft_strequ(word, "else"))
+		return (ELSE);
+	if (ft_strequ(word, "fi"))
+		return (FI);
 	return (0);
 }

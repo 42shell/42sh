@@ -18,6 +18,10 @@
 **                 | compound_command redirect_list
 */
 
+/*
+** need fucking t_compound_command
+*/
+
 t_command		*parse_command(void)
 {
 	t_command	*command;
@@ -28,7 +32,8 @@ t_command		*parse_command(void)
 	if (g_parser.status == NOERR
 	&& (command = parse_compound_command()))
 	{
-		command->value.group->redir_list = parse_redirect_list();
+		if (command->type != IF_CLAUSE)
+			command->value.group->redir_list = parse_redirect_list();
 		if (g_parser.status != NOERR)
 		{
 			complete_command_del(&command);

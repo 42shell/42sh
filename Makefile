@@ -71,6 +71,7 @@ SRC_VARIABLES	:= $(addprefix variables/,$(SRC_VARIABLES))
 
 SRC_EXEC        := eval_command.c\
 				   eval_operator.c\
+				   eval_script.c\
 				   execute.c\
 				   get_argv.c\
 				   get_exec_path.c\
@@ -135,6 +136,7 @@ SRC_PARSER      := and_or.c\
 				   compound_command.c\
 				   group_command.c\
 				   compound_list.c\
+				   if_clause.c\
                    io_redirect.c\
 				   separator.c\
 				   heredoc.c\

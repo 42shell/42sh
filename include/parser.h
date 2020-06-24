@@ -36,7 +36,8 @@ enum							e_cmd_type
 {
 	CONNECTION,
 	SIMPLE,
-	GROUP
+	GROUP,
+	IF_CLAUSE
 };
 
 typedef struct					s_redir
@@ -70,11 +71,19 @@ typedef struct					s_group_cmd
 	bool						subshell;
 }								t_group_cmd;
 
+typedef struct					s_if_clause
+{
+	struct s_command			*if_part;
+	struct s_command			*then_part;
+	struct s_command			*else_part;
+}								t_if_clause;
+
 union							u_cmd_value
 {
 	struct s_connection			*connection;
 	struct s_simple_cmd			*simple;
 	struct s_group_cmd			*group;
+	struct s_if_clause			*if_clause;
 };
 
 typedef struct					s_command
@@ -103,7 +112,7 @@ typedef struct					s_parser
 	int							bracket_lvl;
 }								t_parser;
 
-extern t_parser						g_parser;
+extern t_parser					g_parser;
 
 /*
 ** in case of line continuation
@@ -122,6 +131,10 @@ t_command						*parse_simple_command(void);
 t_command						*parse_compound_command(void);
 t_command						*parse_brace_group(void);
 t_command						*parse_subshell(void);
+
+t_command						*parse_if_clause(void);
+t_command						*parse_else_part(void);
+
 t_command						*parse_compound_list(void);
 t_command						*parse_term(void);
 t_redir							*parse_redirect_list(void);

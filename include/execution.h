@@ -47,10 +47,11 @@ bool				g_bg;
 */
 
 int					eval_complete_command(t_command *command);
-int					eval_command(t_command *command);
-int					eval_group_command(t_command *command);
 int					eval_and_or(t_command *command);
 int					eval_pipeline(t_command *command, int in, int out);
+int					eval_command(t_command *command);
+int					eval_group_command(t_command *command);
+int					eval_if_clause(t_command *command);
 int					eval_simple_command(t_command *command);
 
 /*
