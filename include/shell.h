@@ -76,6 +76,7 @@ echo $?
 ** -add tests for parse errors like "ls;" ?
 **
 ** problems:
+** -CTRL C
 ** -watch deceitful lexer
 ** -store aborted multi-lines in history ? bash does
 **
@@ -102,6 +103,10 @@ echo $?
 # define PSB			"(... "
 # define PSDP			"((... "
 # define PSC			"{... "
+# define PSI			"if... "
+# define PST			"then... "
+# define PSEI			"elif... "
+# define PSE			"else... "
 
 typedef int				(*t_input_func)(const char *, bool);
 

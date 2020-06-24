@@ -54,11 +54,12 @@ int				main_loop(void)
 		g_shell.get_input(PS1, false);
 		if ((complete_command = get_complete_command()))
 		{
-			while (complete_command)
-			{
-				print_command(complete_command, 0);//eval_complete_command(complete_command);
-				complete_command = complete_command->next;
-			}
+			eval_complete_command(complete_command);
+			//while (complete_command)
+			//{
+			//	print_command(complete_command, 0);
+			//	complete_command = complete_command->next;
+			//}
 		}
 		if (g_shell.interactive_mode
 		&& g_lexer.line && *g_lexer.line != '\n')

@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "shell.h"
-#include <stdio.h>
 
 void	print_command(t_command *command, int indent)
 {

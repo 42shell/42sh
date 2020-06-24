@@ -37,6 +37,14 @@ static char		*get_prompt(void)
 		return (PSB);
 	if (g_lexer.line_cont == LBRACE)
 		return (PSC);
+	if (g_lexer.line_cont == IF)
+		return (PSI);
+	if (g_lexer.line_cont == THEN)
+		return (PST);
+	if (g_lexer.line_cont == ELIF)
+		return (PSEI);
+	if (g_lexer.line_cont == ELSE)
+		return (PSE);
 	return (PS2);
 }
 
@@ -104,6 +112,8 @@ t_token			*get_next_token(void)
 {
 	int		ret;
 
+	//if (!g_lexer.token)
+	//	g_lexer.expect_reserv_word = true;
 	if (g_parser.status != NOERR || !g_lexer.line)
 		return (NULL);
 	if (g_lexer.line_cont || g_lexer.quote_st)

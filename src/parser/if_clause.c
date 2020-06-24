@@ -44,6 +44,7 @@ static t_command	*parse_if_then_part()
 		return (NULL);
 	}
 	token_del(&g_parser.token);
+	g_lexer.expect_reserv_word = true;
 	g_parser.token = get_next_token();
 	if (!(then_part = parse_compound_list()))
 	{
@@ -77,6 +78,7 @@ t_command		*parse_else_part(void)
 	while (get_required_reserv_word(ELIF))
 	{
 		token_del(&g_parser.token);
+		g_lexer.expect_reserv_word = true;
 		g_parser.token = get_next_token();
 		if (!(elif_then_clause = parse_if_then_part()))
 		{
@@ -99,6 +101,7 @@ t_command		*parse_else_part(void)
 	if (get_required_reserv_word(ELSE))
 	{
 		token_del(&g_parser.token);
+		g_lexer.expect_reserv_word = true;
 		g_parser.token = get_next_token();
 		if (!(else_statement = parse_else_statement()))
 		{
@@ -141,12 +144,16 @@ t_command			*parse_if_clause(void)
 {
 	t_command	*if_clause;
 	t_command	*else_part;
+	int			old_linebreak_type;
 
 	if_clause = NULL;
 	else_part = NULL;
 	if (!g_parser.token || g_parser.token->type != IF)
 		return (NULL);
+	old_linebreak_type = g_linebreak_type;
+	g_linebreak_type = IF;
 	token_del(&g_parser.token);
+	g_lexer.expect_reserv_word = true;
 	g_parser.token = get_next_token();
 	if (!(if_clause = parse_if_then_part())
 	|| (!(else_part = parse_else_part()) && g_parser.status))
@@ -165,6 +172,8 @@ t_command			*parse_if_clause(void)
 		return (NULL);
 	}
 	token_del(&g_parser.token);
+	g_lexer.expect_reserv_word = true;
 	g_parser.token = get_next_token();
+	g_linebreak_type = old_linebreak_type;
 	return (if_clause);
 }
