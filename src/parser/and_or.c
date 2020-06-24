@@ -48,12 +48,7 @@ t_command			*parse_and_or(void)
 	{
 		node = build_and_or_and_advance(and_or);
 		if (!(node->value.connection->right = parse_pipeline()))
-		{
-			if (!g_parser.status)
-				g_parser.status = UNEXPECTED_TOKEN;
-			command_del(&node);
-			return (NULL);
-		}
+			return(return_parse_error(&node));
 		and_or = node;
 	}
 	return (and_or);

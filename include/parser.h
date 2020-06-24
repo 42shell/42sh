@@ -136,6 +136,7 @@ t_command						*parse_subshell(void);
 
 t_command						*parse_if_clause(void);
 t_command						*parse_else_part(void);
+t_command						*parse_if_then_statement(void);
 
 t_command						*parse_compound_list(void);
 t_command						*parse_term(void);
@@ -149,6 +150,7 @@ int								parse_linebreak(void);
 
 int								get_all_heredocs(void);
 
+t_command						*return_parse_error(t_command **to_del);
 int								parse_error(char *near);
 
 /*

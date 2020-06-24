@@ -15,7 +15,7 @@
 /*
 ** If we already have a job which has forked processes, pgid of this job is set
 ** and we want the jobs to have the same pgid
-** ex: { ls; ls -a } | cat
+** ex: { ls; ls -a; } | cat
 ** We want the ls jobs to have the same pgid than cat, if we don t set it
 ** explicitely, it will be set to the process pid in launch_process
 */

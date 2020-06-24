@@ -47,12 +47,7 @@ static t_command	*parse_pipe_sequence(void)
 	{
 		node = build_pipe_and_advance(pipe_sequence);
 		if (!(node->value.connection->right = parse_command()))
-		{
-			if (!g_parser.status)
-				g_parser.status = UNEXPECTED_TOKEN;
-			command_del(&node);
-			return (NULL);
-		}
+			return(return_parse_error(&node));
 		pipe_sequence = node;
 	}
 	return (pipe_sequence);

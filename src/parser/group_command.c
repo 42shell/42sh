@@ -69,12 +69,7 @@ t_command			*parse_subshell(void)
 	if (!(compound_list = parse_compound_list()))
 		return (NULL);
 	if (!g_parser.token || g_parser.token->type != RBRACKET)
-	{
-		if (!g_parser.status)
-			g_parser.status = UNEXPECTED_TOKEN;
-		complete_command_del(&compound_list);
-		return (NULL);
-	}
+		return (return_parse_error(&compound_list));
 	subshell = build_subshell_and_advance(compound_list);
 	g_linebreak_type = old_linebreak_type;
 	return (subshell);
@@ -114,12 +109,7 @@ t_command			*parse_brace_group(void)
 	if (!(compound_list = parse_compound_list()))
 		return (NULL);
 	if (!get_required_reserv_word(RBRACE))
-	{
-		if (!g_parser.status)
-			g_parser.status = UNEXPECTED_TOKEN;
-		complete_command_del(&compound_list);
-		return (NULL);
-	}
+		return (return_parse_error(&compound_list));
 	group = build_brace_group_and_advance(compound_list);
 	g_linebreak_type = old_linebreak_type;
 	return (group);
