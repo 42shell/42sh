@@ -1,3 +1,4 @@
+#TEST 00
 cat << EOF
 basic
 heredoc
@@ -5,6 +6,7 @@ test
 EOF
 echo ~~~
 
+#TEST 01
 cat << EOF1 ; ls ; cat -e << EOF2
 bonjour
 test multiple heredocs in one line
@@ -17,6 +19,7 @@ tust
 EOF2
 echo ~~~
 
+#TEST 02
 cat << EOF > test; cat test; rm test
 bonjour
 test
@@ -24,6 +27,7 @@ heredoc redirections
 EOF
 echo ~~~
 
+#TEST 03
 cat << EOF
 tests expansions in heredocs
 $USER\$USER
@@ -32,6 +36,7 @@ $USER\$USER
 EOF
 echo ~~~
 
+#TEST 04
 cat << EOF
 testing\
 EOF
@@ -41,12 +46,14 @@ lol
 EOF
 echo ~~~
 
+#TEST 05
 cat << EOF
 testing line cont combined with expansion\
 $HOME
 EOF
 echo ~~~
 
+#TEST 06
 cat << EOF
 testing backslash removal
 \t\\t\\\t\\\\t
@@ -57,21 +64,25 @@ $\
 EOF
 echo ~~~
 
+#TEST 07
 cat << EOF
 EOF
 echo ~~~~
 
+#TEST 08
 cat << EOF
 \
 EOF
 echo ~~~~
 
+#TEST 09
 cat << EOF
 blabla
 EO\
 F
 echo ~~~~
 
+#TEST 10
 cat << EOF
 blabla
 E\
@@ -79,6 +90,7 @@ O\
 F
 echo ~~~~
 
+#TEST 11
 cat << EOF
 blabla
 E\

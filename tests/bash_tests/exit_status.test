@@ -1,58 +1,70 @@
+#TEST 00
 echo "ls"
 ls
 echo $?
 echo '~~~'
 
+#TEST 01
 echo "ls -#"
 ls -#
 echo $?
 echo '~~~'
 
+#TEST 02
 echo 'ls -# | cat'
 ls -# | cat 
 echo $?
 echo '~~~'
 
+#TEST 03
 echo 'exit 0 | exit 1 | exit 2'
 exit 0 | exit 1 | exit 2
 echo $?
 echo '~~~'
 
+#TEST 04
 echo 'exit 0 | exit 1 | exit 2 | exit 3'
 exit 0 | exit 1 | exit 2 | exit 3
 echo $?
 echo '~~~'
 
+#TEST 05
 echo 'ls -# && ls'
 ls -# && ls
 echo $?
 echo '~~~'
 
+#TEST 06
 echo 'ls -# || ls'
 ls -# || ls
 echo $?
 echo '~~~'
 
+#TEST 07
 echo 'ls && ls && ls -# && ls'
 ls && ls && ls -# && ls
 echo $?
 echo '~~~'
 
+#TEST 08
 echo 'ls && ls && ls -# || ls'
 ls && ls && ls -# || ls
 echo $?
 echo '~~~'
 
+#TEST 09
 echo 'Command not found'
 asdfasdf
 echo $?
 echo '~~~'
 
+#TEST 10
 echo 'Is a directory'
 /tmp 
 echo $?
 echo '~~~'
 
+#TEST 11
 echo 'Permission denied'
 chmod -x 42sh
 ./42sh

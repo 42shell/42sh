@@ -1,51 +1,64 @@
+#TEST 00
 echo '(ls | cat)'
 (ls | cat)
 echo '~~~'
 
+#TEST 01
 echo '(ls && ls)'
 (ls && ls)
 echo '~~~'
 
+#TEST 02
 echo '(ls && echo ok)'
 (ls && echo ok)
 echo '~~~'
 
+#TEST 03
 echo '(echo test | cat)'
 (echo test | cat)
 echo '~~~'
 
+#TEST 04
 echo '(ls && ls -z) 2>&1 | cat -e'
 (ls && ls -z) 2>&1 | cat -e
 echo '~~~'
 
+#TEST 05
 echo '(ls -z 2>&1 && ls) 1>tmp | cat -e; rm tmp'
 (ls -z 2>&1 && ls) 1>tmp | cat -e; rm tmp
 echo '~~~'
 
+#TEST 06
 echo '(ls -z && ls) 2>&1 | (wc | cat -e) | (wc | cat)'
 (ls -z && ls) 2>&1 | (wc | cat -e) | (wc | cat)
 echo '~~~'
 
+#TEST 07
 echo '(ls; (ls -#; (ls; (ls -#; (ls; (ls -#; (ls; ( ls -#; )) 1>file)))))) 2>&1; rm file'
 (ls; (ls -#; (ls; (ls -#; (ls; (ls -#; (ls; ( ls -#; )) 1>file)))))) 2>&1; rm file
 echo '~~~'
 
+#TEST 08
 echo '{ ls | cat; } | cat -e'
 { ls | cat; } | cat -e
 echo '~~~'
 
+#TEST 09
 echo '{ ls && commandnotfound; } 2>&1 | cat -e'
 { ls && commandnotfound; } 2>&1 | cat -e
 echo '~~~'
 
+#TEST 10
 echo '{ ls -z && no; } | cat -e'
 { ls -z && no; } | cat -e
 echo '~~~'
 
+#TEST 11
 echo '{ ls -z || { ls && fail; } 2>&1; } | cat -e'
 { ls -z || { ls && fail; } 2>&1; } | cat -e
 echo '~~~'
 
+#TEST 12
 echo '{ ls; { ls } }
 }
 }'
@@ -54,28 +67,35 @@ echo '{ ls; { ls } }
 }
 echo '~~~'
 
+#TEST 13
 echo '{ ls -z 2>&1 && ls; } 1>tmp | cat -e; rm tmp'
 { ls -z 2>&1 && ls; } 1>tmp | cat -e; rm tmp
 echo '~~~'
 
+#TEST 14
 echo '{ ls -z && ls; } 2>&1 | { wc | cat -e; } | { wc | cat; }'
 { ls -z && ls; } 2>&1 | { wc | cat -e; } | { wc | cat; }
 echo '~~~'
 
+#TEST 15
 echo '{ ls; { ls -#; { ls; { ls -#; { ls; { ls -#; { ls; { ls -#; } ; } 1>file; }; }; }; }; }; } 2>&1; rm file'
 { ls; { ls -#; { ls; { ls -#; { ls; { ls -#; { ls; { ls -#; } ; } 1>file; }; }; }; }; }; } 2>&1; rm file
 echo '~~~'
 
+#TEST 16
 echo '{(ls | cat -e)}'
 {(ls | cat -e)}
 echo '~~~'
 
+#TEST 17
 echo '{ ((ls | cat -e) 2>&1 && echo ok); echo ok 1>&2; } | cat -e'
 { ((ls | cat -e) 2>&1 && echo ok); echo ok 1>&2; } | cat -e
 echo '~~~'
 
+#TEST 18
 echo '{ (ls -z || ls) && echo ok; } 2>&1'
 { (ls -z || ls) && echo ok; } 2>&1
 
+#TEST 19
 echo '{ (ls && ls -z) && echo ok; } 2>&1'
 { (ls && ls -z) && echo ok; } 2>&1

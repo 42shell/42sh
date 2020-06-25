@@ -1,47 +1,59 @@
+#TEST 00
 echo '$'
 $
 echo ~~~
 
+#TEST 01
 echo '$ ls'
 $ ls
 echo ~~~
 
+#TEST 02
 echo '$USER'
 $USER
 echo ~~~
 
+#TEST 03
 echo '$ls $arg $amrg2'
 $ls $arg $arg2
 echo ~~~
 
+#TEST 04
 echo 'echo $INVALIDVAR'
 echo $INVALIDVARASDASD
 echo ~~~
 
+#TEST 05
 echo '$loop'
 $loop
 echo ~~~
 
+#TEST 06
 echo '$USER$'
 $USER$
 echo ~~~
 
+#TEST 07
 echo '$USER$USER$USER$USER'
 $USER$USER$USER$USER
 echo ~~~
 
+#TEST 08
 echo 'echo ~'
 echo ~
 echo ~~~
 
+#TEST 09
 echo 'echo $USER~$USER'
 echo $USER~$USER$
 echo ~~~
 
+#TEST 10
 echo 'echo $USER~$USER$'
 echo $USER~$USER$
 echo ~~~
 
+#TEST 11
 echo 'echo ~/bonjour'
 echo ~/bonjour
 echo ~~~

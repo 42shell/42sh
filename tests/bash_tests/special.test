@@ -1,3 +1,4 @@
+#TEST 00
 echo 'ls$ls%'
 ls
 ls
