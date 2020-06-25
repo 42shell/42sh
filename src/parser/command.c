@@ -23,17 +23,17 @@ t_command		*parse_command(void)
 	t_command	*command;
 
 	command = NULL;
+	if (!g_parser.token)
+		return (NULL);
 	if ((command = parse_simple_command()))
 		return (command);
 	if (g_parser.status == NOERR
 	&& (command = parse_compound_command()))
 	{
-		command->value.group->redir_list = parse_redirect_list();
+		command->flags |= CMD_COMPOUND;
+		command->redir_list = parse_redirect_list();
 		if (g_parser.status != NOERR)
-		{
-			complete_command_del(&command);
-			return (NULL);
-		}
+			return (return_parse_error(&command));
 		return (command);
 	}
 	return (NULL);

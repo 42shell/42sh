@@ -120,6 +120,7 @@ void					print_job_long(t_job *job);
 t_process				*process_new(t_command *cmd, int stdin, int stdout);
 t_job					*job_new(t_command *cmd, int stdin, int stdout);
 void					process_del(t_process **process);
+void					job_list_del(t_job **job);
 void					job_del(t_job **job);
 
 #endif

@@ -26,16 +26,15 @@ int			delim_token(void)
 		&& (type = is_reserved_word(g_lexer.token->value->str)))
 			g_lexer.token->type = type;
 		else if (is_operator_start(*g_lexer.token->value->str))
-			g_lexer.token->type =
-			get_operator_type(g_lexer.token->value->str);
+			g_lexer.token->type = get_operator_type(g_lexer.token->value->str);
 		else if ((g_lexer.line[g_lexer.i] == '<'
-				|| g_lexer.line[g_lexer.i] == '>')
+			|| g_lexer.line[g_lexer.i] == '>')
 		&& ft_strisnbr(g_lexer.token->value->str))
 			g_lexer.token->type = IO_NUMBER;
 		g_lexer.expect_reserv_word = false;
 		g_lexer.token_delimited = true;
 	}
-	return (0);
+	return (g_lexer.token->type);
 }
 
 int			lx_operator_end(void)

@@ -13,65 +13,104 @@
 #include "shell.h"
 
 /*
-**void	print_ast(t_node *ast, int indent)
-**{
-**	t_command	*command;
-**	t_token		*word;
-**	t_redir		*redir;
-**	int			i;
+** #include <stdio.h>
+** void	print_command(t_command *command, int indent)
+** {
+** 	t_token		*arg;
+** 	t_redir		*redir;
+** 	int			i;
 **
-**	i = 0;
-**	if (!ast)
-**		return ;
-**	if (ast->type == NODE_CMD)
-**		return (print_ast(ast->left, indent));
-**	while (i++ < indent)
-**		printf("    ");
-**	if (ast->type == NODE_SMPL_CMD)
-**	{
-**		command = (t_command *)ast->data;
-**		word = command->words;
-**		redir = command->redirs;
-**		while (word)
-**		{
-**			printf("%s ", word->value->str);
-**			word = word->next;
-**		}
-**		while (redir)
-**		{
-**			if (redir->left_op)
-**				printf("%s", redir->left_op->value->str);
-**			printf("%s", redir->operator->value->str);
-**			printf("%s ", redir->right_op->value->str);
-**			redir = redir->next;
-**		}
-**		printf("\n");
-**		return ;
-**	}
-**	if (ast->type == NODE_BANG)
-**	{
-**		indent++;
-**		printf("%s\n", "!");
-**		print_ast(ast->left, indent);
-**		return ;
-**	}
-**	if (ast->type == NODE_PIPE || ast->type == NODE_AND || ast->type == NODE_OR)
-**	{
-**		indent++;
-**		printf("%s\n", ast->type == NODE_PIPE ?
-**				"|" : ast->type == AND_IF ? "&&" : "||");
-**		print_ast(ast->left, indent);
-**		print_ast(ast->right, indent);
-**		return ;
-**	}
-**	if (ast->type == NODE_SEMI || ast->type == NODE_AMPER || NODE_ROOT)
-**	{
-**		indent++;
-**		printf("%s\n", ast->type == NODE_SEMI ? ";"
-**						: ast->type == NODE_AMPER ? "&" : "\\n");
-**		print_ast(ast->left, indent);
-**		print_ast(ast->right, indent);
-**		return ;
-**	}
-**}
+** 	i = 0;
+** 	if (!command)
+** 		return ;
+** 	if (command->flags & CMD_INVERT_RETURN)
+** 	{
+** 		while (i++ < indent)
+** 			printf("    ");
+** 		printf("%s\n", "!");
+** 	}
+** 	if (command->type == SIMPLE)
+** 	{
+** 		while (i++ < indent)
+** 			printf("    ");
+** 		arg = command->value.simple->args;
+** 		redir = command->value.simple->redirs;
+** 		while (arg)
+** 		{
+** 			printf("%s ", arg->value->str);
+** 			arg = arg->next;
+** 		}
+** 		while (redir)
+** 		{
+** 			if (redir->left_op)
+** 				printf("%s", redir->left_op->value->str);
+** 			printf("%s", redir->operator->value->str);
+** 			printf("%s ", redir->right_op->value->str);
+** 			redir = redir->next;
+** 		}
+** 		printf("\n");
+** 		return ;
+** 	}
+** 	if (command->type == CONNECTION)
+** 	{
+** 		while (i++ < indent)
+** 			printf("    ");
+** 		indent++;
+** 		printf("%s\n", command->value.connection->connector == PIPE ?
+** 		"|" : command->value.connection->connector == AND_IF ? "&&" : "||");
+** 		print_command(command->value.connection->left, indent);
+** 		print_command(command->value.connection->right, indent);
+** 		return ;
+** 	}
+** 	if (command->type == GROUP)
+** 	{
+** 		while (i++ < indent)
+** 			printf("    ");
+** 		printf("%s ", command->value.group->subshell ? "( " : "{ ");
+** 		while (command->value.group->list)
+** 		{
+** 			print_command(command->value.group->list, indent);
+** 			command->value.group->list = command->value.group->list->next;
+** 		}
+** 		i = 0;
+** 		while (i++ < indent)
+** 			printf("    ");
+** 		printf("%s ", command->value.group->subshell ? ")\n" : "}\n");
+** 		return ;
+** 	}
+** 	if (command->type == IF_CLAUSE)
+** 	{
+** 		if (command->value.if_clause->if_part)
+** 		{
+** 			while (i++ < indent)
+** 				printf("    ");
+** 			printf("IF\n");
+** 		}
+** 		while (command->value.if_clause->if_part)
+** 		{
+** 			print_command(command->value.if_clause->if_part, indent);
+** 			command->value.if_clause->if_part
+** 			= command->value.if_clause->if_part->next;
+** 		}
+** 		i = 0;
+** 		while (i++ < indent)
+** 			printf("    ");
+** 		printf("THEN\n");
+** 		while (command->value.if_clause->then_part)
+** 		{
+** 			print_command(command->value.if_clause->then_part, indent);
+** 			command->value.if_clause->then_part
+** 			= command->value.if_clause->then_part->next;
+** 		}
+** 		if (command->value.if_clause->else_part)
+** 		{
+** 			i = 0;
+** 			while (i++ < indent)
+** 				printf("    ");
+** 			printf("ELSE\n");
+** 			print_command(command->value.if_clause->else_part, indent);
+** 		}
+** 		return ;
+** 	}
+** }
 */

@@ -1,58 +1,72 @@
 cd glob
 
+#TEST 00
 echo '*'
 echo *
 echo '~~~'
 
+#TEST 01
 echo '.*'
 echo .*
 echo '~~~'
 
+#TEST 02
 echo 'echo a*'
 echo a*
 echo '~~~'
 
+#TEST 03
 echo 'echo ?bc'
 echo ?bc
 echo '~~~'
 
+#TEST 04
 echo 'echo [a]*'
 echo [a]*
 echo '~~~'
 
+#TEST 05
 echo 'echo [a-c]*'
 echo [a-c]*
 echo '~~~'
 
+#TEST 06
 echo 'echo [c-a]*'
 echo [c-a]*
 echo '~~~'
 
+#TEST 07
 echo 'echo [abc-f]*[c-d]'
 echo [abc-f]*[c-d]
 echo '~~~'
 
+#TEST 08
 echo 'echo [!a-c]*'
 echo [!a-c]*
 echo '~~~'
 
+#TEST 09
 echo 'echo "*"'
 echo "*"
 echo '~~~'
 
+#TEST 10
 echo 'echo "a"*'
 echo "a"* 
 echo '~~~'
 
+#TEST 11
 echo 'echo *\['
 echo *\[
 echo '~~~'
 
+#TEST 12
 touch "a*" "b*"
 echo 'echo *"*"'
 echo *"*"
 echo '~~~'
 
+#TEST 13
 echo 'echo *\*'
 echo *\*
 echo '~~~'
@@ -60,6 +74,7 @@ echo '~~~'
 rm "a*" "b*"
 touch 'b[a-c]' 'a[a-c]'
 
+#TEST 14
 echo 'echo *\[a-c]'
 echo *\[a-c]
 echo '~~~'
@@ -68,27 +83,33 @@ rm 'b[a-c]' 'a[a-c]'
 
 cd ..
 
+#TEST 15
 echo 'echo */*c'
 echo */*c
 echo '~~~'
 
+#TEST 16
 echo 'echo */*/*/*.[co]'
 echo */*/*/*.[co]
 echo '~~~'
 
+#TEST 17
 echo 'echo **************'
 echo *****************
 echo '~~~'
 
+#TEST 18
 echo 'echo *[a-c'
 echo *[a-c
 echo '~~~'
 
+#TEST 19
 echo 'echo *["a-c"]'
 touch bonjour-
 echo *["a-c"]
 echo '~~~'
 
+#TEST 20
 echo 'echo *[a-]'
 echo *[a-]
 rm bonjour-

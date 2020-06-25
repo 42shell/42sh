@@ -50,7 +50,11 @@ enum			e_token_type
 	RBRACKET,
 	LBRACE,
 	RBRACE,
-	PATTERN
+	IF,
+	THEN,
+	ELIF,
+	ELSE,
+	FI
 };
 
 enum			e_quote_st
@@ -125,5 +129,6 @@ int				get_operator_type(char *ope);
 char			*get_quote_string(enum e_quote_st quote);
 int				lx_line_insert_char(char c, int index);
 int				lx_line_del_char(int index);
+char			*get_prompt(void);
 
 #endif

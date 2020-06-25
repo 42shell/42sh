@@ -1,3 +1,4 @@
+#TEST 00
 echo 'ls
 cat src/shell/main.cat
 ls'
@@ -6,6 +7,7 @@ cat src/shell/main.cat
 ls
 echo '~~~'
 
+#TEST 01
 echo 'ls
 cat
 ls'

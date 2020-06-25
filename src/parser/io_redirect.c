@@ -89,7 +89,7 @@ t_redir			*parse_io_redirect(void)
 			return (parse_io_here(io_number));
 		return (parse_io_file(io_number));
 	}
-	else if (!is_redir(g_parser.token))
+	if (!is_redir(g_parser.token))
 		return (NULL);
 	if (g_parser.token->type == DLESS)
 		return (parse_io_here(NULL));

@@ -12,6 +12,14 @@
 
 #include "shell.h"
 
+t_command	*return_parse_error(t_command **to_del)
+{
+	if (!g_parser.status)
+		g_parser.status = UNEXPECTED_TOKEN;
+	complete_command_del(to_del);
+	return (NULL);
+}
+
 int			get_required_reserv_word(int expect_type)
 {
 	int		type;

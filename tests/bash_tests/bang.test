@@ -1,0 +1,54 @@
+#TEST 00
+echo '! ls; echo $?'
+! ls; echo $?
+echo '~~~'
+
+#TEST 01
+echo 'ls !; echo $?'
+ls !; echo $?
+echo '~~~'
+
+#TEST 02
+echo '! ! ls; echo $?'
+! ! ls; echo $?
+echo '~~~'
+
+#TEST 03
+echo '! ! ls -z; echo $?'
+! ! ls -z; echo $?
+echo '~~~'
+
+#TEST 04
+echo '! ls && echo ok; echo $?'
+! ls && echo ok; echo $?
+echo '~~~'
+
+#TEST 05
+echo '! ls -z && echo ok; echo $?'
+! ls -z && echo ok; echo $?
+echo '~~~'
+
+#TEST 06
+echo '! ls || echo ok; echo $?'
+! ls || echo ok; echo $?
+echo '~~~'
+
+#TEST 07
+echo '! ls -z || echo ok; echo $?'
+! ls -z || echo ok; echo $?
+echo '~~~'
+
+#TEST 08
+echo 'ls && ! echo ok || echo $?; echo $?'
+ls && ! echo ok || echo $?; echo $?
+echo '~~~'
+
+#TEST 09
+echo '! ls -z && ! echo ok || echo $?; echo $?'
+! ls -z && ! echo ok || echo $?; echo $?
+echo '~~~'
+
+#TEST 10
+echo '! ls -z && ! echo ok || ls && ! echo ok || ! echo ok || ls; echo $?'
+! ls -z && ! echo ok || ls && ! echo ok || ! echo ok || ls; echo $?
+echo '~~~'

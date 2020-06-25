@@ -1,3 +1,4 @@
+#TEST 00
 echo "basic tests"
 
 echo $((bonjourlolilol))
@@ -81,6 +82,7 @@ echo $((42 / 2))
 echo $((42 % 3))
 echo '~~~'
 
+#TEST 01
 echo "Priority Tests"
 
 echo $(((6+3) * 12))
@@ -97,6 +99,7 @@ echo $(("1+1 * 6 || 3"))
 
 echo '~~~'
 
+#TEST 02
 echo "Nested Expansion"
 echo $(($((1 + 3))*$((6*7 + $((12))))))
 

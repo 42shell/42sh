@@ -65,7 +65,8 @@ typedef struct			s_var
 
 /*
 ** TODO:
-** -bangs/shell script
+** -parser/command_del, lexer/get_prompt,
+** -shell script
 **
 ** problems:
 ** -watch deceitful lexer
@@ -84,7 +85,7 @@ typedef struct			s_var
 # define INPUT_EOF		4
 
 # define PS1			"$> "
-# define PS2			"\\... "
+# define PS2			"> "
 # define PSQ			"'... "
 # define PSD			"\"... "
 # define PSA			"&&... "
@@ -94,6 +95,10 @@ typedef struct			s_var
 # define PSB			"(... "
 # define PSDP			"((... "
 # define PSC			"{... "
+# define PSI			"if... "
+# define PST			"then... "
+# define PSEI			"elif... "
+# define PSE			"else... "
 
 typedef int				(*t_input_func)(const char *, bool);
 

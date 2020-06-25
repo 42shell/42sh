@@ -35,25 +35,44 @@ static t_command	*build_pipe_and_advance(t_command *left)
 **                  | pipe_sequence '|' linebreak command
 */
 
-t_command			*parse_pipeline(void)
+static t_command	*parse_pipe_sequence(void)
 {
-	t_command		*pipeline;
+	t_command		*pipe_sequence;
 	t_command		*node;
 
-	if (!(pipeline = parse_command()))
+	if (!g_parser.token || !(pipe_sequence = parse_command()))
 		return (NULL);
 	while (g_parser.token
 	&& g_parser.token->type == PIPE)
 	{
-		node = build_pipe_and_advance(pipeline);
+		node = build_pipe_and_advance(pipe_sequence);
 		if (!(node->value.connection->right = parse_command()))
-		{
-			if (!g_parser.status)
-				g_parser.status = UNEXPECTED_TOKEN;
-			command_del(&node);
-			return (NULL);
-		}
-		pipeline = node;
+			return (return_parse_error(&node));
+		pipe_sequence = node;
 	}
+	return (pipe_sequence);
+}
+
+/*
+** pipeline   	 	:      pipe_sequence
+**                  | bang pipe_sequence
+*/
+
+t_command			*parse_pipeline(void)
+{
+	t_command		*pipeline;
+	int				invert_return;
+
+	invert_return = 0;
+	while (g_parser.token->type == BANG)
+	{
+		invert_return ^= CMD_INVERT_RETURN;
+		token_del(&g_parser.token);
+		g_lexer.expect_reserv_word = true;
+		g_parser.token = get_next_token();
+	}
+	if (!(pipeline = parse_pipe_sequence()))
+		return (NULL);
+	pipeline->flags |= invert_return;
 	return (pipeline);
 }

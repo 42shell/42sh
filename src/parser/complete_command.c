@@ -44,10 +44,6 @@ t_command	*parse_complete_command(void)
 	if (g_parser.status == NOERR)
 		parse_linebreak();
 	if (g_parser.status != NOERR || g_parser.token)
-	{
-		if (!g_parser.status)
-			g_parser.status = UNEXPECTED_TOKEN;
-		complete_command_del(&list);
-	}
+		return (return_parse_error(&list));
 	return (list);
 }

@@ -28,10 +28,7 @@ void	notif_jobs(void)
 		{
 			if (job->bg && g_shell.interactive_mode)
 				print_job(job, true);
-			remove_job_from_list(job->id);
-			process_del(&job->processes);
-			command_del(&job->command);
-			free(job);
+			job_del(&job);
 		}
 		else if (job_is_stopped(job) && !job->notified)
 		{
@@ -67,6 +64,8 @@ void	wait_for_job(t_job *job)
 			break ;
 		}
 	}
+	if (job_is_done(job) && job->command->flags & CMD_INVERT_RETURN)
+		g_last_exit_st = g_last_exit_st ? 0 : 1;
 }
 
 void	continue_job(t_job *job, bool bg)

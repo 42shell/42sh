@@ -41,19 +41,14 @@ t_command			*parse_and_or(void)
 	t_command		*and_or;
 	t_command		*node;
 
-	if (!(and_or = parse_pipeline()))
+	if (!g_parser.token || !(and_or = parse_pipeline()))
 		return (NULL);
 	while (g_parser.token
 	&& (g_parser.token->type == AND_IF || g_parser.token->type == OR_IF))
 	{
 		node = build_and_or_and_advance(and_or);
 		if (!(node->value.connection->right = parse_pipeline()))
-		{
-			if (!g_parser.status)
-				g_parser.status = UNEXPECTED_TOKEN;
-			command_del(&node);
-			return (NULL);
-		}
+			return (return_parse_error(&node));
 		and_or = node;
 	}
 	return (and_or);

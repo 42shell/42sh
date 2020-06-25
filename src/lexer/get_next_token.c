@@ -12,34 +12,6 @@
 
 #include "shell.h"
 
-static char		*get_prompt(void)
-{
-	enum e_quote_st	bracket_status;
-
-	bracket_status = get_bracket_status(g_lexer.brack_stack);
-	if (g_lexer.quote_st == SQUOTE || bracket_status == SQUOTE)
-		return (PSQ);
-	if (bracket_status == BRACE)
-		return (PSB);
-	if (bracket_status == DPAREN)
-		return (PSDP);
-	if (bracket_status == PAREN)
-		return (PSP);
-	if (g_lexer.quote_st == DQUOTE || bracket_status == DQUOTE)
-		return (PSD);
-	if (g_lexer.line_cont == PIPE)
-		return (PSP);
-	if (g_lexer.line_cont == AND_IF)
-		return (PSA);
-	if (g_lexer.line_cont == OR_IF)
-		return (PSO);
-	else if (g_lexer.line_cont == LBRACKET)
-		return (PSB);
-	else if (g_lexer.line_cont == LBRACE)
-		return (PSC);
-	return (PS2);
-}
-
 int				reset_lexer(void)
 {
 	token_del(&g_lexer.token);
@@ -110,9 +82,9 @@ t_token			*get_next_token(void)
 	{
 		g_lexer.nl_found = 0;
 		g_lexer.end_of_input = 0;
-		g_lexer.line_cont = 0;
 		if ((ret = g_shell.get_input(get_prompt(), false)) != 0)
 			return (end_of_input(ret));
+		g_lexer.line_cont = 0;
 	}
 	while (!g_lexer.end_of_input && !g_lexer.token_delimited)
 	{

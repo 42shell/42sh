@@ -1,3 +1,4 @@
+#TEST 00
 echo "cd && cd -"
 cd
 echo $PWD
@@ -9,6 +10,7 @@ echo $OLDPWD
 /bin/pwd
 echo ~~~
 
+#TEST 01
 echo "cd / && cd -"
 cd /
 echo $PWD
@@ -20,6 +22,7 @@ echo $OLDPWD
 /bin/pwd
 echo ~~~
 
+#TEST 02
 echo "cd ."
 cd .
 echo $PWD
@@ -39,6 +42,7 @@ echo $OLDPWD
 /bin/pwd
 echo ~~~
 
+#TEST 03
 echo "cd .."
 cd testing_dotdots
 echo $PWD
@@ -66,6 +70,7 @@ echo $OLDPWD
 /bin/pwd
 echo ~~~
 
+#TEST 04
 echo "cd ./1/../1/2/../../1/2/./3/./4/../.././././3/4/5/6/7/../../../../.."
 cd tricky_dots
 cd ./1/../1/2/../../1/2/./3/./4/../.././././3/4/5/6/7/../../../../..
@@ -74,6 +79,7 @@ echo $OLDPWD
 /bin/pwd
 echo ~~~
 
+#TEST 05
 echo "cd -P / -L"
 cd -P /etc
 echo $PWD
@@ -122,6 +128,7 @@ echo $OLDPWD
 cd $DIR_42SH
 echo ~~~
 
+#TEST 06
 echo "cd in CDPATH"
 cd /
 cd 1

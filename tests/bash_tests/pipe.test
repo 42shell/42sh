@@ -1,35 +1,44 @@
+#TEST 00
 echo "ls | cat"
 ls | cat
 echo '~~~'
 
+#TEST 01
 echo "ls | ls | ls | ls"
 ls | ls | ls | ls
 echo '~~~'
 
+#TEST 02
 echo "ls | ls | ls | cat"
 ls | ls | ls | cat
 echo '~~~'
 
+#TEST 03
 echo "sleep 0.1 | ls"
 sleep 0.1 | ls
 echo '~~~'
 
+#TEST 04
 echo "ls | wc | cat"
 ls | wc | cat
 echo '~~~'
 
+#TEST 05
 echo "echo bonjour | cat"
 echo bonjour | cat
 echo '~~~'
 
+#TEST 06
 echo "echo bonjour 1>&2 | cat -e"
 echo bonjour 1>&2 | cat -e
 echo '~~~'
 
+#TEST 07
 echo "echo bonjour 1>&2 | cat -e > tmp; cat tmp; rm tmp"
 echo bonjour 1>&2 | cat -e > tmp; cat tmp; rm tmp
 echo '~~~'
 
+#TEST 08
 echo "cat << EOF | wc | cat"
 cat << EOF | wc | cat
 bonjour
@@ -38,14 +47,14 @@ amiches
 EOF
 echo '~~~'
 
+#TEST 09
 echo "> test | echo blabla; rm test"
 > test | echo blabla; rm test
 echo '~~~'
 
+#TEST 10
 echo 'echo 2 > noright | sleep 0.1 && echo lol'
 touch norights; chmod 000 norights
 echo 2 > norights | sleep 0.1 && echo lol
 rm -f norights
 echo '~~~'
-
-
