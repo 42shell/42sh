@@ -46,6 +46,15 @@ void		process_del(t_process **process)
 	}
 }
 
+void		job_delone(t_job **job)
+{
+	remove_job_from_list((*job)->id);
+	process_del(&(*job)->processes);
+	command_del(&(*job)->command);
+	free(*job);
+	*job = NULL;
+}
+
 void		job_del(t_job **job)
 {
 	t_job	*next;

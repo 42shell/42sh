@@ -83,11 +83,11 @@ t_command	*parse_if_clause(void)
 ** 	struct s_command	*else_part;
 ** }					t_if_clause;
 **
-** if x == 1; then		->		{ if_part	
+** if x == 1; then		->		{ if_part
 ** 		echo 1			->		then_part
 ** elif x == 2; then	->		else_part = { if_part
 ** 		echo 2			->					  then_part
 ** else					->					  else_part = { NULL
 ** 		echo 3			->									then_part
-** 															NULL } } }			
+** 															NULL } } }
 */

@@ -47,7 +47,7 @@ static t_command	*parse_pipe_sequence(void)
 	{
 		node = build_pipe_and_advance(pipe_sequence);
 		if (!(node->value.connection->right = parse_command()))
-			return(return_parse_error(&node));
+			return (return_parse_error(&node));
 		pipe_sequence = node;
 	}
 	return (pipe_sequence);

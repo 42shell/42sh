@@ -26,7 +26,7 @@ int			delim_token(void)
 		&& (type = is_reserved_word(g_lexer.token->value->str)))
 			g_lexer.token->type = type;
 		else if (is_operator_start(*g_lexer.token->value->str))
-			g_lexer.token->type
+			g_lexer.token->type 
 			= get_operator_type(g_lexer.token->value->str);
 		else if ((g_lexer.line[g_lexer.i] == '<'
 			|| g_lexer.line[g_lexer.i] == '>')

@@ -27,11 +27,11 @@ static void			add_else_part(t_command **head, t_command **tail,
 	}
 }
 
-static t_command	*parse_else_statement()
+static t_command	*parse_else_statement(void)
 {
 	t_command	*else_statement;
 	t_command	*then_part;
-	
+
 	g_linebreak_type = ELSE;
 	token_del(&g_parser.token);
 	g_lexer.expect_reserv_word = true;

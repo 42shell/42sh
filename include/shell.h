@@ -12,7 +12,7 @@
 
 #ifndef SHELL_H
 # define SHELL_H
-#include <stdio.h>
+
 # include <unistd.h>
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -64,19 +64,11 @@ typedef struct			s_var
 }						t_var;
 
 /*
-echo '~~~'
-
-echo 'Permission denied'
-chmod -x 42sh
-./42sh
-chmod +x 42sh
-echo $?
 ** TODO:
-** -bangs/shell script
-** -add tests for parse errors like "ls;" ?
+** -parser/command_del, lexer/get_prompt, lexer/EOF while line_cont, 
+** -shell script
 **
 ** problems:
-** -CTRL C
 ** -watch deceitful lexer
 ** -store aborted multi-lines in history ? bash does
 **

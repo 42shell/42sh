@@ -100,3 +100,66 @@ echo '~~~'
 echo '~~~'
 
 !! ls
+echo '~~~'
+
+if then true; echo true; fi
+echo '~~~'
+
+if true; then then echo true; fi
+echo '~~~'
+
+then if true; echo false; fi
+echo '~~~'
+
+if true; elif false; echo false; fi
+echo '~~~'
+
+if true; then elif false; echo false; fi
+echo '~~~'
+
+elif true; then echo true; else echo false; fi
+echo '~~~'
+
+if else; then echo true; fi
+echo '~~~'
+
+else if true; then echo false; fi
+echo '~~~'
+
+if true
+else
+echo '~~~'
+
+fi
+echo '~~~'
+
+if true
+then echo true
+else
+fi
+echo '~~~'
+
+if true; then
+fi
+echo '~~~'
+
+if (then); then echo then; fi
+echo '~~~'
+
+if true; then echo true; then echo false; fi
+echo '~~~'
+
+if true; then echo true; elfi false; then echo false; fi
+echo '~~~'
+
+if true; then
+echo true
+fi if
+echo '~~~'
+
+if ( true )
+then { if ! true; }; fi
+echo '~~~'
+
+if ( true )
+then { if ! true; fi; }; fi

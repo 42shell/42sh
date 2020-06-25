@@ -91,6 +91,7 @@ static t_token	*end_of_input(int ret)
 
 	if (ret == INPUT_EOF)
 	{
+		//if g_lexer.line_cont get token string if elif etc
 		if (g_lexer.quote_st != 0 || g_lexer.brack_stack->size != 0)
 		{
 			err = get_quote_string(g_lexer.brack_stack->size ?
@@ -112,8 +113,6 @@ t_token			*get_next_token(void)
 {
 	int		ret;
 
-	//if (!g_lexer.token)
-	//	g_lexer.expect_reserv_word = true;
 	if (g_parser.status != NOERR || !g_lexer.line)
 		return (NULL);
 	if (g_lexer.line_cont || g_lexer.quote_st)

@@ -63,3 +63,39 @@ lol
 42sh: syntax error near unexpected token '}'
 ~~~
 42sh: !!: command not found
+~~~
+42sh: syntax error near unexpected token 'then'
+~~~
+42sh: syntax error near unexpected token 'then'
+~~~
+42sh: syntax error near unexpected token 'then'
+~~~
+42sh: syntax error near unexpected token 'elif'
+~~~
+42sh: syntax error near unexpected token 'elif'
+~~~
+42sh: syntax error near unexpected token 'elif'
+~~~
+42sh: syntax error near unexpected token 'else'
+~~~
+42sh: syntax error near unexpected token 'else'
+~~~
+42sh: syntax error near unexpected token 'else'
+~~~
+42sh: syntax error near unexpected token 'fi'
+~~~
+42sh: syntax error near unexpected token 'fi'
+~~~
+42sh: syntax error near unexpected token 'fi'
+~~~
+42sh: syntax error near unexpected token 'then'
+~~~
+42sh: syntax error near unexpected token 'then'
+~~~
+42sh: syntax error near unexpected token 'then'
+~~~
+42sh: syntax error near unexpected token 'if'
+~~~
+42sh: syntax error near unexpected token '}'
+~~~
+42sh: syntax error near unexpected token 'fi'

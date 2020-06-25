@@ -48,7 +48,7 @@ t_command			*parse_and_or(void)
 	{
 		node = build_and_or_and_advance(and_or);
 		if (!(node->value.connection->right = parse_pipeline()))
-			return(return_parse_error(&node));
+			return (return_parse_error(&node));
 		and_or = node;
 	}
 	return (and_or);

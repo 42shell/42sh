@@ -33,7 +33,7 @@ t_command		*parse_command(void)
 		command->flags |= CMD_COMPOUND;
 		command->redir_list = parse_redirect_list();
 		if (g_parser.status != NOERR)
-			return(return_parse_error(&command));
+			return (return_parse_error(&command));
 		return (command);
 	}
 	return (NULL);
