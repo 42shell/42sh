@@ -28,7 +28,7 @@ void	notif_jobs(void)
 		{
 			if (job->bg && g_shell.interactive_mode)
 				print_job(job, true);
-			job_delone(&job);
+			job_del(&job);
 		}
 		else if (job_is_stopped(job) && !job->notified)
 		{
