@@ -91,7 +91,6 @@ static t_token	*end_of_input(int ret)
 
 	if (ret == INPUT_EOF)
 	{
-		//if g_lexer.line_cont get token string if elif etc
 		if (g_lexer.quote_st != 0 || g_lexer.brack_stack->size != 0)
 		{
 			err = get_quote_string(g_lexer.brack_stack->size ?

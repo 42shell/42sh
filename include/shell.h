@@ -65,7 +65,7 @@ typedef struct			s_var
 
 /*
 ** TODO:
-** -parser/command_del, lexer/get_prompt, lexer/EOF while line_cont, 
+** -parser/command_del, lexer/get_prompt,
 ** -shell script
 **
 ** problems:
