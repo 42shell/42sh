@@ -85,7 +85,7 @@ typedef struct			s_var
 # define INPUT_EOF		4
 
 # define PS1			"$> "
-# define PS2			"\\... "
+# define PS2			"> "
 # define PSQ			"'... "
 # define PSD			"\"... "
 # define PSA			"&&... "

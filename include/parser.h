@@ -162,8 +162,8 @@ int								handle_heredoc_eof(char *delim);
 int								get_required_reserv_word(int expect_type);
 
 t_command						*command_new(enum e_cmd_type type);
-int								command_del(t_command **command);
-int								redir_del(t_redir **redir);
+void							command_del(t_command **command);
+void							redir_del(t_redir **redir);
 void							complete_command_del(t_command
 								**complete_command);
 void							print_command(t_command *command,

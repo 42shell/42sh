@@ -29,30 +29,32 @@ t_command	*command_new(enum e_cmd_type type)
 	return (command);
 }
 
-int			redir_del(t_redir **redir)
+void		redir_del(t_redir **redir)
 {
 	if (!redir || !*redir)
-		return (0);
+		return ;
 	redir_del(&(*redir)->next);
 	token_del(&(*redir)->left_op);
 	token_del(&(*redir)->operator);
 	token_del(&(*redir)->right_op);
 	ft_memdel((void **)redir);
-	return (0);
 }
 
-int			command_del(t_command **command)
+void		simple_command_del(t_simple_cmd **simple)
+{
+	redir_del(&(*simple)->redirs);
+	token_list_del(&(*simple)->assigns);
+	token_list_del(&(*simple)->args);
+	free_arr((*simple)->argv);
+	ft_memdel((void **)simple);
+}
+
+void		command_del(t_command **command)
 {
 	if (!command || !*command)
-		return (0);
+		return ;
 	if ((*command)->type == SIMPLE)
-	{
-		redir_del(&(*command)->value.simple->redirs);
-		token_list_del(&(*command)->value.simple->assigns);
-		token_list_del(&(*command)->value.simple->args);
-		free_arr((*command)->value.simple->argv);
-		ft_memdel((void **)&(*command)->value.simple);
-	}
+		simple_command_del(&(*command)->value.simple);
 	else if ((*command)->type == CONNECTION)
 	{
 		command_del(&(*command)->value.connection->left);
@@ -73,7 +75,6 @@ int			command_del(t_command **command)
 	}
 	redir_del(&((*command)->redir_list));
 	ft_memdel((void **)command);
-	return (0);
 }
 
 void		complete_command_del(t_command **complete_command)

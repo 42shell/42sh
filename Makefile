@@ -126,7 +126,8 @@ SRC_LEXER       := append.c\
                    token.c\
 				   lx_end.c\
 				   utils_operator.c\
-                   utils.c
+                   utils.c\
+				   get_prompt.c
 SRC_LEXER       := $(addprefix lexer/,$(SRC_LEXER))
 
 SRC_PARSER      := and_or.c\
