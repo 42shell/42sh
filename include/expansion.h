@@ -27,7 +27,7 @@ bool	has_glob_char(char *str);
 
 bool	quote_start(const char *str, int i, char *quote_status);
 bool	quote_stop(const char *str, int i, char *quote_status);
-void	remove_quotes(t_dstr *str);
+void	remove_quotes(t_token *token);
 void	remove_bslash(t_dstr *str);
 void	sort_matches(char **array, int size);
 

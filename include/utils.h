@@ -22,5 +22,6 @@ char	**split_path(char const *path);
 int		get_opt(int argc, unsigned char *argv[]);
 bool	is_valid_var_name(char *str);
 char	*ft_mktemp(char *template);
+bool	was_expanded(t_token *token, int i);
 
 #endif
