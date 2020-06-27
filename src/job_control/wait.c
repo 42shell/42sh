@@ -15,8 +15,17 @@
 /*
 ** We only set last_exit_st if stdout == 1 to ignore the exit status of the
 ** first commands of a pipeline
-** TODO: only print necessary signals
 */
+
+static void	set_signaled_exit_status(t_process *process)
+{
+	process->signaled = WTERMSIG(process->status);
+	if (process->stdout == 1)
+		g_last_exit_st = process->signaled + 128;
+	if (process->signaled != 13 && process->signaled != 2)
+		ft_dprintf(2, "%d: Terminated by signal %d.\n",
+		(int)process->pid, WTERMSIG(process->status));
+}
 
 static int	set_process_status(pid_t pid, int status)
 {
@@ -37,14 +46,7 @@ static int	set_process_status(pid_t pid, int status)
 		if (WIFEXITED(status) && process->stdout == 1)
 			g_last_exit_st = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
-		{
-			process->signaled = WTERMSIG(process->status);
-			if (process->stdout == 1)
-				g_last_exit_st = process->signaled + 128;
-			if (process->signaled != 13 && process->signaled != 2)
-				ft_dprintf(2, "%d: Terminated by signal %d.\n",
-				(int)process->pid, WTERMSIG(process->status));
-		}
+			set_signaled_exit_status(process);
 	}
 	return (0);
 }
@@ -90,9 +92,6 @@ void		wait_for_job(t_job *job)
 			break ;
 		}
 	}
-	if (job_is_done(job))
-	{
-		if (job->command->flags & CMD_INVERT_RETURN)
-			g_last_exit_st = g_last_exit_st ? 0 : 1;
-	}
+	if (job_is_done(job) && (job->command->flags & CMD_INVERT_RETURN))
+		g_last_exit_st = g_last_exit_st ? 0 : 1;
 }

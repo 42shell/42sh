@@ -113,8 +113,6 @@ int			init(int argc, char **argv)
 	}
 	if (g_shell.interactive_mode)
 		init_interactive_mode();
-	else
-		g_shell.pgid = getpgid(getpid());
 	init_builtins();
 	init_vars();
 	g_msg_qid = msgget(IPC_PRIVATE, IPC_CREAT | 0600);

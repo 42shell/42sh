@@ -39,24 +39,12 @@ t_process	*process_list_dup(t_process *process_list)
 	return (dup_list);
 }
 
-t_process	*get_process(pid_t pid)
+static t_process	*get_process_in(t_job *list, pid_t pid)
 {
 	t_job		*job;
 	t_process	*process;
 
-	job = g_jobs;
-	while (job)
-	{
-		process = job->processes;
-		while (process)
-		{
-			if (process->pid == pid)
-				return (process);
-			process = process->next;
-		}
-		job = job->next;
-	}
-	job = g_current_jobs;
+	job = list;
 	while (job)
 	{
 		process = job->processes;
@@ -69,4 +57,16 @@ t_process	*get_process(pid_t pid)
 		job = job->next;
 	}
 	return (NULL);
+}
+
+t_process			*get_process(pid_t pid)
+{
+	t_job		*job;
+	t_process	*process;
+
+	job = g_jobs;
+	if (!(process = get_process_in(g_current_jobs, pid))
+	&& !(process = get_process_in(g_jobs, pid)))
+		return (NULL);
+	return (process);
 }

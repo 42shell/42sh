@@ -50,16 +50,13 @@ static pid_t	fork_child(int in, int out, int fd_to_close)
 
 /*
 ** in case of async group command, jobs corresponding to the compound list
-** are added to g_shell.jobs.
+** are added to the current job.
 ** We can't set job->bg = true, otherwise the subshell will not wait for it to
 ** complete. g_bg allows us to keep trace of the background state.
 ** ex: (ls | cat) &
 ** g_bg is set to true when we fork the "(ls | cat) &" job
 ** and allows us to know that we are in the background in further forks,
-** even if a foreground "ls | cat" job has been added to g_shell.jobs.
-** We del the process list in g_current_job to avoid waiting for processes
-** added in parent
-** ex: ?
+** even if a foreground "ls | cat" job has been added to g_current_jobs.
 */
 
 static void		set_child_attr(t_process *process)
@@ -92,14 +89,10 @@ int				launch_process(t_process *process, int fd_to_close)
 	else
 	{
 		process->pid = pid;
+		if (!g_current_jobs->pgid)
+			g_current_jobs->pgid = pid;
 		if (g_job_control_enabled)
-		{
-			if (!g_current_jobs->pgid)
-				g_current_jobs->pgid = pid;
 			setpgid(process->pid, g_current_jobs->pgid);
-		}
-		else
-			g_current_jobs->pgid = g_shell.pgid;	
 		add_process_to_job(g_current_jobs, process);
 	}
 	return (pid);

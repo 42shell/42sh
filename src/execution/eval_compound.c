@@ -42,9 +42,6 @@ int			eval_compound_list(t_command *command)
 ** again in the fork with g_already_forked = true.
 ** If the list is more than one command, we set g_already_forked = false
 ** to be sure that processes will be forked in case we are in a subshell.
-** After evaluating the compound_list, jobs containing sub-ast for each command
-** in the list have been created, so we set group->list to NULL to avoid double
-** free when deleting ast.
 */
 
 int			eval_group_command(t_command *command)

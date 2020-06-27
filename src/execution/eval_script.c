@@ -35,6 +35,13 @@ int			eval_while_clause(t_command *command)
 }
 */
 
+/*
+** We set g_already_forked=false cause we need to evaluate the if_part in a
+** subshell to avoid exit if we are already in a subshell.
+** We keep trace of the old already_forked status to avoid eventual unnecessary
+** fork when executing the then_part.
+*/
+
 static int	eval_if_statement(t_if_clause *if_clause)
 {
 	int		old_already_forked;
@@ -43,22 +50,13 @@ static int	eval_if_statement(t_if_clause *if_clause)
 	g_already_forked = false;
 	eval_compound_list(if_clause->if_part);
 	g_already_forked = old_already_forked;
-	//if_clause->if_part = NULL;
 	if (g_last_exit_st == 0)
 	{
 		eval_compound_list(if_clause->then_part);
-		//if_clause->then_part = NULL;
 		return (1);
 	}
 	return (0);
 }
-
-/*
-** We need to evaluate the if_part in a subshell to avoid exit after evaluating
-** if_part if we are already in a subshell. We keep trace of the old
-** already_forked status to avoid eventual unnecessary fork when executing the
-** then_part.
-*/
 
 int			eval_if_clause(t_command *command)
 {
@@ -78,10 +76,7 @@ int			eval_if_clause(t_command *command)
 				break ;
 		}
 		else
-		{
 			eval_compound_list(if_clause->then_part);
-			//if_clause->then_part = NULL;
-		}
 		command = if_clause->else_part;
 	}
 	restore_fds();
