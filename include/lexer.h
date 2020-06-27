@@ -69,14 +69,16 @@ enum			e_quote_st
 };
 
 /*
-** -token_del frees the entire list of tokens
-** -the lexer do not chain them.
+** exp_info is used for field splitting:
+**   each char in exp_info indicates if the corresponding char in value
+**   is the result of an expansion (='1') or not (='0')
 */
 
 typedef struct	s_token
 {
 	struct s_token		*next;
 	t_dstr				*value;
+	t_dstr				*exp_info;
 	enum e_token_type	type;
 }				t_token;
 

@@ -43,25 +43,43 @@ static char	*get_var_name(char *str, bool brace)
 	return (ft_strsub(str, brace ? 2 : 1, i - 1));
 }
 
-int			param_expand(t_dstr *str, int *i, bool brace)
+static void	replace_name_by_value(t_token *token, char *var_name, int *i,
+		bool brace)
 {
-	char *var_value;
-	char *var_name;
+	char	*var_value;
+	size_t	to_remove_len;
+	size_t	value_len;
 
-	var_name = get_var_name(str->str + *i, brace);
+	var_value = get_var_value(var_name);
+	to_remove_len = ft_strlen(var_name) + (brace ? 3 : 1);
+	value_len = ft_strlen(var_value);
+	ft_dstr_remove(token->value, *i, to_remove_len);
+	ft_dstr_insert(token->value, *i, var_value, value_len);
+	if (token->exp_info)
+	{
+		ft_dstr_remove(token->exp_info, *i, to_remove_len);
+		ft_dstr_insert(token->exp_info, *i, var_value, value_len);
+		ft_memset(token->exp_info->str + *i, '1', value_len);
+	}
+	*i += value_len - 1;
+	free(var_name);
+}
+
+int			param_expand(t_token *token, int *i, bool brace)
+{
+	char	*var_name;
+
+	var_name = get_var_name(token->value->str + *i, brace);
 	if (var_name == NULL)
 	{
 		if (brace)
 		{
-			ft_dprintf(2, "42sh: %s: bad substitution\n", str->str + *i);
+			ft_dprintf(2, "42sh: %s: bad substitution\n",
+					token->value->str + *i);
 			return (1);
 		}
 		return (0);
 	}
-	var_value = get_var_value(var_name);
-	ft_dstr_remove(str, *i, ft_strlen(var_name) + (brace ? 3 : 1));
-	ft_dstr_insert(str, *i, var_value, ft_strlen(var_value));
-	*i += ft_strlen(var_value) - 1;
-	free(var_name);
+	replace_name_by_value(token, var_name, i, brace);
 	return (0);
 }

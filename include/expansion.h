@@ -16,10 +16,10 @@
 # include "shell.h"
 
 int		expand(t_simple_cmd *command);
-int		dollar_expand(t_dstr *str, int start, bool heredoc);
-int		arith_expand(t_dstr *str, int *i);
+int		dollar_expand(t_token *token, int start, bool heredoc);
+int		arith_expand(t_token *token, int *i);
 long	eval_expr(const char *str);
-int		param_expand(t_dstr *str, int *i, bool brace);
+int		param_expand(t_token *token, int *i, bool brace);
 void	path_expand(t_token *token);
 t_array	*get_matches(char *path);
 bool	is_match(char *str, char *pat, char quote, bool is_first_char);

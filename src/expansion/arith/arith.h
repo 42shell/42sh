@@ -85,6 +85,7 @@ typedef struct	s_token
 {
 	struct s_token		*next;
 	t_dstr				*value;
+	t_dstr				*exp_info;
 	enum e_token_type	type;
 }				t_token;
 
