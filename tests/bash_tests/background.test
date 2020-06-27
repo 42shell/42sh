@@ -48,4 +48,3 @@ echo '~~~'
 #TEST 09
 echo '(cd .. && pwd; cd - && pwd) & pwd;'
 (cd .. && pwd; cd - && pwd) & sleep .2; pwd;
-echo '~~~'

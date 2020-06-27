@@ -36,9 +36,8 @@ t_command		*parse_term(void)
 			break ;
 		if (command->sep == NEWLINE)
 			lx_line_insert_char(';', sep_index);
-		if (command->sep)
-			command->next = parse_and_or();
-		command->next->prev = command;
+		if (command->sep && (command->next = parse_and_or()))
+			command->next->prev = command;
 		command = command->next;
 	}
 	if (g_parser.status != NOERR)

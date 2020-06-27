@@ -12,6 +12,8 @@
 
 #include "shell.h"
 
+extern t_command	*g_complete_command;
+
 /*
 ** If the command is not expanded, we expand it.
 ** If the expansion result in no argv (only redirs), we can execute it.
@@ -66,6 +68,9 @@ int			eval_complete_command(t_command *complete_command)
 	command = complete_command;
 	while (command != NULL)
 	{
+		//if (AND_OR || CMPD_LIST)
+		//	eval_command ->same in compound_list
+		//else
 		job = job_new(command, STDIN_FILENO, STDOUT_FILENO);
 		if (command->sep == AMPERSAND)
 			job->bg = true;

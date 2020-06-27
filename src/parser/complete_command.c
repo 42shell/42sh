@@ -39,9 +39,10 @@ t_command	*parse_complete_command(void)
 	command = list;
 	while (command)
 	{
-		if (!command->sep && (command->sep = parse_separator_op()))
-			command->next = parse_and_or();
-		command->next->prev = command;
+		if (!command->sep
+		&& (command->sep = parse_separator_op())
+		&& (command->next = parse_and_or()))
+			command->next->prev = command;
 		command = command->next;
 	}
 	if (g_parser.status == NOERR)

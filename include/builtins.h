@@ -31,12 +31,6 @@ int			builtin_test(char **argv, t_array *env);
 int			builtin_hash(char **argv, t_array *env);
 
 /*
-** jobs/fgbg utils
-*/
-
-t_job		*get_job_by_str(char *str);
-
-/*
 ** cd utils
 */
 

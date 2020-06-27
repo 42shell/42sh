@@ -12,7 +12,7 @@
 
 #ifndef SHELL_H
 # define SHELL_H
-
+#include <stdio.h>
 # include <unistd.h>
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -26,6 +26,7 @@
 # include <dirent.h>
 # include <sys/ipc.h>
 # include <sys/msg.h>
+# include <time.h>
 # include "libft.h"
 # include "readline.h"
 # include "ft_printf.h"
@@ -85,7 +86,14 @@ typedef struct			s_var
 
 /*
 ** TODO:
-** -parser/command_del, lexer/get_prompt,
+** -redo jobs/fg/bg -> format_command if/while
+** -check and_or still working
+** -redo pipes left/right / care about closing fds
+**  implies queuing processes to print them right
+** -g_invert_ret ?
+** -interrupt exec
+** -force exit on ctrl-D even if jobs
+** -sleep 2 && sleep 3 ^Z jobs (print only processes in jobs)
 ** -shell script
 **
 ** problems:
@@ -107,7 +115,7 @@ typedef struct			s_var
 # define PS1			"$> "
 # define PS2			"> "
 # define PSQ			"'... "
-# define PSD			"\"... "
+# define PSDQ			"\"... "
 # define PSA			"&&... "
 # define PSO			"||... "
 # define PSP			"|... "
@@ -119,6 +127,8 @@ typedef struct			s_var
 # define PST			"then... "
 # define PSEI			"elif... "
 # define PSE			"else... "
+# define PSW			"while... "
+# define PSD			"do... "
 
 typedef int				(*t_input_func)(const char *, bool);
 
@@ -128,7 +138,6 @@ typedef struct			s_shell
 {
 	bool				interactive_mode;
 	t_input_func		get_input;
-	t_job				*jobs;
 	pid_t				pgid;
 	struct termios		tmodes;
 	t_ht				*vars;
@@ -137,6 +146,8 @@ typedef struct			s_shell
 
 extern t_shell			g_shell;
 extern t_ht				*g_builtins;
+
+extern t_command		*g_complete_command;
 
 int						init(int argc, char **argv);
 void					del(void);

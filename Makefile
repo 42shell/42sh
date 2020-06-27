@@ -49,7 +49,6 @@ SRC_BUILTINS    :=	builtins.c\
 					cd_utils.c\
 					var_builtins.c\
 					jobs.c\
-					jobs_fgbg_utils.c\
 					env.c\
 				    exec_command_env.c\
 					test.c\
@@ -93,15 +92,16 @@ SRC_EXEC        := $(addprefix execution/,$(SRC_EXEC))
 
 SRC_JOB       	:= launch_job.c\
 				   launch_process.c\
-				   job_current.c\
 				   job_control.c\
-				   job_get_status.c\
-				   job_set_status.c\
-				   job_print.c\
+				   job_list.c\
+				   update_jobs.c\
+				   print_job.c\
 				   format_job.c\
 				   format_command.c\
-				   job_utils.c\
-				   job_new_del.c
+				   utils_job.c\
+				   utils_process.c\
+				   new_del.c\
+				   wait.c
 SRC_JOB			:= $(addprefix job_control/,$(SRC_JOB))
 
 SRC_EXPANSION   := expand.c\
@@ -149,12 +149,14 @@ SRC_PARSER      := and_or.c\
 				   compound_list.c\
 				   if_clause.c\
 				   if_clause_else.c\
+				   while_clause.c\
                    io_redirect.c\
 				   separator.c\
 				   heredoc.c\
 				   error.c\
 				   debug.c\
                    new_del.c\
+				   remove_command_from_list.c\
 				   utils.c
 SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
 

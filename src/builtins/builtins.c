@@ -71,9 +71,9 @@ static bool	there_are_stopped_jobs(void)
 	static bool	notif = false;
 
 	update_status();
-	if (!g_shell.jobs)
+	if (!g_jobs)
 		return (false);
-	job = g_shell.jobs->next;
+	job = g_jobs;
 	while (job)
 	{
 		if (job_is_stopped(job) && !notif)
@@ -84,6 +84,7 @@ static bool	there_are_stopped_jobs(void)
 		}
 		job = job->next;
 	}
+	g_last_exit_st = 0;
 	return (false);
 }
 
@@ -108,7 +109,7 @@ void		builtin_exit(char **argv
 	}
 	else
 		status = ft_atoi(argv[1]);
-	if (g_shell.interactive_mode)
+	if (g_shell.interactive_mode && g_job_control_enabled)
 		tcsetattr(STDIN_FILENO, TCSADRAIN, &g_shell.tmodes);
 	exit(status);
 }

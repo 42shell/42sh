@@ -1,42 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   job_get_status.c                                   :+:      :+:    :+:   */
+/*   notif_jobs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/09 15:29:28 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/25 02:48:20 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
 
-bool	job_is_stopped(t_job *job)
+void	update_jobs(bool notif)
 {
-	t_process	*process;
+	t_job			*job;
+	t_job			*next;
 
-	if (!job || !(process = job->processes))
-		return (true);
-	while (process)
+	update_status();
+	job = g_jobs;
+	while (job)
 	{
-		if (!process->done && !process->stopped)
-			return (false);
-		process = process->next;
+		next = job->next;
+		if (job_is_done(job))
+		{
+			if (notif && job->bg && g_shell.interactive_mode)
+				print_job(job, true);
+			del_job_from_list(&g_jobs, job);
+		}
+		else if (job_is_stopped(job) && !job->notified)
+		{
+			remove_job_from_list(&g_jobs, job);
+			add_job_to_list(&g_jobs, job, false);
+			if (notif && g_shell.interactive_mode)
+				print_job(job, true);
+			job->notified = true;
+		}
+		job = next;
 	}
-	return (true);
-}
-
-bool	job_is_done(t_job *job)
-{
-	t_process	*process;
-
-	process = job->processes;
-	while (process)
-	{
-		if (!process->done)
-			return (false);
-		process = process->next;
-	}
-	return (true);
 }

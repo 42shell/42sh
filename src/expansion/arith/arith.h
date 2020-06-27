@@ -23,7 +23,6 @@ typedef struct	s_shell
 {
 	bool			interactive_mode;
 	t_input_func	get_input;
-	t_job			*jobs;
 	pid_t			pgid;
 	struct termios	tmodes;
 	t_ht			*vars;

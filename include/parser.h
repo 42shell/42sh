@@ -170,6 +170,13 @@ void							command_del(t_command **command);
 void							redir_del(t_redir **redir);
 void							complete_command_del(t_command
 								**complete_command);
+int								remove_command_from_list(t_command **head,
+								t_command *command);
+
+/*
+** debug
+*/
+
 void							print_command(t_command *command,
 								int indent);
 

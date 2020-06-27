@@ -13,13 +13,13 @@
 #include "shell.h"
 
 /*
-** If we already have a job which has forked processes, pgid of this job is set
-** and we want the jobs to have the same pgid
+** If we are in a fork, we want the jobs created to have the same pgid than the
+** fork.
 ** ex: { ls; ls -a; } | cat
 ** We want the ls jobs to have the same pgid than cat, if we don t set it
 ** explicitely, it will be set to the process pid in launch_process
 */
-
+// { ls; cat; ls }
 int			eval_compound_list(t_command *command)
 {
 	t_job	*job;
@@ -27,13 +27,13 @@ int			eval_compound_list(t_command *command)
 	while (command)
 	{
 		job = job_new(command, STDIN_FILENO, STDOUT_FILENO);
-		job->pgid = g_shell.jobs->pgid;
+		job->pgid = g_current_jobs->pgid;
 		if (command->sep == AMPERSAND)
 			job->bg = true;
 		launch_job(job);
 		command = command->next;
 	}
-	return (0);
+	return (g_last_exit_st);
 }
 
 /*
@@ -41,9 +41,6 @@ int			eval_compound_list(t_command *command)
 ** again in the fork with g_already_forked = true.
 ** If the list is more than one command, we set g_already_forked = false
 ** to be sure that processes will be forked in case we are in a subshell.
-** After evaluating the compound_list, jobs containing sub-ast for each command
-** in the list have been created, so we set group->list to NULL to avoid double
-** free when deleting ast.
 */
 
 int			eval_group_command(t_command *command)
@@ -52,13 +49,10 @@ int			eval_group_command(t_command *command)
 	t_group_cmd	*group;
 
 	group = command->value.group;
-	if (group->subshell)
+	if (group->subshell && !g_already_forked)
 	{
-		if (!g_already_forked)
-		{
-			process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
-			return (launch_process(process, 0));
-		}
+		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
+		return (launch_process(process, 0));
 	}
 	if (set_redir(command->redir_list, true) != 0)
 	{
@@ -68,9 +62,8 @@ int			eval_group_command(t_command *command)
 	if (group->list && group->list->next)
 		g_already_forked = false;
 	eval_compound_list(group->list);
-	group->list = NULL;
 	restore_fds();
-	return (0);
+	return (g_last_exit_st);
 }
 
 int			eval_compound_command(t_command *command)
@@ -79,5 +72,7 @@ int			eval_compound_command(t_command *command)
 		return (eval_group_command(command));
 	if (command->type == IF_CLAUSE)
 		return (eval_if_clause(command));
+	//if (command->type == WHILE_CLAUSE)
+	//	return (eval_while_clause(command));
 	return (0);
 }

@@ -17,6 +17,7 @@ t_shell		g_shell;
 t_lexer		g_lexer;
 t_parser	g_parser;
 t_ht		*g_builtins;
+t_command	*g_complete_command;
 
 t_command		*get_complete_command(void)
 {
@@ -43,17 +44,17 @@ t_command		*get_complete_command(void)
 
 int				main_loop(void)
 {
-	t_command	*complete_command;
-
 	while (1)
 	{
-		if (g_shell.jobs)
-			notif_jobs();
+		if (g_jobs)
+			update_jobs(true);
+		g_interrupt = false;
 		g_parser.status = NOERR;
 		g_parser.bracket_lvl = 0;
 		g_shell.get_input(PS1, false);
-		if ((complete_command = get_complete_command()))
-			eval_complete_command(complete_command);
+		if ((g_complete_command = get_complete_command()))
+			eval_complete_command(g_complete_command);
+		complete_command_del(&g_complete_command);
 		if (g_shell.interactive_mode
 		&& g_lexer.line && *g_lexer.line != '\n')
 		{

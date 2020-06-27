@@ -18,6 +18,19 @@ int			eval_pipeline(t_command *command, int in, int out)
 	t_process		*process;
 	int				fd[2];
 
+	/*
+	in = 0;
+	while (command == pipe)
+	{
+		pipe(fd)
+		in = fd[0];
+		process = process_new(pipeline->left, in, fd[1]);
+		return (launch_process(process, fd[0]));
+		command = command->right;
+	} 
+	process = process_new(pipeline->right, fd[0], out);
+	launch_process(process, fd[1]);
+	*/
 	if (pipe(fd) == -1)
 		return (-1);
 	pipeline = command->value.connection;
@@ -30,30 +43,48 @@ int			eval_pipeline(t_command *command, int in, int out)
 	return (launch_process(process, fd[0]));
 }
 
+/*
 static int	wait_for_and_or(t_command *command)
 {
-	if (!g_bg && g_job_control_enabled)
-		put_job_fg(g_shell.jobs, false);
+	if (g_job_control_enabled)
+		put_job_fg(g_current_jobs, false);
 	else
-		wait_for_job(g_shell.jobs);
-	if (command->flags & CMD_INVERT_RETURN)
-		g_last_exit_st = g_last_exit_st ? 0 : 1;
+		wait_for_job(g_current_jobs);
 	return (g_last_exit_st);
 }
+*/
+
+/*
+** If we are in a fork, we want the jobs created to have the same pgid than the
+** fork.
+** ex: { ls && ls } | cat
+** We want the ls jobs to have the same pgid than cat, if we don t set it
+** explicitely, it will be set to the process pid in launch_process
+*/
 
 int			eval_and_or(t_command *command)
 {
 	t_connection	*and_or;
+	t_job			*job;
 
 	g_already_forked = false;
 	and_or = command->value.connection;
-	eval_command(and_or->left);
-	wait_for_and_or(and_or->left);
+	if (and_or->left->type == CONNECTION
+	&& (and_or->left->value.connection->connector == AND_IF
+		|| and_or->left->value.connection->connector == OR_IF))
+		eval_command(and_or->left);
+	else
+	{
+		job = job_new(and_or->left, STDIN_FILENO, STDOUT_FILENO);
+		job->pgid = g_current_jobs->pgid;
+		launch_job(job);
+	}
 	if ((and_or->connector == AND_IF && g_last_exit_st == 0)
 	|| (and_or->connector == OR_IF && g_last_exit_st != 0))
 	{
-		eval_command(and_or->right);
-		wait_for_and_or(and_or->right);
+		job = job_new(and_or->right, STDIN_FILENO, STDOUT_FILENO);
+		job->pgid = g_current_jobs->pgid;
+		launch_job(job);
 	}
-	return (0);
+	return (g_last_exit_st);
 }

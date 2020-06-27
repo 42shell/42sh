@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   job_print.c                                        :+:      :+:    :+:   */
+/*   print_job.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,6 +12,21 @@
 
 #include "shell.h"
 
+bool		is_last_job(t_job *job)
+{
+	if (job && g_jobs == job)
+		return (true);
+	return (false);
+}
+
+bool		is_before_last_job(t_job *job)
+{
+	if (job && g_jobs && g_jobs->next == job)
+		return (true);
+	return (false);
+}
+
+/*
 void		print_job_long(t_job *job)
 {
 	t_dstr		*command_format;
@@ -37,22 +52,39 @@ void		print_job_long(t_job *job)
 	}
 	ft_dstr_del(&command_format);
 }
+*/
+/*
+still eval the tree to print the command,
+sort jobs numerically
+*/
 
 void		print_job(t_job *job, bool print_command)
 {
-	t_dstr	*command_format;
-	char	*job_format;
-	char	*curr;
+	t_dstr		*command_format;
+	t_process	*process;
+	char		*job_format;
+	char		*curr;
 
 	if (!job)
 		return ;
-	if (is_current_job(job))
+	curr = " ";
+	if (is_last_job(job))
 		curr = "+";
-	else if (is_previous_job(job))
+	else if (is_before_last_job(job))
 		curr = "-";
 	else
 		curr = " ";
 	job_format = get_job_format(job);
+	process = job->processes;
+	command_format = ft_dstr_new(64);
+	while (process)
+	{
+		ft_dstr_append(command_format, process->command_str->str);//printf //dstr_cat
+		if (process->next)
+			ft_dstr_append(command_format, " ");
+		process = process->next;
+	}
+	/*
 	if (print_command)
 	{
 		command_format = ft_dstr_new(64);
@@ -60,7 +92,8 @@ void		print_job(t_job *job, bool print_command)
 		if (job->bg)
 			ft_dstr_append(command_format, " &");
 	}
-	ft_dprintf(2, "[%d]%s %-30s %s\n", job->id + 1, curr, job_format,
+	*/
+	ft_dprintf(2, "[%d]%s %-30s %s\n", job->id, curr, job_format,
 	print_command ? command_format->str : "");
 	if (print_command)
 		ft_dstr_del(&command_format);
