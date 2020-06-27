@@ -87,11 +87,12 @@ void	add_matches_to_list(t_token *token, t_array *matches)
 	t_token *old_next;
 	size_t	i;
 
-	free(token->value->str);
+	ft_dstr_del(&token->value);
+	ft_dstr_del(&token->exp_info);
 	array = (char **)matches->array;
-	token->value->str = ft_strdup(array[0]);
-	token->value->len = ft_strlen(array[0]);
-	token->value->size = token->value->len + 1;
+	token->value = ft_dstr_from_str(array[0]);
+	token->exp_info = ft_dstr_from_str(array[0]);
+	ft_memset(token->exp_info->str, '1', ft_strlen(array[0]));
 	cur = token;
 	old_next = token->next;
 	i = 1;
@@ -99,6 +100,8 @@ void	add_matches_to_list(t_token *token, t_array *matches)
 	{
 		cur->next = token_new(WORD);
 		ft_dstr_append(cur->next->value, array[i]);
+		cur->next->exp_info = ft_dstr_from_str(array[i]);
+		ft_memset(cur->next->exp_info->str, '1', ft_strlen(array[i]));
 		i++;
 		cur = cur->next;
 	}

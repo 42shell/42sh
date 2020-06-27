@@ -24,17 +24,17 @@
 
 int			tilde_expand(t_dstr *str, char *home_dir)
 {
-	char	*new;
+	size_t len;
 
 	if (home_dir == NULL)
 		return (0);
 	if (str->str[0] == '~'
 	&& (str->str[1] == '\0' || str->str[1] == '/' || str->str[1] == ':'))
 	{
-		new = ft_strjoin(home_dir, str->str + 1);
-		free(str->str);
-		str->str = new;
-		return (ft_strlen(home_dir));
+		ft_dstr_remove(str, 0, 1);
+		len = ft_strlen(home_dir);
+		ft_dstr_insert(str, 0, home_dir, len);
+		return (len);
 	}
 	return (0);
 }
@@ -55,7 +55,9 @@ static int	expand_token(t_token *token, char *home_dir)
 	int	pos;
 
 	pos = tilde_expand(token->value, home_dir);
-	if (dollar_expand(token->value, pos, false) == 1)
+	token->exp_info = ft_dstr_dup(token->value);
+	ft_memset(token->exp_info->str, '0', token->exp_info->len);
+	if (dollar_expand(token, pos, false) == 1)
 		return (1);
 	path_expand(token);
 	remove_quotes(token->value);

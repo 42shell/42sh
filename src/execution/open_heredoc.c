@@ -14,9 +14,21 @@
 
 char	*g_tmp_file = NULL;
 
-int		open_heredoc(t_dstr *heredoc)
+static t_token	*create_tmp_token(t_dstr *heredoc)
+{
+	t_token *tmp;
+
+	tmp = ft_xmalloc(sizeof(t_token));
+	tmp->value = heredoc;
+	tmp->exp_info = ft_dstr_dup(heredoc);
+	ft_memset(tmp->exp_info->str, '0', tmp->exp_info->len);
+	return (tmp);
+}
+
+int				open_heredoc(t_dstr *heredoc)
 {
 	int		fd;
+	t_token	*tmp;
 
 	free(g_tmp_file);
 	g_tmp_file = ft_mktemp(ft_strdup("/tmp/42sh_XXXXXX"));
@@ -27,14 +39,16 @@ int		open_heredoc(t_dstr *heredoc)
 	}
 	if (g_tmp_file == NULL)
 		return (-1);
-	if (dollar_expand(heredoc, 0, true) == 1)
+	tmp = create_tmp_token(heredoc);
+	if (dollar_expand(tmp, 0, true) == 1)
 	{
 		ft_memdel((void **)&g_tmp_file);
+		token_del(&tmp);
 		return (ERROR_REDIR_EXPAND);
 	}
 	remove_bslash(heredoc);
 	ft_putstr_fd(heredoc->str, fd);
 	close(fd);
-	fd = open(g_tmp_file, O_RDONLY);
-	return (fd);
+	token_del(&tmp);
+	return (open(g_tmp_file, O_RDONLY));
 }
