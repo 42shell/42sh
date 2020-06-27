@@ -12,6 +12,7 @@
 
 #include "shell.h"
 
+/*
 static int	notif_and_continue_job(t_job *job, bool bg)
 {
 	t_dstr		*command_format;
@@ -24,9 +25,9 @@ static int	notif_and_continue_job(t_job *job, bool bg)
 	return (0);
 }
 
-/*
-** argv = argv + 1
-*/
+
+//argv = argv + 1
+
 
 static int	fgbg_internal(char **argv, bool bg)
 {
@@ -67,3 +68,4 @@ int			builtin_fg(char **argv, __attribute__((unused)) t_array *env)
 	update_status();
 	return (fgbg_internal(argv + 1, false));
 }
+*/

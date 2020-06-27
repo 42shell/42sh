@@ -57,19 +57,23 @@ static pid_t	fork_child(int in, int out, int fd_to_close)
 ** g_bg is set to true when we fork the "(ls | cat) &" job
 ** and allows us to know that we are in the background in further forks,
 ** even if a foreground "ls | cat" job has been added to g_shell.jobs.
+** We del the process list in g_current_job to avoid waiting for processes
+** added in parent
+** ex: ?
 */
 
 static void		set_child_attr(t_process *process)
 {
 	process->pid = getpid();
-	if (!g_shell.jobs->pgid)
-		g_shell.jobs->pgid = process->pid;
+	if (!g_current_jobs->pgid)
+		g_current_jobs->pgid = process->pid;
 	if (!g_bg && g_job_control_enabled)
 	{
-		setpgid(process->pid, g_shell.jobs->pgid);
-		tcsetpgrp(STDIN_FILENO, g_shell.jobs->pgid);
+		setpgid(process->pid, g_current_jobs->pgid);
+		tcsetpgrp(STDIN_FILENO, g_current_jobs->pgid);
 	}
-	process_del(&g_shell.jobs->processes);
+	//try to remove this
+	process_list_del(&g_current_jobs->processes);
 	g_job_control_enabled = false;
 	g_already_forked = true;
 }
@@ -85,17 +89,17 @@ int				launch_process(t_process *process, int fd_to_close)
 		set_child_attr(process);
 		reset_signals();
 		eval_command(process->command);
-		wait_for_job(g_shell.jobs);
+		wait_for_job(g_current_jobs);
 		builtin_exit(NULL, NULL);
 	}
 	else
 	{
 		process->pid = pid;
-		if (!g_shell.jobs->pgid)
-			g_shell.jobs->pgid = pid;
+		if (!g_current_jobs->pgid)
+			g_current_jobs->pgid = pid;
 		if (g_job_control_enabled)
-			setpgid(process->pid, g_shell.jobs->pgid);
-		add_process(process);
+			setpgid(process->pid, g_current_jobs->pgid);
+		add_process_to_job(g_current_jobs, process);
 	}
 	return (pid);
 }

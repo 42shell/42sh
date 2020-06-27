@@ -12,7 +12,17 @@
 
 #include "shell.h"
 
-t_list_head *g_curr_job;
+/*
+** a stack containing the jobs currently being executed
+*/
+
+t_job		*g_current_jobs;
+
+/*
+** a stack containing jobs stopped or put in the background
+*/
+
+t_job		*g_jobs;
 
 void	notif_jobs(void)
 {
@@ -20,7 +30,7 @@ void	notif_jobs(void)
 	t_job	*next;
 
 	update_status();
-	job = g_shell.jobs;
+	job = g_jobs;
 	while (job)
 	{
 		next = job->next;
@@ -28,13 +38,16 @@ void	notif_jobs(void)
 		{
 			if (job->bg && g_shell.interactive_mode)
 				print_job(job, true);
+			remove_job_from_list(&g_jobs, job->id);
+			process_list_del(&job->processes);
+			command_del(&job->command);
 			job_del(&job);
 		}
 		else if (job_is_stopped(job) && !job->notified)
 		{
+			//job already in the list at this point
 			if (g_shell.interactive_mode)
 				print_job(job, true);
-			update_curr_job(job);
 			job->notified = true;
 		}
 		job = next;
@@ -64,8 +77,16 @@ void	wait_for_job(t_job *job)
 			break ;
 		}
 	}
-	if (job_is_done(job) && job->command->flags & CMD_INVERT_RETURN)
-		g_last_exit_st = g_last_exit_st ? 0 : 1;
+	if (job_is_done(job))
+	{
+		if (job->command->flags & CMD_INVERT_RETURN)
+			g_last_exit_st = g_last_exit_st ? 0 : 1;
+	}
+	else if (job_is_stopped(job))
+	{
+		remove_command_from_list(job->command);
+		add_job_to_list(&g_jobs, job_dup(job));
+	}
 }
 
 void	continue_job(t_job *job, bool bg)
@@ -83,7 +104,7 @@ void	put_job_bg(t_job *job, bool cont)
 
 	job->bg = true;
 	g_last_bg_job_pid = job->pgid;
-	update_curr_job(job);
+	//update_curr_job(job);
 	if (cont)
 		kill(-job->pgid, SIGCONT);
 }

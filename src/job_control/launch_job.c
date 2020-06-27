@@ -18,8 +18,9 @@ static int	launch_job_bg(t_job *job)
 {
 	t_process	*process;
 	int			fd_in;
+	int			old_bg;
 
-	g_bg = true;
+	old_bg = g_bg;
 	g_last_exit_st = 0;
 	fd_in = STDIN_FILENO;
 	if (!g_job_control_enabled)
@@ -33,23 +34,34 @@ static int	launch_job_bg(t_job *job)
 		launch_process(process, 0);
 		process->stdin = 0;
 	}
-	put_job_bg(job, false);
-	if (g_job_control_enabled && g_shell.interactive_mode)
-		ft_dprintf(2, "[%d] %d\n", job->id + 1, job->pgid);
 	if (fd_in != STDIN_FILENO)
 		close(fd_in);
+	put_job_bg(job, false);
+	g_bg = old_bg;
 	return (0);
 }
 
 int			launch_job(t_job *job)
 {
-	add_job(job);
+	add_job_to_list(&g_current_jobs, job);
 	if (job->bg)
-		return (launch_job_bg(job));
-	eval_command(job->command);
-	if (!g_bg && g_job_control_enabled)
-		put_job_fg(job, false);
+	{
+		launch_job_bg(job);
+		remove_command_from_list(job->command);
+		add_job_to_list(&g_jobs, job_dup(job));
+		if (g_job_control_enabled && g_shell.interactive_mode)
+			ft_dprintf(2, "[%d] %d\n", job->id + 1, job->pgid);
+	}
 	else
-		wait_for_job(job);
+	{
+		eval_command(job->command);
+		if (g_job_control_enabled)
+			put_job_fg(job, false);
+		else
+			wait_for_job(job);
+	}
+	remove_job_from_list(&g_current_jobs, job->id);
+	process_list_del(&job->processes);
+	job_del(&job);
 	return (0);
 }

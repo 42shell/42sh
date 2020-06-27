@@ -32,10 +32,10 @@ int			eval_pipeline(t_command *command, int in, int out)
 
 static int	wait_for_and_or(t_command *command)
 {
-	if (!g_bg && g_job_control_enabled)
-		put_job_fg(g_shell.jobs, false);
+	if (g_job_control_enabled)
+		put_job_fg(g_current_jobs, false);
 	else
-		wait_for_job(g_shell.jobs);
+		wait_for_job(g_current_jobs);
 	if (command->flags & CMD_INVERT_RETURN)
 		g_last_exit_st = g_last_exit_st ? 0 : 1;
 	return (g_last_exit_st);
@@ -45,6 +45,7 @@ int			eval_and_or(t_command *command)
 {
 	t_connection	*and_or;
 
+	//create jobs ?
 	g_already_forked = false;
 	and_or = command->value.connection;
 	eval_command(and_or->left);

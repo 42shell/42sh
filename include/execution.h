@@ -36,6 +36,7 @@ extern				t_ht	*g_binaries;
 
 extern bool			g_job_control_enabled;
 extern bool			g_already_forked;
+bool				g_interrupt;
 
 /*
 ** to know if we are in backgroud or not during
@@ -57,6 +58,7 @@ int					eval_compound_list(t_command *command);
 int					eval_and_or(t_command *command);
 int					eval_pipeline(t_command *command, int in, int out);
 int					eval_if_clause(t_command *command);
+int					eval_while_clause(t_command *command);
 
 /*
 ** execution

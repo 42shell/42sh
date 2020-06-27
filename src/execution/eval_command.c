@@ -12,6 +12,8 @@
 
 #include "shell.h"
 
+extern t_command	*g_complete_command;
+
 /*
 ** If the command is not expanded, we expand it.
 ** If the expansion result in no argv (only redirs), we can execute it.

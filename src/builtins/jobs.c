@@ -12,6 +12,7 @@
 
 #include "shell.h"
 
+/*
 #define JOBS_L	1
 #define JOBS_N	2
 #define JOBS_P	4
@@ -74,9 +75,9 @@ static int	print_one_job(t_job *job, int options)
 	return (0);
 }
 
-/*
-** argv = argv + number of option arguments
-*/
+
+//argv = argv + number of option arguments
+
 
 static int	print_jobs(char **argv, int options)
 {
@@ -87,7 +88,8 @@ static int	print_jobs(char **argv, int options)
 		job = g_shell.jobs->next;
 		while (job)
 		{
-			print_one_job(job, options);
+			if (job->bg || job_is_stopped(job))
+				print_one_job(job, options);
 			job = job->next;
 		}
 		return (0);
@@ -125,3 +127,4 @@ int			builtin_jobs(char **argv, __attribute__((unused)) t_array *env)
 	}
 	return (0);
 }
+*/

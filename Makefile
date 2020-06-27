@@ -149,6 +149,7 @@ SRC_PARSER      := and_or.c\
 				   compound_list.c\
 				   if_clause.c\
 				   if_clause_else.c\
+				   while_clause.c\
                    io_redirect.c\
 				   separator.c\
 				   heredoc.c\

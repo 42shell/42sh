@@ -12,6 +12,7 @@
 
 #include "shell.h"
 
+/*
 t_job		*get_job_by_str(char *str)
 {
 	t_job	*job;
@@ -40,3 +41,4 @@ t_job		*get_job_by_str(char *str)
 		job = job->next;
 	return (job);
 }
+*/

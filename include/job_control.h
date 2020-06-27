@@ -43,12 +43,8 @@ typedef struct			s_job
 	int					id;
 }						t_job;
 
-/*
-** A stack in which the first element is always the last job stopped
-** while it was in the foreground or started in the background
-*/
-
-extern t_list_head				*g_curr_job;
+extern t_job			*g_current_jobs;
+extern t_job			*g_jobs;
 
 /*
 ** launch job/process
@@ -88,20 +84,26 @@ bool					job_is_stopped(t_job *job);
 ** current job stack related
 */
 
+/*
 bool					is_current_job(t_job *job);
 bool					is_previous_job(t_job *job);
 t_list_head				*get_job_current_list_elem(t_job *job);
 void					remove_current_list_elem(t_list_head *elem);
 void					update_curr_job(t_job *job);
+*/
 
 /*
 ** job utils
 */
 
 t_job					*get_job(pid_t pgid);
-void					add_job(t_job *job);
-void					add_process(t_process *process);
-void					remove_job_from_list(pid_t pgid);
+void					add_job_to_list(t_job **head, t_job *job);
+void					add_process_to_job(t_job *job, t_process *process);
+void					remove_job_from_list(t_job **head, int job_id);
+t_job					*job_dup(t_job *job);
+t_process				*process_list_dup(t_process *process_list);
+void					remove_command_from_list(t_command *command);
+
 
 /*
 ** job display
@@ -119,7 +121,7 @@ void					print_job_long(t_job *job);
 
 t_process				*process_new(t_command *cmd, int stdin, int stdout);
 t_job					*job_new(t_command *cmd, int stdin, int stdout);
-void					process_del(t_process **process);
+void					process_list_del(t_process **process_list);
 void					job_list_del(t_job **job);
 void					job_del(t_job **job);
 

@@ -46,12 +46,13 @@ void		print_job(t_job *job, bool print_command)
 
 	if (!job)
 		return ;
-	if (is_current_job(job))
-		curr = "+";
-	else if (is_previous_job(job))
-		curr = "-";
-	else
-		curr = " ";
+	curr = " ";
+	//if (is_current_job(job))
+	//	curr = "+";
+	//else if (is_previous_job(job))
+	//	curr = "-";
+	//else
+	//	curr = " ";
 	job_format = get_job_format(job);
 	if (print_command)
 	{

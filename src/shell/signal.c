@@ -17,7 +17,7 @@ void	sighup_handler(int sig)
 	t_job	*job;
 
 	(void)sig;
-	job = g_shell.jobs;
+	job = g_jobs;
 	while (job)
 	{
 		kill(-job->pgid, SIGHUP);
@@ -30,12 +30,18 @@ void	sighup_handler(int sig)
 	exit(129);
 }
 
+void	sigint_handler(int sig)
+{
+	(void)sig;
+	g_interrupt = true;
+}
+
 void	init_sig(void)
 {
-	signal(SIGINT, SIG_IGN);
+	signal(SIGINT, &sigint_handler);
+	signal(SIGHUP, &sighup_handler);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGTTIN, SIG_IGN);
 	signal(SIGTTOU, SIG_IGN);
 	signal(SIGTSTP, SIG_IGN);
-	signal(SIGHUP, &sighup_handler);
 }

@@ -12,6 +12,27 @@
 
 #include "shell.h"
 
+int			eval_while_clause(t_command *command)
+{
+	t_if_clause	*if_clause;
+
+	g_already_forked = false;
+	if_clause = command->value.if_clause;
+	if (set_redir(command->redir_list, true) != 0)
+	{
+		restore_fds();
+		return (g_last_exit_st = 1);
+	}
+	while (!g_interrupt && eval_compound_list(if_clause->if_part) == 0)
+	{
+		eval_compound_list(if_clause->then_part); //if 140 break
+		if (g_last_exit_st == 130 || g_interrupt)
+			break ;
+	}
+	restore_fds();
+	return (0);
+}
+
 static int	eval_if_statement(t_if_clause *if_clause)
 {
 	int		old_already_forked;
@@ -20,11 +41,11 @@ static int	eval_if_statement(t_if_clause *if_clause)
 	g_already_forked = false;
 	eval_compound_list(if_clause->if_part);
 	g_already_forked = old_already_forked;
-	if_clause->if_part = NULL;
+	//if_clause->if_part = NULL;
 	if (g_last_exit_st == 0)
 	{
 		eval_compound_list(if_clause->then_part);
-		if_clause->then_part = NULL;
+		//if_clause->then_part = NULL;
 		return (1);
 	}
 	return (0);
@@ -57,7 +78,7 @@ int			eval_if_clause(t_command *command)
 		else
 		{
 			eval_compound_list(if_clause->then_part);
-			if_clause->then_part = NULL;
+			//if_clause->then_part = NULL;
 		}
 		command = if_clause->else_part;
 	}

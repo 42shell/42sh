@@ -38,6 +38,7 @@ void	set_process_status(t_process *process, int status)
 	{
 		process->stopped = true;
 		process->signaled = WSTOPSIG(process->status);
+		g_last_exit_st = 128 + process->signaled;
 	}
 	else
 	{
@@ -56,12 +57,12 @@ void	set_process_status(t_process *process, int status)
 	}
 }
 
-int		mark_status(pid_t pid, int status)
+int		mark_status(pid_t pid, int status)//separate markstatus for fg and bg
 {
 	t_job		*job;
 	t_process	*process;
 
-	job = g_shell.jobs;
+	job = g_jobs;
 	while (job)
 	{
 		process = job->processes;
@@ -75,6 +76,18 @@ int		mark_status(pid_t pid, int status)
 			process = process->next;
 		}
 		job = job->next;
+	}
+	process = NULL;
+	if ((job = g_current_jobs))
+		process = job->processes;
+	while (process)
+	{
+		if (process->pid == pid)
+		{
+			set_process_status(process, status);
+			return (0);
+		}
+		process = process->next;
 	}
 	return (-1);
 }

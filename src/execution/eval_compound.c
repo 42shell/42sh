@@ -27,13 +27,14 @@ int			eval_compound_list(t_command *command)
 	while (command)
 	{
 		job = job_new(command, STDIN_FILENO, STDOUT_FILENO);
-		job->pgid = g_shell.jobs->pgid;
+		if (g_current_jobs)
+			job->pgid = g_current_jobs->pgid;
 		if (command->sep == AMPERSAND)
 			job->bg = true;
 		launch_job(job);
 		command = command->next;
 	}
-	return (0);
+	return (g_last_exit_st);
 }
 
 /*
@@ -52,13 +53,10 @@ int			eval_group_command(t_command *command)
 	t_group_cmd	*group;
 
 	group = command->value.group;
-	if (group->subshell)
+	if (group->subshell && !g_already_forked)
 	{
-		if (!g_already_forked)
-		{
-			process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
-			return (launch_process(process, 0));
-		}
+		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
+		return (launch_process(process, 0));
 	}
 	if (set_redir(command->redir_list, true) != 0)
 	{
@@ -68,9 +66,8 @@ int			eval_group_command(t_command *command)
 	if (group->list && group->list->next)
 		g_already_forked = false;
 	eval_compound_list(group->list);
-	group->list = NULL;
 	restore_fds();
-	return (0);
+	return (g_last_exit_st);
 }
 
 int			eval_compound_command(t_command *command)
@@ -79,5 +76,7 @@ int			eval_compound_command(t_command *command)
 		return (eval_group_command(command));
 	if (command->type == IF_CLAUSE)
 		return (eval_if_clause(command));
+	if (command->type == WHILE_CLAUSE)
+		return (eval_while_clause(command));
 	return (0);
 }

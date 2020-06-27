@@ -12,6 +12,7 @@
 
 #include "shell.h"
 
+/*
 bool		is_current_job(t_job *job)
 {
 	if (job && g_curr_job && g_curr_job->next != g_curr_job
@@ -78,3 +79,4 @@ void		update_curr_job(t_job *job)
 	}
 	ft_list_add(job, g_curr_job);
 }
+*/
