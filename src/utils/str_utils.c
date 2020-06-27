@@ -22,3 +22,11 @@ char	*ft_strjoin_triple(char *s1, char *s2, char *s3)
 	ft_strcat(str, s2);
 	return (ft_strcat(str, s3));
 }
+
+bool	was_expanded(t_token *token, int i)
+{
+	if (token->exp_info)
+		return (token->exp_info->str[i] == '1');
+	else
+		return (false);
+}

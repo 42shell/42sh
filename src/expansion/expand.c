@@ -60,7 +60,7 @@ static int	expand_token(t_token *token, char *home_dir)
 	if (dollar_expand(token, pos, false) == 1)
 		return (1);
 	path_expand(token);
-	remove_quotes(token->value);
+	remove_quotes(token);
 	return (0);
 }
 
