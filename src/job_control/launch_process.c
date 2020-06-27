@@ -72,8 +72,6 @@ static void		set_child_attr(t_process *process)
 		setpgid(process->pid, g_current_jobs->pgid);
 		tcsetpgrp(STDIN_FILENO, g_current_jobs->pgid);
 	}
-	//try to remove this
-	process_list_del(&g_current_jobs->processes);
 	g_job_control_enabled = false;
 	g_already_forked = true;
 }
@@ -89,7 +87,6 @@ int				launch_process(t_process *process, int fd_to_close)
 		set_child_attr(process);
 		reset_signals();
 		eval_command(process->command);
-		wait_for_job(g_current_jobs);
 		builtin_exit(NULL, NULL);
 	}
 	else

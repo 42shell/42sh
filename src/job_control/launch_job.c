@@ -21,7 +21,7 @@ static int	launch_job_bg(t_job *job)
 	int			old_bg;
 
 	old_bg = g_bg;
-	g_last_exit_st = 0;
+	g_bg = true;
 	fd_in = STDIN_FILENO;
 	if (!g_job_control_enabled)
 		fd_in = open("/dev/null", O_RDONLY);
@@ -37,6 +37,7 @@ static int	launch_job_bg(t_job *job)
 	if (fd_in != STDIN_FILENO)
 		close(fd_in);
 	put_job_bg(job, false);
+	g_last_exit_st = 0;
 	g_bg = old_bg;
 	return (0);
 }

@@ -84,6 +84,7 @@ static bool	there_are_stopped_jobs(void)
 		}
 		job = job->next;
 	}
+	g_last_exit_st = 0;
 	return (false);
 }
 
