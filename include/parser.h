@@ -39,7 +39,8 @@ enum							e_cmd_type
 	SIMPLE,
 	COMPOUND,
 	GROUP,
-	IF_CLAUSE
+	IF_CLAUSE,
+	WHILE_CLAUSE
 };
 
 typedef struct					s_redir
@@ -92,6 +93,7 @@ typedef struct					s_command
 	enum e_cmd_type				type;
 	int							flags;
 	union u_cmd_value			value;
+	struct s_command			*prev;
 	struct s_command			*next;
 	t_redir						*redir_list;
 	int							sep;
@@ -137,7 +139,9 @@ t_command						*parse_subshell(void);
 t_command						*parse_if_clause(void);
 t_command						*parse_else_part(void);
 t_command						*parse_if_then_statement(void);
+t_command						*parse_while_clause(void);
 
+t_command						*parse_do_group(void);
 t_command						*parse_compound_list(void);
 t_command						*parse_term(void);
 t_redir							*parse_redirect_list(void);

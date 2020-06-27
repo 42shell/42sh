@@ -17,7 +17,7 @@ static char	*get_prompt_quote(enum e_quote_st bracket_status)
 	if (g_lexer.quote_st == SQUOTE || bracket_status == SQUOTE)
 		return (PSQ);
 	if (g_lexer.quote_st == DQUOTE || bracket_status == DQUOTE)
-		return (PSD);
+		return (PSDQ);
 	if (bracket_status == BRACE)
 		return (PSB);
 	if (bracket_status == DPAREN)
@@ -52,5 +52,9 @@ char		*get_prompt(void)
 		return (PSEI);
 	if (g_lexer.line_cont == ELSE)
 		return (PSE);
+	if (g_lexer.line_cont == WHILE)
+		return (PSW);
+	if (g_lexer.line_cont == DO)
+		return (PSD);
 	return (PS2);
 }

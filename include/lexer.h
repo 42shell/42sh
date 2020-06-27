@@ -54,7 +54,10 @@ enum			e_token_type
 	THEN,
 	ELIF,
 	ELSE,
-	FI
+	FI,
+	WHILE,
+	DO,
+	DONE
 };
 
 enum			e_quote_st

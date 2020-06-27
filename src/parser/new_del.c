@@ -17,15 +17,15 @@ t_command	*command_new(enum e_cmd_type type)
 	t_command	*command;
 
 	command = ft_xmalloc(sizeof(t_command));
-	command->type = type;
 	if (type == SIMPLE)
 		command->value.simple = ft_xmalloc(sizeof(t_simple_cmd));
 	else if (type == CONNECTION)
 		command->value.connection = ft_xmalloc(sizeof(t_connection));
 	else if (type == GROUP)
 		command->value.group = ft_xmalloc(sizeof(t_group_cmd));
-	else if (type == IF_CLAUSE)
+	else if (type == IF_CLAUSE || type == WHILE_CLAUSE)
 		command->value.if_clause = ft_xmalloc(sizeof(t_if_clause));
+	command->type = type;
 	return (command);
 }
 
@@ -71,6 +71,12 @@ void		command_del(t_command **command)
 		complete_command_del(&(*command)->value.if_clause->if_part);
 		complete_command_del(&(*command)->value.if_clause->then_part);
 		complete_command_del(&(*command)->value.if_clause->else_part);
+		ft_memdel((void **)&(*command)->value.if_clause);
+	}
+	else if ((*command)->type == WHILE_CLAUSE)
+	{
+		complete_command_del(&(*command)->value.if_clause->if_part);
+		complete_command_del(&(*command)->value.if_clause->then_part);
 		ft_memdel((void **)&(*command)->value.if_clause);
 	}
 	redir_del(&((*command)->redir_list));
