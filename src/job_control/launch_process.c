@@ -92,10 +92,14 @@ int				launch_process(t_process *process, int fd_to_close)
 	else
 	{
 		process->pid = pid;
-		if (!g_current_jobs->pgid)
-			g_current_jobs->pgid = pid;
 		if (g_job_control_enabled)
+		{
+			if (!g_current_jobs->pgid)
+				g_current_jobs->pgid = pid;
 			setpgid(process->pid, g_current_jobs->pgid);
+		}
+		else
+			g_current_jobs->pgid = g_shell.pgid;	
 		add_process_to_job(g_current_jobs, process);
 	}
 	return (pid);

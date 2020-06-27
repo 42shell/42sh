@@ -95,13 +95,15 @@ SRC_JOB       	:= launch_job.c\
 				   launch_process.c\
 				   job_current.c\
 				   job_control.c\
-				   job_get_status.c\
-				   job_set_status.c\
+				   job_list.c\
+				   notif_jobs.c\
 				   job_print.c\
 				   format_job.c\
 				   format_command.c\
-				   job_utils.c\
-				   job_new_del.c
+				   utils_job.c\
+				   utils_process.c\
+				   new_del.c\
+				   wait.c
 SRC_JOB			:= $(addprefix job_control/,$(SRC_JOB))
 
 SRC_EXPANSION   := expand.c\

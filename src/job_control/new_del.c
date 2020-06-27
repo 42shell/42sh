@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   job.c                                              :+:      :+:    :+:   */
+/*   new_del.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -43,28 +43,5 @@ void		process_list_del(t_process **process_list)
 		next = (*process_list)->next;
 		free(*process_list);
 		*process_list = next;
-	}
-}
-
-void		job_del(t_job **job)
-{
-	if (!job || !*job)
-		return ;
-	//process_del(&(*job)->processes);
-	free(*job);
-	*job = NULL;
-}
-
-void		job_list_del(t_job **job)
-{
-	t_job	*next;
-
-	while (job && *job)
-	{
-		process_list_del(&(*job)->processes);
-		//command_del(&(*job)->command);
-		next = (*job)->next;
-		free(*job);
-		*job = next;
 	}
 }

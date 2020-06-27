@@ -1,29 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   job_set_status.c                                   :+:      :+:    :+:   */
+/*   wait.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/15 09:08:47 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/05/08 16:47:45 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/05/25 02:48:20 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "shell.h"
-
-void	mark_job_as_running(t_job *job)
-{
-	t_process *process;
-
-	process = job->processes;
-	while (process)
-	{
-		process->stopped = false;
-		process = process->next;
-	}
-	job->notified = false;
-}
 
 /*
 ** We only set last_exit_st if stdout == 1 to ignore the exit status of the
@@ -31,8 +18,12 @@ void	mark_job_as_running(t_job *job)
 ** TODO: only print necessary signals
 */
 
-void	set_process_status(t_process *process, int status)
+static int	set_process_status(pid_t pid, int status)
 {
+	t_process	*process;
+
+	if (!(process = get_process(pid)))
+		return (-1);
 	process->status = status;
 	if (WIFSTOPPED(status))
 	{
@@ -55,44 +46,10 @@ void	set_process_status(t_process *process, int status)
 				(int)process->pid, WTERMSIG(process->status));
 		}
 	}
+	return (0);
 }
 
-int		mark_status(pid_t pid, int status)//separate markstatus for fg and bg
-{
-	t_job		*job;
-	t_process	*process;
-
-	job = g_jobs;
-	while (job)
-	{
-		process = job->processes;
-		while (process)
-		{
-			if (process->pid == pid)
-			{
-				set_process_status(process, status);
-				return (0);
-			}
-			process = process->next;
-		}
-		job = job->next;
-	}
-	process = NULL;
-	if ((job = g_current_jobs))
-		process = job->processes;
-	while (process)
-	{
-		if (process->pid == pid)
-		{
-			set_process_status(process, status);
-			return (0);
-		}
-		process = process->next;
-	}
-	return (-1);
-}
-
-void	update_status(void)
+void		update_status(void)
 {
 	pid_t	pid;
 	int		status;
@@ -100,7 +57,7 @@ void	update_status(void)
 	pid = 0;
 	while ((pid = waitpid(WAIT_ANY, &status, WNOHANG | WUNTRACED)) > 0)
 	{
-		if (mark_status(pid, status) < 0)
+		if (set_process_status(pid, status) < 0)
 		{
 			ft_dprintf(2, "42sh: process %d not found.\n", pid);
 			break ;
@@ -108,4 +65,34 @@ void	update_status(void)
 	}
 	if (pid < 0 && errno != ECHILD)
 		ft_dprintf(2, "42sh: waitpid: unexpected error.\n", pid);
+}
+
+void		wait_for_job(t_job *job)
+{
+	pid_t		pid;
+	int			status;
+
+	status = 0;
+	if (!job->processes)
+		return ;
+	while (!job_is_done(job)
+	&& (g_job_control_enabled ? !job_is_stopped(job) : 1))
+	{
+		pid = waitpid(WAIT_ANY, &status, WUNTRACED);
+		if (pid > 0 && set_process_status(pid, status) < 0)
+		{
+			ft_dprintf(2, "42sh: process %d not found.\n", pid);
+			break ;
+		}
+		else if (pid < 0)
+		{
+			ft_dprintf(2, "42sh: waitpid: unexpected error.\n", pid);
+			break ;
+		}
+	}
+	if (job_is_done(job))
+	{
+		if (job->command->flags & CMD_INVERT_RETURN)
+			g_last_exit_st = g_last_exit_st ? 0 : 1;
+	}
 }

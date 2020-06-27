@@ -63,6 +63,6 @@ int			launch_job(t_job *job)
 	}
 	remove_job_from_list(&g_current_jobs, job->id);
 	process_list_del(&job->processes);
-	job_del(&job);
+	free(job);
 	return (0);
 }

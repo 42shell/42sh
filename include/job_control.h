@@ -51,7 +51,6 @@ extern t_job			*g_jobs;
 */
 
 int						launch_job(t_job *job);
-int						launch_job_in_subshell(t_job *job);
 int						launch_process(t_process *process, int fd_to_close);
 
 /*
@@ -61,24 +60,30 @@ int						launch_process(t_process *process, int fd_to_close);
 void					put_job_fg(t_job *job, bool cont);
 void					put_job_bg(t_job *job, bool cont);
 void					wait_for_job(t_job *job);
+void					update_status(void);
 void					continue_job(t_job *job, bool bg);
 void					notif_jobs(void);
 
-/*
-** job set status
-*/
-
-void					update_status(void);
-int						mark_status(pid_t pid, int status);
-void					set_process_status(t_process *process, int status);
-void					mark_job_as_running (t_job *job);
 
 /*
-** job get status
+** utils
 */
 
 bool					job_is_done(t_job *job);
 bool					job_is_stopped(t_job *job);
+bool					job_is_in_list(t_job *list, t_job *job_to_check);
+t_job					*job_dup(t_job *job);
+t_process				*process_list_dup(t_process *process_list);
+t_process				*get_process(pid_t pid);
+
+/*
+** jobs lists
+*/
+
+void					add_job_to_list(t_job **head, t_job *job);
+void					add_process_to_job(t_job *job, t_process *process);
+void					remove_job_from_list(t_job **head, int job_id);
+void					remove_command_from_list(t_command *command);
 
 /*
 ** current job stack related
@@ -91,19 +96,6 @@ t_list_head				*get_job_current_list_elem(t_job *job);
 void					remove_current_list_elem(t_list_head *elem);
 void					update_curr_job(t_job *job);
 */
-
-/*
-** job utils
-*/
-
-t_job					*get_job(pid_t pgid);
-void					add_job_to_list(t_job **head, t_job *job);
-void					add_process_to_job(t_job *job, t_process *process);
-void					remove_job_from_list(t_job **head, int job_id);
-t_job					*job_dup(t_job *job);
-t_process				*process_list_dup(t_process *process_list);
-void					remove_command_from_list(t_command *command);
-
 
 /*
 ** job display
@@ -122,7 +114,5 @@ void					print_job_long(t_job *job);
 t_process				*process_new(t_command *cmd, int stdin, int stdout);
 t_job					*job_new(t_command *cmd, int stdin, int stdout);
 void					process_list_del(t_process **process_list);
-void					job_list_del(t_job **job);
-void					job_del(t_job **job);
 
 #endif

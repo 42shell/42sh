@@ -12,6 +12,7 @@
 
 #include "shell.h"
 
+/*
 int			eval_while_clause(t_command *command)
 {
 	t_if_clause	*if_clause;
@@ -32,6 +33,7 @@ int			eval_while_clause(t_command *command)
 	restore_fds();
 	return (0);
 }
+*/
 
 static int	eval_if_statement(t_if_clause *if_clause)
 {

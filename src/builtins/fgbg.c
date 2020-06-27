@@ -13,6 +13,12 @@
 #include "shell.h"
 
 /*
+fg : remove_job_from_list(g_jobs)
+	 put job in g_current_jobs
+	 put the fucking ast in g_complete_command
+	 put_job_fg -> will dup again if stopped again
+	 del the job
+
 static int	notif_and_continue_job(t_job *job, bool bg)
 {
 	t_dstr		*command_format;

@@ -76,7 +76,7 @@ int			eval_compound_command(t_command *command)
 		return (eval_group_command(command));
 	if (command->type == IF_CLAUSE)
 		return (eval_if_clause(command));
-	if (command->type == WHILE_CLAUSE)
-		return (eval_while_clause(command));
+	//if (command->type == WHILE_CLAUSE)
+	//	return (eval_while_clause(command));
 	return (0);
 }
