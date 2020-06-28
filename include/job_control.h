@@ -62,7 +62,7 @@ void					put_job_bg(t_job *job, bool cont);
 void					wait_for_job(t_job *job);
 void					update_status(void);
 void					continue_job(t_job *job, bool bg);
-void					notif_jobs(void);
+void					update_jobs(bool notif);
 
 
 /*
@@ -71,19 +71,20 @@ void					notif_jobs(void);
 
 bool					job_is_done(t_job *job);
 bool					job_is_stopped(t_job *job);
-bool					job_is_in_list(t_job *list, t_job *job_to_check);
 t_job					*job_dup(t_job *job);
 t_process				*process_list_dup(t_process *process_list);
 t_process				*get_process(pid_t pid);
+t_job					*get_job_by_str(char *str);
 
 /*
 ** jobs lists
 */
 
-void					add_job_to_list(t_job **head, t_job *job);
+void					add_job_to_list(t_job **head, t_job *job, bool set_id);
 void					add_process_to_job(t_job *job, t_process *process);
-void					remove_job_from_list(t_job **head, int job_id);
-void					remove_command_from_list(t_command *command);
+void					remove_job_from_list(t_job **head, t_job *job);
+void					remove_command_from_list(t_command **head, t_command *command);
+void					add_command_to_list(t_command **head, t_command *command);
 
 /*
 ** current job stack related

@@ -61,7 +61,7 @@ void		print_job(t_job *job, bool print_command)
 		if (job->bg)
 			ft_dstr_append(command_format, " &");
 	}
-	ft_dprintf(2, "[%d]%s %-30s %s\n", job->id + 1, curr, job_format,
+	ft_dprintf(2, "[%d]%s %-30s %s\n", job->id, curr, job_format,
 	print_command ? command_format->str : "");
 	if (print_command)
 		ft_dstr_del(&command_format);

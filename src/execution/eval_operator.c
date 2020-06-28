@@ -18,6 +18,19 @@ int			eval_pipeline(t_command *command, int in, int out)
 	t_process		*process;
 	int				fd[2];
 
+	/*
+	in = 0;
+	while (command == pipe)
+	{
+		pipe(fd)
+		in = fd[0];
+		process = process_new(pipeline->left, in, fd[1]);
+		return (launch_process(process, fd[0]));
+		command = command->right;
+	} 
+	process = process_new(pipeline->right, fd[0], out);
+	launch_process(process, fd[1]);
+	*/
 	if (pipe(fd) == -1)
 		return (-1);
 	pipeline = command->value.connection;

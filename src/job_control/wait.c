@@ -22,9 +22,9 @@ static void	set_signaled_exit_status(t_process *process)
 	process->signaled = WTERMSIG(process->status);
 	if (process->stdout == 1)
 		g_last_exit_st = process->signaled + 128;
-	if (process->signaled != 13 && process->signaled != 2)
-		ft_dprintf(2, "%d: Terminated by signal %d.\n",
-		(int)process->pid, WTERMSIG(process->status));
+	//if (process->signaled != 13 && process->signaled != 2)
+	//	ft_dprintf(2, "%d: Terminated by signal %d.\n",
+	//	(int)process->pid, WTERMSIG(process->status));
 }
 
 static int	set_process_status(pid_t pid, int status)
@@ -53,10 +53,12 @@ static int	set_process_status(pid_t pid, int status)
 
 void		update_status(void)
 {
-	pid_t	pid;
-	int		status;
+	pid_t			pid;
+	int				status;
+	struct timespec	time = { 0, 0xffffff };
 
 	pid = 0;
+	nanosleep(&time, NULL);
 	while ((pid = waitpid(WAIT_ANY, &status, WNOHANG | WUNTRACED)) > 0)
 	{
 		if (set_process_status(pid, status) < 0)

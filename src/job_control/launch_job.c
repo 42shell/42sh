@@ -44,14 +44,14 @@ static int	launch_job_bg(t_job *job)
 
 int			launch_job(t_job *job)
 {
-	add_job_to_list(&g_current_jobs, job);
+	add_job_to_list(&g_current_jobs, job, false);
 	if (job->bg)
 	{
 		launch_job_bg(job);
-		remove_command_from_list(job->command);
-		add_job_to_list(&g_jobs, job_dup(job));
+		add_job_to_list(&g_jobs, job_dup(job), true);
+		remove_command_from_list(&g_complete_command, job->command);
 		if (g_job_control_enabled && g_shell.interactive_mode)
-			ft_dprintf(2, "[%d] %d\n", job->id + 1, job->pgid);
+			ft_dprintf(2, "[%d] %d\n", g_jobs->id, g_jobs->pgid);
 	}
 	else
 	{
@@ -61,7 +61,7 @@ int			launch_job(t_job *job)
 		else
 			wait_for_job(job);
 	}
-	remove_job_from_list(&g_current_jobs, job->id);
+	remove_job_from_list(&g_current_jobs, job);
 	process_list_del(&job->processes);
 	free(job);
 	return (0);

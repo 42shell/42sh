@@ -13,6 +13,22 @@
 #include "shell.h"
 
 /*
+//g_loop_lvl
+//ctrl-C	: g_interrupt = true
+//			: g_interrupt_is_due_to_break = false;
+//break	n	: g_interrupt = true
+//			: g_break_interrupt = true;
+//			: g_break_n = n
+//eval_while_clause :
+//					 g_loop_lvl++;
+//					 if (g_interrupt && !g_break_interrupt)
+//						return;
+//					 else if g_interrupt && g_break_n
+//						if --g_break_n == 0
+//							g_interrupt = false
+//							g_break_interrupt = false
+//						break
+
 int			eval_while_clause(t_command *command)
 {
 	t_if_clause	*if_clause;

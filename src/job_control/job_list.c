@@ -12,42 +12,55 @@
 
 #include "shell.h"
 
-void	remove_command_from_list(t_command *command)
+void	add_command_to_list(t_command **head, t_command *command)
+{
+	command->next = *head;
+	if (*head)
+		(*head)->prev = command;
+	*head = command;
+}
+
+void	remove_command_from_list(t_command **head, t_command *command)
 {
 	if (command->next)
 		command->next->prev = command->prev;
 	if (command->prev)
 		command->prev->next = command->next;
-	else if ((g_complete_command = command->next))
-		g_complete_command->prev = NULL;
+	else if ((*head = command->next))
+		(*head)->prev = NULL;
 }
 
-void	add_job_to_list(t_job **head, t_job *job)
+void	add_job_to_list(t_job **head, t_job *job, bool set_id)
 {
 	job->next = *head;
-	if (job->next)
-		job->id = job->next->id + 1;
+	if (set_id && !job->id)
+	{
+		if (!job->next)
+			job->id = 1;
+		else
+			job->id = job->next->id + 1;
+	}
 	*head = job;
 }
 
-void	remove_job_from_list(t_job **head, int job_id)
+void	remove_job_from_list(t_job **head, t_job *job)
 {
-	t_job		*job;
+	t_job		*ptr;
 	t_job		*prev;
 
 	prev = NULL;
-	job = *head;
-	while (job)
+	ptr = *head;
+	while (ptr)
 	{
-		if (job->id == job_id)
+		if (ptr == job)
 		{
 			if (prev)
-				prev->next = job->next;
+				prev->next = ptr->next;
 			else
-				*head = job->next;
+				*head = ptr->next;
 		}
-		prev = job;
-		job = job->next;
+		prev = ptr;
+		ptr = ptr->next;
 	}
 }
 

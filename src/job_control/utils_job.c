@@ -12,6 +12,31 @@
 
 #include "shell.h"
 
+t_job		*get_job_by_str(char *str)
+{
+	t_job	*job;
+	int		id;
+
+	if (str[0] == '%')
+	{
+		if (str[1] == '+')
+			return (g_jobs);
+		if (str[1] == '-')
+		{
+			if (g_jobs && g_jobs->next)
+				return (g_jobs->next);
+			return (NULL);
+		}
+		id = ft_atoi(++str) - 1;
+	}
+	else
+		id = ft_atoi(str) - 1;
+	job = g_jobs;
+	while (job && job->id != id)
+		job = job->next;
+	return (job);
+}
+
 t_job		*job_dup(t_job *job)
 {
 	t_job		*dup_job;

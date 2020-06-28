@@ -26,6 +26,7 @@
 # include <dirent.h>
 # include <sys/ipc.h>
 # include <sys/msg.h>
+# include <time.h>
 # include "libft.h"
 # include "readline.h"
 # include "ft_printf.h"
@@ -85,13 +86,9 @@ typedef struct			s_var
 
 /*
 ** TODO:
-** -add job to the list only if its in bg, or it is stopped
-** -when job stopped, add it to the list and remove command
-**  from command list (no bg flag)
 ** -redo jobs/fg/bg
 ** -interrupt exec
 ** -force exit on ctrl-D even if jobs
-** -g_bg ?
 ** -sleep 2 && sleep 3 ^Z jobs (print only processes in jobs)
 ** -shell script
 **

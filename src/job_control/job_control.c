@@ -68,8 +68,7 @@ void	put_job_fg(t_job *job, bool cont)
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &g_shell.tmodes);
 	if (job_is_stopped(job))
 	{
-		remove_command_from_list(job->command);
-		if (!job_is_in_list(g_jobs, job))
-			add_job_to_list(&g_jobs, job_dup(job));
+		remove_command_from_list(&g_complete_command, job->command);
+		add_job_to_list(&g_jobs, job_dup(job), true);
 	}
 }

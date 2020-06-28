@@ -12,10 +12,10 @@
 
 #include "shell.h"
 
-void	notif_jobs(void)
+void	update_jobs(bool notif)
 {
-	t_job	*job;
-	t_job	*next;
+	t_job			*job;
+	t_job			*next;
 
 	update_status();
 	job = g_jobs;
@@ -24,16 +24,18 @@ void	notif_jobs(void)
 		next = job->next;
 		if (job_is_done(job))
 		{
-			if (job->bg && g_shell.interactive_mode)
+			if (notif && job->bg && g_shell.interactive_mode)
 				print_job(job, true);
-			remove_job_from_list(&g_jobs, job->id);
+			remove_job_from_list(&g_jobs, job);
 			process_list_del(&job->processes);
 			command_del(&job->command);
 			free(job);
 		}
 		else if (job_is_stopped(job) && !job->notified)
 		{
-			if (g_shell.interactive_mode)
+			remove_job_from_list(&g_jobs, job);
+			add_job_to_list(&g_jobs, job, false);
+			if (notif && g_shell.interactive_mode)
 				print_job(job, true);
 			job->notified = true;
 		}

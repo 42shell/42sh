@@ -49,7 +49,6 @@ SRC_BUILTINS    :=	builtins.c\
 					cd_utils.c\
 					var_builtins.c\
 					jobs.c\
-					jobs_fgbg_utils.c\
 					env.c\
 				    exec_command_env.c\
 					test.c\
@@ -96,7 +95,7 @@ SRC_JOB       	:= launch_job.c\
 				   job_current.c\
 				   job_control.c\
 				   job_list.c\
-				   notif_jobs.c\
+				   update_jobs.c\
 				   job_print.c\
 				   format_job.c\
 				   format_command.c\
