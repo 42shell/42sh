@@ -18,7 +18,9 @@
 typedef struct			s_process
 {
 	struct s_process	*next;
+	struct s_process	*prev;
 	t_command			*command;
+	t_dstr				*command_str;
 	pid_t				pid;
 	int					stdin;
 	int					stdout;
@@ -31,6 +33,7 @@ typedef struct			s_process
 typedef struct			s_job
 {
 	struct s_job		*next;
+	struct s_job		*prev;
 	t_command			*command;
 	t_process			*processes;
 	pid_t				pgid;
@@ -39,6 +42,7 @@ typedef struct			s_job
 	struct termios		tmodes;
 	bool				has_tmodes;
 	bool				notified;
+	bool				invert_ret;
 	bool				bg;
 	int					id;
 }						t_job;
@@ -83,20 +87,7 @@ t_job					*get_job_by_str(char *str);
 void					add_job_to_list(t_job **head, t_job *job, bool set_id);
 void					add_process_to_job(t_job *job, t_process *process);
 void					remove_job_from_list(t_job **head, t_job *job);
-void					remove_command_from_list(t_command **head, t_command *command);
-void					add_command_to_list(t_command **head, t_command *command);
-
-/*
-** current job stack related
-*/
-
-/*
-bool					is_current_job(t_job *job);
-bool					is_previous_job(t_job *job);
-t_list_head				*get_job_current_list_elem(t_job *job);
-void					remove_current_list_elem(t_list_head *elem);
-void					update_curr_job(t_job *job);
-*/
+void					del_job_from_list(t_job **head, t_job *job);
 
 /*
 ** job display

@@ -28,6 +28,7 @@ t_job		*job_new(t_command *cmd, int stdin, int stdout)
 	t_job	*job;
 
 	job = (t_job *)ft_xmalloc(sizeof(t_job));
+	job->invert_ret = cmd->flags & CMD_INVERT_RETURN;
 	job->stdin = stdin;
 	job->stdout = stdout;
 	job->command = cmd;
@@ -41,6 +42,7 @@ void		process_list_del(t_process **process_list)
 	while (process_list && *process_list)
 	{
 		next = (*process_list)->next;
+		ft_dstr_del(&(*process_list)->command_str);
 		free(*process_list);
 		*process_list = next;
 	}

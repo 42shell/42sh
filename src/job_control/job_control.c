@@ -66,9 +66,4 @@ void	put_job_fg(t_job *job, bool cont)
 	tcgetattr(STDIN_FILENO, &job->tmodes);
 	job->has_tmodes = true;
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &g_shell.tmodes);
-	if (job_is_stopped(job))
-	{
-		remove_command_from_list(&g_complete_command, job->command);
-		add_job_to_list(&g_jobs, job_dup(job), true);
-	}
 }

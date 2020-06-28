@@ -30,6 +30,25 @@ void	sighup_handler(int sig)
 	exit(129);
 }
 
+/*
+void	sigtstp_handler(int sig)
+{
+	t_job	*job;
+
+	(void)sig;
+	job = g_jobs;
+	while (job)
+	{
+		if (job_is_stopped(job) && !(g_jobs == job))
+		{
+			remove_job_from_list(&g_jobs, job);
+			add_job_to_list(&g_jobs, job, false);
+		}
+		job = job->next;
+	}
+}
+*/
+
 void	sigint_handler(int sig)
 {
 	(void)sig;

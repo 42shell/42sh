@@ -13,13 +13,13 @@
 #include "shell.h"
 
 /*
-** If we already have a job which has forked processes, pgid of this job is set
-** and we want the jobs to have the same pgid
+** If we are in a fork, we want the jobs created to have the same pgid than the
+** fork.
 ** ex: { ls; ls -a; } | cat
 ** We want the ls jobs to have the same pgid than cat, if we don t set it
 ** explicitely, it will be set to the process pid in launch_process
 */
-
+// { ls; cat; ls }
 int			eval_compound_list(t_command *command)
 {
 	t_job	*job;
@@ -27,8 +27,7 @@ int			eval_compound_list(t_command *command)
 	while (command)
 	{
 		job = job_new(command, STDIN_FILENO, STDOUT_FILENO);
-		if (g_current_jobs)
-			job->pgid = g_current_jobs->pgid;
+		job->pgid = g_current_jobs->pgid;
 		if (command->sep == AMPERSAND)
 			job->bg = true;
 		launch_job(job);

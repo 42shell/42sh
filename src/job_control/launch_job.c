@@ -48,21 +48,26 @@ int			launch_job(t_job *job)
 	if (job->bg)
 	{
 		launch_job_bg(job);
-		add_job_to_list(&g_jobs, job_dup(job), true);
-		remove_command_from_list(&g_complete_command, job->command);
+		move_job_in_persistent_list(job);
 		if (g_job_control_enabled && g_shell.interactive_mode)
-			ft_dprintf(2, "[%d] %d\n", g_jobs->id, g_jobs->pgid);
+			ft_dprintf(2, "[%d] %d\n", job->id, job->pgid);
+		return (g_last_exit_st);
 	}
 	else
 	{
 		eval_command(job->command);
 		if (g_job_control_enabled)
+		{
 			put_job_fg(job, false);
+			if (job_is_stopped(job))
+			{
+				move_job_in_persistent_list(job);
+				return (g_last_exit_st);
+			}
+		}
 		else
 			wait_for_job(job);
 	}
-	remove_job_from_list(&g_current_jobs, job);
-	process_list_del(&job->processes);
-	free(job);
+	del_job_from_list(&g_current_jobs, job);
 	return (0);
 }

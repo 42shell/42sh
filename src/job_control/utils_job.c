@@ -89,7 +89,6 @@ bool	job_is_done(t_job *job)
 	t_process	*process;
 
 	process = job->processes;
-
 	while (process)
 	{
 		if (!process->done)

@@ -28,9 +28,6 @@ both cases, if job_is_done command will be deleted in notif_jobs
 notif_jobs : the job was stopped while in the background,
 			 put the job on top of the stack (need prev_job=no))
 
-still eval the tree to print the command,
-do not put & if job is done or stopped ?,
-sort jobs numerically
 */
 
 /*
@@ -80,13 +77,7 @@ int			builtin_fg(char **argv, __attribute__((unused)) t_array *env)
 		argv[1] ? argv[1] : "current");
 		return (2);
 	}
-	remove_job_from_list(&g_jobs, job);
-	add_job_to_list(&g_current_jobs, job, false);
-	add_command_to_list(&g_complete_command, job->command);
 	ft_dprintf(2, "stupid job fg'd by stupid user\n");
 	continue_job(job, false);
-	remove_job_from_list(&g_current_jobs, job);
-	process_list_del(&job->processes);
-	free(job);
 	return (0);
 }

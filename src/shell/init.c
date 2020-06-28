@@ -46,12 +46,16 @@ static void	init_builtins(void)
 	ht_put(g_builtins, "fg", builtin_fg);
 	ht_put(g_builtins, "bg", builtin_bg);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	ht_put(g_builtins, "jobs", builtin_jobs);
 	ht_put(g_builtins, "test", builtin_test);
 	ht_put(g_builtins, "hash", builtin_hash);
 =======
 	//ht_put(g_builtins, "jobs", builtin_jobs);
 >>>>>>> add basic fg/bg (no jobs display), slightly modify some job control functions
+=======
+	ht_put(g_builtins, "jobs", builtin_jobs);
+>>>>>>> refactor of job control
 }
 
 static int	set_input_fd(char *filename)

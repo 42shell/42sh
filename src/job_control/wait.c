@@ -77,8 +77,6 @@ void		wait_for_job(t_job *job)
 	int			status;
 
 	status = 0;
-	if (!job->processes)
-		return ;
 	while (!job_is_done(job)
 	&& (g_job_control_enabled ? !job_is_stopped(job) : 1))
 	{
@@ -94,6 +92,6 @@ void		wait_for_job(t_job *job)
 			break ;
 		}
 	}
-	if (job_is_done(job) && (job->command->flags & CMD_INVERT_RETURN))
+	if (job_is_done(job) && job->invert_ret)
 		g_last_exit_st = g_last_exit_st ? 0 : 1;
 }

@@ -12,7 +12,6 @@
 
 #include "shell.h"
 
-/*
 #define JOBS_L	1
 #define JOBS_N	2
 #define JOBS_P	4
@@ -48,7 +47,7 @@ static int	get_jobs_options(char **argv, int *options)
 	while ((c = get_opt(argc, (unsigned char **)argv)) != -1)
 	{
 		if (ret == 0
-				&& (c == 'l' || c == 'n' || c == 'p' || c == 'r' || c == 's'))
+		&& (c == 'l' || c == 'n' || c == 'p' || c == 'r' || c == 's'))
 			set_option(options, c);
 		else if (ret == 0)
 		{
@@ -68,7 +67,7 @@ static int	print_one_job(t_job *job, int options)
 	if (options & JOBS_P)
 		ft_dprintf(2, "%d\n", job->pgid);
 	else if (options & JOBS_L)
-		print_job_long(job);
+		print_job(job, true);//print_job_long(job);
 	else
 		print_job(job, true);
 	job->notified = true;
@@ -85,12 +84,13 @@ static int	print_jobs(char **argv, int options)
 
 	if (!*argv)
 	{
-		job = g_shell.jobs->next;
+		job = g_jobs;
+		while (job->next)
+			job = job->next;
 		while (job)
 		{
-			if (job->bg || job_is_stopped(job))
-				print_one_job(job, options);
-			job = job->next;
+			print_one_job(job, options);
+			job = job->prev;
 		}
 		return (0);
 	}
@@ -115,7 +115,7 @@ int			builtin_jobs(char **argv, __attribute__((unused)) t_array *env)
 	options = 0;
 	if (get_jobs_options(argv, &options) == -1)
 		return (2);
-	update_status();
+	update_jobs(false);
 	argv++;
 	while (*argv && **argv == '-')
 		argv++;
@@ -127,4 +127,3 @@ int			builtin_jobs(char **argv, __attribute__((unused)) t_array *env)
 	}
 	return (0);
 }
-*/

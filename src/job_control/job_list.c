@@ -12,6 +12,13 @@
 
 #include "shell.h"
 
+void	del_job_from_list(t_job **head, t_job *job)
+{
+	remove_job_from_list(head, job);
+	process_list_del(&job->processes);
+	free(job);
+}
+
 void	add_command_to_list(t_command **head, t_command *command)
 {
 	command->next = *head;
@@ -20,19 +27,11 @@ void	add_command_to_list(t_command **head, t_command *command)
 	*head = command;
 }
 
-void	remove_command_from_list(t_command **head, t_command *command)
-{
-	if (command->next)
-		command->next->prev = command->prev;
-	if (command->prev)
-		command->prev->next = command->next;
-	else if ((*head = command->next))
-		(*head)->prev = NULL;
-}
-
 void	add_job_to_list(t_job **head, t_job *job, bool set_id)
 {
 	job->next = *head;
+	if (job->next)
+		job->next->prev = job;
 	if (set_id && !job->id)
 	{
 		if (!job->next)
@@ -45,23 +44,12 @@ void	add_job_to_list(t_job **head, t_job *job, bool set_id)
 
 void	remove_job_from_list(t_job **head, t_job *job)
 {
-	t_job		*ptr;
-	t_job		*prev;
-
-	prev = NULL;
-	ptr = *head;
-	while (ptr)
-	{
-		if (ptr == job)
-		{
-			if (prev)
-				prev->next = ptr->next;
-			else
-				*head = ptr->next;
-		}
-		prev = ptr;
-		ptr = ptr->next;
-	}
+	if (job->next)
+		job->next->prev = job->prev;
+	if (job->prev)
+		job->prev->next = job->next;
+	else
+		*head = job->next;
 }
 
 void	add_process_to_job(t_job *job, t_process *process)
@@ -69,5 +57,7 @@ void	add_process_to_job(t_job *job, t_process *process)
 	if (!job || !process)
 		return ;
 	process->next = job->processes;
+	if (process->next)
+		process->next->prev = process;
 	job->processes = process;
 }

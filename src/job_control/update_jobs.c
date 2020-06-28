@@ -26,10 +26,7 @@ void	update_jobs(bool notif)
 		{
 			if (notif && job->bg && g_shell.interactive_mode)
 				print_job(job, true);
-			remove_job_from_list(&g_jobs, job);
-			process_list_del(&job->processes);
-			command_del(&job->command);
-			free(job);
+			del_job_from_list(&g_jobs, job);
 		}
 		else if (job_is_stopped(job) && !job->notified)
 		{

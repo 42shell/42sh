@@ -92,11 +92,10 @@ SRC_EXEC        := $(addprefix execution/,$(SRC_EXEC))
 
 SRC_JOB       	:= launch_job.c\
 				   launch_process.c\
-				   job_current.c\
 				   job_control.c\
 				   job_list.c\
 				   update_jobs.c\
-				   job_print.c\
+				   print_job.c\
 				   format_job.c\
 				   format_command.c\
 				   utils_job.c\
@@ -157,6 +156,7 @@ SRC_PARSER      := and_or.c\
 				   error.c\
 				   debug.c\
                    new_del.c\
+				   remove_command_from_list.c\
 				   utils.c
 SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
 
