@@ -1,0 +1,35 @@
+#TEST 00
+lol="bonjour les amiches"
+ls $lol
+echo '~~~'
+
+#TEST 01
+ls "$lol"
+echo '~~~'
+
+#TEST 02
+lol='"bonjour les amiches"'
+ls $lol
+echo '~~~'
+
+#TEST 03
+ls "$lol"
+echo '~~~'
+
+#TEST 04
+lol="'bonjour les amiches'"
+ls $lol
+echo '~~~'
+
+#TEST 05
+ls "$lol"
+echo '~~~'
+
+#TEST 06
+IFS=a
+ls lolalesamiches
+echo '~~~'
+
+#TEST 07
+lol=lolalesamiches
+ls $lol

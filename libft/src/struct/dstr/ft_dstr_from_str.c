@@ -12,6 +12,20 @@
 
 #include "libft.h"
 
+t_dstr	*ft_dstr_from_strn(char *str, size_t n)
+{
+	size_t len;
+	t_dstr *new;
+
+	len = ft_strnlen(str, n);
+	new = ft_xmalloc(sizeof(t_dstr));
+	new->len = len;
+	new->size = ft_next_power_of_two(len + 1);
+	new->str = ft_xmalloc(new->size);
+	ft_memcpy(new->str, str, len);
+	return (new);
+}
+
 t_dstr	*ft_dstr_from_str(char *str)
 {
 	t_dstr	*dstr;
