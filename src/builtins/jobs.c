@@ -113,6 +113,8 @@ int			builtin_jobs(char **argv, __attribute__((unused)) t_array *env)
 	int			options;
 
 	options = 0;
+	if (!g_jobs)
+		return (0);
 	if (get_jobs_options(argv, &options) == -1)
 		return (2);
 	update_jobs(false);

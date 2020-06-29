@@ -12,7 +12,15 @@
 
 #include "shell.h"
 
-int		parse_error(char *near)
+t_command	*return_parse_error(t_command **to_del)
+{
+	if (!g_parser.status)
+		g_parser.status = UNEXPECTED_TOKEN;
+	complete_command_del(to_del);
+	return (NULL);
+}
+
+int			parse_error(char *near)
 {
 	g_last_exit_st = 2;
 	if (g_parser.status != USER_ABORT)

@@ -64,6 +64,7 @@ t_command	*parse_if_clause(void)
 	if (!(if_clause = parse_if_then_statement())
 	|| (!(else_part = parse_else_part()) && g_parser.status))
 		return (return_parse_error(&if_clause));
+	if_clause->flags = CMD_IF;
 	if_clause->value.if_clause->else_part = else_part;
 	if (!get_required_reserv_word(FI))
 		return (return_parse_error(&if_clause));

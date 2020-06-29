@@ -20,13 +20,16 @@
 ** values for s_command->flags
 */
 
-# define CMD_INVERT_RETURN		0x01
-# define CMD_AMPERSAND			0x02
-# define CMD_AND_IF				0x04
-# define CMD_OR_IF				0x08
-# define CMD_PIPE				0x10
-# define CMD_COMPOUND			0x20
-# define CMD_SUBSHELL			0x40
+# define CMD_INVERT_RETURN		0x001
+# define CMD_AMPERSAND			0x002
+# define CMD_AND_IF				0x004
+# define CMD_OR_IF				0x008
+# define CMD_PIPE				0x010
+# define CMD_COMPOUND			0x020
+# define CMD_SUBSHELL			0x040
+# define CMD_IF					0x080
+# define CMD_ELIF				0x100		
+# define CMD_ELSE				0x200		
 
 enum							e_parser_status
 {
@@ -143,26 +146,45 @@ int								parse_separator_op(void);
 int								parse_newline_list(void);
 int								parse_linebreak(void);
 
+int								get_required_reserv_word(int expect_type);
+
+/*
+** heredocs
+*/
+
 int								get_all_heredocs(void);
+void							add_heredoc(t_token *heredoc);
+int								handle_heredoc_eof(char *delim);
+
+/*
+** parse error
+*/
 
 t_command						*return_parse_error(t_command **to_del);
 int								parse_error(char *near);
 
 /*
-** utils
+** new/del
 */
-
-void							add_heredoc(t_token *heredoc);
-int								handle_heredoc_eof(char *delim);
-int								get_required_reserv_word(int expect_type);
 
 t_command						*command_new(enum e_cmd_type type);
 void							command_del(t_command **command);
 void							redir_del(t_redir **redir);
 void							complete_command_del(t_command
 								**complete_command);
-int								remove_command_from_list(t_command **head,
-								t_command *command);
+
+/*
+** ast to str
+*/
+
+void							format_command(t_dstr *buf, t_command *command);
+void							format_and_or(t_dstr *buf, t_command *command);
+void							format_pipeline(t_dstr *buf, t_command *command);
+void							format_group(t_dstr *buf, t_command *command);
+void							format_if_clause(t_dstr *buf, t_command *command);
+void							format_while_clause(t_dstr *buf, t_command *command);
+void							format_compound_list(t_dstr *buf, t_command *command);
+void							format_simple_command(t_dstr *buf, t_command *command);
 
 /*
 ** debug

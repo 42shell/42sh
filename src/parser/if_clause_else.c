@@ -82,12 +82,14 @@ t_command			*parse_else_part(void)
 	{
 		if (!(elif_statement = parse_elif_then_statement()))
 			return (return_parse_error(&else_part));
+		elif_statement->flags = CMD_ELIF;
 		add_else_part(&else_part, &else_part_tail, elif_statement);
 	}
 	if (get_required_reserv_word(ELSE))
 	{
 		if (!(else_statement = parse_else_statement()))
 			return (return_parse_error(&else_part));
+		else_statement->flags = CMD_ELSE;
 		add_else_part(&else_part, &else_part_tail, else_statement);
 	}
 	g_linebreak_type = old_linebreak_type;

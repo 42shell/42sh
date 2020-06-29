@@ -84,15 +84,8 @@ void		print_job(t_job *job, bool print_command)
 			ft_dstr_append(command_format, " ");
 		process = process->next;
 	}
-	/*
-	if (print_command)
-	{
-		command_format = ft_dstr_new(64);
-		format_command(command_format, job->command);
-		if (job->bg)
-			ft_dstr_append(command_format, " &");
-	}
-	*/
+	if (job->bg) // and job_is_running
+		ft_dstr_append(command_format, " &");
 	ft_dprintf(2, "[%d]%s %-30s %s\n", job->id, curr, job_format,
 	print_command ? command_format->str : "");
 	if (print_command)
