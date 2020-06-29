@@ -43,7 +43,7 @@ static bool		should_pop(const char *str, int i, enum e_quote_st brack_status
 	(brack_status == BRACE && str[i] == '}')
 	|| (brack_status == DPAREN && str[i] == ')' && i > 0 && str[i - 1] == ')'
 				&& !just_closed_dparen)
-	|| (brack_status == PAREN && str[i] == ')' && !just_closed_dparen)
+	|| (brack_status == PAREN && str[i] == ')')
 	|| ((str[i] == DQUOTE || str[i] == SQUOTE)
 				&& (char)brack_status == str[i]));
 }
