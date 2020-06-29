@@ -12,6 +12,15 @@
 
 #include "shell.h"
 
+void		print_command(t_command *command)
+{
+	t_dstr	*buf;
+
+	buf = ft_dstr_new(128);
+	format_command(buf, command);
+	ft_dprintf(2, "%s\n", buf->str);
+}
+
 int			get_required_reserv_word(int expect_type)
 {
 	int		type;

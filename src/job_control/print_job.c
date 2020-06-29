@@ -12,83 +12,62 @@
 
 #include "shell.h"
 
-bool		is_last_job(t_job *job)
+int			g_padding_left;
+
+void		set_padding_left(char *job_str)
 {
-	if (job && g_jobs == job)
-		return (true);
-	return (false);
+	while (*job_str++ != ']')
+		g_padding_left++;
+	g_padding_left += 2;
 }
 
-bool		is_before_last_job(t_job *job)
+void		pad_right(t_dstr *dstr, int n)
 {
-	if (job && g_jobs && g_jobs->next == job)
-		return (true);
-	return (false);
+	if (n < 0)
+		n = 1;
+	while (n--)
+		ft_dstr_add(dstr, ' ');
 }
 
-/*
-void		print_job_long(t_job *job)
+void		format_processes(t_dstr *buf, t_process *list, bool l_opt)
 {
-	t_dstr		*command_format;
-	char		*process_format;
-	t_process	*process;
+	int		start_of_line;
+
+	while (list->next)
+		list = list->next;
+	while (list)
+	{
+		if (l_opt)
+		{
+			ft_dstr_add(buf, '\n');
+			start_of_line = buf->len;
+			format_process_info(buf, list, g_padding_left);
+			pad_right(buf, 36 - (buf->len - start_of_line));
+			if (list->stdin == 0)
+				ft_dstr_cat(buf, "  ");
+		}
+		ft_dstr_cat(buf, list->command_str->str);
+		if (!l_opt && list->prev) 
+			ft_dstr_add(buf, ' ');
+		list = list->prev;
+	}
+}
+
+void		print_job(t_job *job, bool l_opt)
+{
+	t_dstr	*job_format;
 
 	if (!job)
 		return ;
-	print_job(job, false);
-	command_format = ft_dstr_new(64);
-	process = job->processes;
-	while (process)
-	{
-		process_format = get_process_format(process);
-		if (process->stdin != 0)
-			ft_dstr_append(command_format, "| ");
-		format_command(command_format, process->command);
-		ft_dprintf(2, "     %-30s %s%s\n", process_format, command_format->str,
-		(!process->next && job->bg) ? " &" : "");
-		ft_dstr_clear(command_format, 64);
-		free(process_format);
-		process = process->next;
-	}
-	ft_dstr_del(&command_format);
-}
-*/
-/*
-still eval the tree to print the command,
-sort jobs numerically
-*/
-
-void		print_job(t_job *job, bool print_command)
-{
-	t_dstr		*command_format;
-	t_process	*process;
-	char		*job_format;
-	char		*curr;
-
-	if (!job)
-		return ;
-	curr = " ";
-	if (is_last_job(job))
-		curr = "+";
-	else if (is_before_last_job(job))
-		curr = "-";
-	else
-		curr = " ";
-	job_format = get_job_format(job);
-	process = job->processes;
-	command_format = ft_dstr_new(64);
-	while (process)
-	{
-		ft_dstr_append(command_format, process->command_str->str);//printf //dstr_cat
-		if (process->next)
-			ft_dstr_append(command_format, " ");
-		process = process->next;
-	}
-	if (job->bg) // and job_is_running
-		ft_dstr_append(command_format, " &");
-	ft_dprintf(2, "[%d]%s %-30s %s\n", job->id, curr, job_format,
-	print_command ? command_format->str : "");
-	if (print_command)
-		ft_dstr_del(&command_format);
-	free(job_format);
+	g_padding_left = 1;
+	job_format = ft_dstr_new(64);
+	format_job_info(job_format, job);
+	set_padding_left(job_format->str);
+	if (!l_opt)
+		pad_right(job_format, 36 - job_format->len);
+	format_processes(job_format, job->processes, l_opt);
+	if (job->bg && job_is_running(job))
+		ft_dstr_cat(job_format, " &");
+	ft_dprintf(2, "%s\n", job_format->str);
+	ft_dstr_del(&job_format);
 }

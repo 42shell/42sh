@@ -17,7 +17,7 @@
 */
 
 /*
-void	print_command(t_command *command, int indent)
+void	print_ast(t_command *command, int indent)
 {
 	t_token		*arg;
 	t_redir		*redir;

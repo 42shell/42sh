@@ -27,43 +27,40 @@ t_job		*get_job_by_str(char *str)
 				return (g_jobs->next);
 			return (NULL);
 		}
-		id = ft_atoi(++str) - 1;
+		id = ft_atoi(++str);
 	}
 	else
-		id = ft_atoi(str) - 1;
+		id = ft_atoi(str);
 	job = g_jobs;
 	while (job && job->id != id)
 		job = job->next;
 	return (job);
 }
 
-t_job		*job_dup(t_job *job)
+bool	is_last_job(t_job *job)
 {
-	t_job		*dup_job;
-	t_process	*dup_process;
-
-	dup_job = ft_xmalloc(sizeof(t_job));
-	*dup_job = *job;
-	dup_process = process_list_dup(job->processes);
-	dup_job->processes = dup_process;
-	return (dup_job);
+	if (job && g_jobs == job)
+		return (true);
+	return (false);
 }
 
-/*
-** we compare the pointers cause different jobs can have same pgid when
-** dealing with compound_lists.
-*/
-
-bool	job_is_in_list(t_job *list, t_job *job_to_check)
+bool	is_before_last_job(t_job *job)
 {
-	t_job	*job;
+	if (job && g_jobs && g_jobs->next == job)
+		return (true);
+	return (false);
+}
 
-	job = list;
-	while (job)
+bool	job_is_running(t_job *job)
+{
+	t_process	*process;
+
+	process = job->processes;
+	while (process)
 	{
-		if (job == job_to_check)
+		if (!process->done && !process->stopped)
 			return (true);
-		job = job->next;
+		process = process->next;
 	}
 	return (false);
 }
@@ -77,7 +74,7 @@ bool	job_is_stopped(t_job *job)
 	process = job->processes;
 	while (process)
 	{
-		if (!process->done && !process->stopped)
+		if (!process->stopped && !process->done)
 			return (false);
 		process = process->next;
 	}

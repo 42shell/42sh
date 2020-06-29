@@ -187,10 +187,11 @@ void							format_compound_list(t_dstr *buf, t_command *command);
 void							format_simple_command(t_dstr *buf, t_command *command);
 
 /*
-** debug
+** notif/debug
 */
 
-void							print_command(t_command *command,
+void							print_command(t_command *command);
+void							print_ast(t_command *command,
 								int indent);
 
 #endif

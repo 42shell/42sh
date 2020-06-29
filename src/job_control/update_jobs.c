@@ -25,7 +25,7 @@ void	update_jobs(bool notif)
 		if (job_is_done(job))
 		{
 			if (notif && job->bg && g_shell.interactive_mode)
-				print_job(job, true);
+				print_job(job, false);
 			del_job_from_list(&g_jobs, job);
 		}
 		else if (job_is_stopped(job) && !job->notified)
@@ -33,7 +33,7 @@ void	update_jobs(bool notif)
 			remove_job_from_list(&g_jobs, job);
 			add_job_to_list(&g_jobs, job, false);
 			if (notif && g_shell.interactive_mode)
-				print_job(job, true);
+				print_job(job, false);
 			job->notified = true;
 		}
 		job = next;
