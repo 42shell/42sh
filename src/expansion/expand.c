@@ -59,6 +59,7 @@ static int	expand_token(t_token *token, char *home_dir)
 	ft_memset(token->exp_info->str, '0', token->exp_info->len);
 	if (dollar_expand(token, pos, false) == 1)
 		return (1);
+	split_fields(token);
 	path_expand(token);
 	remove_quotes(token);
 	return (0);

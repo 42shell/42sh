@@ -120,6 +120,7 @@ t_dstr					*ft_dstr_new(size_t size);
 int						ft_dstr_cat(t_dstr *dstr, char *str);
 t_dstr					*ft_dstr_dup(t_dstr *dstr);
 t_dstr					*ft_dstr_from_str(char *str);
+t_dstr					*ft_dstr_from_strn(char *str, size_t n);
 int						ft_dstr_add(t_dstr *dstr, char c);
 int						ft_dstr_insert(t_dstr *dstr, size_t i, char *str,
 						size_t len);

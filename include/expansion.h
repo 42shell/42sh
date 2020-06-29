@@ -33,4 +33,6 @@ void	sort_matches(char **array, int size);
 
 int		get_end_of_braces(const char *str);
 
+void	split_fields(t_token *token);
+
 #endif
