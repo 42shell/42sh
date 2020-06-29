@@ -33,3 +33,17 @@ echo '~~~'
 #TEST 07
 lol=lolalesamiches
 ls $lol
+echo '~~~'
+
+#TEST 08
+lol=" il faut      expand les * dans les nouveaux  fields   "
+ls $lol
+echo '~~~'
+
+#TEST 09
+touch 'ce fichier a des espaces'
+ls ce*
+
+#TEST 10
+HOME='   des   espaces dans mon home???'
+echo ~

@@ -54,7 +54,9 @@ enum			e_token_type
 	THEN,
 	ELIF,
 	ELSE,
-	FI
+	FI,
+	SPLIT_FIELD,
+	PATH_EXP
 };
 
 enum			e_quote_st

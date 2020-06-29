@@ -92,13 +92,14 @@ void	add_matches_to_list(t_token *token, t_array *matches)
 	array = (char **)matches->array;
 	token->value = ft_dstr_from_str(array[0]);
 	token->exp_info = ft_dstr_from_str(array[0]);
+	token->type = PATH_EXP;
 	ft_memset(token->exp_info->str, '1', ft_strlen(array[0]));
 	cur = token;
 	old_next = token->next;
 	i = 1;
 	while (i < matches->size)
 	{
-		cur->next = token_new(WORD);
+		cur->next = token_new(PATH_EXP);
 		ft_dstr_append(cur->next->value, array[i]);
 		cur->next->exp_info = ft_dstr_from_str(array[i]);
 		ft_memset(cur->next->exp_info->str, '1', ft_strlen(array[i]));
