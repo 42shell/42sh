@@ -47,14 +47,10 @@ int			eval_command(t_command *command)
 {
 	if (command->flags & CMD_COMPOUND)
 		return (eval_compound_command(command));
-	if (command->type == CONNECTION)
-	{
-		if (command->value.connection->connector == OR_IF
-		|| command->value.connection->connector == AND_IF)
-			return (eval_and_or(command));
-		if (command->value.connection->connector == PIPE)
-			return (eval_pipeline(command, STDIN_FILENO, STDOUT_FILENO));
-	}
+	if (command->type == AND_OR)
+		return (eval_and_or(command));
+	if (command->type == PIPELINE)
+		return (eval_pipeline(command));
 	if (command->type == SIMPLE)
 		return (eval_simple_command(command));
 	return (0);
@@ -68,9 +64,6 @@ int			eval_complete_command(t_command *complete_command)
 	command = complete_command;
 	while (command != NULL)
 	{
-		//if (AND_OR || CMPD_LIST)
-		//	eval_command ->same in compound_list
-		//else
 		job = job_new(command, STDIN_FILENO, STDOUT_FILENO);
 		if (command->sep == AMPERSAND)
 			job->bg = true;

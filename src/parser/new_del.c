@@ -19,10 +19,10 @@ t_command	*command_new(enum e_cmd_type type)
 	command = ft_xmalloc(sizeof(t_command));
 	if (type == SIMPLE)
 		command->value.simple = ft_xmalloc(sizeof(t_simple_cmd));
-	else if (type == CONNECTION)
-		command->value.connection = ft_xmalloc(sizeof(t_connection));
-	else if (type == GROUP)
-		command->value.group = ft_xmalloc(sizeof(t_group_cmd));
+	//else if (type == CONNECTION)
+	//	command->value.connection = ft_xmalloc(sizeof(t_connection));
+	//else if (type == GROUP)
+	//	command->value.group = ft_xmalloc(sizeof(t_group_cmd));
 	else if (type == IF_CLAUSE || type == WHILE_CLAUSE)
 		command->value.if_clause = ft_xmalloc(sizeof(t_if_clause));
 	command->type = type;
@@ -55,17 +55,12 @@ void		command_del(t_command **command)
 		return ;
 	if ((*command)->type == SIMPLE)
 		simple_command_del(&(*command)->value.simple);
-	else if ((*command)->type == CONNECTION)
-	{
-		command_del(&(*command)->value.connection->left);
-		command_del(&(*command)->value.connection->right);
-		ft_memdel((void **)&(*command)->value.connection);
-	}
+	else if ((*command)->type == AND_OR)
+		complete_command_del(&(*command)->value.and_or);
+	else if ((*command)->type == PIPELINE)
+		complete_command_del(&(*command)->value.pipeline);
 	else if ((*command)->type == GROUP)
-	{
-		complete_command_del(&(*command)->value.group->list);
-		ft_memdel((void **)&(*command)->value.group);
-	}
+		complete_command_del(&(*command)->value.compound_list);
 	else if ((*command)->type == IF_CLAUSE)
 	{
 		complete_command_del(&(*command)->value.if_clause->if_part);

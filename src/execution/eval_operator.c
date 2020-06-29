@@ -12,79 +12,55 @@
 
 #include "shell.h"
 
-int			eval_pipeline(t_command *command, int in, int out)
+int		eval_pipeline(t_command *command)
 {
-	t_connection	*pipeline;
-	t_process		*process;
-	int				fd[2];
+	t_command	*pipeline;
+	t_process	*process;
+	int			stdin;
+	int			fd[2];
 
-	/*
-	in = 0;
-	while (command == pipe)
+	stdin = STDIN_FILENO;
+	pipeline = command->value.pipeline;
+	while (pipeline->next)
 	{
-		pipe(fd)
-		in = fd[0];
-		process = process_new(pipeline->left, in, fd[1]);
-		return (launch_process(process, fd[0]));
-		command = command->right;
+		if (pipe(fd) == -1)
+			return (-1);
+		process = process_new(pipeline, stdin, fd[1]);
+		launch_process(process, fd[0]);
+		pipeline =  pipeline->next;
+		stdin = fd[0];
 	} 
-	process = process_new(pipeline->right, fd[0], out);
-	launch_process(process, fd[1]);
-	*/
-	if (pipe(fd) == -1)
-		return (-1);
-	pipeline = command->value.connection;
-	process = process_new(pipeline->right, fd[0], out);
-	launch_process(process, fd[1]);
-	if (pipeline->left->type == CONNECTION
-	&& pipeline->left->value.connection->connector == PIPE)
-		return (eval_pipeline(pipeline->left, in, fd[1]));
-	process = process_new(pipeline->left, in, fd[1]);
-	return (launch_process(process, fd[0]));
+	process = process_new(pipeline, stdin, STDOUT_FILENO);
+	return (launch_process(process, fd[1]));
 }
 
 /*
-static int	wait_for_and_or(t_command *command)
-{
-	if (g_job_control_enabled)
-		put_job_fg(g_current_jobs, false);
-	else
-		wait_for_job(g_current_jobs);
-	return (g_last_exit_st);
-}
-*/
-
-/*
-** If we are in a fork, we want the jobs created to have the same pgid than the
-** fork.
+** If we are in a fork, we want the jobs created to have the same pgid
+** than the fork.
 ** ex: { ls && ls } | cat
 ** We want the ls jobs to have the same pgid than cat, if we don t set it
 ** explicitely, it will be set to the process pid in launch_process
 */
 
-int			eval_and_or(t_command *command)
+int		eval_and_or(t_command *command)
 {
-	t_connection	*and_or;
-	t_job			*job;
+	t_command	*and_or;
+	t_job		*job;
 
 	g_already_forked = false;
-	and_or = command->value.connection;
-	if (and_or->left->type == CONNECTION
-	&& (and_or->left->value.connection->connector == AND_IF
-		|| and_or->left->value.connection->connector == OR_IF))
-		eval_command(and_or->left);
-	else
+	and_or = command->value.and_or;
+	while (and_or)
 	{
-		job = job_new(and_or->left, STDIN_FILENO, STDOUT_FILENO);
-		job->pgid = g_current_jobs->pgid;
-		launch_job(job);
-	}
-	if ((and_or->connector == AND_IF && g_last_exit_st == 0)
-	|| (and_or->connector == OR_IF && g_last_exit_st != 0))
-	{
-		job = job_new(and_or->right, STDIN_FILENO, STDOUT_FILENO);
-		job->pgid = g_current_jobs->pgid;
-		launch_job(job);
+		if (!(and_or->flags & (CMD_AND_IF | CMD_OR_IF))
+		|| ((and_or->flags & CMD_AND_IF) && g_last_exit_st == 0)
+		|| ((and_or->flags & CMD_OR_IF) && g_last_exit_st != 0))
+		{
+			job = job_new(and_or, STDIN_FILENO, STDOUT_FILENO);
+			if (g_current_jobs)
+				job->pgid = g_current_jobs->pgid;
+			launch_job(job);
+		}
+		and_or = and_or->next;
 	}
 	return (g_last_exit_st);
 }

@@ -86,14 +86,11 @@ typedef struct			s_var
 
 /*
 ** TODO:
+** -update comments commit
 ** -redo jobs/fg/bg -> format_command if/while
-** -check and_or still working
-** -redo pipes left/right / care about closing fds
-**  implies queuing processes to print them right
-** -g_invert_ret ?
 ** -interrupt exec
+** -check ^C on line continuations
 ** -force exit on ctrl-D even if jobs
-** -sleep 2 && sleep 3 ^Z jobs (print only processes in jobs)
 ** -shell script
 **
 ** problems:

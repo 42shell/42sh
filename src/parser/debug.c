@@ -12,8 +12,13 @@
 
 #include "shell.h"
 
+/*
+** deprecated for the moment, again
+*/
 
+/*
 #include <stdio.h>
+
 void	print_command(t_command *command, int indent)
 {
 	t_token		*arg;
@@ -113,3 +118,4 @@ void	print_command(t_command *command, int indent)
 		return ;
 	}
 }
+*/
