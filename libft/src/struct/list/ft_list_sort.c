@@ -99,8 +99,8 @@ void		list_restore_links(t_list_head *head)
 }
 
 /*
-** WARNING: this sorts the head too, make sure head->data != NULL and your cmp
-** function will always make head->data inferior
+** WARNING: this sorts the head too, make sure that head->data != NULL and
+** that your cmp function always make head->data inferior
 */
 
 void		ft_list_sort(t_list_head **head, int (*cmp)(void *a, void *b))

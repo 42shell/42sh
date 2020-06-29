@@ -75,8 +75,9 @@ void					update_jobs(bool notif);
 
 bool					job_is_done(t_job *job);
 bool					job_is_stopped(t_job *job);
-t_job					*job_dup(t_job *job);
-t_process				*process_list_dup(t_process *process_list);
+bool					job_is_running(t_job *job);
+bool					is_last_job(t_job *job);
+bool					is_before_last_job(t_job *job);
 t_process				*get_process(pid_t pid);
 t_job					*get_job_by_str(char *str);
 
@@ -88,16 +89,18 @@ void					add_job_to_list(t_job **head, t_job *job, bool set_id);
 void					add_process_to_job(t_job *job, t_process *process);
 void					remove_job_from_list(t_job **head, t_job *job);
 void					del_job_from_list(t_job **head, t_job *job);
+t_list_head				*get_sorted_jobs_list(void);
 
 /*
 ** job display
 */
 
-char					*get_job_format(t_job *job);
-char					*get_process_format(t_process *process);
-void					format_command(t_dstr *buf, t_command *command);
-void					print_job(t_job *job, bool print_command);
-void					print_job_long(t_job *job);
+void					format_job_info(t_dstr *buf, t_job *job);
+void					format_process_info(t_dstr *buf, t_process *process,
+						int padding);
+void					format_processes(t_dstr *buf, t_process *list,
+						bool l_opt);
+void					print_job(t_job *job, bool l_opt);
 
 /*
 ** job new/del

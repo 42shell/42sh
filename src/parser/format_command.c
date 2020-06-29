@@ -21,18 +21,18 @@ void	format_simple_command(t_dstr *buf, t_command *command)
 	arg = command->value.simple->args;
 	while (arg != NULL)
 	{
-		ft_dstr_append(buf, arg->value->str);
+		ft_dstr_cat(buf, arg->value->str);
 		if ((arg = arg->next) != NULL || redir)
-			ft_dstr_append(buf, " ");
+			ft_dstr_cat(buf, " ");
 	}
 	while (redir)
 	{
 		if (redir->left_op)
-			ft_dstr_append(buf, redir->left_op->value->str);
-		ft_dstr_append(buf, redir->operator->value->str);
-		ft_dstr_append(buf, redir->right_op->value->str);
+			ft_dstr_cat(buf, redir->left_op->value->str);
+		ft_dstr_cat(buf, redir->operator->value->str);
+		ft_dstr_cat(buf, redir->right_op->value->str);
 		if ((redir = redir->next))
-			ft_dstr_append(buf, " ");
+			ft_dstr_cat(buf, " ");
 	}
 }
 
@@ -44,7 +44,7 @@ void	format_pipeline(t_dstr *buf, t_command *command)
 	while (pipeline)
 	{
 		if (pipeline->flags & CMD_PIPE)
-			ft_dstr_append(buf, " | ");
+			ft_dstr_cat(buf, " | ");
 		format_command(buf, pipeline);
 		pipeline = pipeline->next;
 	}
@@ -58,9 +58,9 @@ void	format_and_or(t_dstr *buf, t_command *command)
 	while (and_or)
 	{
 		if (and_or->flags & CMD_AND_IF)
-			ft_dstr_append(buf, " && ");
+			ft_dstr_cat(buf, " && ");
 		else if (and_or->flags & CMD_OR_IF)
-			ft_dstr_append(buf, " || ");
+			ft_dstr_cat(buf, " || ");
 		format_command(buf, and_or);
 		and_or = and_or->next;
 	}

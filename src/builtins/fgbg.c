@@ -57,8 +57,8 @@ int			builtin_bg(char **argv, __attribute__((unused)) t_array *env)
 		argv[1] ? argv[1] : "current");
 		return (2);
 	}
-	ft_dprintf(2, "stupid job bg'd by stupid user\n");
 	continue_job(job, true);
+	print_job(job, false);
 	return (0);
 }
 
@@ -66,6 +66,7 @@ int			builtin_bg(char **argv, __attribute__((unused)) t_array *env)
 int			builtin_fg(char **argv, __attribute__((unused)) t_array *env)
 {
 	t_job	*job;
+	t_dstr	*buf;
 
 	if (!g_job_control_enabled)
 		return (2);
@@ -77,7 +78,10 @@ int			builtin_fg(char **argv, __attribute__((unused)) t_array *env)
 		argv[1] ? argv[1] : "current");
 		return (2);
 	}
-	ft_dprintf(2, "stupid job fg'd by stupid user\n");
+	buf = ft_dstr_new(128);
+	format_processes(buf, job->processes, false);
+	ft_dprintf(2, "%s\n", buf->str);
+	ft_dstr_del(&buf);
 	continue_job(job, false);
 	return (0);
 }

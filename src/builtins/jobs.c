@@ -69,40 +69,37 @@ static int	print_one_job(t_job *job, int options)
 	else if (options & JOBS_L)
 		print_job(job, true);//print_job_long(job);
 	else
-		print_job(job, true);
+		print_job(job, false);
 	job->notified = true;
 	return (0);
 }
 
-
 //argv = argv + number of option arguments
-
 
 static int	print_jobs(char **argv, int options)
 {
-	t_job	*job;
+	t_job		*job;
+	t_list_head	*sorted_list;
+	t_list_head	*tmp;
 
 	if (!*argv)
 	{
-		job = g_jobs;
-		while (job->next)
-			job = job->next;
-		while (job)
+		sorted_list = get_sorted_jobs_list();
+		while (sorted_list)
 		{
-			print_one_job(job, options);
-			job = job->prev;
+			print_one_job((t_job *)sorted_list->data, options);
+			tmp = sorted_list;
+			sorted_list = sorted_list->next;
+			free(tmp);
 		}
 		return (0);
 	}
 	while (*argv)
 	{
-		if (!(job = get_job_by_str(*argv)))
-		{
-			g_jobspec_error = true;
-			ft_dprintf(2, "42sh: jobs: %s: No such job\n", *argv);
-		}
-		else
+		if ((job = get_job_by_str(*argv)))
 			print_one_job(job, options);
+		else if ((g_jobspec_error = true))
+			ft_dprintf(2, "42sh: jobs: %s: No such job\n", *argv);
 		argv++;
 	}
 	return (0);
