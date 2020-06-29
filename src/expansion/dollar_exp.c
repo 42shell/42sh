@@ -56,8 +56,13 @@ static int	do_one_expansion(t_token *token, int *i)
 {
 	if (token->value->str[*i + 1] == '{')
 		return (param_expand(token, i, true));
-	if (token->value->str[*i + 1] == '(' && token->value->str[*i + 2] == '(')
-		return (arith_expand(token, i));
+	if (token->value->str[*i + 1] == '(')
+	{
+		if (token->value->str[*i + 2] == '(')
+			return (arith_expand(token, i));
+		else
+			return (cmd_sub(token, i));
+	}
 	return (param_expand(token, i, false));
 }
 

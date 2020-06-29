@@ -151,6 +151,7 @@ extern t_ht				*g_builtins;
 extern t_command		*g_complete_command;
 
 int						init(int argc, char **argv);
+int						main_loop(void);
 void					del(void);
 
 int						input_batch(const char *prompt, bool heredoc);

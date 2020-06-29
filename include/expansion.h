@@ -18,6 +18,7 @@
 int		expand(t_simple_cmd *command);
 int		dollar_expand(t_token *token, int start, bool heredoc);
 int		arith_expand(t_token *token, int *i);
+int		cmd_sub(t_token *token, int *i);
 long	eval_expr(const char *str);
 int		param_expand(t_token *token, int *i, bool brace);
 void	path_expand(t_token *token);

@@ -111,6 +111,7 @@ void					update_jobs_greatest_id(void);
 
 void					add_process_to_job(t_job *job, t_process *process);
 t_process				*get_process(pid_t pid);
+void					reset_signals(void);
 
 /*
 ** job display
