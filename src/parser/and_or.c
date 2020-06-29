@@ -12,22 +12,17 @@
 
 #include "shell.h"
 
-static t_command	*build_and_or_and_advance(t_command *left)
+static void	advance_and_parse_linebreak(int type)
 {
-	t_command		*node;
-	int				old_linebreak_type;
+	int		old_linebreak_type;
 
-	node = command_new(CONNECTION);
-	node->value.connection->connector = g_parser.token->type;
-	node->value.connection->left = left;
 	token_del(&g_parser.token);
 	g_lexer.expect_reserv_word = true;
 	g_parser.token = get_next_token();
 	old_linebreak_type = g_linebreak_type;
-	g_linebreak_type = node->value.connection->connector;
+	g_linebreak_type = type;
 	parse_linebreak();
 	g_linebreak_type = old_linebreak_type;
-	return (node);
 }
 
 /*
@@ -36,20 +31,29 @@ static t_command	*build_and_or_and_advance(t_command *left)
 **                 | and_or OR_IF  linebreak pipeline
 */
 
-t_command			*parse_and_or(void)
+t_command	*parse_and_or(void)
 {
-	t_command		*and_or;
-	t_command		*node;
+	t_command	*and_or;
+	t_command	*and_or_list;
+	t_command	*command;
+	int			type;
 
-	if (!g_parser.token || !(and_or = parse_pipeline()))
+	if (!g_parser.token || !(command = parse_pipeline()))
 		return (NULL);
+	and_or_list = command;
 	while (g_parser.token
 	&& (g_parser.token->type == AND_IF || g_parser.token->type == OR_IF))
 	{
-		node = build_and_or_and_advance(and_or);
-		if (!(node->value.connection->right = parse_pipeline()))
-			return (return_parse_error(&node));
-		and_or = node;
+		type = g_parser.token->type;
+		advance_and_parse_linebreak(type);
+		if (!(command->next = parse_pipeline()))
+			return (return_parse_error(&and_or_list));
+		command = command->next;
+		command->flags |= (type == AND_IF) ? CMD_AND_IF : CMD_OR_IF;
 	}
+	if (!and_or_list->next)
+		return (and_or_list);
+	and_or = command_new(AND_OR);
+	and_or->value.and_or = and_or_list;
 	return (and_or);
 }

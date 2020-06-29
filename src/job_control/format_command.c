@@ -12,6 +12,10 @@
 
 #include "shell.h"
 
+/*
+** deprecated for the moment
+*/
+
 static void	format_simple_command(t_dstr *buf, t_command *command)
 {
 	t_redir		*redir;
@@ -40,8 +44,8 @@ static void	format_group(t_dstr *buf, t_command *command)
 {
 	t_command	*cmd;
 
-	cmd = command->value.group->list;
-	ft_dstr_append(buf, command->value.group->subshell ? "( " : "{ ");
+	cmd = command->value.compound_list;
+	ft_dstr_append(buf, (command->flags & CMD_SUBSHELL) ? "( " : "{ ");
 	while (cmd)
 	{
 		format_command(buf, cmd);
@@ -53,33 +57,23 @@ static void	format_group(t_dstr *buf, t_command *command)
 		}
 		else if (cmd->next)
 			ft_dstr_append(buf, "; ");
-		else if (!command->value.group->subshell)
+		else if (!(command->flags & CMD_SUBSHELL))
 			ft_dstr_append(buf, ";");
 		cmd = cmd->next;
 	}
-	ft_dstr_append(buf, command->value.group->subshell ? " )" : " }");
+	ft_dstr_append(buf, (command->flags & CMD_SUBSHELL) ? " )" : " }");
 }
 
 void		format_command(t_dstr *buf, t_command *command)
 {
-	enum e_token_type	connector;
-
 	if (!command || !buf)
 		return ;
 	if (command->type == GROUP)
 		return (format_group(buf, command));
-	if (command->type == CONNECTION)
-	{
-		format_command(buf, command->value.connection->left);
-		connector = command->value.connection->connector;
-		if (connector == AND_IF)
-			ft_dstr_append(buf, " && ");
-		else if (connector == OR_IF)
-			ft_dstr_append(buf, " || ");
-		else if (connector == PIPE)
-			ft_dstr_append(buf, " | ");
-		format_command(buf, command->value.connection->right);
-	}
+	if (command->type == AND_OR)
+		ft_dstr_append(buf, (command->flags & CMD_AND_IF) ? " && " : " || ");//format_and_or
+	if (command->type == PIPE)
+		ft_dstr_append(buf, " | ");//format_pipeline
 	if (command->type == SIMPLE)
 		return (format_simple_command(buf, command));
 	return ;

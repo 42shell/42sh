@@ -23,25 +23,13 @@ static int			check_bracket_lvl(void)
 	return (0);
 }
 
-/*
-** if there is only a subshell in the compound list, we have useless parens
-** like in "((ls))". We dont set the subshell flag to convert it into { (ls) },
-** to avoid useless fork.
-** This way is easier than deleting the useless node cause we need to keep
-** eventual redirections.
-** ex : ((ls) 2>&1) >file  ->   { (ls) 2>&1 } >file
-*/
-
 static t_command	*build_subshell_and_advance(t_command *compound_list)
 {
 	t_command		*subshell;
 
 	subshell = command_new(GROUP);
-	subshell->value.group->list = compound_list;
-	if (!(subshell->value.group->list->type == GROUP
-	&& subshell->value.group->list->value.group->subshell
-	&& !subshell->value.group->list->next))
-		subshell->value.group->subshell = true;
+	subshell->value.compound_list = compound_list;
+	subshell->flags |= CMD_SUBSHELL;
 	token_del(&g_parser.token);
 	g_parser.token = get_next_token();
 	--g_parser.bracket_lvl;
@@ -80,7 +68,7 @@ static t_command	*build_brace_group_and_advance(t_command *compound_list)
 	t_command		*group;
 
 	group = command_new(GROUP);
-	group->value.group->list = compound_list;
+	group->value.compound_list = compound_list;
 	token_del(&g_parser.token);
 	g_lexer.expect_reserv_word = true;
 	g_parser.token = get_next_token();

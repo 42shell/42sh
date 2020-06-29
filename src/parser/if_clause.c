@@ -13,9 +13,9 @@
 #include "shell.h"
 
 /*
-** At this point the if/elif has already been parsed so we can use this for the
-** first if/then statement in parse_if_clause and for elif/then statements in
-** parse_else_part.
+** At this point the if/elif token has already been parsed so we can use this
+** fucntion for the first if/then statement in parse_if_clause and for elif/then
+** statements in parse_else_part.
 */
 
 t_command	*parse_if_then_statement(void)

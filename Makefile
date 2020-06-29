@@ -156,7 +156,6 @@ SRC_PARSER      := and_or.c\
 				   error.c\
 				   debug.c\
                    new_del.c\
-				   remove_command_from_list.c\
 				   utils.c
 SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
 

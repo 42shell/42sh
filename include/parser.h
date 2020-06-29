@@ -22,8 +22,11 @@
 
 # define CMD_INVERT_RETURN		0x01
 # define CMD_AMPERSAND			0x02
-# define CMD_LASTPIPE			0x04
-# define CMD_COMPOUND			0x08
+# define CMD_AND_IF				0x04
+# define CMD_OR_IF				0x08
+# define CMD_PIPE				0x10
+# define CMD_COMPOUND			0x20
+# define CMD_SUBSHELL			0x40
 
 enum							e_parser_status
 {
@@ -35,9 +38,9 @@ enum							e_parser_status
 
 enum							e_cmd_type
 {
-	CONNECTION,
+	AND_OR,
+	PIPELINE,
 	SIMPLE,
-	COMPOUND,
 	GROUP,
 	IF_CLAUSE,
 	WHILE_CLAUSE
@@ -51,13 +54,6 @@ typedef struct					s_redir
 	t_token						*right_op;
 }								t_redir;
 
-typedef struct					s_connection
-{
-	struct s_command			*left;
-	struct s_command			*right;
-	enum e_token_type			connector;
-}								t_connection;
-
 typedef struct					s_simple_cmd
 {
 	t_redir						*redirs;
@@ -66,12 +62,6 @@ typedef struct					s_simple_cmd
 	char						**argv;
 	bool						is_expand;
 }								t_simple_cmd;
-
-typedef struct					s_group_cmd
-{
-	struct s_command			*list;
-	bool						subshell;
-}								t_group_cmd;
 
 typedef struct					s_if_clause
 {
@@ -82,10 +72,11 @@ typedef struct					s_if_clause
 
 union							u_cmd_value
 {
-	struct s_connection			*connection;
-	struct s_simple_cmd			*simple;
-	struct s_group_cmd			*group;
+	struct s_command			*and_or;
+	struct s_command			*pipeline;
+	struct s_command			*compound_list;
 	struct s_if_clause			*if_clause;
+	struct s_simple_cmd			*simple;
 };
 
 typedef struct					s_command

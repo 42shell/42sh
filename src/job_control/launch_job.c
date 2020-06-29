@@ -25,9 +25,8 @@ static int	launch_job_bg(t_job *job)
 	fd_in = STDIN_FILENO;
 	if (!g_job_control_enabled)
 		fd_in = open("/dev/null", O_RDONLY);
-	if (job->command->type == CONNECTION
-	&& job->command->value.connection->connector == PIPE)
-		eval_command(job->command);
+	if (job->command->type == PIPELINE)
+		eval_command(job->command); // eval_pipeline
 	else
 	{
 		process = process_new(job->command, fd_in, STDOUT_FILENO);
