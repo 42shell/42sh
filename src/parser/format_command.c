@@ -12,11 +12,7 @@
 
 #include "shell.h"
 
-/*
-** deprecated for the moment
-*/
-
-static void	format_simple_command(t_dstr *buf, t_command *command)
+void	format_simple_command(t_dstr *buf, t_command *command)
 {
 	t_redir		*redir;
 	t_token		*arg;
@@ -40,41 +36,50 @@ static void	format_simple_command(t_dstr *buf, t_command *command)
 	}
 }
 
-static void	format_group(t_dstr *buf, t_command *command)
+void	format_pipeline(t_dstr *buf, t_command *command)
 {
-	t_command	*cmd;
+	t_command	*pipeline;
 
-	cmd = command->value.compound_list;
-	ft_dstr_append(buf, (command->flags & CMD_SUBSHELL) ? "( " : "{ ");
-	while (cmd)
+	pipeline = command->value.pipeline;
+	while (pipeline)
 	{
-		format_command(buf, cmd);
-		if (cmd->sep == AMPERSAND)
-		{
-			ft_dstr_append(buf, " &");
-			if (cmd->next)
-				ft_dstr_append(buf, " ");
-		}
-		else if (cmd->next)
-			ft_dstr_append(buf, "; ");
-		else if (!(command->flags & CMD_SUBSHELL))
-			ft_dstr_append(buf, ";");
-		cmd = cmd->next;
+		if (pipeline->flags & CMD_PIPE)
+			ft_dstr_append(buf, " | ");
+		format_command(buf, pipeline);
+		pipeline = pipeline->next;
 	}
-	ft_dstr_append(buf, (command->flags & CMD_SUBSHELL) ? " )" : " }");
 }
 
-void		format_command(t_dstr *buf, t_command *command)
+void	format_and_or(t_dstr *buf, t_command *command)
+{
+	t_command	*and_or;
+
+	and_or = command->value.and_or;
+	while (and_or)
+	{
+		if (and_or->flags & CMD_AND_IF)
+			ft_dstr_append(buf, " && ");
+		else if (and_or->flags & CMD_OR_IF)
+			ft_dstr_append(buf, " || ");
+		format_command(buf, and_or);
+		and_or = and_or->next;
+	}
+}
+
+void	format_command(t_dstr *buf, t_command *command)
 {
 	if (!command || !buf)
 		return ;
-	if (command->type == GROUP)
-		return (format_group(buf, command));
 	if (command->type == AND_OR)
-		ft_dstr_append(buf, (command->flags & CMD_AND_IF) ? " && " : " || ");//format_and_or
-	if (command->type == PIPE)
-		ft_dstr_append(buf, " | ");//format_pipeline
-	if (command->type == SIMPLE)
-		return (format_simple_command(buf, command));
-	return ;
+		format_and_or(buf, command);
+	else if (command->type == PIPELINE)
+		format_pipeline(buf, command);
+	else if (command->type == GROUP)
+		format_group(buf, command);
+	else if (command->type == SIMPLE)
+		format_simple_command(buf, command);
+	else if (command->type == IF_CLAUSE)
+		format_if_clause(buf, command);
+	else if (command->type == WHILE_CLAUSE)
+		format_while_clause(buf, command);
 }

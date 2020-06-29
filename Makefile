@@ -97,7 +97,6 @@ SRC_JOB       	:= launch_job.c\
 				   update_jobs.c\
 				   print_job.c\
 				   format_job.c\
-				   format_command.c\
 				   utils_job.c\
 				   utils_process.c\
 				   new_del.c\
@@ -156,6 +155,8 @@ SRC_PARSER      := and_or.c\
 				   error.c\
 				   debug.c\
                    new_del.c\
+				   format_command.c\
+				   format_compound.c\
 				   utils.c
 SRC_PARSER      := $(addprefix parser/,$(SRC_PARSER))
 
