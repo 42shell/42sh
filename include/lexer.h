@@ -57,7 +57,9 @@ enum			e_token_type
 	FI,
 	WHILE,
 	DO,
-	DONE
+	DONE,
+	SPLIT_FIELD,
+	PATH_EXP
 };
 
 enum			e_quote_st

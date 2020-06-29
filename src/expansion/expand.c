@@ -39,21 +39,15 @@ int			tilde_expand(t_dstr *str, char *home_dir)
 	return (0);
 }
 
-/*
-** If the complete expansion appropriate for a word results in an empty field,
-** that empty field shall be deleted from the list of fields that form the
-** completely expanded command, unless the original word contained single-quote
-** or double-quote characters. -> bash does not seem to keep the empty field in
-** any case ? would be easier to implement.
-** ^ disregard that
-** we store the next token before expanding because we may add new tokens after
-** the token we expand, and we don't want to expand them
-*/
-
 static int	expand_token(t_token *token, char *home_dir)
 {
 	int	pos;
 
+	if (token->type == SPLIT_FIELD)
+	{
+		path_expand(token);
+		return (0);
+	}
 	pos = tilde_expand(token->value, home_dir);
 	token->exp_info = ft_dstr_dup(token->value);
 	ft_memset(token->exp_info->str, '0', token->exp_info->len);
@@ -68,16 +62,14 @@ static int	expand_token(t_token *token, char *home_dir)
 static int	expand_token_list(t_token *token_list, char *home_dir)
 {
 	t_token	*cur;
-	t_token *next;
 
 	cur = token_list;
 	while (cur != NULL)
 	{
-		next = cur->next;
-		if (cur->type == WORD)
+		if (cur->type == WORD || cur->type == SPLIT_FIELD)
 			if (expand_token(cur, home_dir) == 1)
 				return (1);
-		cur = next;
+		cur = cur->next;
 	}
 	return (0);
 }

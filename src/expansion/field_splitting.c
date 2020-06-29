@@ -52,6 +52,8 @@ static void	end_field_split(t_token *orig_token, t_token *new_list,
 {
 	if (new_list == NULL)
 		return ;
+	if (new_list->next == orig_token->next)
+		new_list->type = WORD;
 	(*list_last) = orig_token->next;
 	ft_dstr_del(&orig_token->value);
 	ft_dstr_del(&orig_token->exp_info);
@@ -77,6 +79,7 @@ void		split_fields(t_token *token)
 			i++;
 		wlen = get_wlen(token, i, &quote_status);
 		*cur = ft_xmalloc(sizeof(t_token));
+		(*cur)->type = SPLIT_FIELD;
 		(*cur)->value = ft_dstr_from_strn(token->value->str + i, wlen);
 		(*cur)->exp_info = ft_dstr_from_strn(token->exp_info->str + i, wlen);
 		cur = &(*cur)->next;
