@@ -66,7 +66,8 @@ static t_token	*end_of_input(int ret)
 			free(err);
 			return (NULL);
 		}
-		g_lexer.token_delimited = true;
+		if (!delim_token())
+			return (NULL);
 		return (return_token());
 	}
 	return (NULL);
