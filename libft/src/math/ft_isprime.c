@@ -32,7 +32,7 @@ char	ft_isprime(long n)
 		if (n % i == 0)
 			return (0);
 		step = 6 - step;
-        i += step;
+		i += step;
 	}
 	return (1);
 }

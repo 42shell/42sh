@@ -41,11 +41,6 @@
 # include "utils.h"
 
 /*
-Norme: ./src/job_control/job_list.c
-Error: 6 functions in the file
-*/
-
-/*
 ** vars.h
 */
 
