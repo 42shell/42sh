@@ -56,7 +56,7 @@ void		format_processes(t_dstr *buf, t_process *list, bool l_opt)
 				ft_dstr_cat(buf, "  ");
 		}
 		ft_dstr_cat(buf, list->command_str->str);
-		if (!l_opt && list->prev) 
+		if (!l_opt && list->prev)
 			ft_dstr_add(buf, ' ');
 		list = list->prev;
 	}

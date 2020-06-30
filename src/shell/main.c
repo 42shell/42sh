@@ -19,7 +19,7 @@ t_parser	g_parser;
 t_ht		*g_builtins;
 t_command	*g_complete_command;
 
-t_command		*get_complete_command(void)
+static t_command	*get_complete_command(void)
 {
 	t_command	*complete_command;
 
@@ -42,7 +42,7 @@ t_command		*get_complete_command(void)
 	return (complete_command);
 }
 
-int				main_loop(void)
+int					main_loop(void)
 {
 	while (1)
 	{

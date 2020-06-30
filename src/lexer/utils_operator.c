@@ -54,7 +54,7 @@ int		get_operator_type(char *ope)
 	if (ft_strequ(ope, "|") || ft_strequ(ope, "||"))
 		return (*(ope + 1) == 0 ? PIPE : OR_IF);
 	if (ft_strequ(ope, "(") || ft_strequ(ope, ")"))
-		return (*ope == '(' ? LBRACKET : RBRACKET);
+		return (*ope == '(' ? LPAREN : RPAREN);
 	if (ft_strequ(ope, ";"))
 		return (SEMI);
 	return (0);

@@ -46,17 +46,17 @@ t_command			*parse_subshell(void)
 	t_command	*compound_list;
 	int			old_linebreak_type;
 
-	if (!g_parser.token || g_parser.token->type != LBRACKET
+	if (!g_parser.token || g_parser.token->type != LPAREN
 	|| check_bracket_lvl() != 0)
 		return (NULL);
 	old_linebreak_type = g_linebreak_type;
-	g_linebreak_type = LBRACKET;
+	g_linebreak_type = LPAREN;
 	token_del(&g_parser.token);
 	g_lexer.expect_reserv_word = true;
 	g_parser.token = get_next_token();
 	if (!(compound_list = parse_compound_list()))
 		return (NULL);
-	if (!g_parser.token || g_parser.token->type != RBRACKET)
+	if (!g_parser.token || g_parser.token->type != RPAREN)
 		return (return_parse_error(&compound_list));
 	subshell = build_subshell_and_advance(compound_list);
 	g_linebreak_type = old_linebreak_type;

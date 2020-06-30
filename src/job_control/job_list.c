@@ -12,15 +12,6 @@
 
 #include "shell.h"
 
-int			cmp(void *a, void *b)
-{
-	if ((int *)a < (int *)b)
-		return (-1);
-	if ((int *)a > (int *)b)
-		return (1);
-	return (0);
-}
-
 t_list_head	*get_sorted_jobs_list(void)
 {
 	t_list_head	*sorted_list;
@@ -35,7 +26,7 @@ t_list_head	*get_sorted_jobs_list(void)
 		ft_list_add_tail(job, sorted_list);
 		job = job->next;
 	}
-	ft_list_sort(&sorted_list, &cmp);
+	ft_list_sort(&sorted_list, &ft_cmp);
 	sorted_list->prev->next = NULL;
 	sorted_list->prev = NULL;
 	return (sorted_list);

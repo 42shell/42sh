@@ -68,7 +68,6 @@ void					update_status(void);
 void					continue_job(t_job *job, bool bg);
 void					update_jobs(bool notif);
 
-
 /*
 ** utils
 */

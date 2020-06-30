@@ -55,9 +55,11 @@ void		update_status(void)
 {
 	pid_t			pid;
 	int				status;
-	struct timespec	time = { 0, 0xffffff };
+	struct timespec	time;
 
 	pid = 0;
+	time.tv_sec = 0;
+	time.tv_nsec = 0xffffff;
 	nanosleep(&time, NULL);
 	while ((pid = waitpid(WAIT_ANY, &status, WNOHANG | WUNTRACED)) > 0)
 	{
