@@ -42,7 +42,7 @@ static t_command	*get_complete_command(void)
 	return (complete_command);
 }
 
-int					main_loop(void)
+static int			main_loop(void)
 {
 	while (1)
 	{
@@ -66,7 +66,7 @@ int					main_loop(void)
 	return (0);
 }
 
-int				main(int argc, char **argv)
+int					main(int argc, char **argv)
 {
 	init(argc - 1, argv + 1);
 	main_loop();
