@@ -21,7 +21,7 @@ int		eval_pipeline(t_command *command)
 
 	stdin = STDIN_FILENO;
 	pipeline = command->value.pipeline;
-	while (pipeline->next)
+	while (!g_interrupt && pipeline->next)
 	{
 		if (pipe(fd) == -1)
 			return (-1);
@@ -49,7 +49,7 @@ int		eval_and_or(t_command *command)
 
 	g_already_forked = false;
 	and_or = command->value.and_or;
-	while (and_or)
+	while (!g_interrupt && and_or)
 	{
 		if (!(and_or->flags & (CMD_AND_IF | CMD_OR_IF))
 		|| ((and_or->flags & CMD_AND_IF) && g_last_exit_st == 0)

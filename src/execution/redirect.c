@@ -44,13 +44,13 @@ static int	get_redirection_fd(t_redir *redir)
 	return (open(filename->str, get_flags(type), RIGHTS));
 }
 
-static int	redirect(t_redir *redir, int redirected_fd, bool backup)
+static int	redirect(t_redir *redir, int redirected_fd)
 {
 	int		redirection_fd;
 
 	if (ft_strequ(redir->right_op->value->str, "-"))
 	{
-		dup2_and_backup(g_backup_list, -1, redirected_fd, backup);
+		dup2_and_backup(g_backup_list, -1, redirected_fd);
 		close(redirected_fd);
 		return (0);
 	}
@@ -63,7 +63,7 @@ static int	redirect(t_redir *redir, int redirected_fd, bool backup)
 	}
 	if (redirected_fd == redirection_fd)
 		move_fd(&redirection_fd);
-	dup2_and_backup(g_backup_list, redirection_fd, redirected_fd, backup);
+	dup2_and_backup(g_backup_list, redirection_fd, redirected_fd);
 	if (redir->operator->type != LESSAND && redir->operator->type != GREATAND)
 		close(redirection_fd);
 	return (0);
@@ -85,7 +85,7 @@ static int	get_redirected_fd(t_redir *redir)
 
 extern char	*g_tmp_file;
 
-int			set_redir(t_redir *redir_list, bool backup, t_list_head **backup_list)
+int			set_redir(t_redir *redir_list, t_list_head **backup_list)
 {
 	int		redirected_fd;
 	int		ret;
@@ -98,7 +98,7 @@ int			set_redir(t_redir *redir_list, bool backup, t_list_head **backup_list)
 			restore_fds(backup_list);
 			return (redir_error(ERROR_REDIR_BAD_FD));
 		}
-		else if ((ret = redirect(redir_list, redirected_fd, backup)) < 0)
+		else if ((ret = redirect(redir_list, redirected_fd)) < 0)
 		{
 			restore_fds(backup_list);
 			return (redir_error(ret));

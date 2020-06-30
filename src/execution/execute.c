@@ -26,8 +26,7 @@ int			exec_builtin(char **argv, t_array *temp_env)
 	ret = builtin(argv, temp_env);
 	if (g_already_forked)
 		exit(ret);
-	g_last_exit_st = ret;
-	return (0);
+	return (g_last_exit_st = ret);
 }
 
 int			exec_binary(char **argv, t_array *temp_env)
@@ -61,7 +60,7 @@ int			exec_simple_command(t_simple_cmd *simple)
 	t_list_head	*fd_backups;
 
 	fd_backups = NULL;
-	if (set_redir(simple->redirs, true, &fd_backups) != 0)
+	if (set_redir(simple->redirs, &fd_backups) != 0)
 		return (g_last_exit_st = 1);
 	if (simple->argv)
 	{
@@ -79,5 +78,5 @@ int			exec_simple_command(t_simple_cmd *simple)
 		g_last_exit_st = 0;
 	}
 	restore_fds(&fd_backups);
-	return (0);
+	return (g_last_exit_st);
 }
