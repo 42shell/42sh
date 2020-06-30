@@ -26,7 +26,7 @@ static int	launch_job_bg(t_job *job)
 	if (!g_job_control_enabled)
 		fd_in = open("/dev/null", O_RDONLY);
 	if (job->command->type == PIPELINE)
-		eval_command(job->command); // eval_pipeline
+		eval_pipeline(job->command); // eval_pipeline
 	else
 	{
 		process = process_new(job->command, fd_in, STDOUT_FILENO);
@@ -52,21 +52,18 @@ int			launch_job(t_job *job)
 			ft_dprintf(2, "[%d] %d\n", job->id, job->pgid);
 		return (g_last_exit_st);
 	}
-	else
+	eval_command(job->command);
+	if (g_job_control_enabled)
 	{
-		eval_command(job->command);
-		if (g_job_control_enabled)
+		put_job_fg(job, false);
+		if (job_is_stopped(job))
 		{
-			put_job_fg(job, false);
-			if (job_is_stopped(job))
-			{
-				move_job_in_persistent_list(job);
-				return (g_last_exit_st);
-			}
+			move_job_in_persistent_list(job);
+			return (g_last_exit_st);
 		}
-		else
-			wait_for_job(job);
 	}
+	else
+		wait_for_job(job);
 	del_job_from_list(&g_current_jobs, job);
-	return (0);
+	return (g_last_exit_st);
 }

@@ -86,7 +86,7 @@ typedef struct			s_var
 
 /*
 ** TODO:
-** -while_clause
+** -norme
 ** -shell script
 **
 ** Small issues:
