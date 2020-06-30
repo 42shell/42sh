@@ -27,9 +27,9 @@ int		eval_pipeline(t_command *command)
 			return (-1);
 		process = process_new(pipeline, stdin, fd[1]);
 		launch_process(process, fd[0]);
-		pipeline =  pipeline->next;
+		pipeline = pipeline->next;
 		stdin = fd[0];
-	} 
+	}
 	process = process_new(pipeline, stdin, STDOUT_FILENO);
 	return (launch_process(process, fd[1]));
 }

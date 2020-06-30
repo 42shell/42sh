@@ -12,7 +12,7 @@
 
 #include "shell.h"
 
-static void	advance_and_parse_linebreak()
+static void	advance_and_parse_linebreak(void)
 {
 	int		old_linebreak_type;
 
@@ -59,10 +59,10 @@ t_command	*parse_pipe_sequence(void)
 **                  | bang pipe_sequence
 */
 
-t_command			*parse_pipeline(void)
+t_command	*parse_pipeline(void)
 {
-	t_command		*pipeline;
-	int				invert_return;
+	t_command	*pipeline;
+	int			invert_return;
 
 	invert_return = 0;
 	while (g_parser.token->type == BANG)

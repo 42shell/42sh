@@ -1,20 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_power.c                                         :+:      :+:    :+:   */
+/*   ft_cmp.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nbousset <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/10 18:52:06 by nbousset          #+#    #+#             */
-/*   Updated: 2019/06/13 22:30:53 by nbousset         ###   ########.fr       */
+/*   Created: 2019/11/21 20:08:08 by fratajcz          #+#    #+#             */
+/*   Updated: 2019/12/08 03:09:45 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-double		ft_power(double nb, double exp)
+#include "libft.h"
+
+int		ft_cmp(void *a, void *b)
 {
-	if (exp == 0.0)
-		return (1.0);
-	if (exp < 0.0)
-		return (1.0 / ft_power(nb, -exp));
-	return (nb * ft_power(nb, exp - 1.0));
+	if ((int *)a < (int *)b)
+		return (-1);
+	if ((int *)a > (int *)b)
+		return (1);
+	return (0);
 }

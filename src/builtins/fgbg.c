@@ -12,6 +12,31 @@
 
 #include "shell.h"
 
+t_job	*get_job_by_str(char *str)
+{
+	t_job	*job;
+	int		id;
+
+	if (str[0] == '%')
+	{
+		if (str[1] == '+')
+			return (g_jobs);
+		if (str[1] == '-')
+		{
+			if (g_jobs && g_jobs->next)
+				return (g_jobs->next);
+			return (NULL);
+		}
+		id = ft_atoi(++str);
+	}
+	else
+		id = ft_atoi(str);
+	job = g_jobs;
+	while (job && job->id != id)
+		job = job->next;
+	return (job);
+}
+
 int		builtin_bg(char **argv, __attribute__((unused)) t_array *env)
 {
 	t_job	*job;
@@ -30,7 +55,6 @@ int		builtin_bg(char **argv, __attribute__((unused)) t_array *env)
 	print_job(job, false);
 	return (0);
 }
-
 
 int		builtin_fg(char **argv, __attribute__((unused)) t_array *env)
 {

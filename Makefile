@@ -153,7 +153,6 @@ SRC_PARSER      := and_or.c\
 				   separator.c\
 				   heredoc.c\
 				   error.c\
-				   debug.c\
                    new_del.c\
 				   format_command.c\
 				   format_compound.c\

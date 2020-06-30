@@ -19,10 +19,6 @@ t_command	*command_new(enum e_cmd_type type)
 	command = ft_xmalloc(sizeof(t_command));
 	if (type == SIMPLE)
 		command->value.simple = ft_xmalloc(sizeof(t_simple_cmd));
-	//else if (type == CONNECTION)
-	//	command->value.connection = ft_xmalloc(sizeof(t_connection));
-	//else if (type == GROUP)
-	//	command->value.group = ft_xmalloc(sizeof(t_group_cmd));
 	else if (type == IF_CLAUSE || type == WHILE_CLAUSE)
 		command->value.if_clause = ft_xmalloc(sizeof(t_if_clause));
 	command->type = type;

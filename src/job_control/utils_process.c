@@ -12,7 +12,7 @@
 
 #include "shell.h"
 
-t_process	*process_list_dup(t_process *process_list)
+t_process			*process_list_dup(t_process *process_list)
 {
 	t_process	*dup_list;
 	t_process	*dup;

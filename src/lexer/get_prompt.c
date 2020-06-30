@@ -27,20 +27,15 @@ static char	*get_prompt_quote(enum e_quote_st bracket_status)
 	return (PS2);
 }
 
-char		*get_prompt(void)
+char		*get_prompt_token(void)
 {
-	enum e_quote_st	bracket_status;
-
-	bracket_status = get_bracket_status(g_lexer.brack_stack);
-	if (g_lexer.quote_st || bracket_status)
-		return (get_prompt_quote(bracket_status));
 	if (g_lexer.line_cont == PIPE)
 		return (PSP);
 	if (g_lexer.line_cont == AND_IF)
 		return (PSA);
 	if (g_lexer.line_cont == OR_IF)
 		return (PSO);
-	if (g_lexer.line_cont == LBRACKET)
+	if (g_lexer.line_cont == LPAREN)
 		return (PSB);
 	if (g_lexer.line_cont == LBRACE)
 		return (PSC);
@@ -57,4 +52,14 @@ char		*get_prompt(void)
 	if (g_lexer.line_cont == DO)
 		return (PSD);
 	return (PS2);
+}
+
+char		*get_prompt(void)
+{
+	enum e_quote_st	bracket_status;
+
+	bracket_status = get_bracket_status(g_lexer.brack_stack);
+	if (g_lexer.quote_st || bracket_status)
+		return (get_prompt_quote(bracket_status));
+	return (get_prompt_token());
 }

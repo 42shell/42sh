@@ -12,7 +12,7 @@
 
 #ifndef SHELL_H
 # define SHELL_H
-#include <stdio.h>
+
 # include <unistd.h>
 # include <sys/types.h>
 # include <sys/wait.h>
@@ -39,6 +39,11 @@
 # include "builtins.h"
 # include "autocomplete.h"
 # include "utils.h"
+
+/*
+Norme: ./src/job_control/job_list.c
+Error: 6 functions in the file
+*/
 
 /*
 ** vars.h

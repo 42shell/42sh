@@ -59,6 +59,8 @@ SRC =	mem/ft_xmalloc.c \
 		conv/ft_atoi_base.c \
 		conv/ft_itoa.c \
 		conv/ft_itoa_base.c \
+		math/ft_cmp.c\
+		math/ft_sqrt.c\
 		math/ft_power.c \
 		math/ft_isprime.c \
 		math/ft_nextprime.c \
