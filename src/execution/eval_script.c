@@ -77,12 +77,11 @@ static int	eval_if_statement(t_if_clause *if_clause)
 int			eval_if_clause(t_command *command)
 {
 	t_if_clause	*if_clause;
+	t_list_head	*fd_backup;
 
-	if (set_redir(command->redir_list, true) != 0)
-	{
-		restore_fds();
+	fd_backup = NULL;
+	if (set_redir(command->redir_list, true, &fd_backup) != 0)
 		return (g_last_exit_st = 1);
-	}
 	while (command)
 	{
 		if_clause = command->value.if_clause;
@@ -95,6 +94,6 @@ int			eval_if_clause(t_command *command)
 			eval_compound_list(if_clause->then_part);
 		command = if_clause->else_part;
 	}
-	restore_fds();
+	restore_fds(&fd_backup);
 	return (0);
 }

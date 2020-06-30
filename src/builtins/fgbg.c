@@ -12,38 +12,7 @@
 
 #include "shell.h"
 
-/*
-fg : remove_job_from_list(g_jobs)
-	 add_job_to_list(g_current_jobs)
-	 put the fucking ast in g_complete_command to be deleted if job completes
-	 put_job_fg()
-	 	if stopped again will dup again and put it on top of the stack
-	del the job like in launch_job
-
-bg : job already in the list.
-	 put_job_bg()
-
-both cases, if job_is_done command will be deleted in notif_jobs
-
-notif_jobs : the job was stopped while in the background,
-			 put the job on top of the stack (need prev_job=no))
-
-*/
-
-/*
-static int	notif_and_continue_job(t_job *job, bool bg)
-{
-	//t_dstr		*command_format;
-
-	//command_format = ft_dstr_new(32);
-	//format_command(command_format, job->command);
-	//ft_printf("%s%s\n", command_format->str, bg ? " &" : "");
-	//ft_dstr_del(&command_format);
-	return (0);
-}
-*/
-
-int			builtin_bg(char **argv, __attribute__((unused)) t_array *env)
+int		builtin_bg(char **argv, __attribute__((unused)) t_array *env)
 {
 	t_job	*job;
 
@@ -63,7 +32,7 @@ int			builtin_bg(char **argv, __attribute__((unused)) t_array *env)
 }
 
 
-int			builtin_fg(char **argv, __attribute__((unused)) t_array *env)
+int		builtin_fg(char **argv, __attribute__((unused)) t_array *env)
 {
 	t_job	*job;
 	t_dstr	*buf;

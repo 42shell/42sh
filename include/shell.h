@@ -86,11 +86,10 @@ typedef struct			s_var
 
 /*
 ** TODO:
-** -update comments commit
-** -redo jobs/fg/bg -> format_command if/while
+** -redirections: add test
+** -add_job_to_list -> if set_id, if !jobisstop put it after stopped jobs ? 
 ** -interrupt exec
 ** -check ^C on line continuations
-** -force exit on ctrl-D even if jobs
 ** -shell script
 **
 ** problems:
