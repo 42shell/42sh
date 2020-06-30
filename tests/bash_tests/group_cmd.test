@@ -99,3 +99,9 @@ echo '{ (ls -z || ls) && echo ok; } 2>&1'
 #TEST 19
 echo '{ (ls && ls -z) && echo ok; } 2>&1'
 { (ls && ls -z) && echo ok; } 2>&1
+
+#TEST20
+echo '{ echo foo; echo bar >out; ls DO_NOT_EXIST; } >out 2>err'
+{ echo foo; echo bar >out; ls DO_NOT_EXIST; } >out 2>err
+cat out; cat err; rm out; rm err;
+echo '~~~'

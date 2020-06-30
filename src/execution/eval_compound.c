@@ -65,23 +65,21 @@ static int	subshell_is_useless(t_command *command)
 int			eval_group_command(t_command *command)
 {
 	t_process	*process;
+	t_list_head	*fd_backups;
 
+	fd_backups = NULL;
 	if ((command->flags & CMD_SUBSHELL) && !g_already_forked
 	&& !subshell_is_useless(command))
 	{
 		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
 		return (launch_process(process, 0));
 	}
-	if (set_redir(command->redir_list, true) != 0)
-	{
-		restore_fds();
+	if (set_redir(command->redir_list, true, &fd_backups) != 0)
 		return (g_last_exit_st = 1);
-	}
-	if (command->value.compound_list
-	&& command->value.compound_list->next)
+	if (command->value.compound_list && command->value.compound_list->next)
 		g_already_forked = false;
 	eval_compound_list(command->value.compound_list);
-	restore_fds();
+	restore_fds(&fd_backups);
 	return (g_last_exit_st);
 }
 

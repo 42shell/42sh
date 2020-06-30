@@ -14,12 +14,21 @@
 
 int			g_padding_left;
 
+/*
+** padding to fill job_id field ( [#]+ ) when printing processes in long format
+*/
+
 void		set_padding_left(char *job_str)
 {
 	while (*job_str++ != ']')
 		g_padding_left++;
 	g_padding_left += 2;
 }
+
+/*
+** padding to fill the space after process/job status field
+** and align commands.
+*/
 
 void		pad_right(t_dstr *dstr, int n)
 {

@@ -12,6 +12,8 @@
 
 #include "shell.h"
 
+extern int	*g_backups;
+
 static void		reset_signals(void)
 {
 	signal(SIGINT, SIG_DFL);

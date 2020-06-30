@@ -58,12 +58,11 @@ int			exec_binary(char **argv, t_array *temp_env)
 int			exec_simple_command(t_simple_cmd *simple)
 {
 	t_array		*temp_env;
+	t_list_head	*fd_backups;
 
-	if (set_redir(simple->redirs, true) != 0)
-	{
-		restore_fds();
+	fd_backups = NULL;
+	if (set_redir(simple->redirs, true, &fd_backups) != 0)
 		return (g_last_exit_st = 1);
-	}
 	if (simple->argv)
 	{
 		temp_env = export_env(g_shell.vars);
@@ -79,6 +78,6 @@ int			exec_simple_command(t_simple_cmd *simple)
 		set_local_variables(simple);
 		g_last_exit_st = 0;
 	}
-	restore_fds();
+	restore_fds(&fd_backups);
 	return (0);
 }

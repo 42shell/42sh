@@ -67,14 +67,16 @@ static int	print_one_job(t_job *job, int options)
 	if (options & JOBS_P)
 		ft_dprintf(2, "%d\n", job->pgid);
 	else if (options & JOBS_L)
-		print_job(job, true);//print_job_long(job);
+		print_job(job, true);
 	else
 		print_job(job, false);
 	job->notified = true;
 	return (0);
 }
 
-//argv = argv + number of option arguments
+/*
+** argv = argv + number of option arguments
+*/
 
 static int	print_jobs(char **argv, int options)
 {
