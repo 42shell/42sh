@@ -73,7 +73,7 @@ void		print_job(t_job *job, bool l_opt)
 	format_job_info(job_format, job);
 	set_padding_left(job_format->str);
 	if (!l_opt)
-		pad_right(job_format, 36 - job_format->len);
+		pad_right(job_format, 38 - job_format->len);
 	format_processes(job_format, job->processes, l_opt);
 	if (job->bg && job_is_running(job))
 		ft_dstr_cat(job_format, " &");

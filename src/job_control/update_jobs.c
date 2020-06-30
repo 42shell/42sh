@@ -22,9 +22,9 @@ void	update_jobs(bool notif)
 	while (job)
 	{
 		next = job->next;
-		if (job_is_done(job))
+		if (g_shell.interactive_mode && job_is_done(job))
 		{
-			if (notif && job->bg && g_shell.interactive_mode)
+			if (notif)
 				print_job(job, false);
 			del_job_from_list(&g_jobs, job);
 		}
