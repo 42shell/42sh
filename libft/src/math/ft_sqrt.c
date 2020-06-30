@@ -24,7 +24,6 @@ double	ft_sqrt(double base)
 	double	limit;
 
 	n = 1;
-	m = 0;
 	i = 0;
 	limit = 10000;
 	while (n * n != base && i < limit)

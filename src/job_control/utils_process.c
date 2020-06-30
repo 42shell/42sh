@@ -61,10 +61,8 @@ static t_process	*get_process_in(t_job *list, pid_t pid)
 
 t_process			*get_process(pid_t pid)
 {
-	t_job		*job;
 	t_process	*process;
 
-	job = g_jobs;
 	if (!(process = get_process_in(g_current_jobs, pid))
 	&& !(process = get_process_in(g_jobs, pid)))
 		return (NULL);
