@@ -13,43 +13,38 @@
 #include "shell.h"
 
 /*
-//g_loop_lvl
-//ctrl-C	: g_interrupt = true
-//			: g_interrupt_is_due_to_break = false;
-//break	n	: g_interrupt = true
-//			: g_break_interrupt = true;
-//			: g_break_n = n
-//eval_while_clause :
-//					 g_loop_lvl++;
-//					 if (g_interrupt && !g_break_interrupt)
-//						return;
-//					 else if g_interrupt && g_break_n
-//						if --g_break_n == 0
-//							g_interrupt = false
-//							g_break_interrupt = false
-//						break
+** g_loop_lvl
+** ctrl-C		:	g_interrupt = true
+** 				:	g_interrupt_is_due_to_break = false;
+** break n		:	g_interrupt = true
+** 				:	g_interrupt_is_due_to_break = true;
+** 				:	g_break_n = n
+** eval_while	:	g_loop_lvl++;
+** 					if g_interrupt && g_interrupt_is_due_to_break
+** 						if --g_break_n == 0
+** 							g_interrupt_is_due_to_break = false
+** 							g_interrupt = false
+** 						break
+*/
 
 int			eval_while_clause(t_command *command)
 {
 	t_if_clause	*if_clause;
+	t_list_head	*fd_backup;
 
+	fd_backup = NULL;
 	g_already_forked = false;
 	if_clause = command->value.if_clause;
-	if (set_redir(command->redir_list, true) != 0)
+	if (set_redir(command->redir_list, &fd_backup) != 0)
 	{
-		restore_fds();
+		restore_fds(&fd_backup);
 		return (g_last_exit_st = 1);
 	}
 	while (!g_interrupt && eval_compound_list(if_clause->if_part) == 0)
-	{
-		eval_compound_list(if_clause->then_part); //if 140 break
-		if (g_last_exit_st == 130 || g_interrupt)
-			break ;
-	}
-	restore_fds();
+		eval_compound_list(if_clause->then_part);
+	restore_fds(&fd_backup);
 	return (0);
 }
-*/
 
 /*
 ** We set g_already_forked=false cause we need to evaluate the if_part in a
@@ -80,9 +75,9 @@ int			eval_if_clause(t_command *command)
 	t_list_head	*fd_backup;
 
 	fd_backup = NULL;
-	if (set_redir(command->redir_list, true, &fd_backup) != 0)
+	if (set_redir(command->redir_list, &fd_backup) != 0)
 		return (g_last_exit_st = 1);
-	while (command)
+	while (!g_interrupt && command)
 	{
 		if_clause = command->value.if_clause;
 		if (if_clause->if_part)
@@ -95,5 +90,5 @@ int			eval_if_clause(t_command *command)
 		command = if_clause->else_part;
 	}
 	restore_fds(&fd_backup);
-	return (0);
+	return (g_last_exit_st);
 }

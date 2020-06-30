@@ -75,11 +75,10 @@ void				add_binary_msgs_to_hash(void);
 ** redirections
 */
 
-int					set_redir(t_redir *redirs, bool backup,
-					t_list_head **backup_list);
+int					set_redir(t_redir *redirs, t_list_head **backup_list);
 int					open_heredoc(t_dstr *heredoc);
 int					dup2_and_backup(t_list_head **backup_list,
-					int fildes1, int fildes2, bool backup);
+									int fildes1, int fildes2);
 bool				is_valid_fd(t_list_head *backup_list, int fd);
 int					restore_fds(t_list_head **backup_list);
 void				move_fd(int *fd);

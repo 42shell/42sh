@@ -45,15 +45,13 @@ void				move_fd(int *fd)
 }
 
 int					dup2_and_backup(t_list_head **backup_list,
-					int fd_from, int fd_to, bool backup)
+					int fd_from, int fd_to)
 {
 	t_fd_backup *backup_store;
 	t_fd_backup *backup_to_move;
 
 	if (!backup_list)
 		return (-1);
-	if (backup == false)
-		return (dup2(fd_from, fd_to));
 	if (*backup_list == NULL)
 		*backup_list = ft_list_first_head(NULL);
 	backup_store = ft_xmalloc(sizeof(t_fd_backup));

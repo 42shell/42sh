@@ -24,7 +24,7 @@ int			eval_compound_list(t_command *command)
 {
 	t_job	*job;
 
-	while (command)
+	while (!g_interrupt && command)
 	{
 		job = job_new(command, STDIN_FILENO, STDOUT_FILENO);
 		if (g_current_jobs)
@@ -74,7 +74,7 @@ int			eval_group_command(t_command *command)
 		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
 		return (launch_process(process, 0));
 	}
-	if (set_redir(command->redir_list, true, &fd_backups) != 0)
+	if (set_redir(command->redir_list, &fd_backups) != 0)
 		return (g_last_exit_st = 1);
 	if (command->value.compound_list && command->value.compound_list->next)
 		g_already_forked = false;
@@ -89,7 +89,7 @@ int			eval_compound_command(t_command *command)
 		return (eval_group_command(command));
 	if (command->type == IF_CLAUSE)
 		return (eval_if_clause(command));
-	//if (command->type == WHILE_CLAUSE)
-	//	return (eval_while_clause(command));
+	if (command->type == WHILE_CLAUSE)
+		return (eval_while_clause(command));
 	return (0);
 }

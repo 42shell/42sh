@@ -62,7 +62,7 @@ int			eval_complete_command(t_command *complete_command)
 	t_job		*job;
 
 	command = complete_command;
-	while (command != NULL)
+	while (!g_interrupt && command != NULL)
 	{
 		job = job_new(command, STDIN_FILENO, STDOUT_FILENO);
 		if (command->sep == AMPERSAND)
@@ -71,5 +71,5 @@ int			eval_complete_command(t_command *complete_command)
 		add_binary_msgs_to_hash();
 		command = command->next;
 	}
-	return (0);
+	return (g_last_exit_st);
 }

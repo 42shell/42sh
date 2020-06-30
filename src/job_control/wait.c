@@ -22,9 +22,9 @@ static void	set_signaled_exit_status(t_process *process)
 	process->signaled = WTERMSIG(process->status);
 	if (process->stdout == 1)
 		g_last_exit_st = process->signaled + 128;
-	//if (process->signaled != 13 && process->signaled != 2)
-	//	ft_dprintf(2, "%d: Terminated by signal %d.\n",
-	//	(int)process->pid, WTERMSIG(process->status));
+	if (process->signaled != 13 && process->signaled != 2)
+		ft_dprintf(2, "%d: Killed by signal %d.\n",
+		(int)process->pid, WTERMSIG(process->status));
 }
 
 static int	set_process_status(pid_t pid, int status)
@@ -73,10 +73,9 @@ void		update_status(void)
 
 void		wait_for_job(t_job *job)
 {
-	pid_t		pid;
-	int			status;
+	pid_t	pid;
+	int		status;
 
-	status = 0;
 	while (!job_is_done(job)
 	&& (g_job_control_enabled ? !job_is_stopped(job) : 1))
 	{
@@ -86,12 +85,17 @@ void		wait_for_job(t_job *job)
 			ft_dprintf(2, "42sh: process %d not found.\n", pid);
 			break ;
 		}
-		else if (pid < 0)
+		if (pid < 0)
 		{
 			ft_dprintf(2, "42sh: waitpid: unexpected error.\n", pid);
 			break ;
 		}
 	}
-	if (job_is_done(job) && job->invert_ret)
-		g_last_exit_st = g_last_exit_st ? 0 : 1;
+	if (job_is_done(job))
+	{
+		if (g_last_exit_st == 130)
+			g_interrupt = true;
+		if (job->invert_ret)
+			g_last_exit_st = g_last_exit_st ? 0 : 1;
+	}
 }

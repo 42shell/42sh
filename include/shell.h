@@ -86,11 +86,18 @@ typedef struct			s_var
 
 /*
 ** TODO:
-** -redirections: add test
-** -add_job_to_list -> if set_id, if !jobisstop put it after stopped jobs ? 
-** -interrupt exec
-** -check ^C on line continuations
+** -while_clause
 ** -shell script
+**
+** Small issues:
+** -Signal handlers does not seem to work
+** -Running background jobs should be inserted in the
+**  stack below stopped jobs. Who cares ? I don t
+** -Useless jobs (containing no processes) are added
+** 	to g_current_jobs stack when executing some commands
+**  (and_ors, brace_groups). Does not cause any problem,
+**  and they are deleted as soon as the command evaluation
+**  is finished.
 **
 ** problems:
 ** -watch deceitful lexer
