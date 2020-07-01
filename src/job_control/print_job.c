@@ -70,7 +70,7 @@ void		print_job(t_job *job, bool l_opt)
 		return ;
 	g_padding_left = 1;
 	job_format = ft_dstr_new(64);
-	format_job_info(job_format, job);
+	format_job_info(job_format, job, l_opt);
 	set_padding_left(job_format->str);
 	if (!l_opt)
 		pad_right(job_format, 38 - job_format->len);
