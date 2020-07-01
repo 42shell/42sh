@@ -121,6 +121,7 @@ int			builtin_jobs(char **argv, __attribute__((unused)) t_array *env)
 	argv++;
 	while (*argv && **argv == '-')
 		argv++;
+	update_jobs(false, false);
 	print_jobs(argv, options);
 	if (g_jobspec_error)
 	{

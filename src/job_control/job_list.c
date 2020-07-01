@@ -45,12 +45,7 @@ void		add_job_to_list(t_job **head, t_job *job, bool set_id)
 	if (job->next)
 		job->next->prev = job;
 	if (set_id && !job->id)
-	{
-		if (!job->next)
-			job->id = 1;
-		else
-			job->id = job->next->id + 1;
-	}
+		job->id = ++g_jobs_count;
 	*head = job;
 }
 

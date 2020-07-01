@@ -23,6 +23,7 @@ t_job	*g_current_jobs;
 */
 
 t_job	*g_jobs;
+int		g_jobs_count;
 
 void	continue_job(t_job *job, bool bg)
 {

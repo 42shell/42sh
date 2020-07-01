@@ -85,7 +85,17 @@ typedef struct			s_var
 }						t_var;
 
 /*
+** notif timing ?
+** test fifo ctrl-C
+*/
+
+/*
 ** TODO:
+** -test every correction test and every tests/bash_tests test
+**  compare output and process management with bash.
+**  For each test:
+** 		Ctrl-C, Ctrl-Z
+**      fg/bg/jobs
 ** -shell script
 **
 ** Small issues:

@@ -49,6 +49,7 @@ typedef struct			s_job
 
 extern t_job			*g_current_jobs;
 extern t_job			*g_jobs;
+extern int				g_jobs_count;
 
 /*
 ** launch job/process
@@ -66,7 +67,8 @@ void					put_job_bg(t_job *job, bool cont);
 void					wait_for_job(t_job *job);
 void					update_status(void);
 void					continue_job(t_job *job, bool bg);
-void					update_jobs(bool notif);
+void					update_jobs(bool del_from_list,
+									bool print_notif);
 
 /*
 ** utils
@@ -94,7 +96,7 @@ t_list_head				*get_sorted_jobs_list(void);
 ** job display
 */
 
-void					format_job_info(t_dstr *buf, t_job *job);
+void					format_job_info(t_dstr *buf, t_job *job, bool pgid);
 void					format_process_info(t_dstr *buf, t_process *process,
 						int padding);
 void					format_processes(t_dstr *buf, t_process *list,
