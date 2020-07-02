@@ -34,7 +34,7 @@ static void	format_exit_status(t_dstr *buf, char *itoa_buf, t_process *process)
 	}
 }
 
-void	format_process_info(t_dstr *buf, t_process *process, int padding)
+void		format_process_info(t_dstr *buf, t_process *process, int padding)
 {
 	char	itoa_buf[12];
 
@@ -55,7 +55,7 @@ void	format_process_info(t_dstr *buf, t_process *process, int padding)
 		ft_dstr_cat(buf, " Running");
 }
 
-void	format_job_info(t_dstr *buf, t_job *job, bool pgid)
+void		format_job_info(t_dstr *buf, t_job *job, bool pgid)
 {
 	char	itoa_buf[12];
 
