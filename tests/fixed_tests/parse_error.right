@@ -99,3 +99,19 @@ lol
 42sh: syntax error near unexpected token '}'
 ~~~
 42sh: syntax error near unexpected token 'fi'
+~~~
+42sh: syntax error near unexpected token 'do'
+~~~
+42sh: syntax error near unexpected token 'done'
+~~~
+42sh: syntax error near unexpected token 'do'
+~~~
+42sh: syntax error near unexpected token 'done'
+~~~
+42sh: syntax error near unexpected token 'fi'
+~~~
+42sh: syntax error near unexpected token 'done'
+~~~
+42sh: syntax error near unexpected token ';'
+~~~
+42sh: syntax error near unexpected token 'done'
