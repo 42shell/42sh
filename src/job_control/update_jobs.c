@@ -32,7 +32,7 @@ static void	bubble_up_and_notif(t_job *job, bool print_notif)
 	add_job_to_list(&g_jobs, job, false);
 	if (print_notif && g_shell.interactive_mode)
 		print_job(job, false);
-	job->notified = true; 
+	job->notified = true;
 }
 
 /*
@@ -46,7 +46,7 @@ static void	bubble_up_and_notif(t_job *job, bool print_notif)
 ** 		-we put it on top of the stack
 */
 
-void	update_jobs(bool called_from_main, bool print_notif)
+void		update_jobs(bool called_from_main, bool print_notif)
 {
 	t_job			*job;
 	t_job			*next;
