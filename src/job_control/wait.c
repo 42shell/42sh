@@ -48,27 +48,6 @@ int			set_process_status(pid_t pid, int status)
 	return (0);
 }
 
-/*
-void		update_status(void)
-{
-	pid_t			pid;
-	int				status;
-	struct timespec	time;
-
-	pid = 0;
-	time.tv_sec = 0;
-	time.tv_nsec = 0x10000000;
-	nanosleep(&time, NULL);
-	while ((pid = waitpid(WAIT_ANY, &status, WNOHANG | WUNTRACED)) > 0)
-	{
-		if (set_process_status(pid, status) < 0)
-		{
-			ft_dprintf(2, "42sh: process %d not found.\n", pid);
-			break ;
-		}
-	}
-}
-*/
 void		wait_for_job(t_job *job)
 {
 	pid_t	pid;
@@ -78,7 +57,7 @@ void		wait_for_job(t_job *job)
 	&& (g_job_control_enabled ? !job_is_stopped(job) : 1))
 	{
 		if ((pid = waitpid(WAIT_ANY, &status, WUNTRACED)) < 0)
-			break;
+			break ;
 		if (pid > 0 && set_process_status(pid, status) < 0)
 		{
 			ft_dprintf(2, "42sh: process %d not found.\n", pid);
