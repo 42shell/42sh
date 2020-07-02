@@ -70,7 +70,7 @@ static bool	there_are_stopped_jobs(void)
 	t_job		*job;
 	static bool	notif = false;
 
-	update_status();
+	update_jobs(false, false);
 	if (!g_jobs)
 		return (false);
 	job = g_jobs;

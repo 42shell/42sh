@@ -86,12 +86,11 @@ typedef struct			s_var
 
 /*
 ** notif timing ?
-** test fifo ctrl-C
 */
 
 /*
 ** TODO:
-** -test every correction test and every tests/bash_tests test
+** -test every tests/bash_tests
 **  compare output and process management with bash.
 **  For each test:
 ** 		Ctrl-C, Ctrl-Z
@@ -101,7 +100,7 @@ typedef struct			s_var
 ** Small issues:
 ** -Signal handlers does not seem to work
 ** -Running background jobs should be inserted in the
-**  stack below stopped jobs. Who cares ? I don t
+**  stack below stopped jobs. Who cares  ? I don t
 ** -Useless jobs (containing no processes) are added
 ** 	to g_current_jobs stack when executing some commands
 **  (and_ors, brace_groups). Does not cause any problem,
@@ -109,6 +108,7 @@ typedef struct			s_var
 **  is finished.
 **
 ** problems:
+** -newline printed after expanded heredoc in jobs
 ** -watch deceitful lexer
 ** -store aborted multi-lines in history ? bash does
 **
