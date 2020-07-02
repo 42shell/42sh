@@ -76,11 +76,16 @@ static bool	there_are_stopped_jobs(void)
 	job = g_jobs;
 	while (job)
 	{
-		if (job_is_stopped(job) && !notif)
+		if (job_is_stopped(job))
 		{
-			notif = true;
-			ft_dprintf(2, "42sh: exit: There are stopped jobs.\n");
-			return (true);
+			if (!notif)
+			{
+				notif = true;
+				ft_dprintf(2, "42sh: exit: There are stopped jobs.\n");
+				return (true);
+			}
+			kill(-job->pgid, SIGHUP);
+			kill(-job->pgid, SIGCONT);
 		}
 		job = job->next;
 	}

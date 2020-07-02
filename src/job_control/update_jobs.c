@@ -16,7 +16,8 @@ static void	update_greatest_id(void)
 {
 	t_job	*job;
 
-	job = g_jobs;
+	if (!(job = g_jobs))
+		g_greatest_job_id = 0;
 	while (job)
 	{
 		if (job->id > g_greatest_job_id)
@@ -33,14 +34,14 @@ static void	bubble_up_and_notif(t_job *job, bool print_notif)
 		print_job(job, false);
 	job->notified = true; 
 }
-/* ************************************************************************** */
+
 /*
 ** If job is done:
 ** 		-if and we are in batch mode, we just ignore it. There is no
 **		notification, and we don t delete it from the list cause it needs to be
 ** 		printed if jobs builtin is called.
-** 		-if this function is called from fg/bg/jobs, we don t delete the job from
-**		 the list, cause it needs to be notified in the builtin.
+** 		-if this function is called from fg/bg/jobs, we don t delete the job
+** 		from the list, cause it needs to be notified in the builtin.
 ** If the job is stopped:
 ** 		-we put it on top of the stack
 */
@@ -51,7 +52,8 @@ void	update_jobs(bool called_from_main, bool print_notif)
 	t_job			*next;
 	struct timespec	time;
 
-	job = g_jobs;
+	if (!(job = g_jobs))
+		return ;
 	time.tv_sec = 0;
 	time.tv_nsec = 0x10000000;
 	nanosleep(&time, NULL);
