@@ -163,3 +163,34 @@ echo '~~~'
 
 if ( true )
 then { if ! true; fi; }; fi
+echo '~~~'
+
+do
+echo '~~~'
+
+done
+echo '~~~'
+
+while do
+echo '~~~'
+
+while true
+do
+done
+echo '~~~'
+
+while true
+do echo test
+fi
+echo '~~~'
+
+while true
+echo true
+done
+echo '~~~'
+
+while;
+echo '~~~'
+
+while true do echo true; done
+echo '~~~'

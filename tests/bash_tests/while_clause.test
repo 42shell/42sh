@@ -1,0 +1,4 @@
+#TEST 00
+echo 'while false; do echo false; done'
+while false; do echo false; done
+echo '~~~'
