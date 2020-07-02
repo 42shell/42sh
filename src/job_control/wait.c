@@ -22,12 +22,9 @@ static void	set_signaled_exit_status(t_process *process)
 	process->signaled = WTERMSIG(process->status);
 	if (process->stdout == 1)
 		g_last_exit_st = process->signaled + 128;
-	//if (process->signaled != 13 && process->signaled != 2)
-	//	ft_dprintf(2, "%d: Killed by signal %d.\n",
-	//	(int)process->pid, WTERMSIG(process->status));
 }
 
-static int	set_process_status(pid_t pid, int status)
+int			set_process_status(pid_t pid, int status)
 {
 	t_process	*process;
 
@@ -51,6 +48,7 @@ static int	set_process_status(pid_t pid, int status)
 	return (0);
 }
 
+/*
 void		update_status(void)
 {
 	pid_t			pid;
@@ -59,7 +57,7 @@ void		update_status(void)
 
 	pid = 0;
 	time.tv_sec = 0;
-	time.tv_nsec = 0xffffff;
+	time.tv_nsec = 0x10000000;
 	nanosleep(&time, NULL);
 	while ((pid = waitpid(WAIT_ANY, &status, WNOHANG | WUNTRACED)) > 0)
 	{
@@ -69,10 +67,8 @@ void		update_status(void)
 			break ;
 		}
 	}
-	if (pid < 0 && errno != ECHILD)
-		ft_dprintf(2, "42sh: waitpid: unexpected error.\n", pid);
 }
-
+*/
 void		wait_for_job(t_job *job)
 {
 	pid_t	pid;
@@ -81,15 +77,11 @@ void		wait_for_job(t_job *job)
 	while (!job_is_done(job)
 	&& (g_job_control_enabled ? !job_is_stopped(job) : 1))
 	{
-		pid = waitpid(WAIT_ANY, &status, WUNTRACED);
+		if ((pid = waitpid(WAIT_ANY, &status, WUNTRACED)) < 0)
+			break;
 		if (pid > 0 && set_process_status(pid, status) < 0)
 		{
 			ft_dprintf(2, "42sh: process %d not found.\n", pid);
-			break ;
-		}
-		if (pid < 0)
-		{
-			ft_dprintf(2, "42sh: waitpid: unexpected error.\n", pid);
 			break ;
 		}
 	}

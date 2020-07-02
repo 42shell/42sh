@@ -12,13 +12,26 @@
 
 #include "shell.h"
 
+static void	update_greatest_id(void)
+{
+	t_job	*job;
+
+	job = g_jobs;
+	while (job)
+	{
+		if (job->id > g_greatest_job_id)
+			g_greatest_job_id = job->id;
+		job = job->next;
+	}
+}
+
 static void	bubble_up_and_notif(t_job *job, bool print_notif)
 {
 	remove_job_from_list(&g_jobs, job);
 	add_job_to_list(&g_jobs, job, false);
 	if (print_notif && g_shell.interactive_mode)
 		print_job(job, false);
-	job->notified = true;
+	job->notified = true; 
 }
 /* ************************************************************************** */
 /*
@@ -36,24 +49,25 @@ void	update_jobs(bool called_from_main, bool print_notif)
 {
 	t_job			*job;
 	t_job			*next;
+	struct timespec	time;
 
-	update_status();
 	job = g_jobs;
+	time.tv_sec = 0;
+	time.tv_nsec = 0x10000000;
+	nanosleep(&time, NULL);
 	while (job)
 	{
 		next = job->next;
 		if (job_is_done(job) && g_shell.interactive_mode)
 		{
-			if (print_notif)
+			if (print_notif && job->bg)
 				print_job(job, false);
 			if (called_from_main)
-			{
 				del_job_from_list(&g_jobs, job);
-				g_jobs_count--;
-			}
 		}
 		else if (job_is_stopped(job) && !job->notified)
 			bubble_up_and_notif(job, print_notif);
 		job = next;
 	}
+	update_greatest_id();
 }

@@ -16,6 +16,12 @@ extern int	*g_backups;
 
 static void		reset_signals(void)
 {
+	struct sigaction	sigact;
+
+	sigaction(SIGCHLD, NULL, &sigact);
+	sigact.sa_handler = SIG_DFL;
+	sigaction(SIGCHLD, &sigact, NULL);
+
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGTTIN, SIG_DFL);
