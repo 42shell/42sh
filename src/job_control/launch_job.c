@@ -45,25 +45,27 @@ static void	move_job_in_persistent_list(t_job *job)
 static int	launch_job_bg(t_job *job)
 {
 	t_process	*process;
-	int			fd_in;
+	t_list_head	*fd_backup;
 	int			old_bg;
+	int			stdin;
 
 	old_bg = g_bg;
 	g_bg = true;
-	fd_in = STDIN_FILENO;
-	if (!g_job_control_enabled)
-		fd_in = open("/dev/null", O_RDONLY);
+	fd_backup = NULL;
+	if (!g_job_control_enabled && (stdin = open("/dev/null", O_RDONLY)))
+	{
+		dup2_and_backup(&fd_backup, stdin, STDIN_FILENO);
+		close(stdin);
+	}
 	if (job->command->type == PIPELINE)
 		eval_pipeline(job->command);
 	else
 	{
-		process = process_new(job->command, fd_in, STDOUT_FILENO);
+		process = process_new(job->command, STDIN_FILENO, STDOUT_FILENO);
 		launch_process(process, 0);
-		process->stdin = 0;
 	}
-	if (fd_in != STDIN_FILENO)
-		close(fd_in);
 	put_job_bg(job, false);
+	restore_fds(&fd_backup);
 	g_last_exit_st = 0;
 	g_bg = old_bg;
 	return (0);

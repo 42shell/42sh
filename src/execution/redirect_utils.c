@@ -45,7 +45,7 @@ void				move_fd(int *fd)
 }
 
 int					dup2_and_backup(t_list_head **backup_list,
-					int fd_from, int fd_to)
+					int oldfd, int newfd)
 {
 	t_fd_backup *backup_store;
 	t_fd_backup *backup_to_move;
@@ -55,12 +55,12 @@ int					dup2_and_backup(t_list_head **backup_list,
 	if (*backup_list == NULL)
 		*backup_list = ft_list_first_head(NULL);
 	backup_store = ft_xmalloc(sizeof(t_fd_backup));
-	if ((backup_to_move = fd_used_for_backup(*backup_list, fd_to)) != NULL)
+	if ((backup_to_move = fd_used_for_backup(*backup_list, newfd)) != NULL)
 		move_fd(&backup_to_move->backup);
-	backup_store->orig_number = fd_to;
-	backup_store->backup = dup(fd_to);
+	backup_store->orig_number = newfd;
+	backup_store->backup = dup(newfd);
 	ft_list_add(backup_store, *backup_list);
-	return (dup2(fd_from, fd_to));
+	return (dup2(oldfd, newfd));
 }
 
 /*
