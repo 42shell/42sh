@@ -4,10 +4,31 @@ while false; do echo false; done
 echo '~~~'
 
 #TEST 01
-echo -n 9 > var
-while ! grep 0 var; do
+echo '/bin/echo -n 9 > var
+while grep -v 0 var; do
 	cat var
-	echo "- 1" >> var
-	bc < var | tr -d '\n' > tmp; cat tmp > var
-done; rm var
+	/bin/echo "- 1" >> var
+	bc < var | tr -d \\n > tmp; cat tmp > var
+done; rm var tmp'
+/bin/echo -n 9 > var
+while grep -v 0 var; do
+	cat var
+	/bin/echo "- 1" >> var
+	bc < var | tr -d \\n > tmp; cat tmp > var
+done; rm var tmp
+echo '~~~'
+
+#TEST 02
+echo '/bin/echo -n 9 > var
+while grep -v 0 var; do
+	cat var
+	/bin/echo "- 1" >> var
+	bc < var | tr -d \\n > tmp; cat tmp > var
+done >out; cat out; rm var out tmp'
+/bin/echo -n 9 > var
+while grep -v 0 var; do
+	cat var
+	/bin/echo "- 1" >> var
+	bc < var | tr -d \\n > tmp; cat tmp > var
+done >out; cat out; rm var out tmp
 echo '~~~'
