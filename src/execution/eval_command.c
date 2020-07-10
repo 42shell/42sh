@@ -35,7 +35,7 @@ int			eval_simple_command(t_command *command)
 		if (!(simple->argv = get_argv(simple)))
 			return (exec_simple_command(simple));
 	}
-	if (!g_already_forked && !is_builtin(simple->argv[0]))
+	if (!g_already_forked && simple->argv && !is_builtin(simple->argv[0]))
 	{
 		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
 		return (launch_process(process, 0));
