@@ -2,3 +2,12 @@
 echo 'while false; do echo false; done'
 while false; do echo false; done
 echo '~~~'
+
+#TEST 01
+echo -n 9 > var
+while ! grep 0 var; do
+	cat var
+	echo "- 1" >> var
+	bc < var | tr -d '\n' > tmp; cat tmp > var
+done; rm var
+echo '~~~'
