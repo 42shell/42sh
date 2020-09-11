@@ -40,8 +40,8 @@ bool	file_may_be_binary(char *filename)
 	int		i;
 
 	i = 0;
-	if ((fd = open(filename, O_RDONLY)) >= 0)
-		ret = read(fd, buf, 80);
+	fd = open(filename, O_RDONLY);
+	ret = read(fd, buf, 80);
 	close(fd);
 	if (fd < 0 || ret < 0)
 	{

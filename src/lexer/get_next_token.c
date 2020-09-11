@@ -89,9 +89,10 @@ t_token			*get_next_token(void)
 	}
 	while (!g_lexer.end_of_input && !g_lexer.token_delimited)
 	{
-		ret = lx_end() || lx_operator_next() || lx_operator_end()
+		if (!(lx_end() || lx_operator_next() || lx_operator_end()
 		|| lx_backslash() || lx_quote() || lx_operator_new() || lx_newline()
-		|| lx_blank() || lx_word_next() || lx_comment() || lx_word_start();
+		|| lx_blank() || lx_word_next() || lx_comment() || lx_word_start()))
+			return (NULL);
 	}
 	return (return_token());
 }
