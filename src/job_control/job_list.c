@@ -12,6 +12,27 @@
 
 #include "shell.h"
 
+void		move_job_in_persistent_list(t_job *job)
+{
+	t_process	*process;
+	t_dstr		*buf;
+
+	process = job->processes;
+	while (process)
+	{
+		buf = ft_dstr_new(64);
+		if (process->stdin != 0)
+			ft_dstr_append(buf, "| ");
+		format_command(buf, process->command);
+		process->command_str = buf;
+		process->command = NULL;
+		process = process->next;
+	}
+	remove_job_from_list(&g_current_jobs, job);
+	add_job_to_list(&g_jobs, job, true);
+	job->command = NULL;
+}
+
 t_list_head	*get_sorted_jobs_list(void)
 {
 	t_list_head	*sorted_list;
@@ -26,7 +47,7 @@ t_list_head	*get_sorted_jobs_list(void)
 		ft_list_add_tail(job, sorted_list);
 		job = job->next;
 	}
-	ft_list_sort(&sorted_list, &ft_cmp);
+	ft_list_sort(&sorted_list, &cmp_job_id);
 	sorted_list->prev->next = NULL;
 	sorted_list->prev = NULL;
 	return (sorted_list);
@@ -39,18 +60,10 @@ void		del_job_from_list(t_job **head, t_job *job)
 	free(job);
 }
 
-void		add_job_to_list(t_job **head, t_job *job, bool set_id)
-{
-	job->next = *head;
-	if (job->next)
-		job->next->prev = job;
-	if (set_id && !job->id)
-		job->id = g_greatest_job_id + 1;
-	*head = job;
-}
-
 void		remove_job_from_list(t_job **head, t_job *job)
 {
+	if (!*head)
+		return ;
 	if (job->next)
 		job->next->prev = job->prev;
 	if (job->prev)
@@ -61,12 +74,12 @@ void		remove_job_from_list(t_job **head, t_job *job)
 	job->prev = NULL;
 }
 
-void		add_process_to_job(t_job *job, t_process *process)
+void		add_job_to_list(t_job **head, t_job *job, bool set_id)
 {
-	if (!job || !process)
-		return ;
-	process->next = job->processes;
-	if (process->next)
-		process->next->prev = process;
-	job->processes = process;
+	job->next = *head;
+	if (job->next)
+		job->next->prev = job;
+	if (set_id && !job->id)
+		job->id = ++g_greatest_job_id;
+	*head = job;
 }

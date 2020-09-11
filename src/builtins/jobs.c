@@ -51,7 +51,7 @@ static int	get_jobs_options(char **argv, int *options)
 			set_option(options, c);
 		else if (ret == 0)
 		{
-			ft_dprintf(2, "jobs: illegal option -- %d\n", c);
+			ft_dprintf(2, "jobs: illegal option -- %c\n", c);
 			ret = -1;
 		}
 	}
@@ -114,14 +114,14 @@ int			builtin_jobs(char **argv, __attribute__((unused)) t_array *env)
 	int			options;
 
 	options = 0;
-	if (!g_jobs)
-		return (0);
 	if (get_jobs_options(argv, &options) == -1)
 		return (2);
 	argv++;
 	while (*argv && **argv == '-')
 		argv++;
-	update_jobs(false, false);
+	if (!g_jobs)
+		return (0);
+	update_status();
 	print_jobs(argv, options);
 	if (g_jobspec_error)
 	{

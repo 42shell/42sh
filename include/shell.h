@@ -85,16 +85,19 @@ typedef struct			s_var
 }						t_var;
 
 /*
-** notif timing ?
+** remove nanosleep ?
 */
 
 /*
 ** TODO:
-** -test every tests/bash_tests
+** -check jobs management in batch mode
+** -check for zombies
+** -test every tests/bash_tests/background.test
 **  compare output and process management with bash.
 **  For each test:
 ** 		Ctrl-C, Ctrl-Z
 **      fg/bg/jobs
+** -in place expansion causes problems (jobs with heredocs)
 ** -shell script
 **
 ** Small issues:

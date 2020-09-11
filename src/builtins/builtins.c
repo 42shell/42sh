@@ -28,10 +28,6 @@ int			builtin_echo(char **argv, __attribute__((unused)) t_array *env)
 	return (0);
 }
 
-/*
-** "42sh: error" its not a binary
-*/
-
 int			builtin_setenv(char **argv, t_array *env)
 {
 	if (argv[1] == NULL)
@@ -70,7 +66,7 @@ static bool	there_are_stopped_jobs(void)
 	t_job		*job;
 	static bool	notif = false;
 
-	update_jobs(false, false);
+	update_status();
 	if (!g_jobs)
 		return (false);
 	job = g_jobs;

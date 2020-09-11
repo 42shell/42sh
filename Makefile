@@ -33,7 +33,7 @@ LFLAGS          := -ltermcap
 ifeq ($(CC),cc)
 CC              := clang
 endif
-CFLAGS          := -Wall -Wextra #-Werror
+CFLAGS          := -Wall -Wextra -Werror
 ifeq ($(BUILDTYPE), debug)
 	CFLAGS := $(CFLAGS) $(DBG_FLAGS)
 endif
@@ -93,6 +93,7 @@ SRC_EXEC        := $(addprefix execution/,$(SRC_EXEC))
 SRC_JOB       	:= launch_job.c\
 				   launch_process.c\
 				   job_control.c\
+				   job_status.c\
 				   job_list.c\
 				   update_jobs.c\
 				   print_job.c\

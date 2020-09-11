@@ -40,15 +40,14 @@ bool	file_may_be_binary(char *filename)
 	int		i;
 
 	i = 0;
-	if (!filename)
-		return (false);
-	if ((fd = open(filename, O_RDONLY)) < 0 || (ret = read(fd, buf, 80)) < 0)
+	if ((fd = open(filename, O_RDONLY)) >= 0)
+		ret = read(fd, buf, 80);
+	close(fd);
+	if (fd < 0 || ret < 0)
 	{
-		close(fd);
 		ft_dprintf(STDERR_FILENO, "42sh: %s: unable to read file\n", filename);
 		return (true);
 	}
-	close(fd);
 	while (i < ret && buf[i] != '\n')
 	{
 		if (buf[i++] == '\0')

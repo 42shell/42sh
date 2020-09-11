@@ -13,6 +13,7 @@
 #include "shell.h"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 bool		g_bg;
 =======
 static void	make_processes_strings(t_process *list)
@@ -42,6 +43,8 @@ static void	move_job_in_persistent_list(t_job *job)
 }
 >>>>>>> Norme, attempt №1
 
+=======
+>>>>>>> fix problems due to SIGCHLD use for job control, and other small issues
 static int	launch_job_bg(t_job *job)
 {
 	t_process	*process;
@@ -87,10 +90,7 @@ int			launch_job(t_job *job)
 	{
 		put_job_fg(job, false);
 		if (job_is_stopped(job))
-		{
-			move_job_in_persistent_list(job);
 			return (g_last_exit_st);
-		}
 	}
 	else
 		wait_for_job(job);
