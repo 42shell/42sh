@@ -48,8 +48,8 @@ int			builtin_setenv(char **argv, t_array *env)
 	return (1);
 }
 
-int			builtin_unsetenv(char **argv,
-			__attribute__((unused)) t_array *env)
+int			builtin_unsetenv(char **argv
+			, __attribute__((unused)) t_array *env)
 {
 	int		i;
 	t_var	*var;
@@ -87,8 +87,8 @@ static bool	there_are_stopped_jobs(void)
 	return (false);
 }
 
-void		builtin_exit(char **argv,
-			__attribute__((unused)) t_array *env)
+void		builtin_exit(char **argv
+			, __attribute__((unused)) t_array *env)
 {
 	int status;
 

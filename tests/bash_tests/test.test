@@ -1,0 +1,215 @@
+#TEST 00
+echo "basic tests"
+test; echo $?
+test !; echo $?
+test ""; echo $?
+echo '~~~'
+
+#TEST 01
+echo "-b"
+test -b /etc/titi/toto/tata; echo $?
+test -b /dev/; echo $?
+test -b /dev/sda; echo $?
+echo '~~~'
+
+#TEST 02
+echo "-c"
+test -c  /etc/titi/toto/tata; echo $?
+test -c /dev/; echo $?
+test -c /dev/random; echo $?
+echo '~~~'
+
+#TEST 03
+echo "-d"
+test -d /etc/titi/toto/tata; echo $?
+test -d /etc/passwd; echo $?
+test -d /etc/; echo $?
+echo '~~~'
+
+#TEST 04
+echo "op -e"
+test -e /etc/titi/toto/tata; echo $?
+test -e /etc/; echo $?
+echo '~~~'
+
+#TEST 05
+echo "-f"
+test -f /etc/titi/toto/tata; echo $?
+test -f /dev/random; echo $?
+test -f /etc/passwd; echo $?
+echo '~~~'
+
+#TEST 06
+echo "-g"
+touch emptyfile
+chmod g+s emptyfile
+test -g /etc/titi/toto/tata; echo $?
+test -g /etc/passwd; echo $?
+test -g emptyfile; echo $?
+rm emptyfile
+echo '~~~'
+
+#TEST 07
+echo "-L"
+ln -s /etc/ mylink
+test -L /etc/titi/toto/tata; echo $?
+test -L /; echo $?
+test -L mylink; echo $?
+rm mylink
+echo '~~~'
+
+#TEST 08
+echo "-p"
+mkfifo myfifo
+test -p /etc/titi/toto/tata; echo $?
+test -p /; echo $?
+test -p myfifo; echo $?
+rm myfifo
+echo '~~~'
+
+#TEST 09
+echo "-r"
+touch emptyfile
+chmod -r emptyfile
+test -r emptyfile; echo $?
+chmod +r emptyfile
+test -r emptyfile; echo $?
+test -r /etc/titi/toto/tata; echo $?
+rm emptyfile
+echo '~~~'
+
+#TEST 10 
+echo "-S"
+test -S /etc/titi/toto/tata; echo $?
+test -S /dev/; echo $?
+test -S /dev/log; echo $?
+echo '~~~'
+
+#TEST 11 
+echo "-s"
+touch emptyfile
+test -s /etc/titi/toto/tata; echo $?
+test -s emptyfile; echo $?
+test -s /etc/passwd; echo $?
+echo '~~~'
+
+#TEST 12
+echo "-t"
+test -t /etc/titi/toto/tata; echo $?
+test -t hehehe; echo $?
+test -t 123; echo $?
+test -t 0; echo $?
+echo '~~~'
+
+#TEST 13
+echo "-u"
+touch emptyfile
+chmod u+s emptyfile
+test -u /etc/titi/toto/tata; echo $?
+test -u /etc/passwd; echo $?
+test -u emptyfile; echo $?
+rm emptyfile
+echo '~~~'
+
+#TEST 14
+echo "-w"
+touch emptyfile
+test -w /etc/titi/toto/tata; echo $?
+chmod -w emptyfile
+test -w emptyfile; echo $?
+chmod +w emptyfile
+test -w emptyfile; echo $?
+rm emptyfile
+echo '~~~'
+
+#TEST 15
+echo "-x"
+touch emptyfile
+test -x /etc/titi/toto/tata; echo $?
+chmod -x emptyfile
+test -x emptyfile; echo $?
+chmod +x emptyfile
+test -x emptyfile; echo $?
+rm emptyfile
+echo '~~~'
+
+#TEST 16
+echo "-z"
+test -z bonjour; echo $?
+test -z ""; echo $?
+echo '~~~'
+
+#TEST 17
+echo "="
+test bonjour = bonjour; echo $?
+test asdf = bonjour; echo $?
+echo '~~~'
+
+#TEST 18
+echo "!="
+test bonjour != bonjour; echo $?
+test asdf != bonjour; echo $?
+echo '~~~'
+
+#TEST 19
+echo "-eq"
+test 123 -eq 123; echo $?
+test abcd -eq 123; echo $?
+test 123 -eq abcd; echo $?
+test 123 -eq 1234; echo $?
+echo '~~~'
+
+#TEST 20
+echo "op -ne"
+test 123 -ne 123; echo $?
+test abcd -ne 123; echo $?
+test 123 -ne abcd; echo $?
+test 123 -ne 1234; echo $?
+echo '~~~'
+
+#TEST 21
+echo "-gt"
+test 123 -gt 123; echo $?
+test 123 -gt 122; echo $?
+test abcd -gt 123; echo $?
+test 123 -gt abcd; echo $?
+test 123 -gt 1234; echo $?
+echo '~~~'
+
+#TEST 22
+echo "-ge"
+test 123 -ge 123; echo $?
+test abcd -ge 123; echo $?
+test 123 -ge abcd; echo $?
+test 123 -ge 1234; echo $?
+echo '~~~'
+
+#TEST 23
+echo "-lt"
+test 123 -lt 123; echo $?
+test abcd -lt 123; echo $?
+test 123 -lt abcd; echo $?
+test 123 -lt 1234; echo $?
+echo '~~~'
+
+#TEST 24
+echo "-le"
+test 123 -le 123; echo $?
+test abcd -le 123; echo $?
+test 123 -le abcd; echo $?
+test 123 -le 1234; echo $?
+test 1234 -le 123; echo $?
+echo '~~~'
+
+#TEST 24
+echo "!"
+test ! abcd
+test ! -z abcd
+test ! 123 -eq 123
+echo '~~~'
+
+#TEST 25
+echo "errors"
+test abc abcd
+test abc abcd abcde
+test abc abcd abcde abcdef

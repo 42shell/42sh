@@ -27,6 +27,7 @@ int			builtin_cd(char **argv, t_array *env);
 int			builtin_fg(char **argv, t_array *env);
 int			builtin_bg(char **argv, t_array *env);
 int			builtin_jobs(char **argv, t_array *env);
+int			builtin_test(char **argv, t_array *env);
 
 /*
 ** jobs/fgbg utils
@@ -45,10 +46,40 @@ void		remove_dots(char *curpath);
 int			remove_dotdots(char *curpath);
 
 /*
+** test operations
+*/
+
+int			test_b(char **argv);
+int			test_c(char **argv);
+int			test_d(char **argv);
+int			test_e(char **argv);
+int			test_f(char **argv);
+int			test_g(char **argv);
+int			test_l(char **argv);
+int			test_p(char **argv);
+int			test_r(char **argv);
+int			test_sock(char **argv);
+int			test_size(char **argv);
+int			test_t(char **argv);
+int			test_u(char **argv);
+int			test_w(char **argv);
+int			test_x(char **argv);
+int			test_z(char **argv);
+int			test_equal(char **argv);
+int			test_unequal(char **argv);
+int			test_eq(char **argv);
+int			test_ne(char **argv);
+int			test_gt(char **argv);
+int			test_ge(char **argv);
+int			test_lt(char **argv);
+int			test_le(char **argv);
+
+/*
 ** utils
 */
 
 bool		is_builtin(char *str);
 int			exec_command_env(char **argv, t_array *env);
+bool		is_number(char *str);
 
 #endif
