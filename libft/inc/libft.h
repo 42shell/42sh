@@ -20,6 +20,7 @@
 # include <stdint.h>
 
 ssize_t					readc(int fd, void *ptr);
+int						get_next_line(const int fd, char **line);
 
 /*
 ** -----------------------------Struct list-----------------------------
@@ -166,6 +167,7 @@ bool					ft_strisnbr(char *str);
 char					*ft_strcat(char *s1, const char *s2);
 size_t					ft_strnlen(const char *s, size_t maxlen);
 char					*ft_strndup(const char *s1, size_t n);
+char					*ft_strncpy(char *dest, const char *src, size_t n);
 
 /*
 ** -----------------------------Put-----------------------------

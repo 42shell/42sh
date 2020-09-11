@@ -35,6 +35,8 @@ t_list_head	*get_autocomplete_list(char *context, size_t len, int *count)
 			return (get_file_list(partial_word, EXECONLY));
 		return (comp_get_command_list(partial_word));
 	}
+	else if (partial_word[0] == '-')
+		return (get_option_list(partial_word, context, partial_word - context));
 	else if (is_cd(context, i))
 		return (get_file_list(partial_word, DIRONLY));
 	return (get_file_list(partial_word, FILES));
