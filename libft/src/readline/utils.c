@@ -31,6 +31,9 @@ bool	y_n_prompt(void)
 		if (c == 3)
 		{
 			rl_interrupt();
+			movcnl();
+			rl_print_prompt(g_rl_prompt);
+			rl_print_line(false);
 			return (false);
 		}
 		c = 0;
