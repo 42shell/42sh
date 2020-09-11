@@ -23,6 +23,7 @@ t_list_head			*comp_get_command_list(char *partial);
 t_list_head			*get_file_list(char *partial, int flags);
 t_list_head			*get_option_list(char *partial, char *context
 					, size_t opt_pos);
+t_list_head			*get_variable_list(char *partial);
 
 bool				is_cd(char *str, int i);
 bool				is_exec(char *path);

@@ -23,21 +23,20 @@ t_list_head	*get_autocomplete_list(char *context, size_t len, int *count)
 	g_comp_list_count = count;
 	partial_word = &context[i];
 	while (i > 0 && context[i] != ' ')
-	{
-		if (context[--i] != ' ')
-			partial_word--;
-	}
+		partial_word = (context[--i] != ' ') ? partial_word - 1 : partial_word;
 	while (i > 0 && context[i] == ' ')
 		i--;
+	if (partial_word[0] == '$')
+		return (get_variable_list(partial_word));
 	if (i <= 0 || context[i] == '|' || context[i] == '&' || context[i] == ';')
 	{
 		if (ft_strchr(partial_word, '/'))
 			return (get_file_list(partial_word, EXECONLY));
 		return (comp_get_command_list(partial_word));
 	}
-	else if (partial_word[0] == '-')
+	if (partial_word[0] == '-')
 		return (get_option_list(partial_word, context, partial_word - context));
-	else if (is_cd(context, i))
+	if (is_cd(context, i))
 		return (get_file_list(partial_word, DIRONLY));
 	return (get_file_list(partial_word, FILES));
 }

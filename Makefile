@@ -65,6 +65,7 @@ SRC_COMPLETE    := get_autocomplete_list.c\
                    get_command_list.c\
                    get_file_list.c\
 				   get_option_list.c\
+				   get_variable_list.c\
                    utils.c
 SRC_COMPLETE    := $(addprefix complete/,$(SRC_COMPLETE))
 
