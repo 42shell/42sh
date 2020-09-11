@@ -68,6 +68,7 @@ void		rl_print_match_list(char *partial_word)
 {
 	char		*last_slash;
 	int			skip_len;
+	size_t		old_pos;
 
 	movcnl();
 	if (g_rl_complete.match_count >= 100)
@@ -83,8 +84,11 @@ void		rl_print_match_list(char *partial_word)
 	else
 		skip_len = 0;
 	print_list_cols(get_max_len() - skip_len, skip_len);
+	old_pos = g_rl_line.i;
 	rl_print_prompt(g_rl_prompt);
 	rl_print_line(false);
+	while (g_rl_line.i != old_pos)
+		rl_move_left();
 }
 
 void		rl_put_match(char *match, char *partial_word)

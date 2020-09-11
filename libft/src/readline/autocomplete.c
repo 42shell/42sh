@@ -29,6 +29,7 @@ static void	free_comp_list(t_list_head **comp_list)
 	}
 	free(*comp_list);
 	*comp_list = NULL;
+	g_rl_complete.match_count = 0;
 }
 
 static char	*get_lcp(char *partial_word)
@@ -55,7 +56,7 @@ static char	*get_partial_word(void)
 	i = g_rl_line.i;
 	while (i > 0 && g_rl_line.dstr->str[i - 1] != ' ')
 		i--;
-	return (g_rl_line.dstr->str + i);
+	return (ft_strndup(g_rl_line.dstr->str + i, g_rl_line.i - i));
 }
 
 bool		is_same_word(char *partial_word)
@@ -77,24 +78,23 @@ int			rl_complete(void)
 	bool	same_word;
 
 	lcp = NULL;
-	if (!g_rl_complete.get_matches)
-		return (0);
 	partial_word = get_partial_word();
 	same_word = is_same_word(partial_word);
 	if (!same_word && g_rl_complete.matches)
-	{
 		free_comp_list(&g_rl_complete.matches);
-		g_rl_complete.match_count = 0;
-	}
 	if (!g_rl_complete.matches)
 		g_rl_complete.matches = g_rl_complete.get_matches(g_rl_line.dstr->str,
-		g_rl_line.dstr->len, &g_rl_complete.match_count);
+		g_rl_line.i, &g_rl_complete.match_count, partial_word);
 	if (g_rl_complete.match_count == 0)
+	{
+		free(partial_word);
 		return (0);
+	}
 	else if (g_rl_complete.match_count > 1 && same_word)
 		rl_print_match_list(partial_word);
 	else if ((lcp = get_lcp(partial_word)))
 		rl_put_match(lcp, partial_word);
 	free(lcp);
+	free(partial_word);
 	return (0);
 }

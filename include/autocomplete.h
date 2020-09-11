@@ -17,8 +17,8 @@
 
 extern int					*g_comp_list_count;
 
-t_list_head			*get_autocomplete_list(char *context, size_t len,
-					int *count);
+t_list_head			*get_autocomplete_list(char *context, size_t i, int *count
+											, char *partial_word);
 t_list_head			*comp_get_command_list(char *partial);
 t_list_head			*get_file_list(char *partial, int flags);
 t_list_head			*get_option_list(char *partial, char *context
