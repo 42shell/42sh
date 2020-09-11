@@ -181,7 +181,7 @@ struct						s_rl_complete
 	t_complete_func			get_matches;
 	t_list_head				*matches;
 	int						match_count;
-	bool					first_tab;
+	char					*old_partial_word;
 };
 
 extern struct s_rl_complete		g_rl_complete;

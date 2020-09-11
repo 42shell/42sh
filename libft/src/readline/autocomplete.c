@@ -58,17 +58,30 @@ static char	*get_partial_word(void)
 	return (g_rl_line.dstr->str + i);
 }
 
+bool		is_same_word(char *partial_word)
+{
+	bool same_word;
+
+	same_word = ft_strequ(g_rl_complete.old_partial_word, partial_word);
+	free(g_rl_complete.old_partial_word);
+	g_rl_complete.old_partial_word = ft_strdup(partial_word);
+	if (g_rl_oldkey != '\t')
+		return (false);
+	return (same_word);
+}
+
 int			rl_complete(void)
 {
 	char	*partial_word;
 	char	*lcp;
+	bool	same_word;
 
 	lcp = NULL;
 	if (!g_rl_complete.get_matches)
 		return (0);
 	partial_word = get_partial_word();
-	g_rl_complete.first_tab = g_rl_oldkey == '\t' ? false : true;
-	if (g_rl_complete.first_tab && g_rl_complete.matches)
+	same_word = is_same_word(partial_word);
+	if (!same_word && g_rl_complete.matches)
 	{
 		free_comp_list(&g_rl_complete.matches);
 		g_rl_complete.match_count = 0;
@@ -78,7 +91,7 @@ int			rl_complete(void)
 		g_rl_line.dstr->len, &g_rl_complete.match_count);
 	if (g_rl_complete.match_count == 0)
 		return (0);
-	else if (g_rl_complete.match_count > 1 && !g_rl_complete.first_tab)
+	else if (g_rl_complete.match_count > 1 && same_word)
 		rl_print_match_list(partial_word);
 	else if ((lcp = get_lcp(partial_word)))
 		rl_put_match(lcp, partial_word);
