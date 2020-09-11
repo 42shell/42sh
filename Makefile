@@ -52,6 +52,12 @@ SRC_BUILTINS    :=	builtins.c\
 					jobs_fgbg_utils.c\
 					env.c\
 				    exec_command_env.c\
+					test.c\
+					test_op1.c\
+					test_op2.c\
+					test_op3.c\
+					test_op4.c\
+					test_op5.c\
 					fgbg.c
 SRC_BUILTINS    := $(addprefix builtins/,$(SRC_BUILTINS))
 

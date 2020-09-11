@@ -72,7 +72,8 @@ done
 ./42sh "$DIR/setenv.test" > "$DIR/setenv.42sh" 2>&1
 tcsh "$DIR/setenv.test"> "$DIR/setenv.bash" 3>&1
 
-"$SED" -i -E  's/.*:.*: (.*:)/42sh: \1/g' "$DIR/"*.bash
+
+"$SED" -i -E  's/.*: line [[:digit:]]*:/42sh:/g' "$DIR/"*.bash
 "$SED" -i -E "s/(.+)\/$/\1/g" "$DIR/cd.42sh" #remove / at the end of line for $PWD
 "$SED" -i -E "s/norights: Permission denied/Could not open file/g" "$DIR/pipe.bash"
 "$SED" -i -E "s/42sh: .*: Bad file descriptor/42sh: Bad file descriptor/g" "$DIR/redir.bash"
