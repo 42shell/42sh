@@ -53,6 +53,7 @@ void					ft_list_split(t_list_head *head,
 						t_list_head **a, t_list_head **b);
 void					ft_list_sort(t_list_head **head,
 						int (*cmp)(void *a, void *b));
+void					ft_list_splice(t_list_head *list1, t_list_head *list2);
 
 /*
 **--------------------------Struct array----------------------------------
