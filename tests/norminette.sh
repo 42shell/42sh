@@ -20,4 +20,4 @@ if [ -z "$FILES" ]; then
 	exit 0
 fi
 
-! /tmp/norminette/norminette.rb $FILES | grep -B 1 "Error" && echo "No norm error ✔️"
+! /tmp/norminette/norminette.rb $FILES | grep -B 1 "Error|Warning" && echo "No norm error ✔️"
