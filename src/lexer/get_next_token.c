@@ -59,7 +59,7 @@ static t_token	*end_of_input(int ret)
 		{
 			err = get_quote_string(g_lexer.brack_stack->size ?
 						*(enum e_quote_st *)g_lexer.brack_stack->array[0] :
-						g_lexer.quote_st);
+						(enum e_quote_st)g_lexer.quote_st);
 			ft_dprintf(2, "42sh: unexpected EOF while looking for "
 						"matching '%s'\n", err);
 			g_parser.status = UNEXPECTED_TOKEN;
@@ -89,9 +89,9 @@ t_token			*get_next_token(void)
 	}
 	while (!g_lexer.end_of_input && !g_lexer.token_delimited)
 	{
-		lx_end() || lx_operator_next() || lx_operator_end() || lx_backslash()
-		|| lx_quote() || lx_operator_new() || lx_newline() || lx_blank()
-		|| lx_word_next() || lx_comment() || lx_word_start();
+		ret = lx_end() || lx_operator_next() || lx_operator_end()
+		|| lx_backslash() || lx_quote() || lx_operator_new() || lx_newline()
+		|| lx_blank() || lx_word_next() || lx_comment() || lx_word_start();
 	}
 	return (return_token());
 }
