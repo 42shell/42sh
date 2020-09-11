@@ -12,11 +12,17 @@
 
 #include "shell.h"
 
-int			g_padding_left;
+/*
+** field width of the pid + status field
+*/
+
+#define FIELD_WIDTH	38
 
 /*
 ** padding to fill job_id field ( [#]+ ) when printing processes in long format
 */
+
+int			g_padding_left;
 
 void		set_padding_left(char *job_str)
 {
@@ -51,7 +57,7 @@ void		format_processes(t_dstr *buf, t_process *list, bool l_opt)
 			ft_dstr_add(buf, '\n');
 			start_of_line = buf->len;
 			format_process_info(buf, list, g_padding_left);
-			pad_right(buf, 36 - (buf->len - start_of_line));
+			pad_right(buf, FIELD_WIDTH - 2 - (buf->len - start_of_line));
 			if (list->stdin == 0)
 				ft_dstr_cat(buf, "  ");
 		}
@@ -73,7 +79,7 @@ void		print_job(t_job *job, bool l_opt)
 	format_job_info(job_format, job, l_opt);
 	set_padding_left(job_format->str);
 	if (!l_opt)
-		pad_right(job_format, 38 - job_format->len);
+		pad_right(job_format, FIELD_WIDTH - job_format->len);
 	format_processes(job_format, job->processes, l_opt);
 	if (job->bg && job_is_running(job))
 		ft_dstr_cat(job_format, " &");

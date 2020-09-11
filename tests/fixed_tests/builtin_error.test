@@ -51,3 +51,4 @@ echo '~~~'
 echo "cd -\255 getopt bug"
 cd -L -P -L -P -L -P -L -ÿ .
 cd -L .
+

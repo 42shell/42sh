@@ -47,7 +47,7 @@ static int			main_loop(void)
 	while (1)
 	{
 		if (g_jobs)
-			update_jobs(true, true);
+			update_jobs();
 		g_interrupt = false;
 		g_parser.status = NOERR;
 		g_parser.bracket_lvl = 0;

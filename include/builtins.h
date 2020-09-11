@@ -70,6 +70,12 @@ int			test_lt(char **argv);
 int			test_le(char **argv);
 
 /*
+** fg/bg utils
+*/
+
+t_job		*get_job_by_str(char *str);
+
+/*
 ** utils
 */
 

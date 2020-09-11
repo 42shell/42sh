@@ -17,7 +17,7 @@ static void	format_exit_status(t_dstr *buf, char *itoa_buf, t_process *process)
 	if (WIFSIGNALED(process->status))
 	{
 		ft_itoa(WTERMSIG(process->status), itoa_buf);
-		ft_dstr_cat(buf, " Killed (signal ");
+		ft_dstr_cat(buf, " Killed (");
 		ft_dstr_cat(buf, itoa_buf);
 		ft_dstr_add(buf, ')');
 	}
@@ -47,7 +47,7 @@ void		format_process_info(t_dstr *buf, t_process *process, int padding)
 	else if (process->stopped)
 	{
 		ft_itoa(WSTOPSIG(process->status), itoa_buf);
-		ft_dstr_cat(buf, " Stopped (signal ");
+		ft_dstr_cat(buf, " Stopped (");
 		ft_dstr_cat(buf, itoa_buf);
 		ft_dstr_add(buf, ')');
 	}

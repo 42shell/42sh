@@ -16,11 +16,6 @@ extern int	*g_backups;
 
 static void		reset_signals(void)
 {
-	struct sigaction	sigact;
-
-	sigaction(SIGCHLD, NULL, &sigact);
-	sigact.sa_handler = SIG_DFL;
-	sigaction(SIGCHLD, &sigact, NULL);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGTTIN, SIG_DFL);
@@ -57,7 +52,7 @@ static pid_t	fork_child(int in, int out, int fd_to_close)
 
 /*
 ** in case of async group command, jobs corresponding to the compound list
-** are added to the current job.
+** are added to the current jobs list.
 ** We can't set job->bg = true, otherwise the subshell will not wait for it to
 ** complete. g_bg allows us to keep trace of the background state.
 ** ex: (ls | cat) &
@@ -71,11 +66,9 @@ static void		set_child_attr(t_process *process)
 	process->pid = getpid();
 	if (!g_current_jobs->pgid)
 		g_current_jobs->pgid = process->pid;
+	setpgid(process->pid, g_current_jobs->pgid);
 	if (!g_bg && g_job_control_enabled)
-	{
-		setpgid(process->pid, g_current_jobs->pgid);
 		tcsetpgrp(STDIN_FILENO, g_current_jobs->pgid);
-	}
 	g_job_control_enabled = false;
 	g_already_forked = true;
 }
@@ -98,8 +91,7 @@ int				launch_process(t_process *process, int fd_to_close)
 		process->pid = pid;
 		if (!g_current_jobs->pgid)
 			g_current_jobs->pgid = pid;
-		if (g_job_control_enabled)
-			setpgid(process->pid, g_current_jobs->pgid);
+		setpgid(process->pid, g_current_jobs->pgid);
 		add_process_to_job(g_current_jobs, process);
 	}
 	return (pid);

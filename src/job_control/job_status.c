@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_job.c                                        :+:      :+:    :+:   */
+/*   job_status.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,36 +12,46 @@
 
 #include "shell.h"
 
-bool	is_last_job(t_job *job)
+bool	job_is_running(t_job *job)
 {
-	if (job && g_jobs == job)
-		return (true);
-	return (false);
-}
+	t_process	*process;
 
-bool	is_before_last_job(t_job *job)
-{
-	if (job && g_jobs && g_jobs->next == job)
-		return (true);
-	return (false);
-}
-
-bool	job_is_in_list(t_job *list, t_job *job)
-{
-	while (list)
+	process = job->processes;
+	while (process)
 	{
-		if (job == list)
+		if (!process->done && !process->stopped)
 			return (true);
-		list = list->next;
+		process = process->next;
 	}
 	return (false);
 }
 
-int		cmp_job_id(void *a, void *b)
+bool	job_is_stopped(t_job *job)
 {
-	if (((t_job *)a)->id < ((t_job *)b)->id)
-		return (-1);
-	if (((t_job *)a)->id > ((t_job *)b)->id)
-		return (1);
-	return (0);
+	t_process	*process;
+
+	if (job_is_done(job))
+		return (false);
+	process = job->processes;
+	while (process)
+	{
+		if (!process->stopped && !process->done)
+			return (false);
+		process = process->next;
+	}
+	return (true);
+}
+
+bool	job_is_done(t_job *job)
+{
+	t_process	*process;
+
+	process = job->processes;
+	while (process)
+	{
+		if (!process->done)
+			return (false);
+		process = process->next;
+	}
+	return (true);
 }

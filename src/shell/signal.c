@@ -36,30 +36,8 @@ void	sighup_handler(int sig)
 	exit(129);
 }
 
-void	sigchld_handler(int sig)
-{
-	pid_t	pid;
-	int		status;
-
-	(void)sig;
-	while ((pid = waitpid(WAIT_ANY, &status, WNOHANG | WUNTRACED)) > 0)
-	{
-		if (set_process_status(pid, status) < 0)
-		{
-			ft_dprintf(2, "42sh: process %d not found.\n", pid);
-			break ;
-		}
-	}
-}
-
 void	init_sig(void)
 {
-	struct sigaction	sigact;
-
-	sigaction(SIGCHLD, NULL, &sigact);
-	sigact.sa_handler = &sigchld_handler;
-	sigact.sa_flags |= SA_NOCLDWAIT;
-	sigaction(SIGCHLD, &sigact, NULL);
 	signal(SIGINT, &sigint_handler);
 	signal(SIGHUP, &sighup_handler);
 	signal(SIGQUIT, SIG_IGN);

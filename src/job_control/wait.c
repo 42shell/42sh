@@ -24,6 +24,22 @@ static void	set_signaled_exit_status(t_process *process)
 		g_last_exit_st = process->signaled + 128;
 }
 
+static void	bubble_up_job(t_job **list, t_job *job)
+{
+	remove_job_from_list(list, job);
+	add_job_to_list(list, job, false);
+}
+
+/*
+** If the process is stopped and it is already in the persistent jobs list (it
+** was running in bg or has been previously stopped), we put the associated job
+** to the top of the stack.
+** Otherwise (the job was in fg and it has never been stopped or put in bg),
+** we move it from the current jobs to the persistent list.
+** This corresponds to the '[job_id]+' in jobs builtin and allow to fg/bg the
+** last stopped/bg'd job without knowing its id.
+*/
+
 int			set_process_status(pid_t pid, int status)
 {
 	t_process	*process;
@@ -31,11 +47,16 @@ int			set_process_status(pid_t pid, int status)
 	if (!(process = get_process(pid)))
 		return (-1);
 	process->status = status;
+	process->job->notified = false;
 	if (WIFSTOPPED(status))
 	{
 		process->stopped = true;
 		process->signaled = WSTOPSIG(process->status);
 		g_last_exit_st = 128 + process->signaled;
+		if (job_is_in_list(g_jobs, process->job))
+			bubble_up_job(&g_jobs, process->job);
+		else
+			move_job_in_persistent_list(process->job);
 	}
 	else
 	{
@@ -48,11 +69,32 @@ int			set_process_status(pid_t pid, int status)
 	return (0);
 }
 
+void		update_status(void)
+{
+	pid_t			pid;
+	int				status;
+	struct timespec	time;
+
+	time.tv_sec = 0;
+	time.tv_nsec = 0x10000000;
+	nanosleep(&time, NULL);
+	while ((pid = waitpid(WAIT_ANY, &status, WNOHANG | WUNTRACED)) > 0)
+	{
+		if (set_process_status(pid, status) < 0)
+		{
+			ft_dprintf(2, "42sh: process %d not found.\n", pid);
+			break ;
+		}
+	}
+}
+
 void		wait_for_job(t_job *job)
 {
 	pid_t	pid;
 	int		status;
 
+	if (!job)
+		return ;
 	while (!job_is_done(job)
 	&& (g_job_control_enabled ? !job_is_stopped(job) : 1))
 	{

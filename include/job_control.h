@@ -17,6 +17,7 @@
 
 typedef struct			s_process
 {
+	struct s_job		*job;
 	struct s_process	*next;
 	struct s_process	*prev;
 	t_command			*command;
@@ -32,6 +33,7 @@ typedef struct			s_process
 
 typedef struct			s_job
 {
+	int					id;
 	struct s_job		*next;
 	struct s_job		*prev;
 	t_command			*command;
@@ -44,7 +46,6 @@ typedef struct			s_job
 	bool				notified;
 	bool				invert_ret;
 	bool				bg;
-	int					id;
 }						t_job;
 
 extern t_job			*g_current_jobs;
@@ -65,34 +66,44 @@ int						launch_process(t_process *process, int fd_to_close);
 void					put_job_fg(t_job *job, bool cont);
 void					put_job_bg(t_job *job, bool cont);
 void					wait_for_job(t_job *job);
-void					update_status(void);
 void					continue_job(t_job *job, bool bg);
-void					update_jobs(bool del_from_list,
-									bool print_notif);
-int						set_process_status(pid_t pid,
-						int status);
+int						set_process_status(pid_t pid, int status);
+void					update_status(void);
+void					update_jobs(void);
 
 /*
-** utils
+** job status
 */
 
 bool					job_is_done(t_job *job);
 bool					job_is_stopped(t_job *job);
 bool					job_is_running(t_job *job);
-bool					is_last_job(t_job *job);
-bool					is_before_last_job(t_job *job);
-t_process				*get_process(pid_t pid);
-t_job					*get_job_by_str(char *str);
 
 /*
-** jobs lists
+** job list
 */
 
+t_list_head				*get_sorted_jobs_list(void);
+void					move_job_in_persistent_list(t_job *job);
 void					add_job_to_list(t_job **head, t_job *job, bool set_id);
-void					add_process_to_job(t_job *job, t_process *process);
 void					remove_job_from_list(t_job **head, t_job *job);
 void					del_job_from_list(t_job **head, t_job *job);
-t_list_head				*get_sorted_jobs_list(void);
+
+/*
+** job utils
+*/
+
+bool					job_is_in_list(t_job *list, t_job *job);
+bool					is_last_job(t_job *job);
+bool					is_before_last_job(t_job *job);
+int						cmp_job_id(void *a, void *b);
+
+/*
+** process utils
+*/
+
+void					add_process_to_job(t_job *job, t_process *process);
+t_process				*get_process(pid_t pid);
 
 /*
 ** job display

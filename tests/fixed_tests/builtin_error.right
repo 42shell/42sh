@@ -34,6 +34,6 @@ getcwd: could not get current dir
 cd: OLDPWD not set
 ~~~
 cd -\255 getopt bug
-cd: illegal option -- Ã
+cd: illegal option -- ï¿½
 cd: PWD not set
 getcwd: could not get current dir

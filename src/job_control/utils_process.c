@@ -41,3 +41,14 @@ t_process			*get_process(pid_t pid)
 		return (NULL);
 	return (process);
 }
+
+void				add_process_to_job(t_job *job, t_process *process)
+{
+	if (!job || !process)
+		return ;
+	process->next = job->processes;
+	if (process->next)
+		process->next->prev = process;
+	job->processes = process;
+	process->job = job;
+}

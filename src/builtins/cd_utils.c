@@ -25,8 +25,9 @@ char	*get_pwd(void)
 	{
 		if (getcwd(buf, PATH_MAX + 1) == NULL)
 		{
-			ft_putstr_fd("cd: PWD not set\ngetcwd: could not get current dir\n"
-					, 2);
+			ft_putstr_fd("cd: PWD not set\n"
+						"getcwd: could not get current dir\n"
+						, 2);
 			return (NULL);
 		}
 		return (buf);
