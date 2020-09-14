@@ -67,8 +67,8 @@ static t_list_head	*get_matches_in_dir(DIR *dirp, char *dir, char *partial,
 			&& ++(*g_comp_list_count))
 				ft_list_add_tail(ft_strjoin(path, "/"), comp_list);
 			else if (!(flags & DIRONLY)
-			&& (!(flags & EXECONLY) || is_exec(dp->d_name))
-			&& ++(*g_comp_list_count))
+				&& ((flags & EXECONLY) ? is_exec(path) : 1)
+				&& ++(*g_comp_list_count))
 				ft_list_add_tail(ft_strdup(path), comp_list);
 		}
 		free(path);
