@@ -68,17 +68,20 @@ bool		g_job_control_enabled;
 
 static int	init_interactive_mode(void)
 {
+	pid_t	shell_pid;
+
 	g_job_control_enabled = true;
 	while (tcgetpgrp(STDIN_FILENO) != (g_shell.pgid = getpgrp()))
 		kill(-g_shell.pgid, SIGTTIN);
 	init_sig();
-	g_shell.pgid = getpid();
-	if (setpgid(g_shell.pgid, g_shell.pgid) < 0)
+	shell_pid = getpid();
+	if (g_shell.pgid != shell_pid && setpgid(0, 0) < 0)
 	{
 		ft_dprintf(2,
 		"42sh: Couldn't put the shell in its own process group\n");
 		exit(1);
 	}
+	g_shell.pgid = shell_pid;
 	tcgetattr(STDIN_FILENO, &g_shell.tmodes);
 	tcsetpgrp(STDIN_FILENO, g_shell.pgid);
 	g_shell.get_input = &input_interactive;
