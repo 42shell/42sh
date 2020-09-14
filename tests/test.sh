@@ -17,6 +17,9 @@ else
 	SED=sed
 fi
 
+
+OLD_TERMWIDTH=$(tput cols)
+stty cols 80 #set term width to 80 for live test consistency
 export DIR_42SH=$DIR
 export ls=ls
 export arg=-a
@@ -68,6 +71,27 @@ do
 	./42sh "$file" > "$DIR/$test_name.42sh" 2>&1;
 	cp "$DIR/fixed_tests/$test_name.right" "$DIR/$test_name.bash"
 done
+
+
+mkdir testing_autocomplete
+cd testing_autocomplete
+for num in `seq 1 100`
+do
+	mkdir $num
+	cd $num
+	mkdir abc cde def
+	cd ..
+done
+cd ..
+
+for file in "$DIR/live_tests/"*.timing
+do
+	test_name=$(basename "$file" | cut -d '.' -f 1)
+	scriptlive -T "$DIR/live_tests/$test_name".timing --log-in "$DIR/live_tests/$test_name.stdin" --maxdelay 0.02 -c ./42sh > "$DIR/$test_name.42sh"
+	cp "$DIR/live_tests/$test_name.right" "$DIR/$test_name.bash"
+done
+
+rm -rf testing_autocomplete
 
 ./42sh "$DIR/setenv.test" > "$DIR/setenv.42sh" 2>&1
 tcsh "$DIR/setenv.test"> "$DIR/setenv.bash" 3>&1
@@ -135,4 +159,5 @@ fi
 printf "\n$ok/$n Succesful Tests %s\n" "$emoji" 1>&2
 
 rm -rf "$DIR/"*42sh "$DIR/"*bash
+stty cols $OLD_TERMWIDTH
 exit $EXIT_ST
