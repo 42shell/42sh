@@ -1,0 +1,17 @@
+>>> scriptlive: Starting your typescript execution by ./42sh.
+[?1h=[?1h=$> [J/[C[Ju[C[Js[C[Jr[C[J/[C[Jb[C[Ji[C[Jn[C[J/[C[Jo[C[Js[C[J-[C[Jp[C[Jr[C[Jo[C[Jb[C[Je[C[Jr[C[J[J[J[J[J[J[J[J[J[Ja[C[Js[C[Jd[C[Jf[C[Ja[C[Js[C[Jd[C[Ja[C[Js[C[Jf[C[Jd[C[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J[J/[C[Ja[C[Js[C[Jd[C[Jf[C[Ja[C[Js[C[Jd[C[Jf[C[J/[C[J[Jo[C[Js[C[J-[C[Jp[C[Jr[C[Jo[C[Jb[C[Je[C[Jr[C[J[Jl[C[Ji[C[Jb[C[Jf[C[Jt[C[J/[C[J[Jj[C[Jo[C[Jb[C[Js[C[J[Js[C[Je[C[Jt[C[Je[C[Jn[C[Jv[C[J[Jb[C[Jc[C[J [C[J-[C
+--help         --interactive  --mathlib      --quiet        --standard     
+--version      --warn         -1             -9             -C             
+-h             -i             -l             -q             -s             
+-v             -w             
+$> [Jbc -[J-[C
+--help         --interactive  --mathlib      --quiet        --standard     
+--version      --warn         
+$> [Jbc --[J[Jl[C[Js[C[J [C[J|[C[J [C[Jb[C[Jc[C[J [C[J-[C
+--help         --interactive  --mathlib      --quiet        --standard     
+--version      --warn         -1             -9             -C             
+-h             -i             -l             -q             -s             
+-v             -w             
+$> [Jls | bc -[J[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
+[C
+>>> scriptlive: done.
