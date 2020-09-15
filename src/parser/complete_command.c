@@ -12,6 +12,8 @@
 
 #include "shell.h"
 
+int			g_linebreak_type;
+
 /*
 ** -incorrect, complete_commands must be separated by a newline list,
 **  commands separated by '\0' in batch mode will work.

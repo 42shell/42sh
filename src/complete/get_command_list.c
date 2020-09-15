@@ -83,7 +83,6 @@ static t_list_head	*add_builtins_or_dirs(t_list_head *cmds, char *partial)
 t_list_head			*comp_get_command_list(char *partial)
 {
 	t_list_head		*comp_list;
-	t_list_head		*dirs;
 	char			**path_dirs;
 	char			*path;
 	int				i;

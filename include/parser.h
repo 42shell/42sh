@@ -123,7 +123,7 @@ extern t_parser					g_parser;
 **  is stored internally and reset after the line continuation
 */
 
-int								g_linebreak_type;
+extern int						g_linebreak_type;
 
 t_command						*parse_complete_command(void);
 t_command						*parse_and_or(void);
