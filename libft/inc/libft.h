@@ -20,6 +20,7 @@
 # include <stdint.h>
 
 ssize_t					readc(int fd, void *ptr);
+int						get_next_line(const int fd, char **line);
 
 /*
 ** -----------------------------Struct list-----------------------------
@@ -52,6 +53,7 @@ void					ft_list_split(t_list_head *head,
 						t_list_head **a, t_list_head **b);
 void					ft_list_sort(t_list_head **head,
 						int (*cmp)(void *a, void *b));
+void					ft_list_splice(t_list_head *list1, t_list_head *list2);
 
 /*
 **--------------------------Struct array----------------------------------
@@ -166,6 +168,7 @@ bool					ft_strisnbr(char *str);
 char					*ft_strcat(char *s1, const char *s2);
 size_t					ft_strnlen(const char *s, size_t maxlen);
 char					*ft_strndup(const char *s1, size_t n);
+char					*ft_strncpy(char *dest, const char *src, size_t n);
 
 /*
 ** -----------------------------Put-----------------------------

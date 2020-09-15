@@ -12,7 +12,19 @@
 
 #include "readline.h"
 
-bool	y_n_prompt(void)
+static void	redraw_line(void)
+{
+	size_t old_pos;
+
+	old_pos = g_rl_line.i;
+	movcnl();
+	rl_print_prompt(g_rl_prompt);
+	rl_print_line(false);
+	while (g_rl_line.i != old_pos)
+		rl_move_left();
+}
+
+bool		y_n_prompt(void)
 {
 	u_int64_t c;
 
@@ -21,9 +33,7 @@ bool	y_n_prompt(void)
 	{
 		if (c == 'n')
 		{
-			movcnl();
-			rl_print_prompt(g_rl_prompt);
-			rl_print_line(false);
+			redraw_line();
 			return (false);
 		}
 		if (c == 'y')
@@ -31,6 +41,7 @@ bool	y_n_prompt(void)
 		if (c == 3)
 		{
 			rl_interrupt();
+			redraw_line();
 			return (false);
 		}
 		c = 0;
@@ -38,7 +49,7 @@ bool	y_n_prompt(void)
 	return (false);
 }
 
-int		is_word_sep(char c)
+int			is_word_sep(char c)
 {
 	return (ft_iswhitespace(c) || ft_isquote(c));
 }

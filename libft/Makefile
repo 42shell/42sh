@@ -38,6 +38,7 @@ SRC =	mem/ft_xmalloc.c \
 		str/ft_putstr_fd.c \
 		str/ft_putendl.c\
 		str/ft_strrchr.c \
+		str/ft_strncpy.c \
 		put/ft_putc.c \
 		put/ft_putstr.c \
 		char/ft_iswhitespace.c \
@@ -73,6 +74,7 @@ SRC =	mem/ft_xmalloc.c \
 		struct/list/ft_list_foreach.c \
 		struct/list/ft_list_foreach_rev.c \
 		struct/list/ft_list_sort.c \
+		struct/list/ft_list_splice.c \
 		struct/dstr/ft_dstr_new.c \
 		struct/dstr/ft_dstr_add.c \
 		struct/dstr/ft_dstr_cat.c \
@@ -128,6 +130,7 @@ SRC =	mem/ft_xmalloc.c \
 		ft_printf/pf_handlers/pf_handle_color.c \
 		ft_printf/pf_parser/pf_parser.c \
 		ft_printf/ft_printf.c \
+		get_next_line.c \
 		readc.c
 
 OBJ = $(addprefix $(DIR_OBJ), $(SRC:.c=.o))

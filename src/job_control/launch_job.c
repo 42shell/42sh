@@ -12,6 +12,8 @@
 
 #include "shell.h"
 
+bool		g_bg;
+
 static int	launch_job_bg(t_job *job)
 {
 	t_process	*process;

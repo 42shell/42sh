@@ -40,7 +40,7 @@ extern bool			g_already_forked;
 ** execution.
 */
 
-bool				g_bg;
+extern bool			g_bg;
 
 /*
 ** eval tree

@@ -1,4 +1,6 @@
 * text eol=lf
 
-.c text
-.h text
+*.c text
+*.h text
+*.right binary
+scriptlive binary

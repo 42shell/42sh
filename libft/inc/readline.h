@@ -172,8 +172,8 @@ extern struct s_rl_line			g_rl_line;
 ** returns an array of matches which will be displayed.
 */
 
-typedef t_list_head			*(*t_complete_func)(char *context, size_t len,
-							int *count);
+typedef t_list_head			*(*t_complete_func)(char *context, size_t i,
+							int *count, char *partial_word);
 typedef	int					(*t_cmp_func)(void *a, void *b);
 
 struct						s_rl_complete
@@ -181,7 +181,7 @@ struct						s_rl_complete
 	t_complete_func			get_matches;
 	t_list_head				*matches;
 	int						match_count;
-	bool					first_tab;
+	char					*old_partial_word;
 };
 
 extern struct s_rl_complete		g_rl_complete;

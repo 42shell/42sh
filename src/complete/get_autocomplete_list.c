@@ -14,28 +14,25 @@
 
 int	*g_comp_list_count;
 
-t_list_head	*get_autocomplete_list(char *context, size_t len, int *count)
+t_list_head	*get_autocomplete_list(char *context, size_t i, int *count
+									, char *partial_word)
 {
-	char	*partial_word;
-	int		i;
-
-	i = len;
 	g_comp_list_count = count;
-	partial_word = &context[i];
 	while (i > 0 && context[i] != ' ')
-	{
-		if (context[--i] != ' ')
-			partial_word--;
-	}
+		i--;
 	while (i > 0 && context[i] == ' ')
 		i--;
+	if (partial_word[0] == '$')
+		return (get_variable_list(partial_word));
 	if (i <= 0 || context[i] == '|' || context[i] == '&' || context[i] == ';')
 	{
 		if (ft_strchr(partial_word, '/'))
 			return (get_file_list(partial_word, EXECONLY));
 		return (comp_get_command_list(partial_word));
 	}
-	else if (is_cd(context, i))
+	if (partial_word[0] == '-')
+		return (get_option_list(partial_word, context, i));
+	if (is_cd(context, i))
 		return (get_file_list(partial_word, DIRONLY));
 	return (get_file_list(partial_word, FILES));
 }
