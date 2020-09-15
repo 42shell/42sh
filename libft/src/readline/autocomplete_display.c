@@ -47,7 +47,7 @@ static void	print_list_cols(int max_width, int skip_len)
 		i = 0;
 		while (i < nb_col && cur != g_rl_complete.matches)
 		{
-			ft_printf("%-*s", max_width, (char *)cur->data + skip_len);
+			ft_dprintf(0, "%-*s", max_width, (char *)cur->data + skip_len);
 			cur = cur->next;
 			i++;
 		}
@@ -73,7 +73,7 @@ void		rl_print_match_list(char *partial_word)
 	movcnl();
 	if (g_rl_complete.match_count >= 100)
 	{
-		ft_printf("Display all %d possibilities? (y or n)"
+		ft_dprintf(0, "Display all %d possibilities? (y or n)"
 				, g_rl_complete.match_count);
 		if (!y_n_prompt())
 			return ;
