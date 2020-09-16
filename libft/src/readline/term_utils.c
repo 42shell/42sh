@@ -24,7 +24,7 @@ int		get_cpos(void)
 
 	p = buf;
 	ft_bzero(buf, 16);
-	if (write(STDOUT_FILENO, "\033[6n", 4) != 4
+	if (write(STDIN_FILENO, "\033[6n", 4) != 4
 	|| read(STDIN_FILENO, buf, 15) < 0)
 	{
 		g_rl_error = RL_SYSCALL_ERROR;
