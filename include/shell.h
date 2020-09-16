@@ -86,22 +86,16 @@ typedef struct			s_var
 
 /*
 ** remove nanosleep ?
+** 
 */
 
 /*
 ** TODO:
-** -check jobs management in batch mode
 ** -check for zombies
-** -test every tests/bash_tests/background.test
-**  compare output and process management with bash.
-**  For each test:
-** 		Ctrl-C, Ctrl-Z
-**      fg/bg/jobs
 ** -in place expansion causes problems (jobs with heredocs)
 ** -shell script
 **
 ** Small issues:
-** -Signal handlers does not seem to work
 ** -Running background jobs should be inserted in the
 **  stack below stopped jobs. Who cares  ? I don t
 ** -Useless jobs (containing no processes) are added
@@ -112,15 +106,11 @@ typedef struct			s_var
 **
 ** problems:
 ** -newline printed after expanded heredoc in jobs
-** -watch deceitful lexer
 ** -store aborted multi-lines in history ? bash does
 **
 ** old problems:
 ** -unsetenv infinite loop when unseting non existing var ?
 ** -env dup invalid read ?
-** -autcomplete vim /t doesnt complete files ?
-** -others
-** 		-check comments work properly
 ** -leaks/invalid reads/still reachable
 */
 

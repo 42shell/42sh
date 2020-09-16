@@ -29,6 +29,12 @@ unsigned int		g_rl_line_size_max;
 int					g_rl_last_ret;
 bool				g_rl_hist_doubl;
 
+static void	sigwinch_handler(int sig)
+{
+	(void)sig;
+	get_winsize();
+}
+
 static char	*rl_return(int ret)
 {
 	char	*line;
@@ -68,6 +74,7 @@ static int	rl_init(void)
 			g_rl_error = RL_ALLOC_ERROR;
 			return (-1);
 		}
+		signal(SIGWINCH, sigwinch_handler);
 		g_rl_is_init = true;
 	}
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &g_rl_term);
