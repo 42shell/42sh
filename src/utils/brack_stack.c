@@ -23,7 +23,7 @@ void			add_bracket_to_stack(t_array *stack, enum e_quote_st bracket)
 {
 	enum e_quote_st	*data;
 
-	data = malloc(sizeof(enum e_quote_st));
+	data = ft_xmalloc(sizeof(enum e_quote_st));
 	*data = bracket;
 	array_append(stack, data);
 }
