@@ -39,7 +39,7 @@ void		ht_delete(t_ht *map)
 		return ;
 	i = 0;
 	buckets = map->buckets;
-	while (i < map->size)
+	while (i++ < map->size)
 	{
 		pair = buckets;
 		while (pair)
@@ -48,10 +48,10 @@ void		ht_delete(t_ht *map)
 			map->free_value(pair->value);
 			tmp = pair;
 			pair = pair->next;
-			free(tmp);
+			if (tmp != buckets)
+				free(tmp);
 		}
 		buckets++;
-		i++;
 	}
 	free(map->buckets);
 	free(map);
