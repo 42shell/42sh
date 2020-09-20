@@ -24,6 +24,8 @@
 # include <fcntl.h>
 # include <limits.h>
 # include <dirent.h>
+# include <sys/ipc.h>
+# include <sys/msg.h>
 # include "libft.h"
 # include "readline.h"
 # include "ft_printf.h"
@@ -49,6 +51,24 @@
 
 typedef char	*(*t_var_value_func)(void);
 typedef int		(*t_builtin_func)(char **argv, t_array *temp_env);
+
+/*
+** for inter process communication, see man msgsnd
+** we send command=path from children to hash binaries
+** MSG_SIZE = PATH_MAX * 2 + 2 (not a constant value according to norm :)) )
+** because max size of command and path is PATH_MAX, \0 after command and \0
+** after path
+*/
+
+extern int		g_msg_qid;
+
+# define MSG_SIZE 8094
+
+struct					s_msgbuf
+{
+	long				mtype;
+	char				mtext[MSG_SIZE];
+};
 
 /*
 ** value_func is used to get the values of special variables like $$.
