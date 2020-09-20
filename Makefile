@@ -58,6 +58,7 @@ SRC_BUILTINS    :=	builtins.c\
 					test_op3.c\
 					test_op4.c\
 					test_op5.c\
+					hash.c\
 					fgbg.c
 SRC_BUILTINS    := $(addprefix builtins/,$(SRC_BUILTINS))
 

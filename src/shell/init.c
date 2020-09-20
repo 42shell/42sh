@@ -47,6 +47,7 @@ static void	init_builtins(void)
 	ht_put(g_builtins, "bg", builtin_bg);
 	ht_put(g_builtins, "jobs", builtin_jobs);
 	ht_put(g_builtins, "test", builtin_test);
+	ht_put(g_builtins, "hash", builtin_hash);
 }
 
 static int	set_input_fd(char *filename)
