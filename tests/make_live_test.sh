@@ -31,7 +31,7 @@ scriptlive -T "$DIR/live_tests/$1.timing" --log-in "$DIR/live_tests/$1.stdin" -c
 
 echo "Checking reproducibility with --maxdelay 0.02..."
 
-scriptlive -T "$DIR/live_tests/$1.timing" --log-in "$DIR/live_tests/$1.stdin" --maxdelay 0.02 -c ./42sh | tee "$1.test_log"
+scriptlive -T "$DIR/live_tests/$1.timing" --log-in "$DIR/live_tests/$1.stdin" --maxdelay 0.1 -c ./42sh | tee "$1.test_log"
 
 diff "$1.test_log" "$DIR/live_tests/$1.right" && echo "Diff OK!" || echo "Not reproducible"
 

@@ -86,7 +86,6 @@ typedef struct			s_var
 
 /*
 ** remove nanosleep ?
-** 
 */
 
 /*
