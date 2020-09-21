@@ -12,15 +12,46 @@
 
 #include "shell.h"
 
-static t_ht	*g_binaries;
+t_ht	*g_binaries;
 
-static void	cache_add(char *command, char *path)
+/*
+** Add all messages sent from fork to hash table
+*/
+
+void		add_binary_msgs_to_hash(void)
 {
-	if (!command || !path)
-		return ;
-	if (!g_binaries)
-		g_binaries = ht_new(256, &free);
-	ht_put(g_binaries, command, path);
+	struct s_msgbuf	msg;
+	size_t			cmd_len;
+	char			*cmd_ptr;
+	char			*path_ptr;
+
+	while (msgrcv(g_msg_qid, &msg, MSG_SIZE, 1, IPC_NOWAIT) > 0)
+	{
+		cmd_ptr = msg.mtext;
+		cmd_len = ft_strlen(msg.mtext);
+		path_ptr = msg.mtext + cmd_len + 1;
+		ht_put(g_binaries, cmd_ptr, ft_strdup(path_ptr));
+	}
+}
+
+/*
+** send a message containing command\0path
+*/
+
+static void	cache_msg_send(char *command, char *path)
+{
+	struct s_msgbuf	msg;
+	size_t			cmd_len;
+	size_t			path_len;
+
+	cmd_len = ft_strlen(command);
+	path_len = ft_strlen(path);
+	msg.mtype = 1;
+	ft_memcpy(msg.mtext, command, cmd_len);
+	msg.mtext[cmd_len] = '\0';
+	ft_memcpy(msg.mtext + cmd_len + 1, path, path_len);
+	msg.mtext[cmd_len + path_len + 1] = '\0';
+	msgsnd(g_msg_qid, &msg, cmd_len + path_len + 2, IPC_NOWAIT);
 }
 
 static char	*cache_search(char *command)
@@ -29,8 +60,7 @@ static char	*cache_search(char *command)
 
 	if (!command)
 		return (NULL);
-	if (!g_binaries
-	|| !(ret = (char *)ht_get(g_binaries, command)))
+	if (!g_binaries || !(ret = ht_get(g_binaries, command)))
 		return (NULL);
 	return (ret);
 }
@@ -57,9 +87,9 @@ char		*get_exec_path(char *command, t_array *env)
 				break ;
 			ft_memdel((void **)&ret);
 		}
+		if (ret)
+			cache_msg_send(command, ret);
 	}
-	if (ret)
-		cache_add(command, ft_strdup(ret));
 	free_arr(path);
 	return (ret);
 }

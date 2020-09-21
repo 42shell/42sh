@@ -1,0 +1,13 @@
+ls=/usr/bin/ls
+~~~
+cat=/usr/bin/cat
+~~~
+ls=/usr/bin/ls
+cat=/usr/bin/cat
+~~~
+42sh: hash: asdfasdfaiiiiiisssssaaaaaaaa: not found
+1
+~~~
+0
+ls=/usr/bin/ls
+cat=/usr/bin/cat

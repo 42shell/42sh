@@ -47,6 +47,7 @@ static void	init_builtins(void)
 	ht_put(g_builtins, "bg", builtin_bg);
 	ht_put(g_builtins, "jobs", builtin_jobs);
 	ht_put(g_builtins, "test", builtin_test);
+	ht_put(g_builtins, "hash", builtin_hash);
 }
 
 static int	set_input_fd(char *filename)
@@ -93,6 +94,8 @@ static int	init_interactive_mode(void)
 	return (0);
 }
 
+int			g_msg_qid;
+
 int			init(int argc, char **argv)
 {
 	g_shell.interactive_mode = true;
@@ -112,5 +115,7 @@ int			init(int argc, char **argv)
 		init_interactive_mode();
 	init_builtins();
 	init_vars();
+	g_msg_qid = msgget(IPC_PRIVATE, IPC_CREAT | 0600);
+	g_binaries = ht_new(256, free);
 	return (0);
 }

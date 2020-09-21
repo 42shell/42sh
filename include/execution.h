@@ -32,6 +32,8 @@ typedef struct		s_fd_backup
 ** -the table is (should be) flushed when PATH is modified.
 */
 
+extern				t_ht	*g_binaries;
+
 extern bool			g_job_control_enabled;
 extern bool			g_already_forked;
 
@@ -66,6 +68,7 @@ int					exec_builtin(char **argv, t_array *temp_env);
 int					exec_binary(char **argv, t_array *temp_env);
 char				**get_argv(t_simple_cmd *command);
 char				*get_exec_path(char *command, t_array *env);
+void				add_binary_msgs_to_hash(void);
 
 /*
 ** redirections

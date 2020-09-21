@@ -70,6 +70,7 @@ int			eval_complete_command(t_command *complete_command)
 		if (command->sep == AMPERSAND)
 			job->bg = true;
 		launch_job(job);
+		add_binary_msgs_to_hash();
 		command = command->next;
 	}
 	return (0);
