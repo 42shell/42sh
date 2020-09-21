@@ -19,11 +19,11 @@ static char	*get_prompt_quote(enum e_quote_st bracket_status)
 	if (g_lexer.quote_st == DQUOTE || bracket_status == DQUOTE)
 		return (PSDQ);
 	if (bracket_status == BRACE)
-		return (PSB);
+		return (PSC);
 	if (bracket_status == DPAREN)
 		return (PSDP);
 	if (bracket_status == PAREN)
-		return (PSP);
+		return (PSB);
 	return (PS2);
 }
 
