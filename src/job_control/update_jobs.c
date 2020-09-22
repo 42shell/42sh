@@ -12,20 +12,6 @@
 
 #include "shell.h"
 
-static void	update_greatest_id(void)
-{
-	t_job	*job;
-
-	if (!(job = g_jobs))
-		g_greatest_job_id = 0;
-	while (job)
-	{
-		if (job->id > g_greatest_job_id)
-			g_greatest_job_id = job->id;
-		job = job->next;
-	}
-}
-
 static void	notif_job(t_job *job)
 {
 	if (g_shell.interactive_mode)
@@ -46,7 +32,7 @@ void		update_jobs(void)
 		next = job->next;
 		if (job_is_done(job) && g_shell.interactive_mode)
 		{
-			if (job->bg || job->processes->signaled)
+			if (job->bg || job->processes->signaled)  //WIFSIGNALED(job->processes->status)
 				print_job(job, false);
 			del_job_from_list(&g_jobs, job);
 		}
@@ -54,5 +40,5 @@ void		update_jobs(void)
 			notif_job(job);
 		job = next;
 	}
-	update_greatest_id();
+	update_jobs_greatest_id();
 }

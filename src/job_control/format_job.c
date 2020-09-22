@@ -40,7 +40,7 @@ void		format_process_info(t_dstr *buf, t_process *process, int padding)
 
 	while (padding--)
 		ft_dstr_add(buf, ' ');
-	if (PRINT_PID)
+	if (SHOW_PID)
 	{
 		ft_itoa(process->pid, itoa_buf);
 		ft_dstr_cat(buf, itoa_buf);
@@ -72,7 +72,7 @@ void		format_job_info(t_dstr *buf, t_job *job, bool pgid)
 		ft_dstr_cat(buf, "- ");
 	else
 		ft_dstr_cat(buf, "  ");
-	if (pgid && PRINT_PID)
+	if (pgid && SHOW_PID)
 	{
 		ft_itoa(job->pgid, itoa_buf);
 		ft_dstr_cat(buf, itoa_buf);

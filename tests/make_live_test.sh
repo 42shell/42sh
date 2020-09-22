@@ -31,15 +31,20 @@ scriptlive -T "$DIR/live_tests/$1.timing" --log-in "$DIR/live_tests/$1.stdin" -c
 
 echo "Checking reproducibility with --maxdelay 0.02..."
 
-scriptlive -T "$DIR/live_tests/$1.timing" --log-in "$DIR/live_tests/$1.stdin" --maxdelay 0.1 -c ./42sh | tee "$1.test_log"
+scriptlive -T "$DIR/live_tests/$1.timing" --log-in "$DIR/live_tests/$1.stdin" --maxdelay 0.02 -c ./42sh | tee "$1.test_log"
 
-diff "$1.test_log" "$DIR/live_tests/$1.right" && echo "Diff OK!" || echo "Not reproducible"
+diff "$1.test_log" "$DIR/live_tests/$1.right" > "$DIR/live_tests/$1.diff_log" && echo "Diff OK!" \
+|| echo "Not reproducible" && cat "$DIR/live_tests/$1.diff_log" && read -p "Keep diff? [y/n] " -n 1 -r \
+&& if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then rm "$DIR/live_tests/$1.diff_log"; fi
+echo
 
 read -p "Keep test? [y/n] " -n 1 -r
-echo
 if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
 	rm "$DIR/live_tests/$1.timing" "$DIR/live_tests/$1.stdin" "$DIR/live_tests/$1.right"
 fi
+echo
 
-rm "$1.test_log"
+#rm "$1.test_log"
+#rm "$1.diff_log"
 stty cols "$OLD_TERMWIDTH"
+

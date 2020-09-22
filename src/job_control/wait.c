@@ -77,7 +77,7 @@ void		update_status(void)
 
 	time.tv_sec = 0;
 	time.tv_nsec = 0x10000000;
-	nanosleep(&time, NULL);
+	//nanosleep(&time, NULL);
 	while ((pid = waitpid(WAIT_ANY, &status, WNOHANG | WUNTRACED)) > 0)
 	{
 		if (set_process_status(pid, status) < 0)

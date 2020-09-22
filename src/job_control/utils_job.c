@@ -45,3 +45,17 @@ int		cmp_job_id(void *a, void *b)
 		return (1);
 	return (0);
 }
+
+void	update_jobs_greatest_id(void)
+{
+	t_job	*job;
+
+	if (!(job = g_jobs))
+		g_greatest_job_id = 0;
+	while (job)
+	{
+		if (job->id > g_greatest_job_id)
+			g_greatest_job_id = job->id;
+		job = job->next;
+	}
+}
