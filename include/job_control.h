@@ -15,6 +15,12 @@
 
 # include "shell.h"
 
+# ifdef HIDE_PID
+#  define SHOW_PID		0
+# else
+#  define SHOW_PID		1
+# endif
+
 typedef struct			s_process
 {
 	struct s_job		*job;
@@ -97,6 +103,7 @@ bool					job_is_in_list(t_job *list, t_job *job);
 bool					is_last_job(t_job *job);
 bool					is_before_last_job(t_job *job);
 int						cmp_job_id(void *a, void *b);
+void					update_jobs_greatest_id(void);
 
 /*
 ** process utils

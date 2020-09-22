@@ -82,7 +82,7 @@ int			launch_job(t_job *job)
 		launch_job_bg(job);
 		move_job_in_persistent_list(job);
 		if (g_job_control_enabled && g_shell.interactive_mode)
-			ft_dprintf(2, "[%d] %d\n", job->id, PRINT_PID ? job->pgid : 0);
+			ft_dprintf(2, "[%d] %d\n", job->id, SHOW_PID ? job->pgid : 0);
 		return (g_last_exit_st);
 	}
 	eval_command(job->command);

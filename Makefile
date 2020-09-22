@@ -33,7 +33,7 @@ LFLAGS          := -ltermcap
 ifeq ($(CC),cc)
 CC              := clang
 endif
-CFLAGS          := -Wall -Wextra -Werror -DPRINT_PID=1
+CFLAGS          := -Wall -Wextra -Werror
 ifeq ($(BUILDTYPE), debug)
 	CFLAGS := $(CFLAGS) $(DBG_FLAGS)
 endif
