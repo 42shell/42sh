@@ -19,9 +19,12 @@
 
 static void	set_exit_status(t_process *process)
 {
-	if (WIFEXITED(status) && process->stdout == 1)
-		g_last_exit_st = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
+	if (WIFEXITED(process->status))
+	{
+		if (process->stdout == 1)
+			g_last_exit_st = WEXITSTATUS(process->status);
+	}
+	else if (WIFSIGNALED(process->status))
 	{
 		process->signaled = WTERMSIG(process->status);
 		if (process->stdout == 1)
@@ -76,11 +79,7 @@ void		update_status(void)
 {
 	pid_t			pid;
 	int				status;
-	struct timespec	time;
 
-	time.tv_sec = 0;
-	time.tv_nsec = 0x10000000;
-	//nanosleep(&time, NULL);
 	while ((pid = waitpid(WAIT_ANY, &status, WNOHANG | WUNTRACED)) > 0)
 	{
 		if (set_process_status(pid, status) < 0)
