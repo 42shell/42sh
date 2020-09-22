@@ -17,11 +17,16 @@
 ** first commands of a pipeline
 */
 
-static void	set_signaled_exit_status(t_process *process)
+static void	set_exit_status(t_process *process)
 {
-	process->signaled = WTERMSIG(process->status);
-	if (process->stdout == 1)
-		g_last_exit_st = process->signaled + 128;
+	if (WIFEXITED(status) && process->stdout == 1)
+		g_last_exit_st = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+	{
+		process->signaled = WTERMSIG(process->status);
+		if (process->stdout == 1)
+			g_last_exit_st = process->signaled + 128;
+	}
 }
 
 static void	bubble_up_job(t_job **list, t_job *job)
@@ -61,10 +66,8 @@ int			set_process_status(pid_t pid, int status)
 	else
 	{
 		process->done = true;
-		if (WIFEXITED(status) && process->stdout == 1)
-			g_last_exit_st = WEXITSTATUS(status);
-		else if (WIFSIGNALED(status))
-			set_signaled_exit_status(process);
+		process->signaled = false;
+		set_exit_status(process);
 	}
 	return (0);
 }
