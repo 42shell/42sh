@@ -16,7 +16,7 @@ void		move_job_in_persistent_list(t_job *job)
 {
 	t_process	*process;
 	t_dstr		*buf;
-
+	
 	process = job->processes;
 	while (process)
 	{
@@ -62,7 +62,7 @@ void		del_job_from_list(t_job **head, t_job *job)
 
 void		remove_job_from_list(t_job **head, t_job *job)
 {
-	if (!*head)
+	if (!*head || !job)
 		return ;
 	if (job->next)
 		job->next->prev = job->prev;
@@ -76,6 +76,8 @@ void		remove_job_from_list(t_job **head, t_job *job)
 
 void		add_job_to_list(t_job **head, t_job *job, bool set_id)
 {
+	if (!job)
+		return ;
 	job->next = *head;
 	if (job->next)
 		job->next->prev = job;

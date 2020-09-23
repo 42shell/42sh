@@ -83,6 +83,6 @@ void		print_job(t_job *job, bool l_opt)
 	format_processes(job_format, job->processes, l_opt);
 	if (job->bg && job_is_running(job))
 		ft_dstr_cat(job_format, " &");
-	ft_dprintf(2, "%s\n", job_format->str);
+	ft_printf("%s\n", job_format->str);
 	ft_dstr_del(&job_format);
 }

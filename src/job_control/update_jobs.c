@@ -21,12 +21,13 @@ static void	notif_job(t_job *job)
 
 void		update_jobs(void)
 {
-	t_job			*job;
-	t_job			*next;
+	t_job	*job;
+	t_job	*next;
 
-	if (!(job = g_jobs))
+	if (!g_jobs)
 		return ;
 	update_status();
+	job = g_jobs;
 	while (job)
 	{
 		next = job->next;

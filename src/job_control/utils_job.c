@@ -49,13 +49,19 @@ int		cmp_job_id(void *a, void *b)
 void	update_jobs_greatest_id(void)
 {
 	t_job	*job;
+	int		max;
 
+	max = 0;
 	if (!(job = g_jobs))
+	{
 		g_greatest_job_id = 0;
+		return ;
+	}
 	while (job)
 	{
-		if (job->id > g_greatest_job_id)
-			g_greatest_job_id = job->id;
+		if (job->id > max)
+			max = job->id;
 		job = job->next;
 	}
+	g_greatest_job_id = max;
 }

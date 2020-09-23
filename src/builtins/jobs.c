@@ -65,7 +65,7 @@ static int	print_one_job(t_job *job, int options)
 	|| ((options & JOBS_S) && !job_is_stopped(job)))
 		return (0);
 	if (options & JOBS_P)
-		ft_dprintf(2, "%d\n", job->pgid);
+		ft_printf("%d\n", job->pgid);
 	else if (options & JOBS_L)
 		print_job(job, true);
 	else

@@ -87,7 +87,7 @@ cd ..
 for file in "$DIR/live_tests/"*.timing
 do
 	test_name=$(basename "$file" | cut -d '.' -f 1)
-	scriptlive -T "$DIR/live_tests/$test_name".timing --log-in "$DIR/live_tests/$test_name.stdin" --maxdelay 0.02 -c ./42sh > "$DIR/$test_name.42sh"
+	scriptlive -T "$DIR/live_tests/$test_name".timing --log-in "$DIR/live_tests/$test_name.stdin" --maxdelay 0.03 -c ./42sh > "$DIR/$test_name.42sh"
 	cp "$DIR/live_tests/$test_name.right" "$DIR/$test_name.bash"
 done
 

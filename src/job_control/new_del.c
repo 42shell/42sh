@@ -32,6 +32,8 @@ t_job		*job_new(t_command *cmd, int stdin, int stdout)
 	job->stdin = stdin;
 	job->stdout = stdout;
 	job->command = cmd;
+	job->prev = NULL;
+	job->next = NULL;
 	return (job);
 }
 
