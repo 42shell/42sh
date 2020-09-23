@@ -85,12 +85,9 @@ typedef struct			s_var
 }						t_var;
 
 /*
-** remove nanosleep ?
-*/
-
-/*
+**
+**
 ** TODO:
-** -check for zombies
 ** -in place expansion causes problems (jobs with heredocs)
 ** -shell script
 **
