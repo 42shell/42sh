@@ -31,8 +31,9 @@ void	remove_quotes(t_token *token);
 void	remove_bslash(t_dstr *str);
 void	sort_matches(char **array, int size);
 
-int		get_end_of_braces(const char *str);
-
+int		get_end_of_braces(const char *str, int start);
+void	token_replace_between(t_token *token, int start, int end,
+									char *replacement);
 void	split_fields(t_token *token);
 
 #endif

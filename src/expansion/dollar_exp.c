@@ -19,13 +19,13 @@ char	*g_expand_error_token = NULL;
 ** Probably should never return -1 since lexer enforces brace termination
 */
 
-int			get_end_of_braces(const char *str)
+int			get_end_of_braces(const char *str, int start)
 {
 	int		i;
 	t_array	*brack_stack;
 
 	brack_stack = array_new(4);
-	i = 0;
+	i = start;
 	while (str[i])
 	{
 		if (str[i] == '\\'
