@@ -5,9 +5,22 @@
 #brew install gnu-sed
 #to install them
 
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 cd "$DIR/.."
+
+source tests/progress_bar.sh
+
+NB_TESTS=$(ls tests/live_tests/*.stdin tests/*_tests/*.test | wc -l)
+
+test_name_max_len=0
+for file in tests/live_tests/*.stdin tests/*_tests/*.test; do
+	len=$(basename "$file" | cut -d '.' -f 1 | wc -m)
+	if test "$len" -ge "$test_name_max_len"; then
+		test_name_max_len="$len"
+	fi
+done
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
 	CSPLIT=gcsplit
@@ -43,9 +56,12 @@ for a in {a..f}; do
 	done
 done
 
+i=0
 for file in "$DIR/bash_tests/"*.test
 do
 	test_name=$(basename "$file" | cut -d '.' -f 1)
+	((i++))
+	progress_bar "Testing..." "$i" "$NB_TESTS" "$(printf %+"$test_name_max_len"s "$test_name")"
 	if [ $test_name = "stdin1" ]; then
 		./42sh < "$file" > "$DIR/$test_name.42sh" 2>&1;
 		bash < "$file" > "$DIR/$test_name.bash" 2>&1;
@@ -69,7 +85,14 @@ rm -rf glob
 for file in "$DIR/fixed_tests/"*.test
 do
 	test_name=$(basename "$file" | cut -d '.' -f 1)
-	./42sh "$file" > "$DIR/$test_name.42sh" 2>&1;
+	((i++))
+	progress_bar "Testing..." "$i" "$NB_TESTS" "$(printf %+"$test_name_max_len"s "$test_name")"
+	if [[ "$test_name" =~ sighup* ]]; then
+		./42sh "$file" > "$DIR/$test_name.42sh" 2>&1 & disown
+	else
+		./42sh "$file" > "$DIR/$test_name.42sh" 2>&1
+	fi
+
 	cp "$DIR/fixed_tests/$test_name.right" "$DIR/$test_name.bash"
 done
 
@@ -88,6 +111,8 @@ cd ..
 for file in "$DIR/live_tests/"*.timing
 do
 	test_name=$(basename "$file" | cut -d '.' -f 1)
+	((i++))
+	progress_bar "Testing..." "$i" "$NB_TESTS" "$(printf %+"$test_name_max_len"s "$test_name")"
 	scriptlive -T "$DIR/live_tests/$test_name".timing --log-in "$DIR/live_tests/$test_name.stdin" --maxdelay 0.02 -c ./42sh > "$DIR/$test_name.42sh"
 	cp "$DIR/live_tests/$test_name.right" "$DIR/$test_name.bash"
 done
@@ -140,6 +165,7 @@ EXIT_ST=0
 n=0
 ok=0
 
+echo
 for file in "$DIR/bash/"*
 do
 	file="$(basename "$file")"
