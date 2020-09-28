@@ -61,8 +61,20 @@ t_list_head	*get_sorted_jobs_list(void)
 
 void		del_job_from_list(t_job **head, t_job *job)
 {
+	size_t i;
+
 	remove_job_from_list(head, job);
 	process_list_del(&job->processes);
+	if (job->fds_to_close)
+	{
+		i = 0;
+		while (i < job->fds_to_close->size)
+		{
+			close(*(int *)(job->fds_to_close->array[i]));
+			i++;
+		}
+		array_destroy(job->fds_to_close);
+	}
 	free(job);
 }
 

@@ -33,7 +33,7 @@ LFLAGS          := -ltermcap
 ifeq ($(CC),cc)
 CC              := clang
 endif
-CFLAGS          := -Wall -Wextra -Werror
+CFLAGS          := -Wall -Wextra 
 ifeq ($(BUILDTYPE), debug)
 	CFLAGS := $(CFLAGS) $(DBG_FLAGS)
 endif
@@ -126,8 +126,9 @@ SRC_EXPANSION   := expand.c\
 				   sort_matches.c\
 				   has_glob_char.c\
 				   field_splitting.c\
-				   cmd_sub.c\
 				   path_exp.c\
+				   cmd_sub.c\
+				   process_sub.c\
 				   utils.c
 SRC_EXPANSION   := $(addprefix expansion/,$(SRC_EXPANSION))
 

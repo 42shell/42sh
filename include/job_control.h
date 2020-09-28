@@ -58,6 +58,7 @@ typedef struct			s_job
 	bool				notified;
 	bool				invert_ret;
 	bool				bg;
+	t_array				*fds_to_close;
 }						t_job;
 
 extern t_job			*g_current_jobs;

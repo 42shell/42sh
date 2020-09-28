@@ -41,6 +41,10 @@ bool	is_operator_next(char *ope, char c)
 	return (0);
 }
 
+/*
+** return word for <() and >()
+*/
+
 int		get_operator_type(char *ope)
 {
 	if (ft_strequ(ope, "<") || ft_strequ(ope, ">"))
@@ -57,5 +61,5 @@ int		get_operator_type(char *ope)
 		return (*ope == '(' ? LPAREN : RPAREN);
 	if (ft_strequ(ope, ";"))
 		return (SEMI);
-	return (0);
+	return (WORD);
 }

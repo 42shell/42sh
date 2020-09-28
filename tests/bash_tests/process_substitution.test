@@ -1,0 +1,27 @@
+#TEST 00
+diff <(echo bonjour) <(echo aurevoir)
+echo '~~~'
+
+#TEST 01
+(diff <(echo bonjour) <(echo aurevoir) )
+echo '~~~'
+
+#TEST 02
+(echo $(diff <(echo bonjour) <(echo $((1 + 1)))))
+echo '~~~'
+
+#TEST 03
+echo "LALA" | tee >(cat -e)
+sleep 0.1
+echo '~~~'
+
+#TEST 04
+echo "bonjour" | tee >(echo 1
+echo 2)
+echo '~~~'
+
+#TEST 05
+echo "bonjour" | tee >(ls "bonjour
+les amiches
+sssss"
+)
