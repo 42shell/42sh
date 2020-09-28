@@ -46,14 +46,15 @@ done
 for file in "$DIR/bash_tests/"*.test
 do
 	test_name=$(basename "$file" | cut -d '.' -f 1)
-	if [ $test_name = "stdin1" ]
-	then
+	if [ $test_name = "stdin1" ]; then
 		./42sh < "$file" > "$DIR/$test_name.42sh" 2>&1;
 		bash < "$file" > "$DIR/$test_name.bash" 2>&1;
-	elif [ $test_name = "stdin2" ]
-	then
+	elif [ $test_name = "stdin2" ]; then
 		./42sh "$file" < "$file" > "$DIR/$test_name.42sh" 2>&1;
 		bash "$file" < "$file" > "$DIR/$test_name.bash" 2>&1;
+	elif [ $test_name = "background" ]; then
+		./42sh "$file" > "$DIR/$test_name.42sh" 2>&1 &
+		bash "$file" > "$DIR/$test_name.bash" 2>&1	&
 	else
 		./42sh "$file" > "$DIR/$test_name.42sh" 2>&1;
 		bash "$file" > "$DIR/$test_name.bash" 2>&1;
@@ -96,6 +97,8 @@ rm -rf testing_autocomplete
 ./42sh "$DIR/setenv.test" > "$DIR/setenv.42sh" 2>&1
 tcsh "$DIR/setenv.test"> "$DIR/setenv.bash" 3>&1
 
+
+wait
 
 "$SED" -i -E  's/.*: line [[:digit:]]*:/42sh:/g' "$DIR/"*.bash
 "$SED" -i -E "s/(.+)\/$/\1/g" "$DIR/cd.42sh" #remove / at the end of line for $PWD
