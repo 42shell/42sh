@@ -12,39 +12,8 @@
 
 #include "shell.h"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 bool		g_bg;
-=======
-static void	make_processes_strings(t_process *list)
-{
-	t_process	*process;
-	t_dstr		*buf;
 
-	process = list;
-	while (process)
-	{
-		buf = ft_dstr_new(64);
-		if (process->stdin != 0)
-			ft_dstr_append(buf, "| ");
-		format_command(buf, process->command);
-		process->command_str = buf;
-		process->command = NULL;
-		process = process->next;
-	}
-}
-
-static void	move_job_in_persistent_list(t_job *job)
-{
-	make_processes_strings(job->processes);
-	remove_job_from_list(&g_current_jobs, job);
-	add_job_to_list(&g_jobs, job, true);
-	job->command = NULL;
-}
->>>>>>> Norme, attempt №1
-
-=======
->>>>>>> fix problems due to SIGCHLD use for job control, and other small issues
 static int	launch_job_bg(t_job *job)
 {
 	t_process	*process;
