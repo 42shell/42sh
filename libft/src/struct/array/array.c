@@ -21,7 +21,7 @@ t_array		*array_new(size_t alloc)
 		ret->allocated = 4;
 	else
 		ret->allocated = alloc;
-	ret->array = ft_xmalloc(ret->allocated * sizeof(void *));
+	ret->array = ft_xmalloc((ret->allocated + 1) * sizeof(void *));
 	ret->size = 0;
 	return (ret);
 }
@@ -40,7 +40,7 @@ void		array_realloc(t_array *array)
 	new_size = array->size + 1;
 	array->allocated = (new_size >> 3) + (new_size < 9 ? 3 : 6);
 	array->allocated += new_size;
-	new_array = ft_xmalloc(array->allocated * sizeof(void *));
+	new_array = ft_xmalloc((array->allocated + 1) * sizeof(void *));
 	i = 0;
 	while (i < array->size)
 	{

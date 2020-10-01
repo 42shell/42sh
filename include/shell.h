@@ -18,7 +18,6 @@
 # include <sys/wait.h>
 # include <sys/uio.h>
 # include <sys/stat.h>
-# include <sys/prctl.h>
 # include <sys/ioctl.h>
 # include <signal.h>
 # include <fcntl.h>
@@ -85,9 +84,12 @@ typedef struct			s_var
 }						t_var;
 
 /*
+** make waitpid return when child get SIGCONT, make t_array be NULL terminated
+** avoid SEGFAULT in parse_pipeline.
+** use $! instead of pkill
+** add notif for CONT jobs ?
 **
-**
-** TODO:
+** TODO: 
 ** -in place expansion causes problems (jobs with heredocs)
 ** -shell script
 **

@@ -65,7 +65,7 @@ t_command	*parse_pipeline(void)
 	int			invert_return;
 
 	invert_return = 0;
-	while (g_parser.token->type == BANG)
+	while (g_parser.token && g_parser.token->type == BANG)
 	{
 		invert_return ^= CMD_INVERT_RETURN;
 		token_del(&g_parser.token);
