@@ -84,9 +84,7 @@ typedef struct			s_var
 }						t_var;
 
 /*
-** make waitpid return when child get SIGCONT, make t_array be NULL terminated
-** avoid SEGFAULT in parse_pipeline.
-** use $! instead of pkill
+** Don't forget to setpgid(0, shell_pgid) if !job_control_enabled or merge procsub
 ** add notif for CONT jobs ?
 **
 ** TODO: 
