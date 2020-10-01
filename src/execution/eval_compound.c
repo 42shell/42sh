@@ -56,7 +56,7 @@ static int	subshell_is_useless(t_command *command)
 }
 
 /*
-** If the group is a subshell and we have not forked yet, and a we can t avoid
+** If the group is a subshell and we have not forked yet, and we can t avoid
 ** a subshell, we fork. This function will be called again in the fork with
 ** g_already_forked = true.
 ** If the list is more than one command, we set g_already_forked = false

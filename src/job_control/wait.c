@@ -66,6 +66,8 @@ int			set_process_status(pid_t pid, int status)
 		else
 			move_job_in_persistent_list(process->job);
 	}
+	else if (WIFCONTINUED(status))
+		process->stopped = false;
 	else
 	{
 		process->done = true;
@@ -80,7 +82,7 @@ void		update_status(void)
 	pid_t			pid;
 	int				status;
 
-	while ((pid = waitpid(WAIT_ANY, &status, WNOHANG | WUNTRACED)) > 0)
+	while ((pid = waitpid(WAIT_ANY, &status, WNOHANG | WUNTRACED | WCONTINUED)) > 0)
 	{
 		if (set_process_status(pid, status) < 0)
 		{

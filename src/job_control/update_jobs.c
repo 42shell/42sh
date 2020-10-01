@@ -33,7 +33,7 @@ void		update_jobs(void)
 		next = job->next;
 		if (job_is_done(job) && g_shell.interactive_mode)
 		{
-			if (job->bg || job->processes->signaled)  //WIFSIGNALED(job->processes->status)
+			if (job->bg || job->processes->signaled)
 				print_job(job, false);
 			del_job_from_list(&g_jobs, job);
 		}
