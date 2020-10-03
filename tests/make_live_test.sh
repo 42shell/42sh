@@ -52,7 +52,7 @@ if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
 fi
 echo
 
-rm "$1.test_log"
+#rm "$1.test_log"
 
 stty cols "$OLD_TERMWIDTH"
 
