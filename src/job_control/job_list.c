@@ -16,7 +16,7 @@ void		move_job_in_persistent_list(t_job *job)
 {
 	t_process	*process;
 	t_dstr		*buf;
-	
+
 	process = job->processes;
 	while (process)
 	{

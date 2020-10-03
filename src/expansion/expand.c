@@ -101,91 +101,12 @@ static int	expand_redir_list(t_redir *redir_list, char *home_dir)
 
 extern char *g_expand_error_token;
 
-t_token		*token_dup(t_token *token)
-{
-	t_token	*dup;
-
-	if (!token)
-		return (NULL);
-	dup = token_new(token->type);
-	dup->value = ft_dstr_dup(token->value);
-	return (dup);
-}
-
-t_redir		*redir_dup(t_redir *redir)
-{
-	t_redir	*dup;
-
-	if (!redir)
-		return (NULL);
-	dup = (t_redir *)ft_xmalloc(sizeof(t_redir));
-	dup->left_op = redir->left_op;
-	dup->operator = redir->operator;
-	dup->right_op = redir->right_op;
-	return (dup);
-}
-
-t_redir		*redir_list_dup(t_redir *list)
-{
-	t_redir	*dup;
-	t_redir	*tmp;
-	t_redir	*last;
-
-	dup = NULL;
-	if (!list)
-		return (NULL);
-	while (list)
-	{
-		tmp = redir_dup(list);
-		if (!dup)
-		{
-			dup = tmp;
-			last = dup;
-		}
-		else
-		{
-			last->next = tmp;
-			last = last->next;
-		}
-		list = list->next;
-	}
-	return (dup);
-}
-
-t_token		*token_list_dup(t_token *list)
-{
-	t_token	*dup;
-	t_token	*tmp;
-	t_token	*last;
-
-	dup = NULL;
-	if (!list)
-		return (NULL);
-	while (list)
-	{
-		tmp = token_dup(list);
-		if (!dup)
-		{
-			dup = tmp;
-			last = dup;
-		}
-		else
-		{
-			last->next = tmp;
-			last = last->next;
-		}
-		list = list->next;
-	}
-	return (dup);
-}
-
 int			expand(t_simple_cmd *command)
 {
 	char	*home_dir;
 	t_redir	*cur;
 
 	home_dir = get_var_value("HOME");
-
 	command->args_exp = token_list_dup(command->args);
 	command->assigns_exp = token_list_dup(command->assigns);
 	command->redirs_exp = redir_list_dup(command->redirs);

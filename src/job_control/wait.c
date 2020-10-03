@@ -82,7 +82,8 @@ void		update_status(void)
 	pid_t			pid;
 	int				status;
 
-	while ((pid = waitpid(WAIT_ANY, &status, WNOHANG | WUNTRACED | WCONTINUED)) > 0)
+	while ((pid = waitpid(WAIT_ANY, &status,
+			WNOHANG | WUNTRACED | WCONTINUED)) > 0)
 	{
 		if (set_process_status(pid, status) < 0)
 		{
