@@ -1,67 +1,0 @@
->>> scriptlive: Starting your typescript execution by ./42sh.
-[?1h=[?1h=$> [Js[C[Jl[C[Je[C[Je[C[Jp[C[J [C[J1[C[J0[C[J0[C[J [C[J&[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[1] 0
-[?1h=$> [Jf[C[Jg[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[Csleep 100
-[1]+  Stopped                         sleep 100
-[?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[1]+  Stopped                         sleep 100
-[?1h=$> [Jb[C[Jg[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[1]+  Running                         sleep 100 &
-[?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[1]+  Running                         sleep 100 &
-[?1h=$> [Jf[C[Jg[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[Csleep 100
-[1]+  Terminated (2)                  sleep 100
-[?1h=$> [Js[C[Jl[C[Je[C[Je[C[Jp[C[J [C[J1[C[J0[C[J0[C[J [C[J&[C[J [C[Js[C[Jl[C[Je[C[Je[C[Jp[C[J [C[J2[C[J0[C[J0[C[J [C[J&[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1] 0
-[2] 0
-[?1h=$> [Jf[C[Jg[C[J [C[J%[C[J2[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[Csleep 200
-[2]+  Terminated (2)                  sleep 200
-[?1h=$> [Jf[C[Jg[C[J [C[J%[C[J2[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C42sh: fg: %2: No such job
-[?1h=$> [Jb[C[Jg[C[J [C[J%[C[J2[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C42sh: bg: %2: No such job
-[?1h=$> [Jf[C[Jg[C[J [C[J%[C[J1[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[Csleep 100
-[1]+  Terminated (2)                  sleep 100
-[?1h=$> [Js[C[Jl[C[Je[C[Je[C[Jp[C[J [C[J1[C[J0[C[J0[C[J [C[J&[C[J [C[Js[C[Jl[C[Je[C[Je[C[Jp[C[J [C[J2[C[J0[C[J0[C[J [C[J&[C[J [C[Js[C[Jl[C[Je[C[Je[C[Jp[C[J [C[J3[C[J0[C[J0[C[J [C[J&[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1] 0
-[2] 0
-[3] 0
-[?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[1]   Running                         sleep 100 &
-[2]-  Running                         sleep 200 &
-[3]+  Running                         sleep 300 &
-[?1h=$> [Jf[C[Jg[C[J [C[J%[C[J-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[Csleep 200
-[2]-  Terminated (2)                  sleep 200
-[?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[1]-  Running                         sleep 100 &
-[3]+  Running                         sleep 300 &
-[?1h=$> [Jjobs[Jfg %-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[Csleep 100
-[1]-  Terminated (2)                  sleep 100
-[?1h=$> [Jfg %-[Jjobs[Jfg %-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C42sh: fg: %-: No such job
-[?1h=$> [Jfg %-[J[J+[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[Csleep 300
-[3]+  Terminated (2)                  sleep 300
-[?1h=$> [Jf[C[Jg[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C42sh: fg: current: No such job
-[?1h=$> [Jb[C[Jg[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C42sh: bg: current: No such job
-[?1h=$> [Jt[C[Jr[C[Ju[C[Je[C[J [C[J&[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[1] 0
-[?1h=$> [Jf[C[Jg[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C42sh: fg: job [1] has terminated
-[1]+  Done                            true
-[?1h=$> [Jt[C[Jr[C[Ju[C[Je[C[J [C[J&[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[1] 0
-[?1h=$> [Jb[C[Jg[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C42sh: bg: job [1] has terminated
-[1]+  Done                            true
-[?1h=$> [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C
->>> scriptlive: done.
