@@ -5,14 +5,12 @@
 /bin/echo ok &
 jobs
 
-sleep 100 &
-PID=$!
+sleep 100 & PID=$!
 jobs
 kill -9 $PID 2>&/dev/null
 jobs
 
-cat &
-PID=$!
+cat & PID=$!
 jobs
 kill -9 $PID 2>&/dev/null
 jobs
