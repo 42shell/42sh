@@ -14,7 +14,7 @@
 [?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
 [C[C[C[C[C[?1h=$> [Jc[C[Ja[C[Jt[C[J [C[J&[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
 [C[C[C[C[C[C[1] 0
-[?1h=$> [JP[C[JI[C[JD[C[J=[C[J$[C[J![C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
+[?1h=$> [Jp[C[Ji[C[J[J[Jcat &[Jjobs[Jkill -9 $PID 2>&/dev/null[Jjobs[JPID=$![C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
 [C[C[C[C[C[C[C[1]+  Stopped                         cat
 [?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
 [C[C[C[C[C[1]+  Stopped                         cat
@@ -49,8 +49,8 @@
 [C[C[C[C[C[C[C[C[1]+  Stopped
       Terminated (9)                  cat
       Stopped (21)                  | sleep 100
-[?1h=$> [Jp[C[Jk[C[Ji[C[Jl[C[Jl[C[J [C[J-[C[J9[C[J [C[Jc[C[Ja[C[Jt[C[J [C[J2[C[J>[C[J&[C[J/[C[Jd[C[Je[C[Jv[C[J/[C[Jn[C[Ju[C[Jl[C[Jl[C[C[C[J 2>&/dev/null[J 2>&/dev/null[J 2>&/dev/null[Js 2>&/dev/null[C[Jl 2>&/dev/null[C[Je 2>&/dev/null[C[Je 2>&/dev/null[C[Jp 2>&/dev/null[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1]+  Terminated (9)                  cat | sleep 100
+[?1h=$> [Jp[C[Jk[C[Ji[C[Jl[C[Jl[C[J [C[J-[C[J9[C[J [C[Js[C[Jl[C[Je[C[Je[C[Jp[C[J [C[J2[C[J>[C[J&[C[J/[C[Jd[C[Je[C[Jv[C[J/[C[Jn[C[Ju[C[Jl[C[Jl[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
+[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1]+  Terminated (9)                  cat | sleep 100
 [?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
 [C[C[C[C[C[?1h=$> [Jc[C[Ja[C[Jt[C[J [C[J|[C[J [C[Js[C[Jl[C[Je[C[Je[C[Jp[C[J [C[J1[C[J0[C[J0[C[J [C[J&[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
 [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1] 0
@@ -59,7 +59,7 @@
       Stopped (21)                    cat
       Stopped (21)                  | sleep 100
 [?1h=$> [Jp[C[Jk[C[Ji[C[Jl[C[Jl[C[J [C[J-[C[JC[C[JO[C[JN[C[JT[C[J [C[Js[C[Jl[C[Je[C[Je[C[Jp[C[J [C[J2[C[J>[C[J&[C[J/[C[Jd[C[Je[C[Jv[C[J/[C[Jn[C[Ju[C[Jl[C[Jl[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[J [C[J-[C[Jl[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
+[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[?1h=$> [Jo[C[Jb[C[Js[C[J[J[J[Jj[C[Jo[C[Jb[C[Js[C[J [C[J-[C[Jl[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
 [C[C[C[C[C[C[C[C[1]+  Running
       Stopped (21)                    cat
       Running                       | sleep 100 &
