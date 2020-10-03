@@ -19,9 +19,9 @@ t_redir		*redir_dup(t_redir *redir)
 	if (!redir)
 		return (NULL);
 	dup = (t_redir *)ft_xmalloc(sizeof(t_redir));
-	dup->left_op = redir->left_op;
-	dup->operator = redir->operator;
-	dup->right_op = redir->right_op;
+	dup->left_op = token_dup(redir->left_op);
+	dup->operator = token_dup(redir->operator);
+	dup->right_op = token_dup(redir->right_op);
 	return (dup);
 }
 
