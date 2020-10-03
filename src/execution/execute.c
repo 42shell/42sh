@@ -60,7 +60,7 @@ int			exec_simple_command(t_simple_cmd *simple)
 	t_list_head	*fd_backups;
 
 	fd_backups = NULL;
-	if (set_redir(simple->redirs, &fd_backups) != 0)
+	if (set_redir(simple->redirs_exp, &fd_backups) != 0)
 		return (g_last_exit_st = 1);
 	if (simple->argv)
 	{

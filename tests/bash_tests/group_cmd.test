@@ -89,7 +89,7 @@ echo '~~~'
 
 #TEST 17
 echo '{ ((ls | cat -e) 2>&1 && echo ok); echo ok 1>&2; } | cat -e'
-{ ((ls | cat -e) 2>&1 && echo ok); echo ok 1>&2; } | cat -e
+{ ((ls | cat -e) 2>&1 && echo ok1); echo ok2 1>&2; } | cat -e
 echo '~~~'
 
 #TEST 18

@@ -17,13 +17,13 @@ static void	format_exit_status(t_dstr *buf, char *itoa_buf, t_process *process)
 	if (WIFSIGNALED(process->status))
 	{
 		ft_itoa(WTERMSIG(process->status), itoa_buf);
-		ft_dstr_cat(buf, " Killed (");
+		ft_dstr_cat(buf, " Terminated (");
 		ft_dstr_cat(buf, itoa_buf);
 		ft_dstr_add(buf, ')');
 	}
 	else
 	{
-		ft_dstr_cat(buf, " Terminated ");
+		ft_dstr_cat(buf, " Done ");
 		if (WIFEXITED(process->status) && WEXITSTATUS(process->status) != 0)
 		{
 			ft_itoa(WEXITSTATUS(process->status), itoa_buf);

@@ -62,6 +62,9 @@ typedef struct				s_simple_cmd
 	t_redir					*redirs;
 	t_token					*args;
 	t_token					*assigns;
+	t_redir					*redirs_exp;
+	t_token					*args_exp;
+	t_token					*assigns_exp;
 	char					**argv;
 	bool					is_expand;
 }							t_simple_cmd;

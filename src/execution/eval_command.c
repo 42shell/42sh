@@ -33,8 +33,12 @@ int			eval_simple_command(t_command *command)
 		if (expand(simple) == 1)
 			return (g_last_exit_st = 1);
 		if (!(simple->argv = get_argv(simple)))
+		{
+			simple->is_expand = false;
 			return (exec_simple_command(simple));
+		}
 	}
+	simple->is_expand = false;
 	if (!g_already_forked && simple->argv && !is_builtin(simple->argv[0]))
 	{
 		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
