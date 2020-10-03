@@ -84,10 +84,10 @@ typedef struct			s_var
 }						t_var;
 
 /*
-** Don't forget to setpgid(0, shell_pgid) if !job_control_enabled or merge procsub
-** add notif for CONT jobs ?
+** Don't forget to setpgid(0, shell_pgid) if !job_control_enabled
+** or merge procsub add notif for CONT jobs ?
 **
-** TODO: 
+** TODO:
 ** -in place expansion causes problems (jobs with heredocs)
 ** -shell script
 **

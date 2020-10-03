@@ -33,4 +33,7 @@ void	sort_matches(char **array, int size);
 
 int		get_end_of_braces(const char *str);
 
+t_redir	*redir_dup(t_redir *redir);
+t_redir	*redir_list_dup(t_redir *list);
+
 #endif

@@ -125,7 +125,8 @@ SRC_EXPANSION   := expand.c\
 				   is_match.c\
 				   sort_matches.c\
 				   has_glob_char.c\
-				   path_exp.c
+				   path_exp.c\
+				   utils.c
 SRC_EXPANSION   := $(addprefix expansion/,$(SRC_EXPANSION))
 
 SRC_LEXER       := append.c\
