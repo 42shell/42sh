@@ -33,6 +33,7 @@ void		redir_del(t_redir **redir)
 	token_del(&(*redir)->left_op);
 	token_del(&(*redir)->operator);
 	token_del(&(*redir)->right_op);
+	token_del(&(*redir)->heredoc);
 	ft_memdel((void **)redir);
 }
 

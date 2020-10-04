@@ -55,6 +55,7 @@ typedef struct				s_redir
 	t_token					*left_op;
 	t_token					*operator;
 	t_token					*right_op;
+	t_token					*heredoc;
 }							t_redir;
 
 typedef struct				s_simple_cmd
