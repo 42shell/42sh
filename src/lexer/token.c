@@ -46,7 +46,7 @@ t_token	*token_dup(t_token *token)
 	if (!token)
 		return (NULL);
 	dup = token_new(token->type);
-	dup->value = ft_dstr_dup(token->value);
+	ft_dstr_append(dup->value, token->value->str);
 	return (dup);
 }
 
