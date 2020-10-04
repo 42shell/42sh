@@ -114,7 +114,7 @@ int			expand(t_simple_cmd *command)
 	|| expand_token_list(command->assigns_exp, home_dir) == 1
 	|| expand_redir_list(command->redirs_exp, home_dir) == 1)
 		return (1);
-	cur = command->redirs;
+	cur = command->redirs_exp;
 	while (cur)
 	{
 		if (cur->right_op && cur->right_op->next)
