@@ -1,110 +1,0 @@
->>> scriptlive: Starting your typescript execution by ./42sh.
-[?1h=[?1h=$> [Jc[C[Ja[C[Jt[C[J [C[J&[C[J [C[JP[C[JI[C[JD[C[J=[C[J$[C[J![C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[1] 0
-[?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[J [C[J0[C[J[J-[C[Jn[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[1]+  Stopped                         cat
-[?1h=$> [Jk[C[Ji[C[Jl[C[Jl[C[J [C[J-[C[J9[C[J [C[J$[C[JP[C[JI[C[JD[C[J [C[J2[C[J>[C[J&[C[J/[C[Jd[C[Je[C[Jv[C[J/[C[Jn[C[Ju[C[Jl[C[Jl[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1]+  Terminated (9)                  cat
-[?1h=$> [Jc[C[Ja[C[Jt[C[J [C[J&[C[J [C[JP[C[JI[C[JD[C[J=[C[J$[C[J![C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[1] 0
-[?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[J [C[J-[C[Jp[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C0
-[?1h=$> [Jk[C[Ji[C[Jl[C[Jl[C[J [C[J-[C[J9[C[J [C[J$[C[JP[C[JI[C[JD[C[J [C[J2[C[J>[C[J&[C[J/[C[Jd[C[Je[C[Jv[C[J/[C[Jn[C[Ju[C[Jl[C[Jl[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1]+  Terminated (9)                  cat
-[?1h=$> [Jc[C[Ja[C[Jt[C[J [C[J&[C[J [C[JP[C[J1[C[J=[C[J$[C[J![C[J;[C[J [C[Js[C[Jl[C[Je[C[Je[C[Jp[C[J [C[J1[C[J0[C[J0[C[J0[C[J [C[J&[C[J [C[JP[C[J2[C[J=[C[J$[C[J![C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1] 0
-[2] 0
-[?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[J [C[J-[C[Jr[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[2]-  Running                         sleep 1000 &
-[1]+  Stopped                         cat
-[?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[J [C[J-[C[Js[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[1]+  Stopped                         cat
-[?1h=$> [Jk[C[Ji[C[Jl[C[Jl[C[J [C[J-[C[J9[C[J [C[J$[C[JP[C[J1[C[J [C[J$[C[JP[C[J2[C[J [C[J2[C[J>[C[J&[C[J/[C[Jd[C[Je[C[Jv[C[J/[C[Jn[C[Ju[C[Jl[C[Jl[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1]+  Terminated (9)                  cat
-[2]+  Terminated (9)                  sleep 1000
-[?1h=$> [Js[C[Jl[C[Je[C[Je[C[Jp[C[J [C[J1[C[J0[C[J0[C[J0[C[J [C[J&[C[J [C[JP[C[J1[C[J=[C[J$[C[J![C[J;[C[J [C[Js[C[Jl[C[Je[C[Je[C[Jp[C[J [C[J2[C[J0[C[J0[C[J0[C[J [C[J&[C[J [C[JP[C[J2[C[J=[C[J$[C[J![C[J;[C[J [C[Js[C[Jl[C[Je[C[Je[C[Jp[C[J [C[J3[C[J0[C[J0[C[J0[C[J [C[J&[C[J [C[JP[C[J3[C[J=[C[J$[C[J![C[J;[C[J [C[Js[C[Jl[C[Je[C[Je[C[Jp[C[J [C[J4[C[J0[C[J0[C[J0[C[J [C[J&[C[J [C[JP[C[J4[C[J=[C[J$
-[80GM[1G
-[J![C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1] 0
-[2] 0
-[3] 0
-[4] 0
-[?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[J [C[J%[C[J0[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C42sh: jobs: %0: No such job
-[?1h=$> [Jjobs %0[J[J1[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[1]   Running                         sleep 1000 &
-[?1h=$> [Jjobs %1[J[J2[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[2]   Running                         sleep 2000 &
-[?1h=$> [Jjobs %2[J[J3[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[3]-  Running                         sleep 3000 &
-[?1h=$> [Jjobs %3[J[J4[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[4]+  Running                         sleep 4000 &
-[?1h=$> [Jjobs %4[J[J5[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C42sh: jobs: %5: No such job
-[?1h=$> [Jjobs %5[J[J+[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[4]+  Running                         sleep 4000 &
-[?1h=$> [Jjobs %+[J[J-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[3]-  Running                         sleep 3000 &
-[?1h=$> [Jjobs %-[J[J*[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C42sh: jobs: %*: No such job
-[?1h=$> [Jjobs %*[J[Je[C[Jr[C[Jr[C[Jo[C[Jr[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C42sh: jobs: %error: No such job
-[?1h=$> [Jk[C[Ji[C[Jl[C[Jl[C[J [C[J-[C[JT[C[JS[C[JT[C[JP[C[J [C[J$[C[JP[C[J2[C[J [C[J2[C[J>[C[J&[C[J/[C[Jd[C[Je[C[Jv[C[J/[C[Jn[C[Ju[C[Jl[C[Jl[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[2]+  Stopped                         sleep 2000
-[?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[1]   Running                         sleep 1000 &
-[2]+  Stopped                         sleep 2000
-[3]   Running                         sleep 3000 &
-[4]-  Running                         sleep 4000 &
-[?1h=$> [Jk[C[Ji[C[Jl[C[Jl[C[J [C[J-[C[JT[C[JS[C[JT[C[JP[C[J [C[J$[C[JP[C[J3[C[J [C[J2[C[J>[C[J&[C[J/[C[Jd[C[Je[C[Jv[C[J/[C[Jn[C[Ju[C[Jl[C[Jl[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[3]+  Stopped                         sleep 3000
-[?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[1]   Running                         sleep 1000 &
-[2]-  Stopped                         sleep 2000
-[3]+  Stopped                         sleep 3000
-[4]   Running                         sleep 4000 &
-[?1h=$> [Jk[C[Ji[C[Jl[C[Jl[C[J [C[J-[C[JC[C[JO[C[JN[C[JT[C[J [C[J$[C[JP[C[J2[C[J [C[J2[C[J>[C[J&[C[J/[C[Jd[C[Je[C[Jv[C[J/[C[Jn[C[Ju[C[Jl[C[Jl[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[1]   Running                         sleep 1000 &
-[2]-  Running                         sleep 2000 &
-[3]+  Stopped                         sleep 3000
-[4]   Running                         sleep 4000 &
-[?1h=$> [Jk[C[Ji[C[Jl[C[Jl[C[J [C[J-[C[JT[C[JS[C[JT[C[JP[C[J [C[J$[C[JP[C[J2[C[J [C[J2[C[J>[C[J&[C[J/[C[Jd[C[Je[C[Jv[C[J/[C[Jn[C[Ju[C[Jl[C[Jl[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[2]+  Stopped                         sleep 2000
-[?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[1]   Running                         sleep 1000 &
-[2]+  Stopped                         sleep 2000
-[3]-  Stopped                         sleep 3000
-[4]   Running                         sleep 4000 &
-[?1h=$> [Jk[C[Ji[C[Jl[C[Jl[C[J [C[J-[C[J9[C[J [C[J$[C[JP[C[J4[C[J [C[J2[C[J>[C[J&[C[J/[C[Jd[C[Je[C[Jv[C[J/[C[Jn[C[Ju[C[Jl[C[Jl[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[4]   Terminated (9)                  sleep 4000
-[?1h=$> [Js[C[Jl[C[Je[C[Je[C[Jp[C[J [C[J5[C[J0[C[J0[C[J0[C[J [C[J&[C[J [C[JP[C[J5[C[J=[C[J$[C[J![C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[4] 0
-[?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[1]   Running                         sleep 1000 &
-[2]-  Stopped                         sleep 2000
-[3]   Stopped                         sleep 3000
-[4]+  Running                         sleep 5000 &
-[?1h=$> [Jk[C[Ji[C[Jl[C[Jl[C[J [C[J-[C[J9[C[J [C[J$[C[JP[C[J2[C[J [C[J2[C[J>[C[J&[C[J/[C[Jd[C[Je[C[Jv[C[J/[C[Jn[C[Ju[C[Jl[C[Jl[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[2]-  Terminated (9)                  sleep 2000
-[?1h=$> [Js[C[Jl[C[Je[C[Je[C[Jp[C[J [C[J6[C[J0[C[J0[C[J0[C[J [C[J&[C[J [C[JP[C[J6[C[J=[C[J$[C[J![C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[5] 0
-[?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[1]   Running                         sleep 1000 &
-[3]   Stopped                         sleep 3000
-[4]-  Running                         sleep 5000 &
-[5]+  Running                         sleep 6000 &
-[?1h=$> [Jk[C[Ji[C[Jl[C[Jl[C[J [C[J-[C[J9[C[J [C[J$[C[JP[C[J1[C[J [C[J$[C[JP[C[J3[C[J [C[J$[C[JP[C[J5[C[J [C[J$[C[JP[C[J6[C[J [C[J2[C[J>[C[J&[C[J/[C[Jd[C[Je[C[Jv[C[J/[C[Jn[C[Ju[C[Jl[C[Jl[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[5]+  Terminated (9)                  sleep 6000
-[4]+  Terminated (9)                  sleep 5000
-[3]+  Terminated (9)                  sleep 3000
-[1]+  Terminated (9)                  sleep 1000
-[?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[?1h=$> [Js[C[Jl[C[Je[C[Je[C[Jp[C[J [C[J7[C[J0[C[J0[C[J0[C[J [C[J&[C[J [C[JP[C[J7[C[J=[C[J$[C[J![C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1] 0
-[?1h=$> [Jj[C[Jo[C[Jb[C[Js[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[1]+  Running                         sleep 7000 &
-[?1h=$> [Jk[C[Ji[C[Jl[C[Jl[C[J [C[J-[C[J9[C[J [C[J$[C[JP[C[J7[C[J [C[J2[C[J>[C[J&[C[J/[C[Jd[C[Je[C[Jv[C[J/[C[Jn[C[Ju[C[Jl[C[Jl[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1]+  Terminated (9)                  sleep 7000
-[?1h=$> [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1G
-[C
->>> scriptlive: done.

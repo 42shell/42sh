@@ -15,6 +15,7 @@
 void	sigint_handler(int sig)
 {
 	(void)sig;
+	ft_printf("\n");
 	g_interrupt = true;
 }
 
