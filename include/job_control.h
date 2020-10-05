@@ -116,7 +116,9 @@ t_process				*get_process(pid_t pid);
 ** job display
 */
 
-void					format_job_info(t_dstr *buf, t_job *job, bool pgid);
+void					format_job_status(t_dstr *buf, t_job *job);
+void					format_job_id(t_dstr *buf, t_job *job);
+void					format_exit_status(t_dstr *buf, t_process *process);
 void					format_process_info(t_dstr *buf, t_process *process,
 						int padding);
 void					format_processes(t_dstr *buf, t_process *list,
