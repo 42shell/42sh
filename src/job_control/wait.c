@@ -32,12 +32,6 @@ static void	set_exit_status(t_process *process)
 	}
 }
 
-static void	bubble_up_job(t_job **list, t_job *job)
-{
-	remove_job_from_list(list, job);
-	add_job_to_list(list, job, false);
-}
-
 /*
 ** If the process is stopped and it is already in the persistent jobs list (it
 ** was running in bg or has been previously stopped), we put the associated job
@@ -61,10 +55,6 @@ int			set_process_status(pid_t pid, int status)
 		process->stopped = true;
 		process->signaled = WSTOPSIG(process->status);
 		g_last_exit_st = 128 + process->signaled;
-		if (job_is_in_list(g_jobs, process->job))
-			bubble_up_job(&g_jobs, process->job);
-		else
-			move_job_in_persistent_list(process->job);
 	}
 	else if (WIFCONTINUED(status))
 		process->stopped = false;
@@ -118,4 +108,6 @@ void		wait_for_job(t_job *job)
 		if (job->invert_ret)
 			g_last_exit_st = g_last_exit_st ? 0 : 1;
 	}
+	else if (g_job_control_enabled)
+		move_job_in_persistent_list(job);
 }

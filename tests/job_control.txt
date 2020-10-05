@@ -137,13 +137,12 @@ fg %1
 # testing %+/-
 sleep 100 & sleep 200 & sleep 300 &
 jobs
-fg %-
+fg %+
 ^C
 jobs
 fg %-
 ^C
 fg %-
-fg %+
 ^C
 
 # no current
