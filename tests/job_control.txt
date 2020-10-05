@@ -112,12 +112,18 @@ ps -alx | egrep ./42sh$ | grep -v 'grep' | grep -v 'script' | awk -F' ' '{ print
 ps -alx | grep sleep | grep -v 'grep' | awk -F' ' '{ print $13 }'
 
 ###########################################################################################
-# fg/bg
+# fg/bg jobspec
 ###########################################################################################
 
-# ^Z bg
-sleep 100 &
+# ^Z fg
+sleep 100
+^Z
+jobs
 fg
+^C
+
+# ^Z bg
+sleep 100
 ^Z
 jobs
 bg
@@ -127,19 +133,28 @@ fg
 
 # testing %n
 sleep 100 & sleep 200 &
+fg %3
 fg %2
 ^C
 fg %2
-bg %2
+fg %0
+fg %256
 fg %1
 ^C
 
-# testing %+/-
+# testing %+ %% %
 sleep 100 & sleep 200 & sleep 300 &
-jobs
 fg %+
 ^C
-jobs
+fg %%
+^C
+fg %
+^C
+
+# testing %-
+sleep 100 & sleep 200 & sleep 300 &
+fg %-
+^C
 fg %-
 ^C
 fg %-
@@ -147,16 +162,18 @@ fg %-
 
 # no current
 fg
+fg %
 bg
+bg %%
 
-# job done
+# job already done
 true &
 fg
 true &
 bg
 
 ###########################################################################################
-# jobs
+# jobs jobspec
 ###########################################################################################
 
 # -n
@@ -185,19 +202,16 @@ jobs %3
 jobs %4
 jobs %5
 jobs %+
+jobs %%
+jobs %
 jobs %-
 jobs %*
 jobs %error
 
-# stopped job bubbles up and previous '+' becomes '-',
 # previously stopped job state is properly updated when SIGCONT
 kill -TSTP $P2 2>&/dev/null
 jobs
-kill -TSTP $P3 2>&/dev/null
-jobs
 kill -CONT $P2 2>&/dev/null
-jobs
-kill -TSTP $P2 2>&/dev/null
 jobs
 
 # when highest id job is removed, highest id decreases
