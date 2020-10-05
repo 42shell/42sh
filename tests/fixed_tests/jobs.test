@@ -1,0 +1,51 @@
+cat & PID=$!
+jobs -n
+kill -9 $PID 2>&/dev/null
+echo '~~~'
+
+cat & PID=$!
+jobs -p
+kill -9 $PID 2>&/dev/null
+echo '~~~'
+
+cat & P1=$!; sleep 1000 & P2=$!
+jobs -s
+jobs -r
+kill -9 $P1 $P2 2>&/dev/null
+echo '~~~'
+
+sleep 1000& P1=$!; sleep 2000& P2=$!; sleep 3000& P3=$!; sleep 4000& P4=$!
+jobs %0 %1
+jobs %2
+jobs %3
+jobs %4
+jobs %5
+jobs %+
+jobs %%
+jobs %
+jobs %-
+jobs %*
+jobs %error
+echo '~~~'
+
+kill -TSTP $P2 2>&/dev/null
+jobs
+kill -CONT $P2 2>&/dev/null
+jobs
+echo '~~~'
+
+kill -9 $P4 2>&/dev/null
+sleep 5000 & P5=$!
+jobs
+echo '~~~'
+
+kill -9 $P2 2>&/dev/null
+sleep 6000 & P6=$!
+jobs
+echo '~~~'
+
+kill -9 $P1 $P3 $P5 $P6 2>&/dev/null
+jobs
+sleep 7000 & P7=$!
+jobs
+kill -9 $P7 2>&/dev/null
