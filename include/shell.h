@@ -88,7 +88,6 @@ typedef struct			s_var
 ** or merge procsub add notif for CONT jobs ?
 **
 ** TODO:
-** -in place expansion causes problems (jobs with heredocs)
 ** -shell script
 **
 ** Small issues:
