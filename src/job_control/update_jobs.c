@@ -49,7 +49,6 @@ static void	notif_jobs(void)
 			{
 				print_job(job, false);
 				job->notified = true;
-				notif_job(job);
 			}
 		}
 		job = job->prev;
