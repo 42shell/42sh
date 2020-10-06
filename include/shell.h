@@ -87,8 +87,6 @@ typedef struct			s_var
 ** Don't forget to setpgid(0, shell_pgid) if !job_control_enabled
 ** or merge procsub add notif for CONT jobs ?
 **
-** merge update_status and update_jobs
-**
 ** TODO:
 ** -shell script
 **

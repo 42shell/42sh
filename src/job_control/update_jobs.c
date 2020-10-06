@@ -12,6 +12,22 @@
 
 #include "shell.h"
 
+static void	del_done_jobs(void)
+{
+	t_job	*job;
+	t_job	*next;
+
+	job = g_jobs;
+	while (job)
+	{
+		next = job->next;
+		if (job_is_done(job) && g_shell.interactive_mode)
+			del_job_from_list(&g_jobs, job);
+		job = next;
+	}
+	update_jobs_greatest_id();
+}
+
 static void	notif_job(t_job *job)
 {
 	if (g_shell.interactive_mode)
@@ -19,27 +35,33 @@ static void	notif_job(t_job *job)
 	job->notified = true;
 }
 
-void		update_jobs(void)
+static void	notif_jobs(void)
 {
 	t_job	*job;
-	t_job	*next;
 
 	if (!g_jobs)
 		return ;
-	update_status();
 	job = g_jobs;
 	while (job)
 	{
-		next = job->next;
 		if (job_is_done(job) && g_shell.interactive_mode)
 		{
 			if (job->bg || job->processes->signaled)
 				print_job(job, false);
-			del_job_from_list(&g_jobs, job);
 		}
 		else if (job_is_stopped(job) && !job->notified)
 			notif_job(job);
-		job = next;
+		job = job->next;
 	}
-	update_jobs_greatest_id();
+}
+
+void		update_jobs(void)
+{
+	if (!g_jobs)
+		return ;
+	notif_jobs();
+	del_done_jobs();
+	update_status();
+	notif_jobs();
+	del_done_jobs();
 }

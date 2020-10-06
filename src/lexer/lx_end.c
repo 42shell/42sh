@@ -25,4 +25,3 @@ int			lx_end(void)
 	}
 	return (0);
 }
-
