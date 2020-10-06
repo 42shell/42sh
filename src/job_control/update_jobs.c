@@ -28,39 +28,45 @@ static void	del_done_jobs(void)
 	update_jobs_greatest_id();
 }
 
-static void	notif_job(t_job *job)
-{
-	if (g_shell.interactive_mode)
-		print_job(job, false);
-	job->notified = true;
-}
-
 static void	notif_jobs(void)
 {
 	t_job	*job;
 
-	if (!g_jobs)
+	if (!(job = g_jobs) || !g_shell.interactive_mode)
 		return ;
-	job = g_jobs;
+	while (job->next)
+		job = job->next;
 	while (job)
 	{
-		if (job_is_done(job) && g_shell.interactive_mode)
+		if (!job->notified)
 		{
-			if (job->bg || job->processes->signaled)
+			if (job_is_done(job) && (job->bg || job->processes->signaled))
+			{
 				print_job(job, false);
+				job->notified = true;
+			}
+			else if (job_is_stopped(job))
+			{
+				print_job(job, false);
+				job->notified = true;
+				notif_job(job);
+			}
 		}
-		else if (job_is_stopped(job) && !job->notified)
-			notif_job(job);
-		job = job->next;
+		job = job->prev;
 	}
 }
+
+/*
+** We first notif the jobs whose status have been updated while waiting for a
+** fg job in wait_for_job(). Then we call update_status and notif again
+**
+*/
 
 void		update_jobs(void)
 {
 	if (!g_jobs)
 		return ;
 	notif_jobs();
-	del_done_jobs();
 	update_status();
 	notif_jobs();
 	del_done_jobs();

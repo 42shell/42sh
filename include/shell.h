@@ -90,6 +90,10 @@ typedef struct			s_var
 ** TODO:
 ** -shell script
 **
+** current job ([#]+) is the last job stopped while in fg or started in bg according to GNU doc,
+** which differs slightly from bash.
+** Maybe redo the bubble up of stopped jobs in set_process_status, to behave like bash
+**
 ** question:
 ** -store aborted multi-lines in history ? bash does
 **
