@@ -21,6 +21,12 @@
 #  define SHOW_PID		1
 # endif
 
+# ifdef HIDE_NOTIF
+#  define SHOW_NOTIF	0
+# else
+#  define SHOW_NOTIF	1
+# endif
+
 typedef struct			s_process
 {
 	struct s_job		*job;

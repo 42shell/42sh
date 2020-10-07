@@ -42,12 +42,14 @@ static void	notif_jobs(void)
 		{
 			if (job_is_done(job) && (job->bg || job->processes->signaled))
 			{
-				print_job(job, false);
+				if (SHOW_NOTIF)
+					print_job(job, false);
 				job->notified = true;
 			}
 			else if (job_is_stopped(job))
 			{
-				print_job(job, false);
+				if (SHOW_NOTIF)
+					print_job(job, false);
 				job->notified = true;
 			}
 		}
