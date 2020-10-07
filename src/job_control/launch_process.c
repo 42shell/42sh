@@ -72,7 +72,6 @@ static void		set_child_attr(t_process *process)
 	}
 	else
 		g_current_jobs->pgid = g_shell.pgid;
-	setpgid(process->pid, g_current_jobs->pgid);
 	if (!g_bg && g_job_control_enabled)
 		tcsetpgrp(STDIN_FILENO, g_current_jobs->pgid);
 	g_job_control_enabled = false;
