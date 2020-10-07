@@ -64,8 +64,14 @@ static pid_t	fork_child(int in, int out, int fd_to_close)
 static void		set_child_attr(t_process *process)
 {
 	process->pid = getpid();
-	if (!g_current_jobs->pgid)
-		g_current_jobs->pgid = process->pid;
+	if (g_job_control_enabled)
+	{
+		if (!g_current_jobs->pgid)
+			g_current_jobs->pgid = process->pid;
+		setpgid(process->pid, g_current_jobs->pgid);
+	}
+	else
+		g_current_jobs->pgid = g_shell.pgid;
 	setpgid(process->pid, g_current_jobs->pgid);
 	if (!g_bg && g_job_control_enabled)
 		tcsetpgrp(STDIN_FILENO, g_current_jobs->pgid);
@@ -89,9 +95,14 @@ int				launch_process(t_process *process, int fd_to_close)
 	else
 	{
 		process->pid = pid;
-		if (!g_current_jobs->pgid)
-			g_current_jobs->pgid = pid;
-		setpgid(process->pid, g_current_jobs->pgid);
+		if (g_job_control_enabled)
+		{
+			if (!g_current_jobs->pgid)
+				g_current_jobs->pgid = pid;
+			setpgid(process->pid, g_current_jobs->pgid);
+		}
+		else
+			g_current_jobs->pgid = g_shell.pgid;
 		add_process_to_job(g_current_jobs, process);
 	}
 	return (pid);
