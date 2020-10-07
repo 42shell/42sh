@@ -84,7 +84,6 @@ typedef struct			s_var
 }						t_var;
 
 /*
-**
 ** TODO:
 ** -shell script
 **

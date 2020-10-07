@@ -40,7 +40,8 @@ int			eval_while_clause(t_command *command)
 		restore_fds(&fd_backup);
 		return (g_last_exit_st = 1);
 	}
-	while (!g_interrupt && eval_compound_list(if_clause->if_part) == 0 && !g_interrupt)
+	while (!g_interrupt
+	&& eval_compound_list(if_clause->if_part) == 0 && !g_interrupt)
 		eval_compound_list(if_clause->then_part);
 	restore_fds(&fd_backup);
 	return (0);

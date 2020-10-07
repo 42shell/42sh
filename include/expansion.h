@@ -35,5 +35,6 @@ int		get_end_of_braces(const char *str);
 
 t_redir	*redir_dup(t_redir *redir);
 t_redir	*redir_list_dup(t_redir *list);
+void	dup_command_args(t_simple_cmd *command);
 
 #endif

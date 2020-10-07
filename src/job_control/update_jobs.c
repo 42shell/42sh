@@ -40,21 +40,12 @@ static void	notif_jobs(void)
 	{
 		if (!job->notified)
 		{
-			if (job_is_done(job) && (job->bg || job->processes->signaled))
+			if (SHOW_NOTIF
+			&& (job_is_stopped(job)
+			|| (job_is_done(job) && (job->bg || job->processes->signaled))))
 			{
-				if (SHOW_NOTIF)
-				{
-					print_job(job, false);
-					job->notified = true;
-				}
-			}
-			else if (job_is_stopped(job))
-			{
-				if (SHOW_NOTIF)
-				{
-					print_job(job, false);
-					job->notified = true;
-				}
+				print_job(job, false);
+				job->notified = true;
 			}
 		}
 		job = job->prev;
@@ -64,7 +55,6 @@ static void	notif_jobs(void)
 /*
 ** We first notif the jobs whose status have been updated while waiting for a
 ** fg job in wait_for_job(). Then we call update_status and notif again
-**
 */
 
 void		update_jobs(void)

@@ -107,12 +107,7 @@ int			expand(t_simple_cmd *command)
 	t_redir	*cur;
 
 	home_dir = get_var_value("HOME");
-	token_list_del(&command->args_exp);
-	token_list_del(&command->assigns_exp);
-	redir_del(&command->redirs_exp);
-	command->args_exp = token_list_dup(command->args);
-	command->assigns_exp = token_list_dup(command->assigns);
-	command->redirs_exp = redir_list_dup(command->redirs);
+	dup_command_args(command);
 	if (expand_token_list(command->args_exp, home_dir) == 1
 	|| expand_token_list(command->assigns_exp, home_dir) == 1
 	|| expand_redir_list(command->redirs_exp, home_dir) == 1)
