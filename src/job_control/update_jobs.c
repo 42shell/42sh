@@ -21,7 +21,7 @@ static void	del_done_jobs(void)
 	while (job)
 	{
 		next = job->next;
-		if (job_is_done(job) && g_shell.interactive_mode)
+		if (job_is_done(job) && job->notified)
 			del_job_from_list(&g_jobs, job);
 		job = next;
 	}
@@ -43,14 +43,18 @@ static void	notif_jobs(void)
 			if (job_is_done(job) && (job->bg || job->processes->signaled))
 			{
 				if (SHOW_NOTIF)
+				{
 					print_job(job, false);
-				job->notified = true;
+					job->notified = true;
+				}
 			}
 			else if (job_is_stopped(job))
 			{
 				if (SHOW_NOTIF)
+				{
 					print_job(job, false);
-				job->notified = true;
+					job->notified = true;
+				}
 			}
 		}
 		job = job->prev;

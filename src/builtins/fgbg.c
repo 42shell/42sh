@@ -57,7 +57,8 @@ int		builtin_bg(char **argv, __attribute__((unused)) t_array *env)
 		return (1);
 	}
 	continue_job(job, true);
-	print_job(job, false);
+	if (SHOW_NOTIF)
+		print_job(job, false);
 	return (0);
 }
 
