@@ -2,48 +2,31 @@
 # simple bg jobs
 ###########################################################################################
 
-/bin/echo ok &
-jobs
+true & sleep .1
+ps --ppid $$ -o state,comm; sleep .1
 
-sleep 100 &
-ps -$! | grep sleep | awk -F' ' '{ print $3 $5 }'
-jobs
+sleep 100 & sleep .1
+ps --ppid $$ -o state,comm; sleep .1
 kill -9 $! 2>&/dev/null
-jobs
 
-cat &
-ps -$! | grep cat | awk -F' ' '{ print $3 $5 }'
-jobs
+cat & sleep .1
+ps --ppid $$ -o state,comm; sleep .1
 kill -9 $! 2>&/dev/null
-jobs
 
 ###########################################################################################
-# pipelines & jobs -l
+# pipelines
 ###########################################################################################
 
-/bin/echo abc | cat -e &
-jobs -l
+true | cat -e & sleep .1
+ps --ppid $$ -o state,comm; sleep .1
 
-sleep 50 | sleep 50 &
-jobs -l
-pkill -9 sleep 2>&/dev/null
-jobs
+sleep 50 | sleep 50 & sleep .1
+ps --ppid $$ -o state,comm; sleep .1
+pkill -9 -g $! 2>&/dev/null
 
-cat | sleep 100 &
-jobs -l
-pkill -9 cat 2>&/dev/null
-jobs -l
-pkill -9 sleep 2>&/dev/null
-jobs
-
-cat | sleep 100 &
-jobs -l
-pkill -CONT sleep 2>&/dev/null
-jobs -l
-pkill -9 sleep 2>&/dev/null
-jobs -l
-pkill -9 cat 2>&/dev/null
-jobs
+cat | sleep 100 & sleep .1
+ps --ppid $$ -o state,comm; sleep .1
+pkill -9 -g $! 2>&/dev/null
 
 ###########################################################################################
 # subshells & processes
@@ -51,38 +34,35 @@ jobs
 
 cat && sleep 100 &
 # assert there are a subshell and a cat process
-ps -alx | egrep ./42sh$ | grep -v 'grep' | grep -v 'script' | awk -F' ' '{ print $13 }'
-ps -alx | egrep cat$ | grep -v 'grep' | awk -F' ' '{ print $13 }'
+ps --ppid $$,$! -o state,comm
 # kill the cat process
-pkill -9 cat 2>&/dev/null
+pkill -9 -P $! cat 2>&/dev/null
 # assert subshell still there and there is no sleep process
-ps -alx | egrep ./42sh$ | grep -v 'grep' | grep -v 'script' | awk -F' ' '{ print $13 }'
-ps -alx | grep sleep | grep -v 'grep' | awk -F' ' '{ print $13 }'
+ps --ppid $$,$! -o state,comm
 # send -CONT to the subshell to terminate it
-pkill -CONT 42sh 2>&/dev/null
+kill -CONT $! 2>&/dev/null
 # assert subshell and cat processes have disappeared
-ps -alx | egrep ./42sh$ | grep -v 'grep' | grep -v 'script' | awk -F' ' '{ print $13 }'
-ps -alx | egrep cat$ | grep -v 'grep' | awk -F' ' '{ print $13 }'
+ps --ppid $$,$! -o state,comm
+
 
 # almost the same than previous one  
 { cat | sleep 100; } &
-# assert all processes are there, sleep may be running or stopped sdepending on pipeline
-# timing
-ps -alx | egrep ./42sh$ | grep -v 'grep' | grep -v 'script' | awk -F' ' '{ print $13 }'
-ps -alx | egrep cat$ | grep -v 'grep' | awk -F' ' '{ print $13 }'
-ps -alx | grep sleep | grep -v 'grep' | awk -F' ' '{ print $13 }'
+# assert all processes are there, sleep may be running or stopped sdepending on timing //fix this
+ps --ppid $$,$! -o state,comm
 # kill the cat process
-pkill -9 cat 2>&/dev/null
-# assert there is no sleep process
-ps -alx | grep sleep | grep -v 'grep' | awk -F' ' '{ print $13 }'
+pkill -9 -g $! cat 2>&/dev/null
+# assert sleep process still there
+ps --ppid $! -o state,comm
 # kill the sleep process
-pkill -9 sleep 2>&/dev/null
+pkill -9 -g $! sleep 2>&/dev/null
 # send -CONT to the subshell to terminate it
-pkill -CONT 42sh 2>&/dev/null
+kill -CONT $! 2>&/dev/null
 # assert subshell and cat/sleep processes have disappeared
-ps -alx | egrep ./42sh$ | grep -v 'grep' | grep -v 'script' | awk -F' ' '{ print $13 }'
-ps -alx | egrep cat$ | grep -v 'grep' | awk -F' ' '{ print $13 }'
-ps -alx | grep sleep | grep -v 'grep' | awk -F' ' '{ print $13 }'
+ps --ppid $$,$! -o state,comm
+
+###########################################################################################
+###########################################################################################
+###########################################################################################
 
 ###########################################################################################
 # async in subshells
@@ -231,3 +211,14 @@ jobs
 sleep 7000 & P7=$!
 jobs
 kill -9 $P7 2>&/dev/null
+
+# jobs -l
+
+cat | sleep 100 &
+jobs -l
+pkill -CONT -g $! sleep 2>&/dev/null
+jobs -l
+pkill -9 sleep 2>&/dev/null  //////
+jobs -l
+pkill -9 cat 2>&/dev/null ///////
+jobs
