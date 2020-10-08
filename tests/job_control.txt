@@ -47,7 +47,7 @@ ps --ppid $$,$! -o state,comm
 
 # almost the same than previous one  
 { cat | sleep 100; } &
-# assert all processes are there, sleep may be running or stopped sdepending on timing //fix this
+# assert all processes are there, sleep may be running or stopped depending on timing //fix this
 ps --ppid $$,$! -o state,comm
 # kill the cat process
 pkill -9 -g $! cat 2>&/dev/null
@@ -100,18 +100,17 @@ ps -alx | grep sleep | grep -v 'grep' | awk -F' ' '{ print $13 }'
 # ^Z fg
 sleep 100
 ^Z
-jobs
+jobs && sleep .2
 fg
 ^C
 
 # ^Z bg
 sleep 100
 ^Z
-jobs
+jobs && sleep .2
 bg
-jobs
-fg
-^C
+jobs && sleep .2
+kill -9 $!
 
 # testing %n
 sleep 100 & sleep 200 &
