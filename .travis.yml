@@ -8,7 +8,7 @@ language: c
 compiler: gcc
 
 env:
-  - TEST=test.sh DBG_FLAGS="-fsanitize=address -ggdb -O0 -coverage -DHIDE_PID"
+  - TEST=test.sh DBG_FLAGS="-fsanitize=address -ggdb -O0 -coverage -DHIDE_PID -DHIDE_NOTIF"
   - TEST=norminette.sh
 
 addons:
