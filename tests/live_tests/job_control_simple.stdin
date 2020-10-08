@@ -1,3 +1,3 @@
-Script started on 2020-10-07 18:08:32+02:00 [TERM="xterm-256color" TTY="/dev/pts/1" COLUMNS="80" LINES="67"]
-true &ps --ppid $$ -o state,commsleep 100 &ps --ppid $$ -o state,commkill -9 $! 2>&/dev/nullcat &ps --ppid $$ -o state,commkill -9 $! 2>&/dev/nulltrue | cat -e &ps --ppid $$ -o state,commsleep 50 | sleep 50 &ps --ppid $$ -o state,commpkill -9 -g $! 2>&/dev/nullcat | sleep 100 &ps --ppid $$ -o state,commpkill -9 -g $! 2>&/dev/null
-Script done on 2020-10-07 18:09:27+02:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2020-10-08 10:04:43+02:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="80" LINES="67"]
+true & sleep .05ps --ppid $$ -o state,commsleep 100 & sleep .05ps --ppid $$ -o state,commkill -9 $! 2>&/dev/nullcat & sleep .05ps --ppid $$ -o state,commkill -9 $! 2>&/dev/nulltrue | cat -e & sleep .05ps --ppid $$ -o state,commsleep 50 | sleep 50 & sleep .05ps --ppid $$ -o state,commpkill -9 -g $! 2>&/dev/nullcat | sleep 100 & sleep .05ps --ppid $$ -o state,commpkill -9 -g $! 2>&/dev/null
+Script done on 2020-10-08 10:05:44+02:00 [COMMAND_EXIT_CODE="0"]
