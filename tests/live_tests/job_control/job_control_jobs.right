@@ -12,14 +12,18 @@
 [2]-  Running                         sleep 1000 &
 [1]+  Terminated (9)                  cat
 [2]+  Terminated (9)                  sleep 1000
+42sh: jobs: %0: No such job
 [1]   Running                         sleep 1000 &
 [2]   Running                         sleep 2000 &
 [3]-  Running                         sleep 3000 &
 [4]+  Running                         sleep 4000 &
+42sh: jobs: %5: No such job
 [4]+  Running                         sleep 4000 &
 [4]+  Running                         sleep 4000 &
 [4]+  Running                         sleep 4000 &
 [3]-  Running                         sleep 3000 &
+42sh: jobs: %*: No such job
+42sh: jobs: %error: No such job
 [1]   Running                         sleep 1000 &
 [2]+  Stopped                         sleep 2000
 [3]   Running                         sleep 3000 &
