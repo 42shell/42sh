@@ -96,7 +96,7 @@ rm -rf testing_autocomplete
 for file in "$DIR/live_tests/job_control/"*.timing
 do
 	test_name=$(basename "$file" | cut -d '.' -f 1)
-	scriptlive -T "$DIR/live_tests/job_control/$test_name".timing --log-in "$DIR/live_tests/job_control/$test_name.stdin" --maxdelay 0.03 -c "./42sh > $DIR/$test_name.42sh" >/dev/null
+	scriptlive -T "$DIR/live_tests/job_control/$test_name".timing --log-in "$DIR/live_tests/job_control/$test_name.stdin" --maxdelay 0.03 -c "./42sh > $DIR/$test_name.42sh 2>&1" >/dev/null
 	cp "$DIR/live_tests/job_control/$test_name.right" "$DIR/$test_name.bash"
 done
 
