@@ -1,17 +1,17 @@
 # async subshell
-cat && sleep 100 & sleep .1
+cat && sleep 100 & sleep .2
 
 # assert there are a subshell and a cat process
 ps --ppid $$,$! -o state,comm
 
 # kill the cat process
-pkill -9 -P $! cat 2>&/dev/null && sleep .1
+pkill -9 -P $! cat 2>&/dev/null && sleep .2
 
 # assert subshell still there and there is no sleep process
 ps --ppid $$,$! -o state,comm
 
 # send -CONT to the subshell to terminate it
-kill -CONT $! 2>&/dev/null && sleep .1
+kill -CONT $! 2>&/dev/null && sleep .2
 
 # assert subshell and cat processes have disappeared
 ps --ppid $$,$! -o state,comm
@@ -20,25 +20,25 @@ ps --ppid $$,$! -o state,comm
 ###########################################################################################
 
 # async brace group
-{ cat | sleep 100; } & sleep .1
+{ cat | sleep 100; } & sleep .2
 
 # assert all processes are there, sleep may be running or stopped depending on timing ?
 ps --ppid $$,$! -o state,comm
 
 # kill the cat process
-pkill -9 -g $! cat 2>&/dev/null && sleep .1
+pkill -9 -g $! cat 2>&/dev/null && sleep .2
 
 # assert sleep process, zombie cat
 ps --ppid $$,$! -o state,comm
 
 # kill the sleep process
-pkill -9 -g $! sleep 2>&/dev/null && sleep .1
+pkill -9 -g $! sleep 2>&/dev/null && sleep .2
 
 # assert zombie cat, zombie sleep
 ps --ppid $$,$! -o state,comm
 
 # send -CONT to the subshell to terminate it
-kill -CONT $! 2>&/dev/null && sleep .1
+kill -CONT $! 2>&/dev/null && sleep .2
 
 # assert subshell and cat/sleep processes have disappeared
 ps --ppid $$,$! -o state,comm
@@ -48,14 +48,14 @@ ps --ppid $$,$! -o state,comm
 ###########################################################################################
 
 # subshell forks cat asynchronously with stdin=/dev/null, cat exit immediately
-(cat & sleep 100) & sleep .1
+(cat & sleep 100) & sleep .2
 ps --ppid $$,$! -o state,comm
-pkill -9 -g $! 2>&/dev/null && sleep .1
+pkill -9 -g $! 2>&/dev/null && sleep .2
 
 # assert sleep processes running
-(cat & sleep 100 & sleep 200) & sleep .1
+(cat & sleep 100 & sleep 200) & sleep .2
 ps --ppid $$,$! -o state,comm
-pkill -9 -g $! 2>&/dev/null && sleep .1
+pkill -9 -g $! 2>&/dev/null && sleep .2
 
 ###########################################################################################
 ###########################################################################################
@@ -63,15 +63,15 @@ pkill -9 -g $! 2>&/dev/null && sleep .1
 # subshell in subshell
 # the subshell forks another subshell in async to run the &&, and exits. The child subshell
 # shall wait for the command to finish. This is not optimized, one subshell would be enough
-(true && sleep 100 & sleep 200) & sleep .1
+(true && sleep 100 & sleep 200) & sleep .2
 
-# assert there are a subshell and a sleep process/ using sh cause I need cmd substitution to
+# assert there are 2 subshells and 2 sleep processes/ using sh cause I need cmd substitution to
 # get the pid of the first sleep of the command
 
 sh -c "PIDS=$(pgrep -g $! | tr '\n' ',' | sed 's/,$/\n/'); ps --pid \$PIDS -g $! -o state,comm"
 
 # kill the sleep processes
-pkill -9 -g $! sleep 2>&/dev/null && sleep .1
+pkill -9 -g $! sleep 2>&/dev/null && sleep .2
 
 # assert all processes have finished
 ps --ppid $$,$! -o state,comm
