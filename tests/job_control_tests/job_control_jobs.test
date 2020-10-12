@@ -42,7 +42,7 @@ sleep 1000& P1=$!; sleep 2000& P2=$!; sleep 3000& P3=$!; sleep 4000& P4=$!; slee
 //sleeps
 
 # %n %+/-
-jobs %0 %1 
+jobs %0 %1
 jobs %2
 jobs %3
 jobs %4
