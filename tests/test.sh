@@ -93,6 +93,10 @@ done
 
 rm -rf testing_autocomplete
 
+if test -z $1 && test $1 = "j"; then
+	echo yes
+fi
+
 for file in "$DIR/live_tests/job_control/"*.timing
 do
 	test_name=$(basename "$file" | cut -d '.' -f 1)
