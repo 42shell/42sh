@@ -56,7 +56,18 @@ void	put_job_bg(t_job *job, bool cont)
 void	put_job_fg(t_job *job, bool cont)
 {
 	job->bg = false;
-	tcsetpgrp(STDIN_FILENO, job->pgid);
+	if (!job->pgid)
+		return ;
+	if (tcsetpgrp(STDIN_FILENO, job->pgid))
+	{
+		ft_dprintf(2, "42sh: process group %d:"
+			"couldn't put pgrp in foreground\n", job->pgid);
+		kill(-job->pgid, SIGHUP);
+		kill(-job->pgid, SIGCONT);
+		tcsetattr(STDIN_FILENO, TCSADRAIN, &g_shell.tmodes);
+		update_status();
+		return ;
+	}
 	if (cont)
 	{
 		kill(-job->pgid, SIGCONT);

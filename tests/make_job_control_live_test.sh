@@ -32,7 +32,7 @@ scriptlive -T "$DIR/live_tests/job_control/$1.timing" --log-in "$DIR/live_tests/
 diff "$DIR/live_tests/job_control/$1.log" "$DIR/live_tests/job_control/$1.right" > "$DIR/live_tests/job_control/$1.diff_log"
 if [[ $? != "0" ]]; then
 	echo "Not reproducible"
-	cat "$DIR/live_tests/$1.diff_log"
+	cat "$DIR/live_tests/job_control/$1.diff_log"
 	read -p "Keep diff? [y/n] " -n 1 -r
 	if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
 		rm "$DIR/live_tests/job_control/$1.diff_log"
@@ -44,11 +44,11 @@ echo
 
 read -p "Keep test? [y/n] " -n 1 -r
 if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
-	rm "$DIR/live_tests/job_control/$1.timing" "$DIR/live_tests/job_control/$1.stdin" "$DIR/live_tests/job_control/$1.right"
+	rm "$DIR/live_tests/job_control/$1.timing" "$DIR/live_tests/job_control/$1.stdin" \
+	"$DIR/live_tests/job_control/$1.right" "$DIR/live_tests/job_control/$1.log"
 fi
 echo
 
-rm "$DIR/live_tests/job_control/$1.log"
 
 stty cols "$OLD_TERMWIDTH"
 
