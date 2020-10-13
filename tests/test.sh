@@ -93,17 +93,15 @@ done
 
 rm -rf testing_autocomplete
 
-if test -z $1 && test $1 = "j"; then
-	echo yes
+if test -n "$1" && test "$1" = "--job_control"; then
+	for file in "$DIR/live_tests/job_control/"*.timing
+	do
+		test_name=$(basename "$file" | cut -d '.' -f 1)
+		scriptlive -T "$DIR/live_tests/job_control/$test_name".timing --log-in "$DIR/live_tests/job_control/$test_name.stdin" \
+		--maxdelay 0.03 -c "./42sh > $DIR/$test_name.42sh 2>&1" >/dev/null
+		cp "$DIR/live_tests/job_control/$test_name.right" "$DIR/$test_name.bash"
+	done
 fi
-
-for file in "$DIR/live_tests/job_control/"*.timing
-do
-	test_name=$(basename "$file" | cut -d '.' -f 1)
-	scriptlive -T "$DIR/live_tests/job_control/$test_name".timing --log-in "$DIR/live_tests/job_control/$test_name.stdin" \
-	--maxdelay 0.05 -c "./42sh > $DIR/$test_name.42sh 2>&1" >/dev/null
-	cp "$DIR/live_tests/job_control/$test_name.right" "$DIR/$test_name.bash"
-done
 
 ./42sh "$DIR/setenv.test" > "$DIR/setenv.42sh" 2>&1
 tcsh "$DIR/setenv.test"> "$DIR/setenv.bash" 3>&1
