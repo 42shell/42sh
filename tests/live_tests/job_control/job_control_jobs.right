@@ -3,8 +3,6 @@
 [1]+  Stopped (20)                    yes >/dev/null
       Running                       | sleep 100 &
 [1]+  Terminated (9)                  yes >/dev/null
-      Running                       | sleep 100 &
-[1]+  Terminated (9)                  yes >/dev/null
       Terminated (9)                | sleep 100
 [1]+  Stopped                         cat
 [1]+  Terminated (9)                  cat
