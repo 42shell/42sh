@@ -93,12 +93,15 @@ done
 
 rm -rf testing_autocomplete
 
-for file in "$DIR/live_tests/job_control/"*.timing
-do
-	test_name=$(basename "$file" | cut -d '.' -f 1)
-	scriptlive -T "$DIR/live_tests/job_control/$test_name".timing --log-in "$DIR/live_tests/job_control/$test_name.stdin" --maxdelay 0.03 -c "./42sh > $DIR/$test_name.42sh 2>&1" >/dev/null
-	cp "$DIR/live_tests/job_control/$test_name.right" "$DIR/$test_name.bash"
-done
+if [[ -z $1 -a $1 = "-j" ]]; then
+	for file in "$DIR/live_tests/job_control/"*.timing
+	do
+		test_name=$(basename "$file" | cut -d '.' -f 1)
+		scriptlive -T "$DIR/live_tests/job_control/$test_name".timing --log-in "$DIR/live_tests/job_control/$test_name.stdin" \
+		--maxdelay 0.1 -c "./42sh > $DIR/$test_name.42sh 2>&1" >/dev/null
+		cp "$DIR/live_tests/job_control/$test_name.right" "$DIR/$test_name.bash"
+	done
+fi
 
 ./42sh "$DIR/setenv.test" > "$DIR/setenv.42sh" 2>&1
 tcsh "$DIR/setenv.test"> "$DIR/setenv.bash" 3>&1

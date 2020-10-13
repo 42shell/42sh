@@ -1,7 +1,7 @@
 # jobs -l
-cat | sleep 100 & sleep .2
+yes > /dev/null | sleep 100 & sleep .2
 jobs -l
-pkill -CONT -g $! sleep 2>&/dev/null; sleep .2
+pkill -TSTP -g $! yes 2>&/dev/null; sleep .2
 jobs -l
 pkill -9 -g $! 2>&/dev/null; sleep .2
 jobs -l

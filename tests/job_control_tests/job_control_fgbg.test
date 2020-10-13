@@ -5,16 +5,16 @@
 # ^Z fg
 sleep 100
 ^Z
-jobs && sleep .2
+ps --ppid $$ -o state,comm; sleep .2
 fg
 ^C
 
 # ^Z bg
 sleep 100
 ^Z
-jobs && sleep .2
+ps --ppid $$ -o state,comm; sleep .2
 bg
-jobs && sleep .2
+ps --ppid $$ -o state,comm; sleep .2
 kill -9 $!
 
 # testing %n
