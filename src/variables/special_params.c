@@ -18,12 +18,12 @@
 
 char	*get_last_exit_status(void)
 {
-	static char	str[10];
+	static char	str[12];
 
 	return (ft_itoa(g_last_exit_st, str));
 }
 
-char	g_shell_pid[10];
+char	g_shell_pid[12];
 
 /*
 ** $$
@@ -46,7 +46,7 @@ int		g_last_bg_job_pid = -1;
 
 char	*get_last_bg_job_pid(void)
 {
-	static char	str[10];
+	static char	str[12];
 
 	if (g_last_bg_job_pid == -1)
 		return ("");

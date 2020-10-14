@@ -15,7 +15,7 @@
 static void	init_vars(void)
 {
 	extern char	**environ;
-	extern char	g_shell_pid[10];
+	extern char	g_shell_pid[12];
 	t_var		*var;
 
 	g_lexer.brack_stack = array_new(4);

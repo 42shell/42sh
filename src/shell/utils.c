@@ -15,7 +15,7 @@
 void	increase_shlvl(void)
 {
 	char	*shlvl_str;
-	char	buf[10];
+	char	buf[12];
 	int		shlvl_int;
 
 	shlvl_str = get_var_value("SHLVL");

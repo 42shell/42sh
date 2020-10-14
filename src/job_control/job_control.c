@@ -56,7 +56,7 @@ void	put_job_bg(t_job *job, bool cont)
 void	put_job_fg(t_job *job, bool cont)
 {
 	job->bg = false;
-	if (!job->pgid)
+	if (!job->pgid || !job->processes)
 		return ;
 	if (tcsetpgrp(STDIN_FILENO, job->pgid) == 0)
 	{

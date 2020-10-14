@@ -10,65 +10,65 @@
 # ^Z fg
 sleep 100
 ^Z
-sleep .4; ps --ppid $$ -o state,comm; sleep .4
+ps --ppid $$ -o state,comm
 fg
 ^C
-sleep .4; jobs; sleep .4
+jobs
 
 # ^Z bg
 sleep 100
 ^Z
-sleep .4; ps --ppid $$ -o state,comm; sleep .4
-bg; sleep .4
-ps --ppid $$ -o state,comm; sleep .4
-kill -9 $!; sleep .4
-jobs; sleep .4
+ps --ppid $$ -o state,comm
+bg
+ps --ppid $$ -o state,comm
+kill -9 $!
+jobs
 
 # testing %n
-sleep 100 & sleep 200 & sleep .4
-fg %3; sleep .4
+sleep 100 & sleep 200 &
+fg %3
 fg %2
 ^C
-sleep .4; jobs; sleep .4
-fg %2; sleep .4
-fg %0; sleep .4
-fg %256; sleep .4
+jobs
+fg %2
+fg %0
+fg %256
 fg %1
 ^C
-sleep .4; jobs; sleep .4
+jobs
 
 # testing %+ %% %
-sleep 100 & sleep 200 & sleep 300 & sleep .4
+sleep 100 & sleep 200 & sleep 300 &
 fg %+
 ^C
-sleep .4; jobs; sleep .4
+jobs
 fg %%
 ^C
-sleep .4; jobs; sleep .4
+jobs
 fg %
 ^C
-sleep .4; jobs; sleep .4
+jobs
 
 # testing %-
-sleep 100 & sleep 200 & sleep 300 & sleep .4
+sleep 100 & sleep 200 & sleep 300 &
 fg %-
 ^C
-sleep .4; jobs; sleep .4
+jobs
 fg %-
 ^C
-sleep .4; jobs; sleep .4
+jobs
 fg %-
 ^C
-sleep .4; jobs; sleep .4
+jobs
 
 # no current
-fg; sleep .4
-fg %; sleep .4
-bg; sleep .4
-bg %%; sleep .4
+fg
+fg %
+bg
+bg %%
 
 # job already done
-true & sleep .4
-fg; sleep .4
-true & sleep .4
-bg; sleep .4
+true &
+fg
+true &
+bg
