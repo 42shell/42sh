@@ -44,10 +44,11 @@ echo
 
 read -p "Keep test? [y/n] " -n 1 -r
 if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
-	rm "$DIR/live_tests/job_control/$1.timing" "$DIR/live_tests/job_control/$1.stdin" "$DIR/live_tests/job_control/$1.right"
-	rm "$DIR/live_tests/job_control/$1.log"
+	rm "$DIR/live_tests/job_control/$1.timing" "$DIR/live_tests/job_control/$1.stdin" \
+	"$DIR/live_tests/job_control/$1.right" "$DIR/live_tests/job_control/$1.log"
 fi
 echo
+
 
 stty cols "$OLD_TERMWIDTH"
 
