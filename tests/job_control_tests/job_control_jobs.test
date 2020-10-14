@@ -1,83 +1,83 @@
 # jobs -l
-yes > /dev/null | sleep 100 & sleep .2
-jobs -l
-pkill -TSTP -g $! yes 2>&/dev/null; sleep .2
-jobs -l
-pkill -9 -g $! 2>&/dev/null; sleep .2
-jobs -l
+yes > /dev/null | sleep 100 & sleep .4
+jobs -l; sleep .4
+pkill -TSTP -g $! yes 2>&/dev/null; sleep .4
+jobs -l; sleep .4
+pkill -9 -g $! 2>&/dev/null; sleep .4
+jobs -l; sleep .4
 
 ###########################################################################################
 ###########################################################################################
 
 # -n
-cat & sleep .2
-jobs -n
-kill -9 $! 2>&/dev/null; sleep .2
-jobs
+cat & sleep .4
+jobs -n; sleep .4
+kill -9 $! 2>&/dev/null; sleep .4
+jobs; sleep .4
 
 ###########################################################################################
 ###########################################################################################
 
 # -p
-cat & sleep .2
-jobs -p
-kill -9 $! 2>&/dev/null; sleep .2
-jobs
+cat & sleep .4
+jobs -p; sleep .4
+kill -9 $! 2>&/dev/null; sleep .4
+jobs; sleep .4
 
 ###########################################################################################
 ###########################################################################################
 
 # -r -s
-cat & P1=$!; sleep 1000 & P2=$!; sleep .2
-jobs -s
-jobs -r
-kill -9 $P1 $P2 2>&/dev/null; sleep .2
-jobs
+cat & P1=$!; sleep 1000 & P2=$!; sleep .4
+jobs -s; sleep .4
+jobs -r; sleep .4
+kill -9 $P1 $P2 2>&/dev/null; sleep .4
+jobs; sleep .4
 
 ###########################################################################################
 ###########################################################################################
 
-sleep 1000& P1=$!; sleep 2000& P2=$!; sleep 3000& P3=$!; sleep 4000& P4=$!; sleep .2
+sleep 1000& P1=$!; sleep 2000& P2=$!; sleep 3000& P3=$!; sleep 4000& P4=$!; sleep .4
 
 //sleeps
 
 # %n %+/-
-jobs %0 %1
-jobs %2
-jobs %3
-jobs %4
-jobs %5
-jobs %+
-jobs %%
-jobs %
-jobs %-
-jobs %*
-jobs %error
+jobs %0 %1; sleep .4
+jobs %2; sleep .4
+jobs %3; sleep .4
+jobs %4; sleep .4
+jobs %5; sleep .4
+jobs %+; sleep .4
+jobs %%; sleep .4
+jobs %; sleep .4
+jobs %-; sleep .4
+jobs %*; sleep .4
+jobs %error; sleep .4
 
 # TSTP'd job bubbles up
-kill -TSTP $P2 2>&/dev/null; sleep .2
-jobs
+kill -TSTP $P2 2>&/dev/null; sleep .4
+jobs; sleep .4
 
 # previously stopped job state is properly updated when SIGCONT
-kill -CONT $P2 2>&/dev/null; sleep .2
-jobs
+kill -CONT $P2 2>&/dev/null; sleep .4
+jobs; sleep .4
 
 # when highest id job is removed, highest id decreases
-kill -9 $P4 2>&/dev/null; sleep .2
-jobs
-sleep 5000 & P5=$!; sleep .2
-jobs
+kill -9 $P4 2>&/dev/null; sleep .4
+jobs; sleep .4
+sleep 5000 & P5=$!; sleep .4
+jobs; sleep .4
 
 # when middle id job is removed, highest id dont change
-kill -9 $P2 2>&/dev/null; sleep .2
-jobs
-sleep 6000 & P6=$!; sleep .2
-jobs
+kill -9 $P2 2>&/dev/null; sleep .4
+jobs; sleep .4
+sleep 6000 & P6=$!; sleep .4
+jobs; sleep .4
 
 # when all jobs are removed, id is back to 1
-kill -9 $P1 $P3 $P5 $P6 2>&/dev/null; sleep .2
-jobs
-sleep 7000 & P7=$!; sleep .2
-jobs
-kill -9 $P7 2>&/dev/null; sleep .2
-jobs
+kill -9 $P1 $P3 $P5 $P6 2>&/dev/null; sleep .4
+jobs; sleep .4
+sleep 7000 & P7=$!; sleep .4
+jobs; sleep .4
+kill -9 $P7 2>&/dev/null; sleep .4
+jobs; sleep .4
