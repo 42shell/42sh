@@ -35,25 +35,6 @@ void		token_replace_between(t_token *token, int start, int end,
 	}
 }
 
-void		token_replace_from_i(t_token *token, int *i, char *new_str
-								, int erase_past_end)
-{
-	size_t	to_replace_len;
-	size_t	new_len;
-
-	to_replace_len = ft_strlen(token->value->str + *i) + erase_past_end;
-	new_len = ft_strlen(new_str);
-	ft_dstr_remove(token->value, *i, to_replace_len);
-	ft_dstr_insert(token->value, *i, new_str, new_len);
-	if (token->exp_info)
-	{
-		ft_dstr_remove(token->exp_info, *i, to_replace_len);
-		ft_dstr_insert(token->exp_info, *i, new_str, new_len);
-		ft_memset(token->exp_info->str + *i, '1', new_len);
-	}
-	*i += new_len - 1;
-}
-
 /*
 ** Returns -1 if var name is invalid or braces aren't closed
 ** start is the index of the leading '$' char
