@@ -87,11 +87,7 @@ void		update_status(void)
 	while ((pid = waitpid(WAIT_ANY, &status,
 			WNOHANG | WUNTRACED | WCONTINUED)) > 0)
 	{
-		if (set_process_status(pid, status) < 0)
-		{
-			ft_dprintf(2, "42sh: process %d not found.\n", pid);
-			break ;
-		}
+		set_process_status(pid, status);
 	}
 }
 
@@ -107,11 +103,8 @@ void		wait_for_job(t_job *job)
 	{
 		if ((pid = waitpid(WAIT_ANY, &status, WUNTRACED)) < 0)
 			break ;
-		if (pid > 0 && set_process_status(pid, status) < 0)
-		{
-			ft_dprintf(2, "42sh: process %d not found.\n", pid);
-			break ;
-		}
+		if (pid > 0)
+			set_process_status(pid, status);
 	}
 	if (job_is_done(job))
 	{
