@@ -15,10 +15,25 @@
 
 # include "shell.h"
 
+# ifdef HIDE_PID
+#  define SHOW_PID		0
+# else
+#  define SHOW_PID		1
+# endif
+
+# ifdef HIDE_NOTIF
+#  define SHOW_NOTIF	0
+# else
+#  define SHOW_NOTIF	1
+# endif
+
 typedef struct			s_process
 {
+	struct s_job		*job;
 	struct s_process	*next;
+	struct s_process	*prev;
 	t_command			*command;
+	t_dstr				*command_str;
 	pid_t				pid;
 	int					stdin;
 	int					stdout;
@@ -30,7 +45,9 @@ typedef struct			s_process
 
 typedef struct			s_job
 {
+	int					id;
 	struct s_job		*next;
+	struct s_job		*prev;
 	t_command			*command;
 	t_process			*processes;
 	pid_t				pgid;
@@ -39,23 +56,19 @@ typedef struct			s_job
 	struct termios		tmodes;
 	bool				has_tmodes;
 	bool				notified;
+	bool				invert_ret;
 	bool				bg;
-	int					id;
 }						t_job;
 
-/*
-** A stack in which the first element is always the last job stopped
-** while it was in the foreground or started in the background
-*/
-
-extern t_list_head				*g_curr_job;
+extern t_job			*g_current_jobs;
+extern t_job			*g_jobs;
+extern int				g_greatest_job_id;
 
 /*
 ** launch job/process
 */
 
 int						launch_job(t_job *job);
-int						launch_job_in_subshell(t_job *job);
 int						launch_process(t_process *process, int fd_to_close);
 
 /*
@@ -66,52 +79,57 @@ void					put_job_fg(t_job *job, bool cont);
 void					put_job_bg(t_job *job, bool cont);
 void					wait_for_job(t_job *job);
 void					continue_job(t_job *job, bool bg);
-void					notif_jobs(void);
-
-/*
-** job set status
-*/
-
+int						set_process_status(pid_t pid, int status);
 void					update_status(void);
-int						mark_status(pid_t pid, int status);
-void					set_process_status(t_process *process, int status);
-void					mark_job_as_running (t_job *job);
+void					update_jobs(void);
 
 /*
-** job get status
+** job status
 */
 
 bool					job_is_done(t_job *job);
 bool					job_is_stopped(t_job *job);
+bool					job_is_running(t_job *job);
 
 /*
-** current job stack related
+** job list
 */
 
-bool					is_current_job(t_job *job);
-bool					is_previous_job(t_job *job);
-t_list_head				*get_job_current_list_elem(t_job *job);
-void					remove_current_list_elem(t_list_head *elem);
-void					update_curr_job(t_job *job);
+t_list_head				*get_sorted_jobs_list(void);
+void					move_job_in_persistent_list(t_job *job);
+void					add_job_to_list(t_job **head, t_job *job, bool set_id);
+void					remove_job_from_list(t_job **head, t_job *job);
+void					del_job_from_list(t_job **head, t_job *job);
 
 /*
 ** job utils
 */
 
-t_job					*get_job(pid_t pgid);
-void					add_job(t_job *job);
-void					add_process(t_process *process);
-void					remove_job_from_list(pid_t pgid);
+bool					job_is_in_list(t_job *list, t_job *job);
+bool					is_last_job(t_job *job);
+bool					is_before_last_job(t_job *job);
+int						cmp_job_id(void *a, void *b);
+void					update_jobs_greatest_id(void);
+
+/*
+** process utils
+*/
+
+void					add_process_to_job(t_job *job, t_process *process);
+t_process				*get_process(pid_t pid);
 
 /*
 ** job display
 */
 
-char					*get_job_format(t_job *job);
-char					*get_process_format(t_process *process);
-void					format_command(t_dstr *buf, t_command *command);
-void					print_job(t_job *job, bool print_command);
-void					print_job_long(t_job *job);
+void					format_job_status(t_dstr *buf, t_job *job);
+void					format_job_id(t_dstr *buf, t_job *job);
+void					format_exit_status(t_dstr *buf, t_process *process);
+void					format_process_info(t_dstr *buf, t_process *process,
+						int padding);
+void					format_processes(t_dstr *buf, t_process *list,
+						bool l_opt);
+void					print_job(t_job *job, bool l_opt);
 
 /*
 ** job new/del
@@ -119,8 +137,6 @@ void					print_job_long(t_job *job);
 
 t_process				*process_new(t_command *cmd, int stdin, int stdout);
 t_job					*job_new(t_command *cmd, int stdin, int stdout);
-void					process_del(t_process **process);
-void					job_list_del(t_job **job);
-void					job_del(t_job **job);
+void					process_list_del(t_process **process_list);
 
 #endif

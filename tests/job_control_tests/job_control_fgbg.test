@@ -1,0 +1,74 @@
+###########################################################################################
+# fg/bg jobspec
+###########################################################################################
+
+# As notifications are disabled, the jobs stack behavior is the same as in batch mode,
+# meaning that done jobs are stored until they are manually notified by a call to jobs.
+# That's why I use jobs builtin here, to simulate interactive notifs and update the jobs
+# stack.
+
+# ^Z fg
+sleep 100
+^Z
+ps --ppid $$ -o state,comm
+fg
+^C
+jobs
+
+# ^Z bg
+sleep 100
+^Z
+ps --ppid $$ -o state,comm
+bg
+ps --ppid $$ -o state,comm
+kill -9 $!
+jobs
+
+# testing %n
+sleep 100 & sleep 200 &
+fg %3
+fg %2
+^C
+jobs
+fg %2
+fg %0
+fg %256
+fg %1
+^C
+jobs
+
+# testing %+ %% %
+sleep 100 & sleep 200 & sleep 300 &
+fg %+
+^C
+jobs
+fg %%
+^C
+jobs
+fg %
+^C
+jobs
+
+# testing %-
+sleep 100 & sleep 200 & sleep 300 &
+fg %-
+^C
+jobs
+fg %-
+^C
+jobs
+fg %-
+^C
+jobs
+
+# no current
+fg
+fg %
+bg
+bg %%
+
+# job already done
+true &
+fg
+true &
+bg

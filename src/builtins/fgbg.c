@@ -12,58 +12,80 @@
 
 #include "shell.h"
 
-static int	notif_and_continue_job(t_job *job, bool bg)
+t_job	*get_job_by_str(char *str)
 {
-	t_dstr		*command_format;
+	t_job	*job;
+	int		id;
 
-	command_format = ft_dstr_new(32);
-	format_command(command_format, job->command);
-	ft_printf("%s%s\n", command_format->str, bg ? " &" : "");
-	ft_dstr_del(&command_format);
-	continue_job(job, bg);
-	return (0);
+	if (str[0] == '%')
+	{
+		if (!str[1] || str[1] == '%' || str[1] == '+')
+			return (g_jobs);
+		if (str[1] == '-')
+		{
+			if (g_jobs)
+				return (g_jobs->next ? g_jobs->next : g_jobs);
+			return (NULL);
+		}
+		id = ft_atoi(++str);
+	}
+	else
+		id = ft_atoi(str);
+	job = g_jobs;
+	while (job && job->id != id)
+		job = job->next;
+	return (job);
 }
 
-/*
-** argv = argv + 1
-*/
-
-static int	fgbg_internal(char **argv, bool bg)
+int		builtin_bg(char **argv, __attribute__((unused)) t_array *env)
 {
 	t_job	*job;
 
-	if (!*argv)
+	if (!g_job_control_enabled)
+		return (2);
+	update_status();
+	if ((!(argv[1]) && !(job = g_jobs))
+	|| (argv[1] && !(job = get_job_by_str(argv[1]))))
 	{
-		if (!g_curr_job || g_curr_job->next == g_curr_job)
-		{
-			ft_dprintf(2, "42sh: %s: %s: No such job\n",
-			bg ? "bg" : "fg", "current");
-			return (2);
-		}
-		job = (t_job *)g_curr_job->next->data;
-	}
-	else if (!(job = get_job_by_str(*argv)))
-	{
-		ft_dprintf(2, "42sh: %s: %s: No such job\n",
-		bg ? "bg" : "fg", *argv);
+		ft_dprintf(2, "42sh: bg: %s: No such job\n",
+		argv[1] ? argv[1] : "current");
 		return (2);
 	}
-	notif_and_continue_job(job, bg);
+	else if (job_is_done(job))
+	{
+		ft_dprintf(2, "42sh: bg: job [%d] has terminated\n", job->id);
+		return (1);
+	}
+	continue_job(job, true);
+	if (SHOW_NOTIF)
+		print_job(job, false);
 	return (0);
 }
 
-int			builtin_bg(char **argv, __attribute__((unused)) t_array *env)
+int		builtin_fg(char **argv, __attribute__((unused)) t_array *env)
 {
-	if (!g_job_control_enabled)
-		return (2);
-	update_status();
-	return (fgbg_internal(argv + 1, true));
-}
+	t_job	*job;
+	t_dstr	*buf;
 
-int			builtin_fg(char **argv, __attribute__((unused)) t_array *env)
-{
 	if (!g_job_control_enabled)
 		return (2);
 	update_status();
-	return (fgbg_internal(argv + 1, false));
+	if ((!(argv[1]) && !(job = g_jobs))
+	|| (argv[1] && !(job = get_job_by_str(argv[1]))))
+	{
+		ft_dprintf(2, "42sh: fg: %s: No such job\n",
+		argv[1] ? argv[1] : "current");
+		return (2);
+	}
+	else if (job_is_done(job))
+	{
+		ft_dprintf(2, "42sh: fg: job [%d] has terminated\n", job->id);
+		return (1);
+	}
+	buf = ft_dstr_new(128);
+	format_processes(buf, job->processes, false);
+	ft_dprintf(2, "%s\n", buf->str);
+	ft_dstr_del(&buf);
+	continue_job(job, false);
+	return (0);
 }

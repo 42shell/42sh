@@ -35,17 +35,16 @@ blabla
 EOF
 echo '~~~'
 
-#TEST 07
+#TEST 07 
 echo 'cd .. & pwd;'
 cd .. & sleep .2; pwd;
 echo '~~~'
 
-#TEST 08
+#TEST 08 
 echo 'cd .. && pwd & pwd;'
 cd .. && pwd & sleep .2; pwd;
 echo '~~~'
 
-#TEST 09
+#TEST 09 
 echo '(cd .. && pwd; cd - && pwd) & pwd;'
 (cd .. && pwd; cd - && pwd) & sleep .2; pwd;
-echo '~~~'

@@ -1,3 +1,6 @@
+# Tmp
+*.tmp
+
 # Vim future
 *.vs
 

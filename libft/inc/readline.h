@@ -17,6 +17,7 @@
 # include <termios.h>
 # include <term.h>
 # include <sys/ioctl.h>
+# include <signal.h>
 # include "libft.h"
 
 /*

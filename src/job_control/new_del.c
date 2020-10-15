@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   job.c                                              :+:      :+:    :+:   */
+/*   new_del.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -28,43 +28,24 @@ t_job		*job_new(t_command *cmd, int stdin, int stdout)
 	t_job	*job;
 
 	job = (t_job *)ft_xmalloc(sizeof(t_job));
+	job->invert_ret = cmd->flags & CMD_INVERT_RETURN;
 	job->stdin = stdin;
 	job->stdout = stdout;
 	job->command = cmd;
+	job->prev = NULL;
+	job->next = NULL;
 	return (job);
 }
 
-void		process_del(t_process **process)
+void		process_list_del(t_process **process_list)
 {
 	t_process	*next;
 
-	while (process && *process)
+	while (process_list && *process_list)
 	{
-		next = (*process)->next;
-		free(*process);
-		*process = next;
-	}
-}
-
-void		job_del(t_job **job)
-{
-	remove_job_from_list((*job)->id);
-	process_del(&(*job)->processes);
-	command_del(&(*job)->command);
-	free(*job);
-	*job = NULL;
-}
-
-void		job_list_del(t_job **job)
-{
-	t_job	*next;
-
-	while (job && *job)
-	{
-		process_del(&(*job)->processes);
-		command_del(&(*job)->command);
-		next = (*job)->next;
-		free(*job);
-		*job = next;
+		next = (*process_list)->next;
+		ft_dstr_del(&(*process_list)->command_str);
+		free(*process_list);
+		*process_list = next;
 	}
 }

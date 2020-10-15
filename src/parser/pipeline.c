@@ -12,14 +12,10 @@
 
 #include "shell.h"
 
-static t_command	*build_pipe_and_advance(t_command *left)
+static void	advance_and_parse_linebreak(void)
 {
-	t_command	*node;
-	int			old_linebreak_type;
+	int		old_linebreak_type;
 
-	node = command_new(CONNECTION);
-	node->value.connection->connector = PIPE;
-	node->value.connection->left = left;
 	token_del(&g_parser.token);
 	g_lexer.expect_reserv_word = true;
 	g_parser.token = get_next_token();
@@ -27,7 +23,6 @@ static t_command	*build_pipe_and_advance(t_command *left)
 	g_linebreak_type = PIPE;
 	parse_linebreak();
 	g_linebreak_type = old_linebreak_type;
-	return (node);
 }
 
 /*
@@ -35,21 +30,27 @@ static t_command	*build_pipe_and_advance(t_command *left)
 **                  | pipe_sequence '|' linebreak command
 */
 
-static t_command	*parse_pipe_sequence(void)
+t_command	*parse_pipe_sequence(void)
 {
-	t_command		*pipe_sequence;
-	t_command		*node;
+	t_command	*pipe_sequence;
+	t_command	*pipe_list;
+	t_command	*command;
 
-	if (!g_parser.token || !(pipe_sequence = parse_command()))
+	if (!g_parser.token || !(command = parse_command()))
 		return (NULL);
-	while (g_parser.token
-	&& g_parser.token->type == PIPE)
+	pipe_list = command;
+	while (g_parser.token && g_parser.token->type == PIPE)
 	{
-		node = build_pipe_and_advance(pipe_sequence);
-		if (!(node->value.connection->right = parse_command()))
-			return (return_parse_error(&node));
-		pipe_sequence = node;
+		advance_and_parse_linebreak();
+		if (!(command->next = parse_command()))
+			return (return_parse_error(&pipe_list));
+		command = command->next;
+		command->flags |= CMD_PIPE;
 	}
+	if (!pipe_list->next)
+		return (pipe_list);
+	pipe_sequence = command_new(PIPELINE);
+	pipe_sequence->value.pipeline = pipe_list;
 	return (pipe_sequence);
 }
 
@@ -58,13 +59,13 @@ static t_command	*parse_pipe_sequence(void)
 **                  | bang pipe_sequence
 */
 
-t_command			*parse_pipeline(void)
+t_command	*parse_pipeline(void)
 {
-	t_command		*pipeline;
-	int				invert_return;
+	t_command	*pipeline;
+	int			invert_return;
 
 	invert_return = 0;
-	while (g_parser.token->type == BANG)
+	while (g_parser.token && g_parser.token->type == BANG)
 	{
 		invert_return ^= CMD_INVERT_RETURN;
 		token_del(&g_parser.token);

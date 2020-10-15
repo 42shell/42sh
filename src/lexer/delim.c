@@ -33,8 +33,9 @@ int			delim_token(void)
 			g_lexer.token->type = IO_NUMBER;
 		g_lexer.expect_reserv_word = false;
 		g_lexer.token_delimited = true;
+		return (g_lexer.token->type);
 	}
-	return (g_lexer.token->type);
+	return (0);
 }
 
 int			lx_operator_end(void)

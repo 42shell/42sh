@@ -12,6 +12,44 @@
 
 #include "shell.h"
 
+t_token	*token_list_dup(t_token *list)
+{
+	t_token	*dup;
+	t_token	*tmp;
+	t_token	*last;
+
+	dup = NULL;
+	if (!list)
+		return (NULL);
+	while (list)
+	{
+		tmp = token_dup(list);
+		if (!dup)
+		{
+			dup = tmp;
+			last = dup;
+		}
+		else
+		{
+			last->next = tmp;
+			last = last->next;
+		}
+		list = list->next;
+	}
+	return (dup);
+}
+
+t_token	*token_dup(t_token *token)
+{
+	t_token	*dup;
+
+	if (!token)
+		return (NULL);
+	dup = token_new(token->type);
+	ft_dstr_append(dup->value, token->value->str);
+	return (dup);
+}
+
 void	token_list_del(t_token **token)
 {
 	if (!token || !*token)

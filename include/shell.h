@@ -18,7 +18,6 @@
 # include <sys/wait.h>
 # include <sys/uio.h>
 # include <sys/stat.h>
-# include <sys/prctl.h>
 # include <sys/ioctl.h>
 # include <signal.h>
 # include <fcntl.h>
@@ -26,6 +25,7 @@
 # include <dirent.h>
 # include <sys/ipc.h>
 # include <sys/msg.h>
+# include <time.h>
 # include "libft.h"
 # include "readline.h"
 # include "ft_printf.h"
@@ -85,19 +85,14 @@ typedef struct			s_var
 
 /*
 ** TODO:
-** -parser/command_del, lexer/get_prompt,
 ** -shell script
 **
-** problems:
-** -watch deceitful lexer
+** question:
 ** -store aborted multi-lines in history ? bash does
 **
 ** old problems:
 ** -unsetenv infinite loop when unseting non existing var ?
 ** -env dup invalid read ?
-** -autcomplete vim /t doesnt complete files ?
-** -others
-** 		-check comments work properly
 ** -leaks/invalid reads/still reachable
 */
 
@@ -107,7 +102,7 @@ typedef struct			s_var
 # define PS1			"$> "
 # define PS2			"> "
 # define PSQ			"'... "
-# define PSD			"\"... "
+# define PSDQ			"\"... "
 # define PSA			"&&... "
 # define PSO			"||... "
 # define PSP			"|... "
@@ -119,6 +114,8 @@ typedef struct			s_var
 # define PST			"then... "
 # define PSEI			"elif... "
 # define PSE			"else... "
+# define PSW			"while... "
+# define PSD			"do... "
 
 typedef int				(*t_input_func)(const char *, bool);
 
@@ -128,7 +125,6 @@ typedef struct			s_shell
 {
 	bool				interactive_mode;
 	t_input_func		get_input;
-	t_job				*jobs;
 	pid_t				pgid;
 	struct termios		tmodes;
 	t_ht				*vars;
@@ -137,6 +133,8 @@ typedef struct			s_shell
 
 extern t_shell			g_shell;
 extern t_ht				*g_builtins;
+
+extern t_command		*g_complete_command;
 
 int						init(int argc, char **argv);
 void					del(void);

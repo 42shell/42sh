@@ -62,7 +62,7 @@ void	set_local_variables(t_simple_cmd *cmd)
 	char	*assignment;
 	char	*value;
 
-	token = cmd->assigns;
+	token = cmd->assigns_exp;
 	while (token)
 	{
 		assignment = token->value->str;
@@ -79,7 +79,7 @@ void	set_temp_env_variables(t_simple_cmd *cmd, t_array *temp_env)
 	char	*assignment;
 	char	*value;
 
-	token = cmd->assigns;
+	token = cmd->assigns_exp;
 	while (token)
 	{
 		assignment = token->value->str;
