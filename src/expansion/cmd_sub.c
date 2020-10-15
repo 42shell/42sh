@@ -82,9 +82,7 @@ static char	*exec_cmd_sub(int *fildes)
 	int		pid;
 	char	*output;
 
-	if ((pid = fork()) < 0)
-		return (NULL);
-	if (pid == 0)
+	if ((pid = fork()) == 0)
 	{
 		dup2(fildes[1], STDOUT_FILENO);
 		close(fildes[1]);
@@ -94,14 +92,15 @@ static char	*exec_cmd_sub(int *fildes)
 		g_current_jobs = NULL;
 		g_shell.interactive_mode = false;
 		g_job_control_enabled = false;
+		g_already_forked = false;
 		g_shell.get_input = input_cmd_sub;
 		reset_signals();
 		reset_lexer();
 		main_loop();
 	}
 	close(fildes[1]);
-	output = get_output(fildes[0]);
-	if (waitpid(pid, NULL, 0) > 0 && g_interrupt)
+	output = pid > 0 ? get_output(fildes[0]) : NULL;
+	if (pid > 0 && waitpid(pid, NULL, 0) > 0 && g_interrupt)
 		output[0] = '\0';
 	return (output);
 }

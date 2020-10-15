@@ -20,3 +20,7 @@ echo '~~~'
 
 #TEST 04
 echo $(sleep 0.1 & sleep 0.1 & ls)
+echo '~~~'
+
+#TEST 05
+echo $(echo 1; echo 2) &
