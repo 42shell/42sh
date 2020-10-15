@@ -36,6 +36,7 @@ extern				t_ht	*g_binaries;
 
 extern bool			g_job_control_enabled;
 extern bool			g_already_forked;
+bool				g_interrupt;
 
 /*
 ** to know if we are in backgroud or not during
@@ -55,14 +56,14 @@ int					eval_compound_command(t_command *command);
 int					eval_group_command(t_command *command);
 int					eval_compound_list(t_command *command);
 int					eval_and_or(t_command *command);
-int					eval_pipeline(t_command *command, int in, int out);
+int					eval_pipeline(t_command *command);
 int					eval_if_clause(t_command *command);
+int					eval_while_clause(t_command *command);
 
 /*
 ** execution
 */
 
-int					exec_group_command(t_group_cmd *group);
 int					exec_simple_command(t_simple_cmd *simple);
 int					exec_builtin(char **argv, t_array *temp_env);
 int					exec_binary(char **argv, t_array *temp_env);
@@ -74,11 +75,12 @@ void				add_binary_msgs_to_hash(void);
 ** redirections
 */
 
-int					set_redir(t_redir *redirs, bool backup);
+int					set_redir(t_redir *redirs, t_list_head **backup_list);
 int					open_heredoc(t_dstr *heredoc);
-int					dup2_and_backup(int fildes1, int fildes2, bool backup);
-bool				is_valid_fd(int fd);
-int					restore_fds(void);
+int					dup2_and_backup(t_list_head **backup_list,
+									int oldfd, int newfd);
+bool				is_valid_fd(t_list_head *backup_list, int fd);
+int					restore_fds(t_list_head **backup_list);
 void				move_fd(int *fd);
 
 /*

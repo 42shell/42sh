@@ -12,6 +12,8 @@
 
 #include "shell.h"
 
+extern t_command	*g_complete_command;
+
 /*
 ** If the command is not expanded, we expand it.
 ** If the expansion result in no argv (only redirs), we can execute it.
@@ -28,31 +30,34 @@ int			eval_simple_command(t_command *command)
 	simple = command->value.simple;
 	if (!simple->is_expand)
 	{
+		free_arr(simple->argv);
 		if (expand(simple) == 1)
 			return (g_last_exit_st = 1);
 		if (!(simple->argv = get_argv(simple)))
+		{
+			simple->is_expand = false;
 			return (exec_simple_command(simple));
+		}
 	}
-	if (!g_already_forked && !is_builtin(simple->argv[0]))
+	if (!g_already_forked && simple->argv && !is_builtin(simple->argv[0]))
 	{
 		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
-		return (launch_process(process, 0));
+		launch_process(process, 0);
 	}
-	return (exec_simple_command(simple));
+	else
+		exec_simple_command(simple);
+	simple->is_expand = false;
+	return (g_last_exit_st);
 }
 
 int			eval_command(t_command *command)
 {
 	if (command->flags & CMD_COMPOUND)
 		return (eval_compound_command(command));
-	if (command->type == CONNECTION)
-	{
-		if (command->value.connection->connector == OR_IF
-		|| command->value.connection->connector == AND_IF)
-			return (eval_and_or(command));
-		if (command->value.connection->connector == PIPE)
-			return (eval_pipeline(command, STDIN_FILENO, STDOUT_FILENO));
-	}
+	if (command->type == AND_OR)
+		return (eval_and_or(command));
+	if (command->type == PIPELINE)
+		return (eval_pipeline(command));
 	if (command->type == SIMPLE)
 		return (eval_simple_command(command));
 	return (0);
@@ -64,7 +69,7 @@ int			eval_complete_command(t_command *complete_command)
 	t_job		*job;
 
 	command = complete_command;
-	while (command != NULL)
+	while (!g_interrupt && command != NULL)
 	{
 		job = job_new(command, STDIN_FILENO, STDOUT_FILENO);
 		if (command->sep == AMPERSAND)
@@ -73,5 +78,5 @@ int			eval_complete_command(t_command *complete_command)
 		add_binary_msgs_to_hash();
 		command = command->next;
 	}
-	return (0);
+	return (g_last_exit_st);
 }

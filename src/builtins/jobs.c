@@ -47,11 +47,11 @@ static int	get_jobs_options(char **argv, int *options)
 	while ((c = get_opt(argc, (unsigned char **)argv)) != -1)
 	{
 		if (ret == 0
-				&& (c == 'l' || c == 'n' || c == 'p' || c == 'r' || c == 's'))
+		&& (c == 'l' || c == 'n' || c == 'p' || c == 'r' || c == 's'))
 			set_option(options, c);
 		else if (ret == 0)
 		{
-			ft_dprintf(2, "jobs: illegal option -- %d\n", c);
+			ft_dprintf(2, "jobs: illegal option -- %c\n", c);
 			ret = -1;
 		}
 	}
@@ -65,12 +65,17 @@ static int	print_one_job(t_job *job, int options)
 	|| ((options & JOBS_S) && !job_is_stopped(job)))
 		return (0);
 	if (options & JOBS_P)
-		ft_printf("%d\n", job->pgid);
+		ft_printf("%d\n", SHOW_PID ? job->pgid : 0);
 	else if (options & JOBS_L)
-		print_job_long(job);
-	else
 		print_job(job, true);
+	else
+		print_job(job, false);
 	job->notified = true;
+	if (job_is_done(job))
+	{
+		del_job_from_list(&g_jobs, job);
+		update_jobs_greatest_id();
+	}
 	return (0);
 }
 
@@ -80,27 +85,28 @@ static int	print_one_job(t_job *job, int options)
 
 static int	print_jobs(char **argv, int options)
 {
-	t_job	*job;
+	t_job		*job;
+	t_list_head	*sorted_list;
+	t_list_head	*tmp;
 
 	if (!*argv)
 	{
-		job = g_shell.jobs->next;
-		while (job)
+		sorted_list = get_sorted_jobs_list();
+		while (sorted_list)
 		{
-			print_one_job(job, options);
-			job = job->next;
+			print_one_job((t_job *)sorted_list->data, options);
+			tmp = sorted_list;
+			sorted_list = sorted_list->next;
+			free(tmp);
 		}
 		return (0);
 	}
 	while (*argv)
 	{
-		if (!(job = get_job_by_str(*argv)))
-		{
-			g_jobspec_error = true;
-			ft_dprintf(2, "42sh: jobs: %s: No such job\n", *argv);
-		}
-		else
+		if ((job = get_job_by_str(*argv)))
 			print_one_job(job, options);
+		else if ((g_jobspec_error = true))
+			ft_dprintf(2, "42sh: jobs: %s: No such job\n", *argv);
 		argv++;
 	}
 	return (0);
@@ -113,10 +119,12 @@ int			builtin_jobs(char **argv, __attribute__((unused)) t_array *env)
 	options = 0;
 	if (get_jobs_options(argv, &options) == -1)
 		return (2);
-	update_status();
 	argv++;
 	while (*argv && **argv == '-')
 		argv++;
+	if (!g_jobs)
+		return (0);
+	update_status();
 	print_jobs(argv, options);
 	if (g_jobspec_error)
 	{

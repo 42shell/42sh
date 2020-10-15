@@ -12,65 +12,31 @@
 
 #include "shell.h"
 
-t_list_head *g_curr_job;
+/*
+** a stack containing the jobs currently being executed
+*/
 
-void	notif_jobs(void)
-{
-	t_job	*job;
-	t_job	*next;
+t_job	*g_current_jobs;
 
-	update_status();
-	job = g_shell.jobs;
-	while (job)
-	{
-		next = job->next;
-		if (job_is_done(job))
-		{
-			if (job->bg && g_shell.interactive_mode)
-				print_job(job, true);
-			job_del(&job);
-		}
-		else if (job_is_stopped(job) && !job->notified)
-		{
-			if (g_shell.interactive_mode)
-				print_job(job, true);
-			update_curr_job(job);
-			job->notified = true;
-		}
-		job = next;
-	}
-}
+/*
+** a stack containing jobs stopped or put in the background
+*/
 
-void	wait_for_job(t_job *job)
-{
-	pid_t		pid;
-	int			status;
+t_job	*g_jobs;
 
-	status = 0;
-	if (!job->processes)
-		return ;
-	while (!job_is_done(job)
-	&& (g_job_control_enabled ? !job_is_stopped(job) : 1))
-	{
-		pid = waitpid(WAIT_ANY, &status, WUNTRACED);
-		if (pid > 0 && mark_status(pid, status) < 0)
-		{
-			ft_dprintf(2, "42sh: process %d not found.\n", pid);
-			break ;
-		}
-		else if (pid < 0)
-		{
-			ft_dprintf(2, "42sh: waitpid: unexpected error.\n", pid);
-			break ;
-		}
-	}
-	if (job_is_done(job) && job->command->flags & CMD_INVERT_RETURN)
-		g_last_exit_st = g_last_exit_st ? 0 : 1;
-}
+int		g_greatest_job_id;
 
 void	continue_job(t_job *job, bool bg)
 {
-	mark_job_as_running(job);
+	t_process *process;
+
+	process = job->processes;
+	while (process)
+	{
+		process->stopped = false;
+		process = process->next;
+	}
+	job->notified = false;
 	if (bg)
 		put_job_bg(job, true);
 	else
@@ -83,7 +49,6 @@ void	put_job_bg(t_job *job, bool cont)
 
 	job->bg = true;
 	g_last_bg_job_pid = job->pgid;
-	update_curr_job(job);
 	if (cont)
 		kill(-job->pgid, SIGCONT);
 }
@@ -91,16 +56,28 @@ void	put_job_bg(t_job *job, bool cont)
 void	put_job_fg(t_job *job, bool cont)
 {
 	job->bg = false;
-	tcsetpgrp(STDIN_FILENO, job->pgid);
-	if (cont)
+	if (!job->pgid || !job->processes)
+		return ;
+	if (tcsetpgrp(STDIN_FILENO, job->pgid) == 0)
 	{
-		kill(-job->pgid, SIGCONT);
-		if (job->has_tmodes)
-			tcsetattr(STDIN_FILENO, TCSADRAIN, &job->tmodes);
+		if (cont)
+		{
+			kill(-job->pgid, SIGCONT);
+			if (job->has_tmodes)
+				tcsetattr(STDIN_FILENO, TCSADRAIN, &job->tmodes);
+		}
+		wait_for_job(job);
+		tcsetpgrp(STDIN_FILENO, g_shell.pgid);
+		tcgetattr(STDIN_FILENO, &job->tmodes);
+		job->has_tmodes = true;
 	}
-	wait_for_job(job);
-	tcsetpgrp(STDIN_FILENO, g_shell.pgid);
-	tcgetattr(STDIN_FILENO, &job->tmodes);
-	job->has_tmodes = true;
+	else
+	{
+		ft_dprintf(2, "42sh: process group %d:"
+			"couldn't put pgrp in foreground\n", job->pgid);
+		kill(-job->pgid, SIGHUP);
+		kill(-job->pgid, SIGCONT);
+		update_status();
+	}
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &g_shell.tmodes);
 }

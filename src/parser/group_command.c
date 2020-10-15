@@ -23,25 +23,13 @@ static int			check_bracket_lvl(void)
 	return (0);
 }
 
-/*
-** if there is only a subshell in the compound list, we have useless parens
-** like in "((ls))". We dont set the subshell flag to convert it into { (ls) },
-** to avoid useless fork.
-** This way is easier than deleting the useless node cause we need to keep
-** eventual redirections.
-** ex : ((ls) 2>&1) >file  ->   { (ls) 2>&1 } >file
-*/
-
 static t_command	*build_subshell_and_advance(t_command *compound_list)
 {
 	t_command		*subshell;
 
 	subshell = command_new(GROUP);
-	subshell->value.group->list = compound_list;
-	if (!(subshell->value.group->list->type == GROUP
-	&& subshell->value.group->list->value.group->subshell
-	&& !subshell->value.group->list->next))
-		subshell->value.group->subshell = true;
+	subshell->value.compound_list = compound_list;
+	subshell->flags |= CMD_SUBSHELL;
 	token_del(&g_parser.token);
 	g_parser.token = get_next_token();
 	--g_parser.bracket_lvl;
@@ -58,17 +46,17 @@ t_command			*parse_subshell(void)
 	t_command	*compound_list;
 	int			old_linebreak_type;
 
-	if (!g_parser.token || g_parser.token->type != LBRACKET
+	if (!g_parser.token || g_parser.token->type != LPAREN
 	|| check_bracket_lvl() != 0)
 		return (NULL);
 	old_linebreak_type = g_linebreak_type;
-	g_linebreak_type = LBRACKET;
+	g_linebreak_type = LPAREN;
 	token_del(&g_parser.token);
 	g_lexer.expect_reserv_word = true;
 	g_parser.token = get_next_token();
 	if (!(compound_list = parse_compound_list()))
 		return (NULL);
-	if (!g_parser.token || g_parser.token->type != RBRACKET)
+	if (!g_parser.token || g_parser.token->type != RPAREN)
 		return (return_parse_error(&compound_list));
 	subshell = build_subshell_and_advance(compound_list);
 	g_linebreak_type = old_linebreak_type;
@@ -80,7 +68,7 @@ static t_command	*build_brace_group_and_advance(t_command *compound_list)
 	t_command		*group;
 
 	group = command_new(GROUP);
-	group->value.group->list = compound_list;
+	group->value.compound_list = compound_list;
 	token_del(&g_parser.token);
 	g_lexer.expect_reserv_word = true;
 	g_parser.token = get_next_token();

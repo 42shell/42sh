@@ -1,51 +1,50 @@
-#TEST 00
+#TEST 00 
 echo 'ls &'
 ls & sleep .2
 echo '~~~'
 
-#TEST 01
+#TEST 01 
 echo 'ls | cat -e &'
 ls | cat -e & sleep .2
 echo '~~~'
 
-#TEST 02
+#TEST 02 
 echo '(ls | cat) &'
 (ls | cat) & sleep .2
 echo '~~~'
 
-#TEST 03
+#TEST 03 
 echo '{ ls | cat; } &'
 { ls | cat; } & sleep .2
 echo '~~~'
 
-#TEST 04
+#TEST 04 
 echo '( ls | cat -e & ls ) &'
 ( ls | cat -e & sleep .2 ) & sleep .2
 echo '~~~'
 
-#TEST 05
+#TEST 05 
 echo '{ ls | cat -e & ls; } &'
 { ls | cat -e & sleep .2; } & sleep .2
 echo '~~~'
 
-#TEST 06
+#TEST 06 
 echo '( ls | cat & { ls | cat -e & } ) & cat << EOF &'
 ( ls | cat & sleep .2; { ls | cat -e & sleep .2; } & sleep .4 ) & sleep .6; cat << EOF & sleep .6
 blabla
 EOF
 echo '~~~'
 
-#TEST 07
+#TEST 07 
 echo 'cd .. & pwd;'
 cd .. & sleep .2; pwd;
 echo '~~~'
 
-#TEST 08
+#TEST 08 
 echo 'cd .. && pwd & pwd;'
 cd .. && pwd & sleep .2; pwd;
 echo '~~~'
 
-#TEST 09
+#TEST 09 
 echo '(cd .. && pwd; cd - && pwd) & pwd;'
 (cd .. && pwd; cd - && pwd) & sleep .2; pwd;
-echo '~~~'

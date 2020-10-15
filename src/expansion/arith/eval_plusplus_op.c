@@ -14,7 +14,7 @@
 
 long		eval_plusplus_node(t_node *node)
 {
-	char	buf[10];
+	char	buf[12];
 	long	tmp;
 
 	if (node->right)
@@ -32,7 +32,7 @@ long		eval_plusplus_node(t_node *node)
 
 long		eval_minusminus_node(t_node *node)
 {
-	char	buf[10];
+	char	buf[12];
 	long	tmp;
 
 	if (node->right)

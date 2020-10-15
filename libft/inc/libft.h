@@ -206,7 +206,9 @@ size_t					ft_strarray_len(char **array);
 ** -----------------------------Math-----------------------------
 */
 
-double					ft_power(double nb, double pwr);
+int						ft_cmp(void *a, void *b);
+double					ft_power(double base, double exp);
+double					ft_sqrt(double base);
 char					ft_isprime(long n);
 long					ft_nextprime(long n);
 unsigned int			ft_next_power_of_two(unsigned int v);

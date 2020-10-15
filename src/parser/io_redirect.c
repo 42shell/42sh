@@ -70,6 +70,7 @@ static t_redir	*parse_io_here(t_token *io_number)
 		return (NULL);
 	}
 	redir->right_op = g_parser.token;
+	redir->heredoc = token_dup(g_parser.token);
 	add_heredoc(redir->right_op);
 	g_parser.token = get_next_token();
 	return (redir);

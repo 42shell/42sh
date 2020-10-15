@@ -31,12 +31,6 @@ int			builtin_test(char **argv, t_array *env);
 int			builtin_hash(char **argv, t_array *env);
 
 /*
-** jobs/fgbg utils
-*/
-
-t_job		*get_job_by_str(char *str);
-
-/*
 ** cd utils
 */
 
@@ -74,6 +68,12 @@ int			test_gt(char **argv);
 int			test_ge(char **argv);
 int			test_lt(char **argv);
 int			test_le(char **argv);
+
+/*
+** fg/bg utils
+*/
+
+t_job		*get_job_by_str(char *str);
 
 /*
 ** utils

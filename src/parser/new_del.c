@@ -17,15 +17,11 @@ t_command	*command_new(enum e_cmd_type type)
 	t_command	*command;
 
 	command = ft_xmalloc(sizeof(t_command));
-	command->type = type;
 	if (type == SIMPLE)
 		command->value.simple = ft_xmalloc(sizeof(t_simple_cmd));
-	else if (type == CONNECTION)
-		command->value.connection = ft_xmalloc(sizeof(t_connection));
-	else if (type == GROUP)
-		command->value.group = ft_xmalloc(sizeof(t_group_cmd));
-	else if (type == IF_CLAUSE)
+	else if (type == IF_CLAUSE || type == WHILE_CLAUSE)
 		command->value.if_clause = ft_xmalloc(sizeof(t_if_clause));
+	command->type = type;
 	return (command);
 }
 
@@ -37,14 +33,18 @@ void		redir_del(t_redir **redir)
 	token_del(&(*redir)->left_op);
 	token_del(&(*redir)->operator);
 	token_del(&(*redir)->right_op);
+	token_del(&(*redir)->heredoc);
 	ft_memdel((void **)redir);
 }
 
 void		simple_command_del(t_simple_cmd **simple)
 {
 	redir_del(&(*simple)->redirs);
+	redir_del(&(*simple)->redirs_exp);
 	token_list_del(&(*simple)->assigns);
+	token_list_del(&(*simple)->assigns_exp);
 	token_list_del(&(*simple)->args);
+	token_list_del(&(*simple)->args_exp);
 	free_arr((*simple)->argv);
 	ft_memdel((void **)simple);
 }
@@ -55,22 +55,23 @@ void		command_del(t_command **command)
 		return ;
 	if ((*command)->type == SIMPLE)
 		simple_command_del(&(*command)->value.simple);
-	else if ((*command)->type == CONNECTION)
-	{
-		command_del(&(*command)->value.connection->left);
-		command_del(&(*command)->value.connection->right);
-		ft_memdel((void **)&(*command)->value.connection);
-	}
+	else if ((*command)->type == AND_OR)
+		complete_command_del(&(*command)->value.and_or);
+	else if ((*command)->type == PIPELINE)
+		complete_command_del(&(*command)->value.pipeline);
 	else if ((*command)->type == GROUP)
-	{
-		complete_command_del(&(*command)->value.group->list);
-		ft_memdel((void **)&(*command)->value.group);
-	}
+		complete_command_del(&(*command)->value.compound_list);
 	else if ((*command)->type == IF_CLAUSE)
 	{
 		complete_command_del(&(*command)->value.if_clause->if_part);
 		complete_command_del(&(*command)->value.if_clause->then_part);
 		complete_command_del(&(*command)->value.if_clause->else_part);
+		ft_memdel((void **)&(*command)->value.if_clause);
+	}
+	else if ((*command)->type == WHILE_CLAUSE)
+	{
+		complete_command_del(&(*command)->value.if_clause->if_part);
+		complete_command_del(&(*command)->value.if_clause->then_part);
 		ft_memdel((void **)&(*command)->value.if_clause);
 	}
 	redir_del(&((*command)->redir_list));

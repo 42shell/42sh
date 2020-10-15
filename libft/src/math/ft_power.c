@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-double		ft_power(double nb, double pwr)
+double		ft_power(double nb, double exp)
 {
-	if (pwr == 0.0)
+	if (exp == 0.0)
 		return (1.0);
-	if (pwr < 0.0)
-		return (1.0 / ft_power(nb, -pwr));
-	return (nb * ft_power(nb, pwr - 1.0));
+	if (exp < 0.0)
+		return (1.0 / ft_power(nb, -exp));
+	return (nb * ft_power(nb, exp - 1.0));
 }
