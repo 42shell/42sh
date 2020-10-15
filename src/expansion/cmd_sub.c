@@ -27,8 +27,6 @@ void		wait_for_all_jobs(void)
 		del_job_from_list(&g_jobs, job);
 		job = next;
 	}
-	if (g_interrupt)
-		kill(getpid(), SIGINT);
 }
 
 static int	input_cmd_sub(const char *prompt, bool heredoc)
@@ -101,6 +99,8 @@ static char	*exec_cmd_sub(int *fildes)
 	close(fildes[1]);
 	output = get_output(fildes[0]);
 	waitpid(pid, NULL, 0);
+	if (g_interrupt)
+		output[0] = '\0';
 	return (output);
 }
 
