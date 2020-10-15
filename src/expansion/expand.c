@@ -39,7 +39,7 @@ int			tilde_expand(t_dstr *str, char *home_dir)
 	return (0);
 }
 
-static int	expand_token(t_token *token, char *home_dir)
+static int	expand_token(t_token *token, char *home_dir, bool split)
 {
 	int	pos;
 
@@ -53,13 +53,14 @@ static int	expand_token(t_token *token, char *home_dir)
 	ft_memset(token->exp_info->str, '0', token->exp_info->len);
 	if (dollar_expand(token, pos, false) == 1)
 		return (1);
-	split_fields(token);
+	if (split)
+		split_fields(token);
 	path_expand(token);
 	remove_quotes(token);
 	return (0);
 }
 
-static int	expand_token_list(t_token *token_list, char *home_dir)
+static int	expand_token_list(t_token *token_list, char *home_dir, bool split)
 {
 	t_token	*cur;
 
@@ -67,7 +68,7 @@ static int	expand_token_list(t_token *token_list, char *home_dir)
 	while (cur != NULL)
 	{
 		if (cur->type == WORD || cur->type == SPLIT_FIELD)
-			if (expand_token(cur, home_dir) == 1)
+			if (expand_token(cur, home_dir, split) == 1)
 				return (1);
 		cur = cur->next;
 	}
@@ -84,10 +85,10 @@ static int	expand_redir_list(t_redir *redir_list, char *home_dir)
 	{
 		next = cur->next;
 		if (cur->left_op && cur->operator->type != DLESS)
-			if (expand_token(cur->left_op, home_dir) == 1)
+			if (expand_token(cur->left_op, home_dir, true) == 1)
 				return (1);
 		if (cur->right_op && cur->operator->type != DLESS)
-			if (expand_token(cur->right_op, home_dir) == 1)
+			if (expand_token(cur->right_op, home_dir, true) == 1)
 				return (1);
 		cur = next;
 	}
@@ -103,8 +104,8 @@ int			expand(t_simple_cmd *command)
 
 	home_dir = get_var_value("HOME");
 	dup_command_args(command);
-	if (expand_token_list(command->args_exp, home_dir) == 1
-	|| expand_token_list(command->assigns_exp, home_dir) == 1
+	if (expand_token_list(command->args_exp, home_dir, true) == 1
+	|| expand_token_list(command->assigns_exp, home_dir, false) == 1
 	|| expand_redir_list(command->redirs_exp, home_dir) == 1)
 		return (1);
 	cur = command->redirs_exp;
