@@ -12,7 +12,7 @@
 
 #include "shell.h"
 
-static char	*g_cmd;
+static char	**g_cmd;
 
 void		wait_for_all_jobs(void)
 {
@@ -29,14 +29,23 @@ void		wait_for_all_jobs(void)
 	}
 }
 
-static int	input_cmd_sub(const char *prompt, bool heredoc)
+static int	input_cmd_sub(const char *prompt
+		, __attribute__((unused)) bool heredoc)
 {
+	static size_t	i = 0;
+	char			*tmp;
+
 	(void)prompt;
-	(void)heredoc;
-	if (g_cmd)
+	if (g_cmd[i])
 	{
-		g_lexer.line = g_cmd;
-		g_cmd = NULL;
+		if (g_lexer.line)
+		{
+			tmp = g_lexer.line;
+			g_lexer.line = ft_strjoin_triple(g_lexer.line, g_cmd[i++], "\n");
+			free(tmp);
+		}
+		else
+			g_lexer.line = ft_strjoin(g_cmd[i++], "\n");
 		return (0);
 	}
 	else
@@ -48,7 +57,6 @@ static int	input_cmd_sub(const char *prompt, bool heredoc)
 		}
 		return (INPUT_EOF);
 	}
-	return (0);
 }
 
 static char	*get_output(int fd)
@@ -114,7 +122,7 @@ int			cmd_sub(t_token *token, int *i)
 	end = get_end_of_braces(token->value->str, *i);
 	token->value->str[end] = '\0';
 	token->exp_info->str[end] = '\0';
-	g_cmd = ft_strdup(token->value->str + *i + 2);
+	g_cmd = ft_strsplit(token->value->str + *i + 2, '\n');
 	if (pipe(fildes) < 0)
 		return (1 && ft_dprintf(2, "42sh: could not open cmd sub pipe\n"));
 	if ((output = exec_cmd_sub(fildes)) == NULL)
@@ -122,7 +130,7 @@ int			cmd_sub(t_token *token, int *i)
 	token_replace_between(token, *i, end, output);
 	*i += ft_strlen(output) - 1;
 	free(output);
-	free(g_cmd);
+	free_arr(g_cmd);
 	g_cmd = NULL;
 	return (0);
 }

@@ -24,3 +24,15 @@ echo '~~~'
 
 #TEST 05
 echo $(echo 1; echo 2) &
+sleep 0.1
+echo '~~~'
+
+#TEST 06
+echo $(ls /usr/
+ls /usr/)
+echo '~~~'
+
+#TEST 07
+echo $(ls "bonjour
+les 
+amiches")

@@ -170,6 +170,7 @@ char					*ft_strcat(char *s1, const char *s2);
 size_t					ft_strnlen(const char *s, size_t maxlen);
 char					*ft_strndup(const char *s1, size_t n);
 char					*ft_strncpy(char *dest, const char *src, size_t n);
+char					**ft_strsplit(const char *str, char c);
 
 /*
 ** -----------------------------Put-----------------------------
