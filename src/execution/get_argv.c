@@ -20,19 +20,21 @@ char	**get_argv(t_simple_cmd *command)
 
 	count = 0;
 	arg = command->args_exp;
-	if (!arg)
-		return (NULL);
 	while (arg)
 	{
-		count++;
+		if (arg->value->len != 0)
+			count++;
 		arg = arg->next;
 	}
+	if (count == 0)
+		return (NULL);
 	argv = ft_xmalloc(sizeof(char *) * (count + 1));
 	arg = command->args_exp;
 	count = 0;
 	while (arg)
 	{
-		argv[count++] = ft_strdup(arg->value->str);
+		if (arg->value->len != 0)
+			argv[count++] = ft_strdup(arg->value->str);
 		arg = arg->next;
 	}
 	return (argv);
