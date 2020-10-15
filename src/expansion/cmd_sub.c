@@ -75,6 +75,8 @@ static char	*get_output(int fd)
 	return (str);
 }
 
+static void *g_ignore_fake_leak;
+
 static char	*exec_cmd_sub(int *fildes)
 {
 	int		pid;
@@ -87,6 +89,7 @@ static char	*exec_cmd_sub(int *fildes)
 		dup2(fildes[1], STDOUT_FILENO);
 		close(fildes[1]);
 		close(fildes[0]);
+		g_ignore_fake_leak = g_jobs;
 		g_jobs = NULL;
 		g_current_jobs = NULL;
 		g_shell.interactive_mode = false;
@@ -98,8 +101,7 @@ static char	*exec_cmd_sub(int *fildes)
 	}
 	close(fildes[1]);
 	output = get_output(fildes[0]);
-	waitpid(pid, NULL, 0);
-	if (g_interrupt)
+	if (waitpid(pid, NULL, 0) > 0 && g_interrupt)
 		output[0] = '\0';
 	return (output);
 }
