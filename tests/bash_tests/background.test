@@ -1,36 +1,36 @@
-#TEST 00 
-echo 'ls &'
-ls & sleep .2
+#TEST 00
+echo '/bin/echo lol &'
+/bin/echo lol & sleep .2
 echo '~~~'
 
-#TEST 01 
-echo 'ls | cat -e &'
-ls | cat -e & sleep .2
+#TEST 01
+echo '/bin/echo lol | cat -e &'
+/bin/echo lol | cat -e & sleep .2
 echo '~~~'
 
-#TEST 02 
-echo '(ls | cat) &'
-(ls | cat) & sleep .2
+#TEST 02
+echo '(/bin/echo lol | cat) &'
+(/bin/echo lol | cat) & sleep .2
 echo '~~~'
 
-#TEST 03 
-echo '{ ls | cat; } &'
-{ ls | cat; } & sleep .2
+#TEST 03
+echo '{ /bin/echo lol | cat; } &'
+{ /bin/echo lol | cat; } & sleep .2
 echo '~~~'
 
-#TEST 04 
-echo '( ls | cat -e & ls ) &'
-( ls | cat -e & sleep .2 ) & sleep .2
+#TEST 04
+echo '( /bin/echo lol | cat -e & /bin/echo lol ) &'
+( /bin/echo lol | cat -e & sleep .2 ) & sleep .2
 echo '~~~'
 
-#TEST 05 
-echo '{ ls | cat -e & ls; } &'
-{ ls | cat -e & sleep .2; } & sleep .2
+#TEST 05
+echo '{ /bin/echo lol | cat -e & /bin/echo lol; } &'
+{ /bin/echo lol | cat -e & sleep .2; } & sleep .2
 echo '~~~'
 
-#TEST 06 
-echo '( ls | cat & { ls | cat -e & } ) & cat << EOF &'
-( ls | cat & sleep .2; { ls | cat -e & sleep .2; } & sleep .4 ) & sleep .6; cat << EOF & sleep .6
+#TEST 06
+echo '( /bin/echo lol | cat & { /bin/echo lol | cat -e & } ) & cat << EOF &'
+( /bin/echo lol | cat & sleep .2; { /bin/echo lol | cat -e & sleep .2; } & sleep .4 ) & sleep .6; cat << EOF & sleep .6
 blabla
 EOF
 echo '~~~'

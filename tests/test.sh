@@ -5,9 +5,22 @@
 #brew install gnu-sed
 #to install them
 
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 cd "$DIR/.."
+
+source tests/progress_bar.sh
+
+NB_TESTS=$(ls tests/live_tests/*.stdin tests/live_tests/job_control/*.stdin tests/*_tests/*.test | wc -l)
+
+test_name_max_len=0
+for file in tests/live_tests/*.stdin tests/*_tests/*.test; do
+	len=$(basename "$file" | cut -d '.' -f 1 | wc -m)
+	if test "$len" -ge "$test_name_max_len"; then
+		test_name_max_len="$len"
+	fi
+done
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
 	CSPLIT=gcsplit
@@ -43,17 +56,21 @@ for a in {a..f}; do
 	done
 done
 
+i=0
 for file in "$DIR/bash_tests/"*.test
 do
 	test_name=$(basename "$file" | cut -d '.' -f 1)
-	if [ $test_name = "stdin1" ]
-	then
+	((i++))
+	progress_bar "Testing..." "$i" "$NB_TESTS" "$(printf %+"$test_name_max_len"s "$test_name")"
+	if [ $test_name = "stdin1" ]; then
 		./42sh < "$file" > "$DIR/$test_name.42sh" 2>&1;
 		bash < "$file" > "$DIR/$test_name.bash" 2>&1;
-	elif [ $test_name = "stdin2" ]
-	then
+	elif [ $test_name = "stdin2" ]; then
 		./42sh "$file" < "$file" > "$DIR/$test_name.42sh" 2>&1;
 		bash "$file" < "$file" > "$DIR/$test_name.bash" 2>&1;
+	elif [ $test_name = "background" ]; then
+		./42sh "$file" > "$DIR/$test_name.42sh" 2>&1 &
+		bash "$file" > "$DIR/$test_name.bash" 2>&1	&
 	else
 		./42sh "$file" > "$DIR/$test_name.42sh" 2>&1;
 		bash "$file" > "$DIR/$test_name.bash" 2>&1;
@@ -69,7 +86,14 @@ rm -rf glob
 for file in "$DIR/fixed_tests/"*.test
 do
 	test_name=$(basename "$file" | cut -d '.' -f 1)
-	./42sh "$file" > "$DIR/$test_name.42sh" 2>&1;
+	((i++))
+	progress_bar "Testing..." "$i" "$NB_TESTS" "$(printf %+"$test_name_max_len"s "$test_name")"
+	if [[ "$test_name" =~ sighup* ]]; then
+		./42sh "$file" > "$DIR/$test_name.42sh" 2>&1 & disown
+	else
+		./42sh "$file" > "$DIR/$test_name.42sh" 2>&1
+	fi
+
 	cp "$DIR/fixed_tests/$test_name.right" "$DIR/$test_name.bash"
 done
 
@@ -87,6 +111,8 @@ cd ..
 for file in "$DIR/live_tests/"*.timing
 do
 	test_name=$(basename "$file" | cut -d '.' -f 1)
+	((i++))
+	progress_bar "Testing..." "$i" "$NB_TESTS" "$(printf %+"$test_name_max_len"s "$test_name")"
 	scriptlive -T "$DIR/live_tests/$test_name".timing --log-in "$DIR/live_tests/$test_name.stdin" --maxdelay 0.03 -c ./42sh > "$DIR/$test_name.42sh"
 	cp "$DIR/live_tests/$test_name.right" "$DIR/$test_name.bash"
 done
@@ -97,6 +123,9 @@ if test -n "$1" && test "$1" = "--job_control"; then
 	for file in "$DIR/live_tests/job_control/"*.timing
 	do
 		test_name=$(basename "$file" | cut -d '.' -f 1)
+		test_name=$(basename "$file" | cut -d '.' -f 1)
+		((i++))
+		progress_bar "Testing..." "$i" "$NB_TESTS" "$(printf %+"$test_name_max_len"s "$test_name")"
 		scriptlive -T "$DIR/live_tests/job_control/$test_name".timing --log-in "$DIR/live_tests/job_control/$test_name.stdin" \
 		--maxdelay 0.03 -c "./42sh > $DIR/$test_name.42sh 2>&1" >/dev/null
 		cp "$DIR/live_tests/job_control/$test_name.right" "$DIR/$test_name.bash"
@@ -106,6 +135,8 @@ fi
 ./42sh "$DIR/setenv.test" > "$DIR/setenv.42sh" 2>&1
 tcsh "$DIR/setenv.test"> "$DIR/setenv.bash" 3>&1
 
+
+wait
 
 "$SED" -i -E  's/.*: line [[:digit:]]*:/42sh:/g' "$DIR/"*.bash
 "$SED" -i -E "s/(.+)\/$/\1/g" "$DIR/cd.42sh" #remove / at the end of line for $PWD
@@ -147,6 +178,7 @@ EXIT_ST=0
 n=0
 ok=0
 
+echo
 for file in "$DIR/bash/"*
 do
 	file="$(basename "$file")"
