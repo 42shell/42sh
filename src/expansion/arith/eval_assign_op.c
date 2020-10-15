@@ -14,7 +14,7 @@
 
 long		eval_assign_node(t_node *node)
 {
-	char	buf[10];
+	char	buf[12];
 
 	ft_itoa(eval_arith_ast(node->right), buf);
 	set_var(node->left->token->value->str, buf, 0);
@@ -23,7 +23,7 @@ long		eval_assign_node(t_node *node)
 
 long		eval_add_assign_node(t_node *node)
 {
-	char	buf[10];
+	char	buf[12];
 
 	ft_itoa(eval_arith_ast(node->left) + eval_arith_ast(node->right), buf);
 	set_var(node->left->token->value->str, buf, 0);
@@ -32,7 +32,7 @@ long		eval_add_assign_node(t_node *node)
 
 long		eval_sub_assign_node(t_node *node)
 {
-	char	buf[10];
+	char	buf[12];
 
 	ft_itoa(eval_arith_ast(node->left) - eval_arith_ast(node->right), buf);
 	set_var(node->left->token->value->str, buf, 0);
@@ -41,7 +41,7 @@ long		eval_sub_assign_node(t_node *node)
 
 long		eval_mul_assign_node(t_node *node)
 {
-	char	buf[10];
+	char	buf[12];
 
 	ft_itoa(eval_arith_ast(node->left) * eval_arith_ast(node->right), buf);
 	set_var(node->left->token->value->str, buf, 0);
@@ -50,7 +50,7 @@ long		eval_mul_assign_node(t_node *node)
 
 long		eval_div_assign_node(t_node *node)
 {
-	char	buf[10];
+	char	buf[12];
 	long	tmp;
 
 	tmp = eval_arith_ast(node->right);

@@ -37,4 +37,8 @@ void	token_replace_between(t_token *token, int start, int end,
 									char *replacement);
 void	split_fields(t_token *token);
 
+t_redir	*redir_dup(t_redir *redir);
+t_redir	*redir_list_dup(t_redir *list);
+void	dup_command_args(t_simple_cmd *command);
+
 #endif

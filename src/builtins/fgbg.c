@@ -19,12 +19,12 @@ t_job	*get_job_by_str(char *str)
 
 	if (str[0] == '%')
 	{
-		if (str[1] == '+')
+		if (!str[1] || str[1] == '%' || str[1] == '+')
 			return (g_jobs);
 		if (str[1] == '-')
 		{
-			if (g_jobs && g_jobs->next)
-				return (g_jobs->next);
+			if (g_jobs)
+				return (g_jobs->next ? g_jobs->next : g_jobs);
 			return (NULL);
 		}
 		id = ft_atoi(++str);
@@ -57,7 +57,8 @@ int		builtin_bg(char **argv, __attribute__((unused)) t_array *env)
 		return (1);
 	}
 	continue_job(job, true);
-	print_job(job, false);
+	if (SHOW_NOTIF)
+		print_job(job, false);
 	return (0);
 }
 

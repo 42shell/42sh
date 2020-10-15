@@ -33,14 +33,18 @@ void		redir_del(t_redir **redir)
 	token_del(&(*redir)->left_op);
 	token_del(&(*redir)->operator);
 	token_del(&(*redir)->right_op);
+	token_del(&(*redir)->heredoc);
 	ft_memdel((void **)redir);
 }
 
 void		simple_command_del(t_simple_cmd **simple)
 {
 	redir_del(&(*simple)->redirs);
+	redir_del(&(*simple)->redirs_exp);
 	token_list_del(&(*simple)->assigns);
+	token_list_del(&(*simple)->assigns_exp);
 	token_list_del(&(*simple)->args);
+	token_list_del(&(*simple)->args_exp);
 	free_arr((*simple)->argv);
 	ft_memdel((void **)simple);
 }

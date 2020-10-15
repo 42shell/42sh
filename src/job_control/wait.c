@@ -32,10 +32,15 @@ static void	set_exit_status(t_process *process)
 	}
 }
 
-static void	bubble_up_job(t_job **list, t_job *job)
+static void	update_jobs_list(t_job *job)
 {
-	remove_job_from_list(list, job);
-	add_job_to_list(list, job, false);
+	if (job_is_in_list(g_jobs, job))
+	{
+		remove_job_from_list(&g_jobs, job);
+		add_job_to_list(&g_jobs, job, false);
+	}
+	else
+		move_job_in_persistent_list(job);
 }
 
 /*
@@ -61,10 +66,7 @@ int			set_process_status(pid_t pid, int status)
 		process->stopped = true;
 		process->signaled = WSTOPSIG(process->status);
 		g_last_exit_st = 128 + process->signaled;
-		if (job_is_in_list(g_jobs, process->job))
-			bubble_up_job(&g_jobs, process->job);
-		else
-			move_job_in_persistent_list(process->job);
+		update_jobs_list(process->job);
 	}
 	else if (WIFCONTINUED(status))
 		process->stopped = false;
@@ -82,7 +84,8 @@ void		update_status(void)
 	pid_t			pid;
 	int				status;
 
-	while ((pid = waitpid(WAIT_ANY, &status, WNOHANG | WUNTRACED | WCONTINUED)) > 0)
+	while ((pid = waitpid(WAIT_ANY, &status,
+			WNOHANG | WUNTRACED | WCONTINUED)) > 0)
 	{
 		if (set_process_status(pid, status) < 0)
 		{

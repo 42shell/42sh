@@ -12,8 +12,10 @@
 
 #include "shell.h"
 
-static void	format_exit_status(t_dstr *buf, char *itoa_buf, t_process *process)
+void		format_exit_status(t_dstr *buf, t_process *process)
 {
+	char	itoa_buf[12];
+
 	if (WIFSIGNALED(process->status))
 	{
 		ft_itoa(WTERMSIG(process->status), itoa_buf);
@@ -46,7 +48,7 @@ void		format_process_info(t_dstr *buf, t_process *process, int padding)
 		ft_dstr_cat(buf, itoa_buf);
 	}
 	if (process->done)
-		format_exit_status(buf, itoa_buf, process);
+		format_exit_status(buf, process);
 	else if (process->stopped)
 	{
 		ft_itoa(WSTOPSIG(process->status), itoa_buf);
@@ -58,7 +60,7 @@ void		format_process_info(t_dstr *buf, t_process *process, int padding)
 		ft_dstr_cat(buf, " Running");
 }
 
-void		format_job_info(t_dstr *buf, t_job *job, bool pgid)
+void		format_job_id(t_dstr *buf, t_job *job)
 {
 	char	itoa_buf[12];
 
@@ -72,13 +74,12 @@ void		format_job_info(t_dstr *buf, t_job *job, bool pgid)
 		ft_dstr_cat(buf, "- ");
 	else
 		ft_dstr_cat(buf, "  ");
-	if (pgid && SHOW_PID)
-	{
-		ft_itoa(job->pgid, itoa_buf);
-		ft_dstr_cat(buf, itoa_buf);
-	}
+}
+
+void		format_job_status(t_dstr *buf, t_job *job)
+{
 	if (job_is_done(job))
-		format_exit_status(buf, itoa_buf, job->processes);
+		format_exit_status(buf, job->processes);
 	else if (job_is_stopped(job))
 		ft_dstr_cat(buf, " Stopped");
 	else

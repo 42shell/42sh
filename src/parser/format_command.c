@@ -30,7 +30,10 @@ void	format_simple_command(t_dstr *buf, t_command *command)
 		if (redir->left_op)
 			ft_dstr_cat(buf, redir->left_op->value->str);
 		ft_dstr_cat(buf, redir->operator->value->str);
-		ft_dstr_cat(buf, redir->right_op->value->str);
+		if (redir->heredoc)
+			ft_dstr_cat(buf, redir->heredoc->value->str);
+		else
+			ft_dstr_cat(buf, redir->right_op->value->str);
 		if ((redir = redir->next))
 			ft_dstr_cat(buf, " ");
 	}

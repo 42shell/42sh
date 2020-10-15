@@ -8,7 +8,7 @@ language: c
 compiler: gcc
 
 env:
-  - TEST=test.sh DBG_FLAGS="-fsanitize=address -ggdb -O0 -coverage -DHIDE_PID"
+  - TEST="test.sh" DBG_FLAGS="-fsanitize=address -ggdb -O0 -coverage -DHIDE_PID -DHIDE_NOTIF"
   - TEST=norminette.sh
 
 addons:
@@ -35,7 +35,7 @@ install:
   - test "$TEST" == "test.sh" && make -j3 || test "$TEST" != "test.sh"
 
 script:
-  - tests/"$TEST"
+  - tests/"$TEST" --job_control
   - gcov --version
 
 after_success: test "$TEST" == "test.sh" && bash <(curl -s https://codecov.io/bash)

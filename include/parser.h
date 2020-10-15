@@ -55,13 +55,17 @@ typedef struct				s_redir
 	t_token					*left_op;
 	t_token					*operator;
 	t_token					*right_op;
+	t_token					*heredoc;
 }							t_redir;
 
 typedef struct				s_simple_cmd
 {
 	t_redir					*redirs;
+	t_redir					*redirs_exp;
 	t_token					*args;
+	t_token					*args_exp;
 	t_token					*assigns;
+	t_token					*assigns_exp;
 	char					**argv;
 	bool					is_expand;
 }							t_simple_cmd;

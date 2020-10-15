@@ -19,7 +19,7 @@ char	**get_argv(t_simple_cmd *command)
 	int		count;
 
 	count = 0;
-	arg = command->args;
+	arg = command->args_exp;
 	if (!arg)
 		return (NULL);
 	while (arg)
@@ -28,7 +28,7 @@ char	**get_argv(t_simple_cmd *command)
 		arg = arg->next;
 	}
 	argv = ft_xmalloc(sizeof(char *) * (count + 1));
-	arg = command->args;
+	arg = command->args_exp;
 	count = 0;
 	while (arg)
 	{

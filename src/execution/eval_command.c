@@ -30,17 +30,24 @@ int			eval_simple_command(t_command *command)
 	simple = command->value.simple;
 	if (!simple->is_expand)
 	{
+		free_arr(simple->argv);
 		if (expand(simple) == 1)
 			return (g_last_exit_st = 1);
 		if (!(simple->argv = get_argv(simple)))
+		{
+			simple->is_expand = false;
 			return (exec_simple_command(simple));
+		}
 	}
 	if (!g_already_forked && simple->argv && !is_builtin(simple->argv[0]))
 	{
 		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
-		return (launch_process(process, 0));
+		launch_process(process, 0);
 	}
-	return (exec_simple_command(simple));
+	else
+		exec_simple_command(simple);
+	simple->is_expand = false;
+	return (g_last_exit_st);
 }
 
 int			eval_command(t_command *command)

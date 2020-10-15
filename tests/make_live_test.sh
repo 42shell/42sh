@@ -5,7 +5,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cd "$DIR/.."
 
 if [ -z "$1" ]; then
-	echo "Usage: tests/make_live_tests.sh [TEST_NAME]"
+	echo "Usage: tests/make_live_test.sh [TEST_NAME]"
 	exit 1
 fi
 

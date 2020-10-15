@@ -16,7 +16,13 @@ void		move_job_in_persistent_list(t_job *job)
 {
 	t_process	*process;
 	t_dstr		*buf;
-	
+
+	if (job_is_in_list(g_jobs, job))
+	{
+		remove_job_from_list(&g_jobs, job);
+		add_job_to_list(&g_jobs, job, false);
+		return ;
+	}
 	process = job->processes;
 	while (process)
 	{

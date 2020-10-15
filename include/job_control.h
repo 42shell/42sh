@@ -21,6 +21,12 @@
 #  define SHOW_PID		1
 # endif
 
+# ifdef HIDE_NOTIF
+#  define SHOW_NOTIF	0
+# else
+#  define SHOW_NOTIF	1
+# endif
+
 typedef struct			s_process
 {
 	struct s_job		*job;
@@ -117,7 +123,9 @@ void					reset_signals(void);
 ** job display
 */
 
-void					format_job_info(t_dstr *buf, t_job *job, bool pgid);
+void					format_job_status(t_dstr *buf, t_job *job);
+void					format_job_id(t_dstr *buf, t_job *job);
+void					format_exit_status(t_dstr *buf, t_process *process);
 void					format_process_info(t_dstr *buf, t_process *process,
 						int padding);
 void					format_processes(t_dstr *buf, t_process *list,

@@ -1,0 +1,26 @@
+true & sleep .4
+ps --ppid $$ -o state,comm; sleep .4
+
+sleep 100 & sleep .4
+ps --ppid $$ -o state,comm; sleep .4
+kill -9 $! 2>&/dev/null; sleep .4
+
+sleep 200 & sleep .4
+kill -TSTP $! 2>&/dev/null sleep .4
+ps --ppid $$ -o state,comm; sleep .4
+kill -9 $! 2>&/dev/null; sleep .4
+
+cat & sleep .4
+ps --ppid $$ -o state,comm; sleep .4
+kill -9 $! 2>&/dev/null; sleep .4
+
+true | cat -e & sleep .4
+ps --ppid $$ -o state,comm; sleep .4
+
+sleep 50 | sleep 50 & sleep .4
+ps --ppid $$ -o state,comm; sleep .4
+pkill -9 -g $! sleep 2>&/dev/null; sleep .4
+
+sleep 100 | cat -e & sleep .4
+ps --ppid $$ -o state,comm; sleep .4
+pkill -9 -g $! 2>&/dev/null; sleep .4

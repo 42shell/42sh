@@ -54,15 +54,16 @@ void		format_processes(t_dstr *buf, t_process *list, bool l_opt)
 	{
 		if (l_opt)
 		{
-			ft_dstr_add(buf, '\n');
-			start_of_line = buf->len;
-			format_process_info(buf, list, g_padding_left);
+			start_of_line = list->next ? buf->len : 0;
+			format_process_info(buf, list, list->next ? g_padding_left : 0);
 			pad_right(buf, FIELD_WIDTH - 2 - (buf->len - start_of_line));
 			if (list->stdin == 0)
 				ft_dstr_cat(buf, "  ");
 		}
 		ft_dstr_cat(buf, list->command_str->str);
-		if (!l_opt && list->prev)
+		if (l_opt && list->prev)
+			ft_dstr_add(buf, '\n');
+		else if (list->prev)
 			ft_dstr_add(buf, ' ');
 		list = list->prev;
 	}
@@ -76,7 +77,9 @@ void		print_job(t_job *job, bool l_opt)
 		return ;
 	g_padding_left = 1;
 	job_format = ft_dstr_new(64);
-	format_job_info(job_format, job, l_opt);
+	format_job_id(job_format, job);
+	if (!l_opt)
+		format_job_status(job_format, job);
 	set_padding_left(job_format->str);
 	if (!l_opt)
 		pad_right(job_format, FIELD_WIDTH - job_format->len);

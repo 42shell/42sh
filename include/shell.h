@@ -84,24 +84,10 @@ typedef struct			s_var
 }						t_var;
 
 /*
-** Don't forget to setpgid(0, shell_pgid) if !job_control_enabled or merge procsub
-** add notif for CONT jobs ?
-**
-** TODO: 
-** -in place expansion causes problems (jobs with heredocs)
+** TODO:
 ** -shell script
 **
-** Small issues:
-** -Running background jobs should be inserted in the
-**  stack below stopped jobs. Who cares  ? I don t
-** -Useless jobs (containing no processes) are added
-** 	to g_current_jobs stack when executing some commands
-**  (and_ors, brace_groups). Does not cause any problem,
-**  and they are deleted as soon as the command evaluation
-**  is finished.
-**
-** problems:
-** -newline printed after expanded heredoc in jobs
+** question:
 ** -store aborted multi-lines in history ? bash does
 **
 ** old problems:
