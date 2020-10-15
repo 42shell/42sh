@@ -1,2 +1,22 @@
 #TEST 00
 ls $(ls /usr/include)
+echo '~~~'
+
+#TEST 01
+var=$(ls /)
+echo $var
+echo '~~~'
+
+#TEST 02
+echo $(invalidcommand)
+echo '~~~'
+
+#TEST 04
+ls $(/bin/echo -n nonewline)
+
+#TEST 03
+ls $(/bin/echo -n nonewline hop hop)
+echo '~~~'
+
+#TEST 04
+echo $(sleep 0.1 & sleep 0.1 & ls)
