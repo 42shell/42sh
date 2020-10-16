@@ -12,7 +12,6 @@
 
 #include "shell.h"
 
-# define AMBIG_REDIR	2
 /*
 ** see POSIX Shell Command Language 2.6 Word Expansions
 **

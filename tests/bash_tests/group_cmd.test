@@ -68,8 +68,8 @@ echo '{ ls; { ls } }
 echo '~~~'
 
 #TEST 13
-echo '{ ls -z 2>&1 && ls; } 1>tmp | cat -e; rm tmp'
-{ ls -z 2>&1 && ls; } 1>tmp | cat -e; rm tmp
+echo 'file=tmp; { ls -z 2>&1 && ls; } 1>$file | cat -e; cat "$file"; rm "$file"'
+file=tmp; { ls -z 2>&1 && ls; } 1>$file | cat -e; cat "$file"; rm "$file"
 echo '~~~'
 
 #TEST 14
@@ -104,4 +104,10 @@ echo '{ (ls && ls -z) && echo ok; } 2>&1'
 echo '{ echo foo; echo bar >out; ls DO_NOT_EXIST; } >out 2>err'
 { echo foo; echo bar >out; ls DO_NOT_EXIST; } >out 2>err
 cat out; cat err; rm out; rm err;
+echo '~~~'
+
+#TEST21
+echo "OUT='ambig out'; ERR='ambig err'; { echo foo; echo bar >\$OUT; ls DO_NOT_EXIST; } >\$OUT 2>\$ERR"
+OUT='ambig out'; ERR='ambig err'; { echo foo; echo bar >$OUT; ls DO_NOT_EXIST; } >$OUT 2>$ERR
+cat 'ambig out'; cat 'ambig err'; rm 'ambig out'; rm 'ambig err';
 echo '~~~'

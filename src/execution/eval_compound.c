@@ -76,8 +76,12 @@ int			eval_group_command(t_command *command)
 		return (launch_process(process, 0));
 	}
 	dup_group_redir_list(command);
-	if (expand_redir_list(command->redir_list_exp, get_var_value("HOME")) == 1)
+	if (expand_redir_list(command->redir_list_exp, get_var_value("HOME"))
+	== AMBIG_REDIR)
+	{
+		ft_dprintf(2, "42sh: ambiguous redirect\n");
 		return (g_last_exit_st = 1);
+	}
 	if (set_redir(command->redir_list_exp, &fd_backups) != 0)
 		return (g_last_exit_st = 1);
 	if (command->value.compound_list && command->value.compound_list->next)
