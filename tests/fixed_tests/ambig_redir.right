@@ -3,5 +3,5 @@ not a builtin error but whatever
 ~~~
 OUT='ambig out'; ERR='ambig err'; { echo foo; echo bar >$OUT; ls DO_NOT_EXIST; } >$OUT 2>$ERR; cat 'ambig out'; cat 'ambig err';
 42sh: ambiguous redirect
-cat: ambig out: No such file or directory
-cat: ambig err: No such file or directory
+cat: 'ambig out': No such file or directory
+cat: 'ambig err': No such file or directory
