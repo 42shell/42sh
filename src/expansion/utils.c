@@ -62,3 +62,9 @@ void		dup_command_args(t_simple_cmd *command)
 	command->assigns_exp = token_list_dup(command->assigns);
 	command->redirs_exp = redir_list_dup(command->redirs);
 }
+
+void		dup_group_redir_list(t_command *command)
+{
+	redir_del(&command->redir_list_exp);
+	command->redir_list_exp = redir_list_dup(command->redir_list);
+}

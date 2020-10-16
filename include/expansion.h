@@ -16,6 +16,7 @@
 # include "shell.h"
 
 int		expand(t_simple_cmd *command);
+int		expand_redir_list(t_redir *redir_list, char *home_dir);
 int		dollar_expand(t_token *token, int start, bool heredoc);
 int		arith_expand(t_token *token, int *i);
 int		cmd_sub(t_token *token, int *i);
@@ -41,5 +42,6 @@ void	split_fields(t_token *token);
 t_redir	*redir_dup(t_redir *redir);
 t_redir	*redir_list_dup(t_redir *list);
 void	dup_command_args(t_simple_cmd *command);
+void	dup_group_redir_list(t_command *command);
 
 #endif

@@ -12,6 +12,7 @@
 
 #include "shell.h"
 
+# define AMBIG_REDIR	2
 /*
 ** see POSIX Shell Command Language 2.6 Word Expansions
 **
@@ -75,7 +76,7 @@ static int	expand_token_list(t_token *token_list, char *home_dir, bool split)
 	return (0);
 }
 
-static int	expand_redir_list(t_redir *redir_list, char *home_dir)
+int			expand_redir_list(t_redir *redir_list, char *home_dir)
 {
 	t_redir	*cur;
 	t_redir *next;
@@ -84,13 +85,22 @@ static int	expand_redir_list(t_redir *redir_list, char *home_dir)
 	while (cur != NULL)
 	{
 		next = cur->next;
-		if (cur->left_op && cur->operator->type != DLESS)
-			if (expand_token(cur->left_op, home_dir, true) == 1)
-				return (1);
-		if (cur->right_op && cur->operator->type != DLESS)
-			if (expand_token(cur->right_op, home_dir, true) == 1)
-				return (1);
+		if ((cur->left_op && cur->operator->type != DLESS
+			&& expand_token(cur->left_op, home_dir, true) == 1)
+		|| (cur->right_op && cur->operator->type != DLESS
+			&& expand_token(cur->right_op, home_dir, true) == 1))
+			return (1);
 		cur = next;
+	}
+	cur = redir_list;
+	while (cur)
+	{
+		if (cur->right_op && cur->right_op->next)
+		{
+			token_list_del(&cur->right_op->next);
+			return (AMBIG_REDIR);
+		}
+		cur = cur->next;
 	}
 	return (0);
 }
@@ -100,24 +110,17 @@ extern char *g_expand_error_token;
 int			expand(t_simple_cmd *command)
 {
 	char	*home_dir;
-	t_redir	*cur;
+	int		ret;
 
 	home_dir = get_var_value("HOME");
 	dup_command_args(command);
-	if (expand_token_list(command->args_exp, home_dir, true) == 1
-	|| expand_token_list(command->assigns_exp, home_dir, false) == 1
-	|| expand_redir_list(command->redirs_exp, home_dir) == 1)
-		return (1);
-	cur = command->redirs_exp;
-	while (cur)
+	if ((ret = expand_token_list(command->args_exp, home_dir, true))
+	|| (ret = expand_token_list(command->assigns_exp, home_dir, false))
+	|| (ret = expand_redir_list(command->redirs_exp, home_dir)))
 	{
-		if (cur->right_op && cur->right_op->next)
-		{
-			token_list_del(&cur->right_op->next);
+		if (ret == AMBIG_REDIR)
 			ft_dprintf(2, "42sh: ambiguous redirect\n");
-			return (1);
-		}
-		cur = cur->next;
+		return (1);
 	}
 	command->is_expand = true;
 	return (0);
