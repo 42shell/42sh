@@ -1,0 +1,8 @@
+not a builtin error but whatever
+42sh: ambiguous redirect
+~~~
+42sh: ambiguous redirect
+cat: ambig out: No such file or directory
+cat: ambig err: No such file or directory
+rm: ambig out: No such file or directory
+rm: ambig err: No such file or directory

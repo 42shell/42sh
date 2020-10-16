@@ -18,9 +18,6 @@ cd: error
 ~~~
 42sh: cd: HOME not set
 ~~~
-not a builtin error but whatever
-42sh: ambiguous redirect
-~~~
 cd: error
 cd: error
 cd: PWD not set
