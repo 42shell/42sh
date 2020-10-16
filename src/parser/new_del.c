@@ -74,6 +74,7 @@ void		command_del(t_command **command)
 		complete_command_del(&(*command)->value.if_clause->then_part);
 		ft_memdel((void **)&(*command)->value.if_clause);
 	}
+	redir_del(&((*command)->redir_list_exp));
 	redir_del(&((*command)->redir_list));
 	ft_memdel((void **)command);
 }
