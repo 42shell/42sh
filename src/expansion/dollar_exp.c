@@ -19,13 +19,13 @@ char	*g_expand_error_token = NULL;
 ** Probably should never return -1 since lexer enforces brace termination
 */
 
-int			get_end_of_braces(const char *str)
+int			get_end_of_braces(const char *str, int start)
 {
 	int		i;
 	t_array	*brack_stack;
 
 	brack_stack = array_new(4);
-	i = 0;
+	i = start;
 	while (str[i])
 	{
 		if (str[i] == '\\'
@@ -52,20 +52,27 @@ static bool	should_expand(char *str, int i, char quote_status, bool heredoc)
 	return (true);
 }
 
-static int	do_one_expansion(t_dstr *str, int *i)
+static int	do_one_expansion(t_token *token, int *i)
 {
-	if (str->str[*i + 1] == '{')
-		return (param_expand(str, i, true));
-	if (str->str[*i + 1] == '(' && str->str[*i + 2] == '(')
-		return (arith_expand(str, i));
-	return (param_expand(str, i, false));
+	if (token->value->str[*i + 1] == '{')
+		return (param_expand(token, i, true));
+	if (token->value->str[*i + 1] == '(')
+	{
+		if (token->value->str[*i + 2] == '(')
+			return (arith_expand(token, i));
+		else
+			return (cmd_sub(token, i));
+	}
+	return (param_expand(token, i, false));
 }
 
-int			dollar_expand(t_dstr *str, int start, bool heredoc)
+int			dollar_expand(t_token *token, int start, bool heredoc)
 {
 	int		i;
 	char	quote_status;
+	t_dstr	*str;
 
+	str = token->value;
 	ft_memdel((void**)&g_expand_error_token);
 	g_expand_error_token = ft_strdup(str->str);
 	i = start - 1;
@@ -75,7 +82,7 @@ int			dollar_expand(t_dstr *str, int start, bool heredoc)
 		if (quote_start(str->str, i, &quote_status))
 			continue ;
 		if (should_expand(str->str, i, quote_status, heredoc))
-			if (do_one_expansion(str, &i) == 1)
+			if (do_one_expansion(token, &i) == 1)
 				return (1);
 		if (i >= 0)
 			quote_stop(str->str, i, &quote_status);

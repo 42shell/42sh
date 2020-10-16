@@ -99,3 +99,9 @@ F\
 F
 E\
 OF
+
+#TEST 12
+cat << EOF
+$((1 + 1))
+$(ls)
+EOF

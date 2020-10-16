@@ -62,32 +62,32 @@ static bool	is_escapable(char c)
 ** increment i after deleting a backslash at the end of a word.
 */
 
-void		remove_quotes(t_dstr *str)
+void		remove_quotes(t_token *token)
 {
 	char	quote_status;
 	int		i;
 	bool	is_bslash;
 
 	quote_status = NONE;
-	i = 0;
-	while (str->str[i])
+	i = -1;
+	while (token->value->str[++i])
 	{
-		if (quote_start(str->str, i, &quote_status))
+		if (was_expanded(token, i))
+			continue;
+		if (quote_start(token->value->str, i, &quote_status))
 		{
 			if (g_dquote && quote_status == BSLASH
-					&& !is_escapable(str->str[i + 1]))
-				i++;
-			else
-				ft_dstr_remove(str, i, 1);
-			continue;
+					&& !is_escapable(token->value->str[i + 1]))
+				continue;
+			ft_dstr_remove(token->value, i, 1);
+			ft_dstr_remove(token->exp_info, i--, 1);
+			continue ;
 		}
 		is_bslash = (quote_status == BSLASH);
-		if (quote_stop(str->str, i, &quote_status))
-		{
-			is_bslash ? i++ : ft_dstr_remove(str, i, 1);
+		if (!quote_stop(token->value->str, i, &quote_status) || is_bslash)
 			continue;
-		}
-		i++;
+		ft_dstr_remove(token->value, i, 1);
+		ft_dstr_remove(token->exp_info, i--, 1);
 	}
 }
 

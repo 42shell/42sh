@@ -57,3 +57,14 @@ echo ~~~
 echo 'echo ~/bonjour'
 echo ~/bonjour
 echo ~~~
+
+#TEST 12
+lol='"do not remove these quotes !"'; echo $lol
+echo ~~~
+
+#TEST 13
+$EMPTYVARERRRRR
+echo ~~~
+
+#TEST 14
+ls $EMPTYVARERERERERERE auteur

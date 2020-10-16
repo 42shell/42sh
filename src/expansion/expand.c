@@ -24,57 +24,53 @@
 
 int			tilde_expand(t_dstr *str, char *home_dir)
 {
-	char	*new;
+	size_t len;
 
 	if (home_dir == NULL)
 		return (0);
 	if (str->str[0] == '~'
 	&& (str->str[1] == '\0' || str->str[1] == '/' || str->str[1] == ':'))
 	{
-		new = ft_strjoin(home_dir, str->str + 1);
-		free(str->str);
-		str->str = new;
-		return (ft_strlen(home_dir));
+		ft_dstr_remove(str, 0, 1);
+		len = ft_strlen(home_dir);
+		ft_dstr_insert(str, 0, home_dir, len);
+		return (len);
 	}
 	return (0);
 }
 
-/*
-** If the complete expansion appropriate for a word results in an empty field,
-** that empty field shall be deleted from the list of fields that form the
-** completely expanded command, unless the original word contained single-quote
-** or double-quote characters. -> bash does not seem to keep the empty field in
-** any case ? would be easier to implement.
-** ^ disregard that
-** we store the next token before expanding because we may add new tokens after
-** the token we expand, and we don't want to expand them
-*/
-
-static int	expand_token(t_token *token, char *home_dir)
+static int	expand_token(t_token *token, char *home_dir, bool split)
 {
 	int	pos;
 
+	if (token->type == SPLIT_FIELD)
+	{
+		path_expand(token);
+		return (0);
+	}
 	pos = tilde_expand(token->value, home_dir);
-	if (dollar_expand(token->value, pos, false) == 1)
+	token->exp_info = ft_dstr_dup(token->value);
+	ft_memset(token->exp_info->str, '0', token->exp_info->len);
+	if (dollar_expand(token, pos, false) == 1)
 		return (1);
+	if (split)
+		split_fields(token);
 	path_expand(token);
-	remove_quotes(token->value);
+	remove_quotes(token);
 	return (0);
 }
 
-static int	expand_token_list(t_token *token_list, char *home_dir)
+static int	expand_token_list(t_token *token_list, char *home_dir, bool split)
 {
 	t_token	*cur;
-	t_token *next;
 
 	cur = token_list;
 	while (cur != NULL)
 	{
-		next = cur->next;
-		if (cur->type == WORD)
-			if (expand_token(cur, home_dir) == 1)
+		if (cur->type == WORD || cur->type == SPLIT_FIELD)
+			if (expand_token(cur, home_dir, split) == 1)
 				return (1);
-		cur = next;
+		cur = cur->next;
 	}
 	return (0);
 }
@@ -89,10 +85,10 @@ static int	expand_redir_list(t_redir *redir_list, char *home_dir)
 	{
 		next = cur->next;
 		if (cur->left_op && cur->operator->type != DLESS)
-			if (expand_token(cur->left_op, home_dir) == 1)
+			if (expand_token(cur->left_op, home_dir, true) == 1)
 				return (1);
 		if (cur->right_op && cur->operator->type != DLESS)
-			if (expand_token(cur->right_op, home_dir) == 1)
+			if (expand_token(cur->right_op, home_dir, true) == 1)
 				return (1);
 		cur = next;
 	}
@@ -108,8 +104,8 @@ int			expand(t_simple_cmd *command)
 
 	home_dir = get_var_value("HOME");
 	dup_command_args(command);
-	if (expand_token_list(command->args_exp, home_dir) == 1
-	|| expand_token_list(command->assigns_exp, home_dir) == 1
+	if (expand_token_list(command->args_exp, home_dir, true) == 1
+	|| expand_token_list(command->assigns_exp, home_dir, false) == 1
 	|| expand_redir_list(command->redirs_exp, home_dir) == 1)
 		return (1);
 	cur = command->redirs_exp;

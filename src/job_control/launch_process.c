@@ -14,7 +14,7 @@
 
 extern int	*g_backups;
 
-static void		reset_signals(void)
+void		reset_signals(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);

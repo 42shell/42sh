@@ -39,6 +39,7 @@ SRC =	mem/ft_xmalloc.c \
 		str/ft_putendl.c\
 		str/ft_strrchr.c \
 		str/ft_strncpy.c \
+		str/ft_strsplit.c \
 		put/ft_putc.c \
 		put/ft_putstr.c \
 		char/ft_iswhitespace.c \

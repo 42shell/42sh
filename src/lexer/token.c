@@ -57,6 +57,8 @@ void	token_list_del(t_token **token)
 	if ((*token)->next)
 		token_list_del(&(*token)->next);
 	ft_dstr_del(&(*token)->value);
+	if ((*token)->exp_info)
+		ft_dstr_del(&(*token)->exp_info);
 	ft_memdel((void **)token);
 }
 
@@ -65,6 +67,8 @@ void	token_del(t_token **token)
 	if (!token || !*token)
 		return ;
 	ft_dstr_del(&(*token)->value);
+	if ((*token)->exp_info)
+		ft_dstr_del(&(*token)->exp_info);
 	ft_memdel((void **)token);
 }
 

@@ -13,55 +13,88 @@
 #include "shell.h"
 
 /*
-** Returns NULL if var name is invalid or braces aren't closed
+** replace a substring of a token between start and end (inclusive)
+** (token "0123456789", 3, 6, "test") -> 012test789
 */
 
-static char	*get_var_name(char *str, bool brace)
+void		token_replace_between(t_token *token, int start, int end,
+									char *replacement)
+{
+	size_t	len_to_delete;
+	size_t	repl_len;
+
+	len_to_delete = end - start + 1;
+	repl_len = ft_strlen(replacement);
+	ft_dstr_remove(token->value, start, len_to_delete);
+	ft_dstr_insert(token->value, start, replacement, repl_len);
+	if (token->exp_info)
+	{
+		ft_dstr_remove(token->exp_info, start, len_to_delete);
+		ft_dstr_insert(token->exp_info, start, replacement, repl_len);
+		ft_memset(token->exp_info->str + start, '1', repl_len);
+	}
+}
+
+/*
+** Returns -1 if var name is invalid or braces aren't closed
+** start is the index of the leading '$' char
+*/
+
+static int	get_var_end(char *str, int start, bool brace)
 {
 	int	i;
 	int	limit;
 
 	limit = INT_MAX;
-	i = 1;
+	i = start + 1;
 	if (brace)
 	{
-		if ((limit = get_end_of_braces(str)) == -1)
-			return (NULL);
-		i = 2;
+		if ((limit = get_end_of_braces(str, i - 1)) == -1)
+			return (-1);
+		i = start + 2;
 	}
 	if (str[i] == '$' || str[i] == '!' || str[i] == '?')
 	{
 		if (!brace || str[i + 1] == '}')
-			return (ft_strsub(str, i, 1));
+			return (i + 1);
 	}
 	if (ft_isdigit(str[i]))
-		return (NULL);
+		return (-1);
 	while ((ft_isalnum(str[i]) || str[i] == '_') && i < limit - 1)
 		i++;
-	if (i == 1 || (brace && (i != limit - 1 || !ft_isalnum(str[i]))))
-		return (NULL);
-	return (ft_strsub(str, brace ? 2 : 1, i - 1));
+	if (i == start + 1 || (brace && (i != limit - 1 || !ft_isalnum(str[i]))))
+		return (-1);
+	return (i + (brace ? 1 : 0));
 }
 
-int			param_expand(t_dstr *str, int *i, bool brace)
-{
-	char *var_value;
-	char *var_name;
+/*
+** get_var_end returns the index past the variable name
+** e.g for $HOME,lol it returns the index of ',' which is why when replacing
+** by the var name, if there is no brace we replace between start and end - 1
+*/
 
-	var_name = get_var_name(str->str + *i, brace);
-	if (var_name == NULL)
+int			param_expand(t_token *token, int *i, bool brace)
+{
+	int		end;
+	char	oldchar;
+	char	*var_value;
+
+	end = get_var_end(token->value->str, *i, brace);
+	if (end == -1)
 	{
 		if (brace)
 		{
-			ft_dprintf(2, "42sh: %s: bad substitution\n", str->str + *i);
+			ft_dprintf(2, "42sh: %s: bad substitution\n",
+					token->value->str + *i);
 			return (1);
 		}
 		return (0);
 	}
-	var_value = get_var_value(var_name);
-	ft_dstr_remove(str, *i, ft_strlen(var_name) + (brace ? 3 : 1));
-	ft_dstr_insert(str, *i, var_value, ft_strlen(var_value));
+	oldchar = token->value->str[end];
+	token->value->str[end] = '\0';
+	var_value = get_var_value(token->value->str + *i + 1 + brace);
+	token->value->str[end] = oldchar;
+	token_replace_between(token, *i, end - !brace, var_value);
 	*i += ft_strlen(var_value) - 1;
-	free(var_name);
 	return (0);
 }

@@ -42,7 +42,7 @@ static t_command	*get_complete_command(void)
 	return (complete_command);
 }
 
-static int			main_loop(void)
+int			main_loop(void)
 {
 	while (1)
 	{
