@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand.c                                           :+:      :+:    :+:   */
+/*   expand_simple_cmd.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -106,7 +106,7 @@ int			expand_redir_list(t_redir *redir_list, char *home_dir)
 
 extern char *g_expand_error_token;
 
-int			expand(t_simple_cmd *command)
+int			expand_simple_cmd(t_simple_cmd *command)
 {
 	char	*home_dir;
 	int		ret;
