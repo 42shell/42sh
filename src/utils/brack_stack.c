@@ -71,8 +71,8 @@ void			set_bracket_status(const char *str, int i, t_array *stack,
 	else if (can_open && (str[i] == DQUOTE || str[i] == SQUOTE)
 			&& brack_status != SQUOTE && brack_status != DQUOTE)
 		add_bracket_to_stack(stack, str[i]);
-	else if (can_open && str[i] == '(' && (i == 0 || str[i - 1] != '$')
-			&& brack_status == PAREN)
+	else if (is_procsub_paren(str, i)
+				|| is_subshell_paren(str, i, brack_status))
 		add_bracket_to_stack(stack, PAREN);
 	else if (should_pop(str, i, brack_status, just_closed_dparen))
 	{

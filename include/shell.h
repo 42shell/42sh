@@ -179,5 +179,8 @@ void					set_bracket_status(const char *str, int i,
 void					add_bracket_to_stack(t_array *stack,
 						enum e_quote_st bracket);
 void					pop_bracket_from_stack(t_array *stack);
+bool					is_subshell_paren(const char *str, int i,
+						enum e_quote_st brack_status);
+bool					is_procsub_paren(const char *str, int i);
 
 #endif

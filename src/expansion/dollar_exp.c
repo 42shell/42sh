@@ -45,26 +45,39 @@ int			get_end_of_braces(const char *str, int start)
 
 static bool	should_expand(char *str, int i, char quote_status, bool heredoc)
 {
-	if (str[i] != '$')
-		return (false);
 	if ((quote_status == SQUOTE && !heredoc) || quote_status == BSLASH)
 		return (false);
-	return (true);
+	if (str[i] == '$'
+			|| ((str[i] == '<' || str[i] == '>') && str[i + 1] == '('))
+		return (true);
+	return (false);
 }
 
 static int	do_one_expansion(t_token *token, int *i)
 {
-	if (token->value->str[*i + 1] == '{')
-		return (param_expand(token, i, true));
-	if (token->value->str[*i + 1] == '(')
+	if (token->value->str[*i] == '$')
 	{
-		if (token->value->str[*i + 2] == '(')
-			return (arith_expand(token, i));
-		else
-			return (cmd_sub(token, i));
+		if (token->value->str[*i + 1] == '{')
+			return (param_expand(token, i, true));
+		if (token->value->str[*i + 1] == '(')
+		{
+			if (token->value->str[*i + 2] == '(')
+				return (arith_expand(token, i));
+			else
+				return (cmd_sub(token, i));
+		}
+		return (param_expand(token, i, false));
 	}
-	return (param_expand(token, i, false));
+	else
+	{
+		return (process_sub(token, i));
+	}
 }
+
+/*
+** do all $ expansions such as $(), $(()), $WORD, ${WORD}
+** and process substitution :)
+*/
 
 int			dollar_expand(t_token *token, int start, bool heredoc)
 {
