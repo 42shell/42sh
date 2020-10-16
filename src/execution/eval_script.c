@@ -36,7 +36,7 @@ int			eval_while_clause(t_command *command)
 	g_already_forked = false;
 	if_clause = command->value.if_clause;
 	if (expand_cmd(command) != 0
-	|| set_redir(command->redir_list, &fd_backup) != 0)
+	|| set_redir(command->redir_list_exp, &fd_backup) != 0)
 	{
 		restore_fds(&fd_backup);
 		return (g_last_exit_st = 1);
@@ -78,7 +78,7 @@ int			eval_if_clause(t_command *command)
 
 	fd_backup = NULL;
 	if (expand_cmd(command) != 0
-	|| set_redir(command->redir_list, &fd_backup) != 0)
+	|| set_redir(command->redir_list_exp, &fd_backup) != 0)
 	{
 		restore_fds(&fd_backup);
 		return (g_last_exit_st = 1);
