@@ -54,6 +54,7 @@ int		builtin_bg(char **argv, __attribute__((unused)) t_array *env)
 	else if (job_is_done(job))
 	{
 		ft_dprintf(2, "42sh: bg: job [%d] has terminated\n", job->id);
+		job->notified = true;
 		return (1);
 	}
 	continue_job(job, true);
@@ -80,6 +81,7 @@ int		builtin_fg(char **argv, __attribute__((unused)) t_array *env)
 	else if (job_is_done(job))
 	{
 		ft_dprintf(2, "42sh: fg: job [%d] has terminated\n", job->id);
+		job->notified = true;
 		return (1);
 	}
 	buf = ft_dstr_new(128);
