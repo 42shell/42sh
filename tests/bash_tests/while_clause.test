@@ -32,3 +32,6 @@ while grep -v 0 var; do
 	bc < var | tr -d \\n > tmp; cat tmp > var
 done >out; cat out; rm var out tmp
 echo '~~~'
+
+#TEST 03
+i=0; while test $i -lt 5; do echo i = $((i++)); j=0; while test $j -lt 5; do echo j = $((j++)); done; done
