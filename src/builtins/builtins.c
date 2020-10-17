@@ -17,6 +17,11 @@ int			builtin_echo(char **argv, __attribute__((unused)) t_array *env)
 	int i;
 
 	i = 1;
+	if (fcntl(STDOUT_FILENO, F_GETFD))
+	{
+		ft_dprintf(2, "42sh: echo: stdout: Bad file descriptor\n");
+		return (1);
+	}
 	while (argv[i])
 	{
 		ft_putstr_fd(argv[i], 1);
