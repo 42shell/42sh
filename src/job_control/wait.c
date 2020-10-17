@@ -108,6 +108,7 @@ void		wait_for_job(t_job *job)
 	}
 	if (job_is_done(job))
 	{
+		job->notified = true;
 		if (g_last_exit_st == 130)
 			g_interrupt = true;
 		if (job->invert_ret)

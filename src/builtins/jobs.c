@@ -125,6 +125,7 @@ int			builtin_jobs(char **argv, __attribute__((unused)) t_array *env)
 	if (!g_jobs)
 		return (0);
 	update_status();
+	del_done_jobs();
 	print_jobs(argv, options);
 	if (g_jobspec_error)
 	{

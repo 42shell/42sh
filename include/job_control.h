@@ -111,6 +111,7 @@ bool					is_last_job(t_job *job);
 bool					is_before_last_job(t_job *job);
 int						cmp_job_id(void *a, void *b);
 void					update_jobs_greatest_id(void);
+void					del_done_jobs(void);
 
 /*
 ** process utils

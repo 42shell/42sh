@@ -44,6 +44,7 @@ int		builtin_bg(char **argv, __attribute__((unused)) t_array *env)
 	if (!g_job_control_enabled)
 		return (2);
 	update_status();
+	del_done_jobs();
 	if ((!(argv[1]) && !(job = g_jobs))
 	|| (argv[1] && !(job = get_job_by_str(argv[1]))))
 	{
@@ -71,6 +72,7 @@ int		builtin_fg(char **argv, __attribute__((unused)) t_array *env)
 	if (!g_job_control_enabled)
 		return (2);
 	update_status();
+	del_done_jobs();
 	if ((!(argv[1]) && !(job = g_jobs))
 	|| (argv[1] && !(job = get_job_by_str(argv[1]))))
 	{
