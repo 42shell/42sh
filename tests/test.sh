@@ -119,7 +119,7 @@ done
 
 rm -rf testing_autocomplete
 
-if test -n "$1" && test "$1" = "--job_control"; then
+if test -n "$1" && test "$1" = "--job-control"; then
 	for file in "$DIR/live_tests/job_control/"*.timing
 	do
 		test_name=$(basename "$file" | cut -d '.' -f 1)
