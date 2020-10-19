@@ -29,7 +29,7 @@ static void	set_exit_status(t_process *process)
 		process->signaled = WTERMSIG(process->status);
 		if (process->stdout == 1)
 			g_last_exit_st = process->signaled + 128;
-		if (!job_is_in_list(g_jobs, process->job))
+		if (SHOW_NOTIF && !job_is_in_list(g_jobs, process->job))
 			ft_dprintf(2, "42sh: %d: Killed (%d)\n", process->pid,
 							process->signaled);
 	}
