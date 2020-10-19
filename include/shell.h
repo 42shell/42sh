@@ -169,6 +169,7 @@ void					set_temp_env_variables(t_simple_cmd *cmd,
 char					*get_last_exit_status(void);
 char					*get_shell_pid(void);
 char					*get_last_bg_job_pid(void);
+char					*get_last_bg_job_pgid(void);
 
 # define BRACK_CAN_OPEN		0x1
 # define BRACK_CAN_CLOSE	0x2
