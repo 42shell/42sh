@@ -35,7 +35,7 @@ install:
   - test "$TEST" == "test.sh" && make -j3 || test "$TEST" != "test.sh"
 
 script:
-  - tests/"$TEST" --job_control
+  - tests/"$TEST" --job-control
   - gcov --version
 
 after_success: test "$TEST" == "test.sh" && bash <(curl -s https://codecov.io/bash)
