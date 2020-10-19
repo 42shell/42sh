@@ -2,7 +2,6 @@ S COMMAND
 T sleep
 R ps
 sleep 100
-[1]+  Terminated (2)                  sleep 100
 S COMMAND
 T sleep
 R ps
@@ -12,34 +11,26 @@ R ps
 [1]+  Terminated (9)                  sleep 100
 42sh: fg: %3: No such job
 sleep 200
-[1]-  Running                         sleep 100 &
-[2]+  Terminated (2)                  sleep 200
+[1]+  Running                         sleep 100 &
 42sh: fg: %2: No such job
 42sh: fg: %0: No such job
 42sh: fg: %256: No such job
 sleep 100
-[1]+  Terminated (2)                  sleep 100
 sleep 300
-[1]   Running                         sleep 100 &
-[2]-  Running                         sleep 200 &
-[3]+  Terminated (2)                  sleep 300
+[1]-  Running                         sleep 100 &
+[2]+  Running                         sleep 200 &
+sleep 200
+[1]+  Running                         sleep 100 &
+sleep 100
 sleep 200
 [1]-  Running                         sleep 100 &
-[2]+  Terminated (2)                  sleep 200
-sleep 100
-[1]+  Terminated (2)                  sleep 100
-sleep 200
-[1]   Running                         sleep 100 &
-[2]-  Terminated (2)                  sleep 200
 [3]+  Running                         sleep 300 &
 sleep 100
-[1]-  Terminated (2)                  sleep 100
 [3]+  Running                         sleep 300 &
 sleep 300
-[3]+  Terminated (2)                  sleep 300
 42sh: fg: current: No such job
 42sh: fg: %: No such job
 42sh: bg: current: No such job
 42sh: bg: %%: No such job
 42sh: fg: job [1] has terminated
-42sh: bg: job [2] has terminated
+42sh: bg: job [1] has terminated

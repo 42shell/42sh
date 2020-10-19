@@ -17,5 +17,7 @@ S sleep
 R ps
 S COMMAND
 S sleep
+S sleep
+S sleep
 S cat
 R ps

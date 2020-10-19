@@ -11,7 +11,7 @@
 [1]+  Stopped                         cat
 [2]-  Running                         sleep 1000 &
 [1]+  Terminated (9)                  cat
-[2]+  Terminated (9)                  sleep 1000
+[2]-  Terminated (9)                  sleep 1000
 42sh: jobs: %0: No such job
 [1]   Running                         sleep 1000 &
 [2]   Running                         sleep 2000 &
@@ -34,14 +34,14 @@
 [4]-  Running                         sleep 4000 &
 [1]   Running                         sleep 1000 &
 [2]+  Running                         sleep 2000 &
-[3]   Running                         sleep 3000 &
-[4]-  Terminated (9)                  sleep 4000
+[3]-  Running                         sleep 3000 &
+[4]   Terminated (9)                  sleep 4000
 [1]   Running                         sleep 1000 &
 [2]-  Running                         sleep 2000 &
 [3]   Running                         sleep 3000 &
 [4]+  Running                         sleep 5000 &
 [1]   Running                         sleep 1000 &
-[2]-  Terminated (9)                  sleep 2000
+[2]   Terminated (9)                  sleep 2000
 [3]-  Running                         sleep 3000 &
 [4]+  Running                         sleep 5000 &
 [1]   Running                         sleep 1000 &
