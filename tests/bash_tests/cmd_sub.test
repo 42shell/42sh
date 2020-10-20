@@ -36,3 +36,8 @@ echo '~~~'
 echo $(ls "bonjour
 les 
 amiches")
+echo '~~~'
+
+#TEST 08
+echo "nested"
+echo $(echo $(/bin/echo $(ls /usr)))

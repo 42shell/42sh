@@ -47,4 +47,6 @@ t_redir	*redir_list_dup(t_redir *list);
 void	dup_command_args(t_simple_cmd *command);
 void	dup_group_redir_list(t_command *command);
 
+void	reset_subshell_globals(void);
+
 #endif
