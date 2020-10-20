@@ -78,7 +78,8 @@ char		*get_exec_path(char *command, t_array *env)
 		return (ft_strdup(ret));
 	else if (ft_strchr(command, '/') && (stat(command, &b) == 0))
 		ret = ft_strdup(command);
-	else if ((path = split_path(get_env_var("PATH", env))))
+	else if ((path = split_path(get_env_var("PATH", env)))
+	|| (path  = split_path(get_var_value("PATH"))))
 	{
 		while (path && path[i] && (ret = append_filename(path[i++], command)))
 		{
