@@ -88,7 +88,7 @@ bool	get_curpath_in_cdpath(char *dir, char **curpath, int *options)
 	while (cdpath[i])
 	{
 		tmp = append_filename(cdpath[i++], dir);
-		if (lstat(tmp, &buf) == 0 && S_ISDIR(buf.st_mode))
+		if (stat(tmp, &buf) == 0 && S_ISDIR(buf.st_mode))
 		{
 			*curpath = tmp;
 			free_arr(cdpath);
