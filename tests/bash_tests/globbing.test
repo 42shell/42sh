@@ -113,3 +113,11 @@ echo '~~~'
 echo 'echo *[a-]'
 echo *[a-]
 rm bonjour-
+echo '~~~'
+
+#TEST 21
+echo 'a[a-z][x' 'ab[x]]'
+touch 'a[a-z][x' 'ab[x'
+echo a[a-z][*; echo a[a-z]*; echo a[a\-z]*
+rm 'a[a-z][x' 'ab[x'
+

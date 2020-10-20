@@ -77,7 +77,7 @@ static int	match_bracket(char c, char *pat)
 	int		bracket_end;
 
 	if ((bracket_end = get_bracket_end(pat)) == 0)
-		return (0);
+		return (-1);
 	reverse = (pat[1] == '!' || pat[1] == '^');
 	is_match = bracket_is_match(c, pat, bracket_end);
 	if (is_match != reverse)
@@ -97,8 +97,8 @@ bool		is_match(char *str, char *pat, char quote, bool is_first_char)
 		return (is_match(str, pat + 1, quote, is_first_char));
 	if (is_first_char && *str == '.' && *pat != '.')
 		return (false);
-	if (*pat == '[' && quote == NONE && (k = match_bracket(*str, pat)))
-		return (is_match(str + 1, pat + k, quote, false));
+	if (*pat == '[' && quote == NONE && (k = match_bracket(*str, pat)) >= 0)
+		return (k == 0 ? false : is_match(str + 1, pat + k, quote, false));
 	if (*pat == '*' && quote == NONE)
 	{
 		while (*(pat + 1) == '*')
