@@ -120,4 +120,8 @@ echo 'a[a-z][x' 'ab[x]]'
 touch 'a[a-z][x' 'ab[x'
 echo a[a-z][*; echo a[a-z]*; echo a[a\-z]*
 rm 'a[a-z][x' 'ab[x'
+echo '~~~'
+
+#TEST 22
+echo /* /us*
 
