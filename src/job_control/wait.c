@@ -32,7 +32,7 @@ static void	set_exit_status(t_process *process)
 		if (SHOW_NOTIF
 		&& !job_is_in_list(g_jobs, process->job) && process->signaled != 2)
 			ft_dprintf(2, "42sh: %d: Killed (%s)\n", process->pid,
-							sys_signame[process->signaled]);
+							sys_siglist[process->signaled]);
 	}
 }
 
