@@ -19,6 +19,8 @@ bool		is_number(char *str)
 	int	i;
 
 	i = 0;
+	if (str[0] == '-' || str[0] == '+')
+		i++;
 	while (str[i])
 	{
 		if (!ft_isdigit(str[i]))
