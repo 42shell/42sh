@@ -26,7 +26,7 @@ static void	enqueue_job(t_job **head, t_job *job)
 		return ;
 	}
 	ptr = *head;
-	while (ptr && ptr->next)
+	while (ptr->next)
 		ptr = ptr->next;
 	ptr->next = job;
 	job->prev = ptr;
