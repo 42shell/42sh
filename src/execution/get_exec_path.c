@@ -65,6 +65,12 @@ static char	*cache_search(char *command)
 	return (ret);
 }
 
+static char	*return_ret_and_free_path(char *ret, char **path)
+{
+	free_arr(path);
+	return (ret);
+}
+
 char		*get_exec_path(char *command, t_array *env)
 {
 	char		**path;
@@ -79,18 +85,17 @@ char		*get_exec_path(char *command, t_array *env)
 	else if (ft_strchr(command, '/') && (stat(command, &b) == 0))
 		ret = ft_strdup(command);
 	else if ((path = split_path(get_env_var("PATH", env)))
-	|| (path  = split_path(get_var_value("PATH"))))
+	|| (path = split_path(get_var_value("PATH"))))
 	{
 		while (path && path[i] && (ret = append_filename(path[i++], command)))
 		{
 			if (stat(ret, &b) == 0 && (S_IXUSR & b.st_mode)
-					&& !S_ISDIR(b.st_mode))
+			&& !S_ISDIR(b.st_mode))
 				break ;
 			ft_memdel((void **)&ret);
 		}
 		if (ret)
 			cache_msg_send(command, ret);
 	}
-	free_arr(path);
-	return (ret);
+	return (return_ret_and_free_path(ret, path));
 }

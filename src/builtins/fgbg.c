@@ -77,13 +77,12 @@ int		builtin_fg(char **argv, __attribute__((unused)) t_array *env)
 	|| (argv[1] && !(job = get_job_by_str(argv[1]))))
 	{
 		ft_dprintf(2, "42sh: fg: %s: No such job\n",
-		argv[1] ? argv[1] : "current");
+						argv[1] ? argv[1] : "current");
 		return (2);
 	}
-	else if (job_is_done(job))
+	else if (job_is_done(job) && (job->notified = true))
 	{
 		ft_dprintf(2, "42sh: fg: job [%d] has terminated\n", job->id);
-		job->notified = true;
 		return (1);
 	}
 	buf = ft_dstr_new(128);

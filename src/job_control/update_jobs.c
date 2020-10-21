@@ -14,7 +14,7 @@
 
 t_job		*g_done_jobs = NULL;
 
-static void enqueue_job(t_job **head, t_job *job)
+static void	enqueue_job(t_job **head, t_job *job)
 {
 	t_job	*ptr;
 
@@ -30,7 +30,6 @@ static void enqueue_job(t_job **head, t_job *job)
 		ptr = ptr->next;
 	ptr->next = job;
 	job->prev = ptr;
-
 }
 
 void		del_done_jobs(void)

@@ -41,8 +41,9 @@ int		g_last_bg_job_pgid = -1;
 
 /*
 ** $!
-** Expands to the process ID of the command most recently placed into the background
-** whether executed as an asynchronous command or using the bg builtin
+** Expands to the process ID of the command most recently placed
+** into the background whether executed as an asynchronous command or using
+** the bg builtin
 */
 
 char	*get_last_bg_job_pid(void)
@@ -56,8 +57,9 @@ char	*get_last_bg_job_pid(void)
 
 /*
 ** $!!
-** Expands to the process group ID of the job most recently placed into the background
-** whether executed as an asynchronous command or using the bg builtin
+** Expands to the process group ID of the job most recently placed
+** into the background whether executed as an asynchronous command or using
+** the bg builtin
 */
 
 char	*get_last_bg_job_pgid(void)

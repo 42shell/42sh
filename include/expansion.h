@@ -18,7 +18,7 @@
 # define AMBIG_REDIR	2
 
 int		expand_simple_cmd(t_simple_cmd *command);
-int     expand_cmd(t_command *command);
+int		expand_cmd(t_command *command);
 int		expand_redir_list(t_redir *redir_list, char *home_dir);
 int		dollar_expand(t_token *token, int start, bool heredoc);
 int		arith_expand(t_token *token, int *i);
