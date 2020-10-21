@@ -43,6 +43,7 @@ echo '~~~'
 #TEST 09
 touch 'ce fichier a des espaces'
 ls ce*
+rm 'ce fichier a des espaces'
 
 #TEST 10
 HOME='   des   espaces dans mon home???'

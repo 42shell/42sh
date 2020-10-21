@@ -1,0 +1,10 @@
+echo "not a builtin error but whatever"
+cat < *
+echo '~~~'
+
+echo "OUT='ambig out'; ERR='ambig err'; { echo foo; echo bar >\$OUT; ls DO_NOT_EXIST; } >\$OUT 2>\$ERR; cat 'ambig out'; cat 'ambig err';"
+OUT='ambig out'; ERR='ambig err'; { echo foo; echo bar >$OUT; ls DO_NOT_EXIST; } >$OUT 2>$ERR; cat 'ambig out'; cat 'ambig err';
+echo '~~~'
+
+echo "export out='ambig redir'; i=0; while test \$i -lt 5; do echo \$((i++)) >>\$out; done"
+export out='ambig redir'; i=0; while test $i -lt 5; do echo $((i++)) >>$out; done

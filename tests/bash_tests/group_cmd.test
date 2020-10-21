@@ -68,8 +68,8 @@ echo '{ ls; { ls } }
 echo '~~~'
 
 #TEST 13
-echo '{ ls -z 2>&1 && ls; } 1>tmp | cat -e; rm tmp'
-{ ls -z 2>&1 && ls; } 1>tmp | cat -e; rm tmp
+echo 'file=tmp; { ls -z 2>&1 && ls; } 1>$file | cat -e; cat "$file"; rm "$file"'
+file=tmp; { ls -z 2>&1 && ls; } 1>$file | cat -e; cat "$file"; rm "$file"
 echo '~~~'
 
 #TEST 14

@@ -75,8 +75,12 @@ int			eval_group_command(t_command *command)
 		process = process_new(command, STDIN_FILENO, STDOUT_FILENO);
 		return (launch_process(process, 0));
 	}
-	if (set_redir(command->redir_list, &fd_backups) != 0)
+	if (expand_cmd(command) != 0
+	|| set_redir(command->redir_list_exp, &fd_backups) != 0)
+	{
+		restore_fds(&fd_backups);
 		return (g_last_exit_st = 1);
+	}
 	if (command->value.compound_list && command->value.compound_list->next)
 		g_already_forked = false;
 	eval_compound_list(command->value.compound_list);

@@ -94,6 +94,7 @@ typedef struct				s_command
 	struct s_command		*prev;
 	struct s_command		*next;
 	t_redir					*redir_list;
+	t_redir					*redir_list_exp;
 	int						sep;
 }							t_command;
 

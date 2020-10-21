@@ -1,0 +1,14 @@
+not a builtin error but whatever
+42sh: ambiguous redirect
+~~~
+OUT='ambig out'; ERR='ambig err'; { echo foo; echo bar >$OUT; ls DO_NOT_EXIST; } >$OUT 2>$ERR; cat 'ambig out'; cat 'ambig err';
+42sh: ambiguous redirect
+cat: 'ambig out': No such file or directory
+cat: 'ambig err': No such file or directory
+~~~
+export out='ambig redir'; i=0; while test $i -lt 5; do echo $((i++)) >>$out; done
+42sh: ambiguous redirect
+42sh: ambiguous redirect
+42sh: ambiguous redirect
+42sh: ambiguous redirect
+42sh: ambiguous redirect

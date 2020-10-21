@@ -31,7 +31,7 @@ int			eval_simple_command(t_command *command)
 	if (!simple->is_expand)
 	{
 		free_arr(simple->argv);
-		if (expand(simple) == 1)
+		if (expand_simple_cmd(simple) == 1)
 			return (g_last_exit_st = 1);
 		if (!(simple->argv = get_argv(simple)))
 		{

@@ -104,7 +104,8 @@ SRC_JOB       	:= launch_job.c\
 				   wait.c
 SRC_JOB			:= $(addprefix job_control/,$(SRC_JOB))
 
-SRC_EXPANSION   := expand.c\
+SRC_EXPANSION   := expand_simple_cmd.c\
+				   expand_cmd.c\
                    dollar_exp.c\
                    param_exp.c\
 				   arith_exp.c\

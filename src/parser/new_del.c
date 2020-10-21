@@ -30,10 +30,10 @@ void		redir_del(t_redir **redir)
 	if (!redir || !*redir)
 		return ;
 	redir_del(&(*redir)->next);
-	token_del(&(*redir)->left_op);
-	token_del(&(*redir)->operator);
-	token_del(&(*redir)->right_op);
-	token_del(&(*redir)->heredoc);
+	token_list_del(&(*redir)->left_op);
+	token_list_del(&(*redir)->operator);
+	token_list_del(&(*redir)->right_op);
+	token_list_del(&(*redir)->heredoc);
 	ft_memdel((void **)redir);
 }
 
@@ -74,6 +74,7 @@ void		command_del(t_command **command)
 		complete_command_del(&(*command)->value.if_clause->then_part);
 		ft_memdel((void **)&(*command)->value.if_clause);
 	}
+	redir_del(&((*command)->redir_list_exp));
 	redir_del(&((*command)->redir_list));
 	ft_memdel((void **)command);
 }
