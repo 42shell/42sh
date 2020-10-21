@@ -151,11 +151,3 @@ echo $PWD
 echo $OLDPWD
 /bin/pwd
 echo '~~~'
-
-#TEST 07
-CDPATH=$(pwd)
-ln -s src link
-cd /
-cd link
-cd ..
-rm -r link
