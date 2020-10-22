@@ -29,7 +29,7 @@ static void	set_exit_status(t_process *process)
 		process->signaled = WTERMSIG(process->status);
 		if (process->stdout == 1)
 			g_last_exit_st = process->signaled + 128;
-		if (SHOW_NOTIF
+		if (SHOW_NOTIF && g_job_control_enabled
 		&& !job_is_in_list(g_jobs, process->job) && process->signaled != 2)
 		{
 			if (process->signaled < NSIG)
