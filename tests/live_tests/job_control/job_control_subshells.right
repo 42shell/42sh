@@ -9,19 +9,13 @@ R ps
 S COMMAND
 R ps
 S COMMAND
-T 42sh
-T cat
-T sleep
+S 42sh
+R yes
+S sleep
 R ps
 S COMMAND
-T 42sh
-Z cat <defunct>
-T sleep
-R ps
-S COMMAND
-T 42sh
-Z cat <defunct>
-Z sleep <defunct>
+S 42sh
+S sleep
 R ps
 S COMMAND
 R ps
@@ -34,15 +28,14 @@ S 42sh
 S sleep
 S sleep
 R ps
-error: process ID list syntax error
-
-Usage:
- ps [options]
-
- Try 'ps --help <simple|list|output|threads|misc|all>'
-  or 'ps --help <s|l|o|t|m|a>'
- for additional help text.
-
-For more details see ps(1).
+S COMMAND
+S 42sh
+S 42sh
+S sleep
+R yes
+S COMMAND
+S 42sh
+R yes
+S COMMAND
 S COMMAND
 R ps
