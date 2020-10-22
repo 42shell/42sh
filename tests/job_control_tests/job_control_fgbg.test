@@ -2,6 +2,8 @@
 # fg/bg jobspec
 ###########################################################################################
 
+# should add pipeline/subshell tests
+
 # As notifications are disabled, the jobs stack behavior is the same as in batch mode,
 # meaning that done jobs are stored until they are manually notified by a call to jobs.
 # That's why I use jobs builtin here, to simulate interactive notifs and update the jobs
