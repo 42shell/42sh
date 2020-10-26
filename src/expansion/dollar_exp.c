@@ -19,6 +19,13 @@ char	*g_expand_error_token = NULL;
 ** Probably should never return -1 since lexer enforces brace termination
 */
 
+bool		is_escaped_brack(const char *str, int i)
+{
+	return (str[i] == '\\'
+		&& (str[i + 1] == '\"' || str[i + 1] == '\'' || str[i + 1] == '\\'
+				|| str[i + 1] == '(' || str[i + 1] == '['));
+}
+
 int			get_end_of_braces(const char *str, int start)
 {
 	int		i;
@@ -28,9 +35,7 @@ int			get_end_of_braces(const char *str, int start)
 	i = start;
 	while (str[i])
 	{
-		if (str[i] == '\\'
-			&& (str[i + 1] == '\"' || str[i + 1] == '\'' || str[i + 1] == '\\'
-					|| str[i + 1] == '(' || str[i + 1] == '['))
+		while (is_escaped_brack(str, i))
 			i += 2;
 		set_bracket_status(str, i, brack_stack, true);
 		if (brack_stack->size == 0)

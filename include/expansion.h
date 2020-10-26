@@ -49,4 +49,6 @@ void	dup_group_redir_list(t_command *command);
 
 void	reset_subshell_globals(void);
 
+bool	is_escaped_brack(const char *str, int i);
+
 #endif

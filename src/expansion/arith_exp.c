@@ -18,28 +18,38 @@ extern bool g_arith_toomuch;
 ** Only dquotes and backslashes in front of dquotes are removed. why? idk
 */
 
+static void	remove_one_char(t_token *token, int i)
+{
+	if (token->exp_info)
+		ft_dstr_remove(token->exp_info, i, 1);
+	ft_dstr_remove(token->value, i, 1);
+}
+
 static void	remove_dquotes(t_token *token, int start)
 {
-	int i;
+	int		i;
+	t_array	*brack_stack;
 
+	brack_stack = array_new(4);
 	i = start;
 	while (token->value->str[i])
 	{
-		if (token->value->str[i] == '\\' && token->value->str[i + 1] == '\"')
+		while (is_escaped_brack(token->value->str, i)
+				&& token->value->str[i + 1] != '"')
+			i += 2;
+		set_bracket_status(token->value->str, i, brack_stack, true);
+		if (brack_stack->size == 0
+				|| (brack_stack->size == 1
+					&& get_bracket_status(brack_stack) == DQUOTE))
 		{
-			if (token->exp_info)
-				ft_dstr_remove(token->exp_info, i, 1);
-			ft_dstr_remove(token->value, i++, 1);
+			if (token->value->str[i] == '\\' && token->value->str[i + 1] == '"')
+				remove_one_char(token, i++);
+			else if (token->value->str[i] == '"')
+				remove_one_char(token, i);
 		}
-		else if (token->value->str[i] == '\"')
-		{
-			if (token->exp_info)
-				ft_dstr_remove(token->exp_info, i, 1);
-			ft_dstr_remove(token->value, i, 1);
-		}
-		else
-			i++;
+		i++;
 	}
+	array_destroy(brack_stack);
 }
 
 #define ERR 1
