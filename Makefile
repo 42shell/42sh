@@ -47,7 +47,8 @@ SRC_BUILTINS    :=	builtins.c\
 					builtin_utils.c\
 					cd.c\
 					cd_utils.c\
-					var_builtins.c\
+					export.c\
+					set_unset.c\
 					jobs.c\
 					env.c\
 				    exec_command_env.c\
