@@ -24,8 +24,6 @@ bool		quote_stop(const char *str, int i, char *quote_status)
 	}
 	if (str[i] != *quote_status || *quote_status == NONE)
 		return (false);
-	if (*quote_status == DQUOTE && i != 0 && str[i - 1] == BSLASH)
-		return (false);
 	*quote_status = NONE;
 	return (true);
 }

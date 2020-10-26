@@ -47,7 +47,8 @@ SRC_BUILTINS    :=	builtins.c\
 					builtin_utils.c\
 					cd.c\
 					cd_utils.c\
-					var_builtins.c\
+					export.c\
+					set_unset.c\
 					jobs.c\
 					env.c\
 				    exec_command_env.c\
@@ -58,6 +59,7 @@ SRC_BUILTINS    :=	builtins.c\
 					test_op4.c\
 					test_op5.c\
 					hash.c\
+					type.c\
 					fgbg.c
 SRC_BUILTINS    := $(addprefix builtins/,$(SRC_BUILTINS))
 

@@ -16,8 +16,58 @@ static void	export_one_var(char *name, char *value)
 {
 	if (value == NULL && var_exists(name))
 		set_var_attributes(name, V_EXPORT);
-	else
+	else if (value)
 		set_var(name, value, V_EXPORT);
+}
+
+char		*get_quoted_string(const char *str)
+{
+	t_dstr	*quoted;
+	char	*ret;
+
+	quoted = ft_dstr_new(32);
+	ft_dstr_add(quoted, '"');
+	while (*str)
+	{
+		if (*str == '"' || *str == '\\' || *str == '$' || *str == '`')
+			ft_dstr_add(quoted, '\\');
+		ft_dstr_add(quoted, *str);
+		str++;
+	}
+	ft_dstr_add(quoted, '"');
+	ret = quoted->str;
+	free(quoted);
+	return (ret);
+}
+
+static void	add_var_to_arr(const char *key, void *value, void *obj)
+{
+	t_array			*array;
+	t_var			*var;
+	char			*quoted;
+
+	var = value;
+	if (var->attributes & V_HIDDEN || !(var->attributes & V_EXPORT))
+		return ;
+	array = obj;
+	quoted = get_quoted_string(var->value);
+	array_append(array, ft_strjoin_triple(key, "=", quoted));
+	free(quoted);
+}
+
+int			export_p(void)
+{
+	t_array *vars;
+	size_t	i;
+
+	vars = array_new(32);
+	ht_enum(g_shell.vars, add_var_to_arr, vars);
+	sort_matches((char **)vars->array, vars->size);
+	i = 0;
+	while (i < vars->size)
+		ft_printf("export %s\n", vars->array[i++]);
+	array_destroy(vars);
+	return (0);
 }
 
 int			builtin_export(char **argv, __attribute__((unused)) t_array *env)
@@ -26,81 +76,25 @@ int			builtin_export(char **argv, __attribute__((unused)) t_array *env)
 	int		ret;
 	char	*value;
 
-	i = 1;
+	i = 0;
 	ret = 0;
-	while (argv[i])
+	if (argv[1] && ft_strequ(argv[1], "-p"))
+		return (export_p());
+	while (argv[++i])
 	{
 		value = NULL;
-		if ((value = ft_strchr(argv[i], '=')))
+		if (argv[i][0] != '=' && (value = ft_strchr(argv[i], '=')))
 			*(value++) = '\0';
 		if (!is_valid_var_name(argv[i]))
 		{
-			ft_dprintf(2, "42sh: export: '%s': not a valid identifier\n",
+			ft_dprintf(2, "42sh: export: `%s': not a valid identifier\n",
 					argv[i]);
 			ret = 1;
 		}
 		else
 			export_one_var(argv[i], value);
-		i++;
 	}
 	if (i == 1)
-		ft_dprintf(2, "usage: export [name[=value]]\n");
+		ft_dprintf(2, "usage: export [name[=value]] or export -p\n");
 	return (ret);
-}
-
-int			builtin_unset(char **argv, __attribute__((unused)) t_array *env)
-{
-	int		i;
-	int		ret;
-
-	i = 1;
-	ret = 0;
-	while (argv[i])
-	{
-		if (!is_valid_var_name(argv[i]))
-		{
-			ft_dprintf(2, "42sh: unset: '%s': not a valid identifier\n",
-					argv[i]);
-			ret = 1;
-		}
-		else
-			unset_var(argv[i]);
-		i++;
-	}
-	return (ret);
-}
-
-/*
-** obj points to a t_array, we add key=value to this array for each variable
-*/
-
-static void	add_var_to_arr(const char *key, void *value, void *obj)
-{
-	t_array			*array;
-	t_var			*var;
-
-	var = value;
-	if (var->attributes & V_HIDDEN)
-		return ;
-	array = obj;
-	if (var->exportstr == NULL)
-		var->exportstr = ft_strjoin_triple((char *)key, "=", var->value);
-	array_append(array, var->exportstr);
-}
-
-int			builtin_set(char **argv, __attribute__((unused)) t_array *env)
-{
-	t_array *vars;
-	size_t	i;
-
-	(void)argv;
-	vars = array_new(ht_get_count(g_shell.vars));
-	ht_enum(g_shell.vars, add_var_to_arr, vars);
-	sort_matches((char **)vars->array, vars->size);
-	i = 0;
-	while (i < vars->size)
-		ft_printf("%s\n", vars->array[i++]);
-	free(vars->array);
-	free(vars);
-	return (0);
 }

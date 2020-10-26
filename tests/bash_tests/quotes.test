@@ -106,3 +106,6 @@ echo ~~~
 echo 'echo \\t\t\t\test'
 echo \\t\t\t\test
 echo ~~~
+
+#TEST 20
+echo "\\"

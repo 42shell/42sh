@@ -12,7 +12,7 @@
 
 #include "shell.h"
 
-char	*ft_strjoin_triple(char *s1, char *s2, char *s3)
+char	*ft_strjoin_triple(const char *s1, const char *s2, const char *s3)
 {
 	char *str;
 

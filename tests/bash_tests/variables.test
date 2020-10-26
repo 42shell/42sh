@@ -1,0 +1,45 @@
+#TEST 00
+asdf=asdf
+lkj=
+set | grep -E 'asdf=|lkj='
+env | grep -E 'asdf=|lkj='
+echo '~~~'
+
+#TEST 01
+unset asdf
+set | grep -E 'asdf=|lkj='
+env | grep -E 'asdf=|lkj='
+echo '~~~'
+
+#TEST 02
+export lkj
+set | grep -E 'asdf=|lkj='
+env | grep -E 'asdf=|lkj='
+echo '~~~'
+
+#TEST 03
+export asdf
+set | grep -E 'asdf=|lkj='
+env | grep -E 'asdf=|lkj='
+echo '~~~'
+
+#TEST 04
+unset %
+echo '~~~'
+
+#TEST 05
+unset doesnotexist
+echo '~~~'
+
+#TEST 06
+export quoteme="\$haha\"'\\"
+export -p | grep quoteme
+echo '~~~'
+
+#TEST 07
+export =
+echo '~~~'
+
+#TEST 08
+export 1 2 3 abc bcd=c
+env | grep -E "abc=|bcd="
