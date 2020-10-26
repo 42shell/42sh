@@ -12,6 +12,40 @@
 
 #include "shell.h"
 
+const char *g_sys_siglist[32] = {
+	"Unknown signal 0",
+	"Hangup",
+	"Interrupt",
+	"Quit",
+	"Illegal instruction",
+	"Trace/breakpoint trap",
+	"Aborted",
+	"Bus error",
+	"Floating point exception",
+	"Killed",
+	"User defined signal 1",
+	"Segmentation fault",
+	"User defined signal 2",
+	"Broken pipe",
+	"Alarm clock",
+	"Terminated",
+	"Stack fault",
+	"Child exited",
+	"Continued",
+	"Stopped (signal)",
+	"Stopped",
+	"Stopped (tty input)",
+	"Stopped (tty output)",
+	"Urgent I/O condition",
+	"CPU time limit exceeded",
+	"File size limit exceeded",
+	"Virtual timer expired",
+	"Profiling timer expired",
+	"Window changed",
+	"I/O possible",
+	"Power failure",
+	"Bad system call"};
+
 void		format_exit_status(t_dstr *buf, t_process *process)
 {
 	char	itoa_buf[12];
@@ -19,8 +53,8 @@ void		format_exit_status(t_dstr *buf, t_process *process)
 	if (WIFSIGNALED(process->status))
 	{
 		ft_dstr_cat(buf, " ");
-		if (process->signaled < NSIG)
-			ft_dstr_cat(buf, (char *)sys_siglist[process->signaled]);
+		if (process->signaled < 32)
+			ft_dstr_cat(buf, (char *)g_sys_siglist[process->signaled]);
 	}
 	else
 	{
@@ -51,8 +85,8 @@ void		format_process_info(t_dstr *buf, t_process *process, int padding)
 	else if (process->stopped)
 	{
 		ft_dstr_cat(buf, " ");
-		if (process->signaled < NSIG)
-			ft_dstr_cat(buf, (char *)sys_siglist[process->signaled]);
+		if (process->signaled < 32)
+			ft_dstr_cat(buf, (char *)g_sys_siglist[process->signaled]);
 	}
 	else
 		ft_dstr_cat(buf, " Running");

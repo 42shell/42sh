@@ -12,6 +12,8 @@
 
 #include "shell.h"
 
+extern const char	*g_sys_siglist[32];
+
 /*
 ** We only set last_exit_st if stdout == 1 to ignore the exit status of the
 ** first commands of a pipeline
@@ -32,9 +34,9 @@ static void	set_exit_status(t_process *process)
 		if (SHOW_NOTIF && g_job_control_enabled
 		&& !job_is_in_list(g_jobs, process->job) && process->signaled != 2)
 		{
-			if (process->signaled < NSIG)
+			if (process->signaled < 32)
 				ft_dprintf(2, "42sh: %d: %s\n", process->pid,
-				sys_siglist[process->signaled]);
+				g_sys_siglist[process->signaled]);
 			else
 				ft_dprintf(2, "42sh: %d: Killed (%d)\n", process->pid,
 				process->signaled);
