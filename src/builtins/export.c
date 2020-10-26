@@ -31,7 +31,7 @@ int			builtin_export(char **argv, __attribute__((unused)) t_array *env)
 	while (argv[i])
 	{
 		value = NULL;
-		if ((value = ft_strchr(argv[i], '=')))
+		if (argv[i][0] != '=' && (value = ft_strchr(argv[i], '=')))
 			*(value++) = '\0';
 		if (!is_valid_var_name(argv[i]))
 		{
