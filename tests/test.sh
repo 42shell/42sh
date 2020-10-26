@@ -71,6 +71,9 @@ do
 	elif [ $test_name = "background" ]; then
 		./42sh "$file" > "$DIR/$test_name.42sh" 2>&1 &
 		bash "$file" > "$DIR/$test_name.bash" 2>&1	&
+	elif [ $test_name = "variables" ]; then
+		./42sh "$file" > "$DIR/$test_name.42sh" 2>&1
+		bash --posix "$file" > "$DIR/$test_name.bash" 2>&1
 	else
 		./42sh "$file" > "$DIR/$test_name.42sh" 2>&1;
 		bash "$file" > "$DIR/$test_name.bash" 2>&1;
