@@ -41,3 +41,7 @@ echo '~~~'
 #TEST 08
 echo "nested"
 echo $(echo $(/bin/echo $(ls /usr)))
+echo '~~~'
+
+#TEST 09
+$(\()
