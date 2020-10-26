@@ -101,21 +101,21 @@ typedef struct			s_var
 
 # define PS1			"$> "
 # define PS2			"> "
-# define PSQ			"'... "
-# define PSDQ			"\"... "
-# define PSA			"&&... "
-# define PSO			"||... "
-# define PSP			"|... "
-# define PSH			"<<... "
-# define PSB			"(... "
-# define PSDP			"((... "
-# define PSC			"{... "
-# define PSI			"if... "
-# define PST			"then... "
-# define PSEI			"elif... "
-# define PSE			"else... "
-# define PSW			"while... "
-# define PSD			"do... "
+# define PSQ			"quote> "
+# define PSDQ			"dquote> "
+# define PSA			"and> "
+# define PSO			"or> "
+# define PSP			"pipe> "
+# define PSH			"doc> "
+# define PSB			"paren> "
+# define PSDP			"dparen> "
+# define PSC			"brace> "
+# define PSI			"if> "
+# define PST			"then> "
+# define PSEI			"elif> "
+# define PSE			"else> "
+# define PSW			"while> "
+# define PSD			"do> "
 
 typedef int				(*t_input_func)(const char *, bool);
 
@@ -169,6 +169,7 @@ void					set_temp_env_variables(t_simple_cmd *cmd,
 char					*get_last_exit_status(void);
 char					*get_shell_pid(void);
 char					*get_last_bg_job_pid(void);
+char					*get_last_bg_job_pgid(void);
 
 # define BRACK_CAN_OPEN		0x1
 # define BRACK_CAN_CLOSE	0x2

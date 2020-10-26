@@ -20,27 +20,21 @@ ps --ppid $$,$! -o state,comm; sleep .4
 ###########################################################################################
 
 # async brace group
-{ cat | sleep 100; } & sleep .4
+{ yes >/dev/null | sleep 300; } & sleep .4
 
-# assert all processes are there, sleep may be running or stopped depending on timing ?
+# assert all processes are there (subshell, yes, sleep)
 ps --ppid $$,$! -o state,comm; sleep .4
 
-# kill the cat process
-pkill -9 -g $! cat 2>&/dev/null; sleep .4
+# kill the yes process
+pkill -9 -g $! yes 2>&/dev/null; sleep .4
 
-# assert sleep process, zombie cat
+# assert sleep process and no yes process
 ps --ppid $$,$! -o state,comm; sleep .4
 
 # kill the sleep process
 pkill -9 -g $! sleep 2>&/dev/null; sleep .4
 
-# assert zombie cat, zombie sleep
-ps --ppid $$,$! -o state,comm; sleep .4
-
-# send -CONT to the subshell to terminate it
-kill -CONT $! 2>&/dev/null; sleep .4
-
-# assert subshell and cat/sleep processes have disappeared
+# assert no subshell and no sleep
 ps --ppid $$,$! -o state,comm; sleep .4
 
 ###########################################################################################
@@ -61,17 +55,22 @@ pkill -9 -g $! 2>&/dev/null; sleep .4
 ###########################################################################################
 
 # subshell in subshell
-# the subshell forks another subshell in async to run the &&, and exits. The child subshell
-# shall wait for the command to finish. This is not optimized, one subshell would be enough
-(true && sleep 100 & sleep 200) & sleep .4
+# the subshell forks another subshell in async to run the &&. The child subshell
+# shall wait for the command to finish.
+(true && yes >/dev/null & sleep 200) & sleep .4
 
-# assert there are 2 subshells and 2 sleep processes/ using sh cause I need cmd substitution to
-# get the pid of the first sleep of the command
+# assert there are 2 subshells and 2 sleep processes
+PIDS=$(pgrep -g $! | tr '\n' ',' | sed 's/,$/\n/'); sleep .4; ps --pid $PIDS -o state,comm; sleep .4
 
-sh -c "PIDS=$(pgrep -g $! | tr '\n' ',' | sed 's/,$/\n/'); ps --pid \$PIDS -g $! -o state,comm"; sleep .4
-
-# kill the sleep processes
+# kill the sleep process
 pkill -9 -g $! sleep 2>&/dev/null; sleep .4
 
+# assert the parent subshell and sleep have exited, but child subshell and yes still running
+ps --pid $PIDS -o state,comm; sleep .4
+
+# kill the yes process
+pkill -9 -g $! yes 2>&/dev/null; sleep .4
+
 # assert all processes have finished
+ps --pid $PIDS -o state,comm; sleep .4
 ps --ppid $$,$! -o state,comm; sleep .4

@@ -44,6 +44,7 @@ int		builtin_bg(char **argv, __attribute__((unused)) t_array *env)
 	if (!g_job_control_enabled)
 		return (2);
 	update_status();
+	del_done_jobs();
 	if ((!(argv[1]) && !(job = g_jobs))
 	|| (argv[1] && !(job = get_job_by_str(argv[1]))))
 	{
@@ -54,6 +55,7 @@ int		builtin_bg(char **argv, __attribute__((unused)) t_array *env)
 	else if (job_is_done(job))
 	{
 		ft_dprintf(2, "42sh: bg: job [%d] has terminated\n", job->id);
+		job->notified = true;
 		return (1);
 	}
 	continue_job(job, true);
@@ -70,14 +72,15 @@ int		builtin_fg(char **argv, __attribute__((unused)) t_array *env)
 	if (!g_job_control_enabled)
 		return (2);
 	update_status();
+	del_done_jobs();
 	if ((!(argv[1]) && !(job = g_jobs))
 	|| (argv[1] && !(job = get_job_by_str(argv[1]))))
 	{
 		ft_dprintf(2, "42sh: fg: %s: No such job\n",
-		argv[1] ? argv[1] : "current");
+						argv[1] ? argv[1] : "current");
 		return (2);
 	}
-	else if (job_is_done(job))
+	else if (job_is_done(job) && (job->notified = true))
 	{
 		ft_dprintf(2, "42sh: fg: job [%d] has terminated\n", job->id);
 		return (1);

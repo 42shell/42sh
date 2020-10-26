@@ -13,6 +13,7 @@
 #include "shell.h"
 
 static char	**g_cmd;
+static int	g_i;
 
 void		wait_for_all_jobs(void)
 {
@@ -32,20 +33,19 @@ void		wait_for_all_jobs(void)
 static int	input_cmd_sub(const char *prompt
 		, __attribute__((unused)) bool heredoc)
 {
-	static size_t	i = 0;
 	char			*tmp;
 
 	(void)prompt;
-	if (g_cmd[i])
+	if (g_cmd && g_cmd[g_i])
 	{
 		if (g_lexer.line)
 		{
 			tmp = g_lexer.line;
-			g_lexer.line = ft_strjoin_triple(g_lexer.line, g_cmd[i++], "\n");
+			g_lexer.line = ft_strjoin_triple(g_lexer.line, g_cmd[g_i++], "\n");
 			free(tmp);
 		}
 		else
-			g_lexer.line = ft_strjoin(g_cmd[i++], "\n");
+			g_lexer.line = ft_strjoin(g_cmd[g_i++], "\n");
 		return (0);
 	}
 	else
@@ -83,24 +83,22 @@ static char	*get_output(int fd)
 	return (str);
 }
 
-static void *g_ignore_fake_leak;
-
 static char	*exec_cmd_sub(int *fildes)
 {
 	int		pid;
 	char	*output;
+	void	*ignore_fake_leak[2];
 
 	if ((pid = fork()) == 0)
 	{
 		dup2(fildes[1], STDOUT_FILENO);
 		close(fildes[1]);
 		close(fildes[0]);
-		g_ignore_fake_leak = g_jobs;
-		g_jobs = NULL;
-		g_current_jobs = NULL;
-		g_shell.interactive_mode = false;
-		g_job_control_enabled = false;
-		g_already_forked = false;
+		ignore_fake_leak[0] = g_cmd;
+		ignore_fake_leak[1] = g_jobs;
+		(void)ignore_fake_leak;
+		reset_subshell_globals();
+		g_i = 0;
 		g_shell.get_input = input_cmd_sub;
 		reset_signals();
 		reset_lexer();

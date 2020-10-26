@@ -6,7 +6,7 @@
 /*   By: fratajcz <fratajcz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/14 13:50:00 by fratajcz          #+#    #+#             */
-/*   Updated: 2020/06/17 05:04:49 by fratajcz         ###   ########.fr       */
+/*   Updated: 2020/10/20 23:12:48 by fratajcz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ int		get_cd_options(char **argv, int *options)
 ** This is step 5 in the posix cd algorithm.
 */
 
-bool	get_curpath_in_cdpath(char *dir, char **curpath, int *options)
+bool	get_curpath_in_cdpath(char *dir, char **curpath, int *options,
+								t_array *env)
 {
 	char		*tmp;
 	char		**cdpath;
@@ -81,14 +82,14 @@ bool	get_curpath_in_cdpath(char *dir, char **curpath, int *options)
 
 	if (ft_strequ(dir, ".") || ft_strequ(dir, "..")
 	|| (ft_strstr(dir, "./") == dir) || (ft_strstr(dir, "../") == dir)
-	|| (tmp = get_var_value("CDPATH")) == NULL || tmp[0] == '\0')
+	|| ((tmp = get_env_var("CDPATH", env)) == NULL
+	&& (tmp = get_var_value("CDPATH")) == NULL) || tmp[0] == '\0')
 		return (false);
 	cdpath = split_path(tmp);
 	i = 0;
-	while (cdpath[i])
+	while (cdpath[i] && (tmp = append_filename(cdpath[i++], dir)))
 	{
-		tmp = append_filename(cdpath[i++], dir);
-		if (lstat(tmp, &buf) == 0 && S_ISDIR(buf.st_mode))
+		if (stat(tmp, &buf) == 0 && S_ISDIR(buf.st_mode))
 		{
 			*curpath = tmp;
 			free_arr(cdpath);
@@ -147,7 +148,7 @@ int		builtin_cd(char **argv, t_array *env)
 		if (dir == NULL)
 			return (1);
 	}
-	if (dir[0] == '/' || !get_curpath_in_cdpath(dir, &curpath, &options))
+	if (dir[0] == '/' || !get_curpath_in_cdpath(dir, &curpath, &options, env))
 		curpath = ft_strdup(dir);
 	if (curpath[0] != '/' && !(options & CD_P))
 		append_curpath_to_pwd(&curpath);

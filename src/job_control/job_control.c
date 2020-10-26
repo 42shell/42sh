@@ -46,9 +46,12 @@ void	continue_job(t_job *job, bool bg)
 void	put_job_bg(t_job *job, bool cont)
 {
 	extern int	g_last_bg_job_pid;
+	extern int	g_last_bg_job_pgid;
 
 	job->bg = true;
-	g_last_bg_job_pid = job->pgid;
+	g_last_bg_job_pgid = job->pgid;
+	if (job->processes)
+		g_last_bg_job_pid = job->processes->pid;
 	if (cont)
 		kill(-job->pgid, SIGCONT);
 }

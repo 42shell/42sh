@@ -67,15 +67,17 @@ t_array	*get_matches(char *path)
 	filename = (filename == NULL) ? path : filename + 1;
 	i = filename - path;
 	dirname = path;
-	if (i > 0)
-		dirname[i - 1] = '\0';
-	else
+	if (i == 0)
 	{
 		dirname = ".";
 		no_dir = true;
 	}
+	else if (i == 1)
+		dirname = "/";
+	else
+		dirname[i - 1] = '\0';
 	ret = get_matches_in_dirs(get_dirs_to_search(dirname), filename, no_dir);
-	if (i > 0)
+	if (i > 1)
 		path[i - 1] = '/';
 	return (ret);
 }

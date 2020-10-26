@@ -12,25 +12,34 @@
 
 #include "shell.h"
 
-static char	**g_cmd;
+static char		**g_cmd;
+static size_t	g_i = 0;
+
+void		reset_subshell_globals(void)
+{
+	g_shell.interactive_mode = false;
+	g_job_control_enabled = false;
+	g_already_forked = false;
+	g_jobs = NULL;
+	g_current_jobs = NULL;
+}
 
 static int	input_process_sub(const char *prompt, bool heredoc)
 {
-	static size_t	i = 0;
 	char			*tmp;
 
 	(void)prompt;
 	(void)heredoc;
-	if (g_cmd[i])
+	if (g_cmd && g_cmd[g_i])
 	{
 		if (g_lexer.line)
 		{
 			tmp = g_lexer.line;
-			g_lexer.line = ft_strjoin_triple(g_lexer.line, g_cmd[i++], "\n");
+			g_lexer.line = ft_strjoin_triple(g_lexer.line, g_cmd[g_i++], "\n");
 			free(tmp);
 		}
 		else
-			g_lexer.line = ft_strjoin(g_cmd[i++], "\n");
+			g_lexer.line = ft_strjoin(g_cmd[g_i++], "\n");
 		return (0);
 	}
 	else
@@ -60,20 +69,19 @@ static void	add_fd_to_job_close_list(int fd)
 int			exec_procsub(int *fildes, int type)
 {
 	int			pid;
-	int			fd;
+	void		*ignore_fake_leak[2];
 
 	if ((pid = fork()) == 0)
 	{
-		fd = open("/dev/null", O_RDWR);
-		dup2(fd, STDIN_FILENO);
+		dup2(open("/dev/null", O_RDWR), STDIN_FILENO);
 		dup2(fildes[type], type);
 		close(fildes[type]);
 		close(fildes[!type]);
-		g_shell.interactive_mode = false;
-		g_job_control_enabled = false;
-		g_already_forked = false;
-		g_jobs = NULL;
-		g_current_jobs = NULL;
+		ignore_fake_leak[0] = g_cmd;
+		ignore_fake_leak[1] = g_jobs;
+		(void)ignore_fake_leak;
+		reset_subshell_globals();
+		g_i = 0;
 		g_shell.get_input = input_process_sub;
 		reset_signals();
 		reset_lexer();

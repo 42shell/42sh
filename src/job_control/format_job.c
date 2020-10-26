@@ -18,10 +18,9 @@ void		format_exit_status(t_dstr *buf, t_process *process)
 
 	if (WIFSIGNALED(process->status))
 	{
-		ft_itoa(WTERMSIG(process->status), itoa_buf);
-		ft_dstr_cat(buf, " Terminated (");
-		ft_dstr_cat(buf, itoa_buf);
-		ft_dstr_add(buf, ')');
+		ft_dstr_cat(buf, " ");
+		if (process->signaled < NSIG)
+			ft_dstr_cat(buf, (char *)sys_siglist[process->signaled]);
 	}
 	else
 	{
@@ -51,10 +50,9 @@ void		format_process_info(t_dstr *buf, t_process *process, int padding)
 		format_exit_status(buf, process);
 	else if (process->stopped)
 	{
-		ft_itoa(WSTOPSIG(process->status), itoa_buf);
-		ft_dstr_cat(buf, " Stopped (");
-		ft_dstr_cat(buf, itoa_buf);
-		ft_dstr_add(buf, ')');
+		ft_dstr_cat(buf, " ");
+		if (process->signaled < NSIG)
+			ft_dstr_cat(buf, (char *)sys_siglist[process->signaled]);
 	}
 	else
 		ft_dstr_cat(buf, " Running");

@@ -16,12 +16,17 @@ sleep 0.1
 echo '~~~'
 
 #TEST 04
-echo "bonjour" | tee >(echo 1
-echo 2)
+echo "bonjour" | tee >(sleep .1; echo 1
+echo 2); sleep 0.2
 echo '~~~'
 
 #TEST 05
-echo "bonjour" | tee >(ls "bonjour
+echo "bonjour" | tee >(sleep .1; ls "bonjour
 les amiches
 sssss"
-)
+); sleep 0.2
+echo '~~~'
+
+#TEST 06
+echo "nested"
+sort <(cat -e <(grep fork <(ls -tr /usr/share/man/man2)) | (head -n 1 1> >(rev)))

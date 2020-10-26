@@ -71,11 +71,6 @@ static int	print_one_job(t_job *job, int options)
 	else
 		print_job(job, false);
 	job->notified = true;
-	if (job_is_done(job))
-	{
-		del_job_from_list(&g_jobs, job);
-		update_jobs_greatest_id();
-	}
 	return (0);
 }
 
@@ -125,6 +120,7 @@ int			builtin_jobs(char **argv, __attribute__((unused)) t_array *env)
 	if (!g_jobs)
 		return (0);
 	update_status();
+	del_done_jobs();
 	print_jobs(argv, options);
 	if (g_jobspec_error)
 	{

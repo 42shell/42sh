@@ -29,6 +29,16 @@ static void	set_exit_status(t_process *process)
 		process->signaled = WTERMSIG(process->status);
 		if (process->stdout == 1)
 			g_last_exit_st = process->signaled + 128;
+		if (SHOW_NOTIF && g_job_control_enabled
+		&& !job_is_in_list(g_jobs, process->job) && process->signaled != 2)
+		{
+			if (process->signaled < NSIG)
+				ft_dprintf(2, "42sh: %d: %s\n", process->pid,
+				sys_siglist[process->signaled]);
+			else
+				ft_dprintf(2, "42sh: %d: Killed (%d)\n", process->pid,
+				process->signaled);
+		}
 	}
 }
 
@@ -108,6 +118,7 @@ void		wait_for_job(t_job *job)
 	}
 	if (job_is_done(job))
 	{
+		job->notified = true;
 		if (g_last_exit_st == 130)
 			g_interrupt = true;
 		if (job->invert_ret)

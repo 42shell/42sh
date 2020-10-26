@@ -12,7 +12,27 @@
 
 #include "shell.h"
 
-static void	del_done_jobs(void)
+t_job		*g_done_jobs = NULL;
+
+static void	enqueue_job(t_job **head, t_job *job)
+{
+	t_job	*ptr;
+
+	if (!job)
+		return ;
+	if (!*head)
+	{
+		*head = job;
+		return ;
+	}
+	ptr = *head;
+	while (ptr->next)
+		ptr = ptr->next;
+	ptr->next = job;
+	job->prev = ptr;
+}
+
+void		del_done_jobs(void)
 {
 	t_job	*job;
 	t_job	*next;
@@ -21,11 +41,22 @@ static void	del_done_jobs(void)
 	while (job)
 	{
 		next = job->next;
-		if (job_is_done(job) && job->notified)
-			del_job_from_list(&g_jobs, job);
+		if (job_is_done(job))
+		{
+			if (job->notified)
+				del_job_from_list(&g_jobs, job);
+			else
+			{
+				remove_job_from_list(&g_jobs, job);
+				enqueue_job(&g_done_jobs, job);
+			}
+		}
 		job = next;
 	}
+	if (g_done_jobs)
+		enqueue_job(&g_jobs, g_done_jobs);
 	update_jobs_greatest_id();
+	g_done_jobs = NULL;
 }
 
 static void	notif_jobs(void)

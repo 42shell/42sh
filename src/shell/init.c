@@ -29,6 +29,8 @@ static void	init_vars(void)
 	ht_put(g_shell.vars, "$", var);
 	var = make_new_var("!", NULL, V_HIDDEN | V_SPECIAL, get_last_bg_job_pid);
 	ht_put(g_shell.vars, "!", var);
+	var = make_new_var("!!", NULL, V_HIDDEN | V_SPECIAL, get_last_bg_job_pgid);
+	ht_put(g_shell.vars, "!!", var);
 }
 
 static void	init_builtins(void)

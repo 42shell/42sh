@@ -61,17 +61,11 @@ void		command_del(t_command **command)
 		complete_command_del(&(*command)->value.pipeline);
 	else if ((*command)->type == GROUP)
 		complete_command_del(&(*command)->value.compound_list);
-	else if ((*command)->type == IF_CLAUSE)
+	else if ((*command)->type == IF_CLAUSE || (*command)->type == WHILE_CLAUSE)
 	{
 		complete_command_del(&(*command)->value.if_clause->if_part);
 		complete_command_del(&(*command)->value.if_clause->then_part);
 		complete_command_del(&(*command)->value.if_clause->else_part);
-		ft_memdel((void **)&(*command)->value.if_clause);
-	}
-	else if ((*command)->type == WHILE_CLAUSE)
-	{
-		complete_command_del(&(*command)->value.if_clause->if_part);
-		complete_command_del(&(*command)->value.if_clause->then_part);
 		ft_memdel((void **)&(*command)->value.if_clause);
 	}
 	redir_del(&((*command)->redir_list_exp));
@@ -83,6 +77,8 @@ void		complete_command_del(t_command **complete_command)
 {
 	t_command	*next;
 
+	if (!complete_command)
+		return ;
 	while (*complete_command)
 	{
 		next = (*complete_command)->next;
