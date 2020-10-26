@@ -16,7 +16,7 @@ static void	export_one_var(char *name, char *value)
 {
 	if (value == NULL && var_exists(name))
 		set_var_attributes(name, V_EXPORT);
-	else
+	else if (value)
 		set_var(name, value, V_EXPORT);
 }
 
