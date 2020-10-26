@@ -87,7 +87,7 @@ int			builtin_export(char **argv, __attribute__((unused)) t_array *env)
 			*(value++) = '\0';
 		if (!is_valid_var_name(argv[i]))
 		{
-			ft_dprintf(2, "42sh: export: '%s': not a valid identifier\n",
+			ft_dprintf(2, "42sh: export: `%s': not a valid identifier\n",
 					argv[i]);
 			ret = 1;
 		}
