@@ -23,7 +23,8 @@ bool		is_escaped_brack(const char *str, int i)
 {
 	return (str[i] == '\\'
 		&& (str[i + 1] == '\"' || str[i + 1] == '\'' || str[i + 1] == '\\'
-				|| str[i + 1] == '(' || str[i + 1] == '['));
+				|| str[i + 1] == '(' || str[i + 1] == '['
+				|| str[i + 1] == '$'));
 }
 
 int			get_end_of_braces(const char *str, int start)
