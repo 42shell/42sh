@@ -31,8 +31,11 @@ void		redir_del(t_redir **redir)
 		return ;
 	redir_del(&(*redir)->next);
 	token_list_del(&(*redir)->left_op);
+	if ((*redir)->operator && (*redir)->operator->type == DLESS)
+		token_del(&(*redir)->right_op);
+	else
+		token_list_del(&(*redir)->right_op);
 	token_list_del(&(*redir)->operator);
-	token_list_del(&(*redir)->right_op);
 	token_list_del(&(*redir)->heredoc);
 	ft_memdel((void **)redir);
 }

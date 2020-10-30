@@ -1,0 +1,2 @@
+42sh: warning: here-document delimited by end-of-file (wanted 'a')
+42sh: warning: here-document delimited by end-of-file (wanted 'b')
