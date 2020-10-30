@@ -36,8 +36,9 @@ int			get_end_of_braces(const char *str, int start)
 	i = start;
 	while (str[i])
 	{
-		while (is_escaped_brack(str, i))
-			i += 2;
+		if (get_bracket_status(brack_stack) != SQUOTE)
+			while (is_escaped_brack(str, i))
+				i += 2;
 		set_bracket_status(str, i, brack_stack, true);
 		if (brack_stack->size == 0)
 		{
