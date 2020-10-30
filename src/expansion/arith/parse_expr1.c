@@ -92,7 +92,10 @@ t_node	*parse_expression(void)
 		g_cur_tok = g_cur_tok->next;
 		node->left = mutable;
 		if ((node->right = parse_expression()) == NULL)
+		{
 			node_del(&node);
+			return (arith_parse_error());
+		}
 		return (node);
 	}
 	g_cur_tok = mutable->token;
