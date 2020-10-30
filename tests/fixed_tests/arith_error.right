@@ -34,5 +34,7 @@
 ~~~
 42sh: \$(: invalid math expression
 ~~~
+42sh: bad substitution: no closing bracket in $((1 + 1
+~~~
 42sh: unexpected EOF while looking for matching '$(('
 42sh: syntax error near unexpected token 'EOF'

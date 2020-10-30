@@ -14,6 +14,31 @@
 
 char	*g_tmp_file = NULL;
 
+/*
+** Ignores quote termination except when they are inside expansions
+*/
+
+static bool		braces_are_closed(const char *heredoc)
+{
+	t_array			*brack_stack;
+	int				i;
+
+	brack_stack = array_new(4);
+	i = 0;
+	while (heredoc[i])
+	{
+		if (heredoc[i] == '$' || brack_stack->size > 0)
+			set_bracket_status(heredoc, i, brack_stack, true);
+		i++;
+	}
+	i = brack_stack->size;
+	if (i != 0)
+		ft_dprintf(2, "42sh: bad substitution: no closing bracket in %s",
+				heredoc);
+	array_destroy(brack_stack);
+	return (i == 0);
+}
+
 static t_token	*create_tmp_token(t_dstr *heredoc)
 {
 	t_token *tmp;
@@ -40,7 +65,7 @@ int				open_heredoc(t_dstr *heredoc)
 	if (g_tmp_file == NULL)
 		return (-1);
 	tmp = create_tmp_token(heredoc);
-	if (dollar_expand(tmp, 0, true) == 1)
+	if (!braces_are_closed(heredoc->str) || dollar_expand(tmp, 0, true) == 1)
 	{
 		ft_memdel((void **)&g_tmp_file);
 		token_del(&tmp);
