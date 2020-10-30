@@ -19,19 +19,20 @@ char	*get_pwd(void)
 {
 	static char	buf[PATH_MAX + 1];
 	char		*pwd;
+	char		*cwd;
+	struct stat	pwd_stat;
+	struct stat cwd_stat;
 
 	pwd = get_var_value("PWD");
-	if (pwd == NULL || *pwd == '\0')
-	{
-		if (getcwd(buf, PATH_MAX + 1) == NULL)
-		{
-			ft_putstr_fd("cd: PWD not set\n"
+	cwd = getcwd(buf, PATH_MAX + 1);
+	if (cwd == NULL || stat(cwd, &cwd_stat) < 0)
+		ft_putstr_fd("cd: PWD not set\n"
 						"getcwd: could not get current dir\n"
 						, 2);
-			return (NULL);
-		}
-		return (buf);
-	}
+	if (pwd == NULL || stat(pwd, &pwd_stat) < 0
+			|| cwd_stat.st_ino != pwd_stat.st_ino
+			|| cwd_stat.st_dev != pwd_stat.st_dev)
+		return (cwd);
 	return (pwd);
 }
 
