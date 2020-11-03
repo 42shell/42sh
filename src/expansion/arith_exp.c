@@ -67,6 +67,8 @@ int			arith_expand(t_token *token, int *i)
 	char	*buf;
 
 	end = get_end_of_braces(token->value->str, *i) - 1;
+	if (end < 0)
+		return (1 && ft_dprintf(2, "42sh: invalid arithmetic expansion"));
 	token->value->str[end] = '\0';
 	token->exp_info->str[end] = '\0';
 	remove_dquotes(token, *i + 3);

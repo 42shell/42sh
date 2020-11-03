@@ -105,6 +105,8 @@ int			process_sub(t_token *token, int *i)
 
 	type = (token->value->str[0] == '<') ? INPUT_PROCSUB : OUTPUT_PROCSUB;
 	end = get_end_of_braces(token->value->str, *i);
+	if (end < 0)
+		return (1 && ft_dprintf(2, "42sh: invalid process substitution"));
 	token->value->str[end] = '\0';
 	token->exp_info->str[end] = '\0';
 	g_cmd = ft_strsplit(token->value->str + *i + 2, '\n');
