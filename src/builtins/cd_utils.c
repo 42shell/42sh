@@ -23,17 +23,25 @@ char	*get_pwd(void)
 	struct stat	pwd_stat;
 	struct stat cwd_stat;
 
-	pwd = get_var_value("PWD");
+	pwd = ft_strdup(get_var_value("PWD"));
+	if (pwd && pwd[0])
+	{
+		remove_dots(pwd);
+		remove_dotdots(pwd);
+		if (ft_strequ(pwd, "..") || ft_strequ(pwd, "."))
+			pwd[0] = '\0';
+	}
 	cwd = getcwd(buf, PATH_MAX + 1);
 	if (cwd == NULL || stat(cwd, &cwd_stat) < 0)
 		ft_putstr_fd("cd: PWD not set\n"
 						"getcwd: could not get current dir\n"
 						, 2);
-	if (pwd == NULL || stat(pwd, &pwd_stat) < 0
+	if (!(pwd == NULL || pwd[0] == '\0' || stat(pwd, &pwd_stat) < 0
 			|| cwd_stat.st_ino != pwd_stat.st_ino
-			|| cwd_stat.st_dev != pwd_stat.st_dev)
-		return (cwd);
-	return (pwd);
+			|| cwd_stat.st_dev != pwd_stat.st_dev))
+		ft_strcpy(cwd, pwd);
+	free(pwd);
+	return (cwd);
 }
 
 char	*get_home_dir(t_array *env)
@@ -72,12 +80,7 @@ void	remove_dots(char *curpath)
 {
 	char *match;
 
-	while ((match = ft_strstr(curpath, "/./")))
-		ft_strcpy(match, match + 2);
-	while ((match = ft_strstr(curpath, "./"))
-			&& (match == curpath || *(match - 1) == '/'))
-		ft_strcpy(match, match + 2);
-	while ((match = ft_strstr(curpath, "/.")) && *(match + 2) == '\0')
+	while ((match = find_dot(curpath)))
 		ft_strcpy(match, match + 2);
 }
 
@@ -87,7 +90,7 @@ int		remove_dotdots(char *curpath)
 	DIR			*dir;
 
 	dir = NULL;
-	while ((match = ft_strstr(curpath, "/..")))
+	while ((match = find_dotdot(curpath)))
 	{
 		if (match == curpath)
 			ft_strcpy(curpath, curpath + 3);

@@ -40,6 +40,8 @@ char		*get_home_dir(t_array *env);
 void		append_curpath_to_pwd(char **curpath);
 void		remove_dots(char *curpath);
 int			remove_dotdots(char *curpath);
+char		*find_dot(const char *path);
+char		*find_dotdot(const char *path);
 
 /*
 ** test operations
