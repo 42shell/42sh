@@ -35,3 +35,8 @@ cd: OLDPWD not set
 ~~~
 cd -\255 getopt bug
 cd: illegal option -- Ã
+~~~
+cd too many dots
+cd: error
+~~~
+cd: error

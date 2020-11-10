@@ -101,7 +101,8 @@ int		remove_dotdots(char *curpath)
 				return (-1);
 			closedir(dir);
 			*(match - 1) = '\0';
-			ft_strcpy(ft_strrchr(curpath, '/'), match + 2);
+			if (ft_strrchr(curpath, '/'))
+				ft_strcpy(ft_strrchr(curpath, '/'), match + 2);
 		}
 	}
 	if ((curpath)[0] == '\0')

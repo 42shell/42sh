@@ -57,3 +57,7 @@ echo '~~~'
 echo "cd too many dots"
 cd /
 cd .../..
+echo '~~~'
+
+setenv PWD ./../..
+cd 0
