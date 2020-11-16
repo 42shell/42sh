@@ -54,7 +54,7 @@ t_token						*get_operator_token(void)
 	type = ht_get(g_operator_types, token->value->str);
 	if (type != NULL)
 	{
-		g_arith_lexer.i += 2;
+		g_arith_lexer.i += (token->value->str[1] != '\0') ? 2 : 1;
 		token->type = *type;
 		return (token);
 	}

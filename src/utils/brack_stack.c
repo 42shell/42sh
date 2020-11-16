@@ -37,12 +37,12 @@ void			pop_bracket_from_stack(t_array *stack)
 }
 
 static bool		should_pop(const char *str, int i, enum e_quote_st brack_status
-						, bool just_closed_dparen)
+						, bool just_closed_paren)
 {
 	return (
 	(brack_status == BRACE && str[i] == '}')
 	|| (brack_status == DPAREN && str[i] == ')' && i > 0 && str[i - 1] == ')'
-				&& !just_closed_dparen)
+				&& !just_closed_paren)
 	|| (brack_status == PAREN && str[i] == ')')
 	|| ((str[i] == DQUOTE || str[i] == SQUOTE)
 				&& (char)brack_status == str[i]));
@@ -50,7 +50,7 @@ static bool		should_pop(const char *str, int i, enum e_quote_st brack_status
 
 /*
 ** in case of $(()) inside a $(), we don't want to close the $() with the second
-** paren of the )) that close the $(( so we use g_just_closed_dparen.
+** paren of the )) that close the $(( so we use g_just_closed_paren.
 ** flags: BRACK_CAN_OPEN, BRACK_CAN_CLOSE.
 */
 
@@ -58,7 +58,7 @@ void			set_bracket_status(const char *str, int i, t_array *stack,
 									bool can_open)
 {
 	enum e_quote_st	brack_status;
-	static bool		just_closed_dparen;
+	static bool		just_closed_paren;
 
 	brack_status = get_bracket_status(stack);
 	if (can_open && str[i] == '$')
@@ -74,12 +74,12 @@ void			set_bracket_status(const char *str, int i, t_array *stack,
 	else if (is_procsub_paren(str, i)
 				|| is_subshell_paren(str, i, brack_status))
 		add_bracket_to_stack(stack, PAREN);
-	else if (should_pop(str, i, brack_status, just_closed_dparen))
+	else if (should_pop(str, i, brack_status, just_closed_paren))
 	{
-		just_closed_dparen = (brack_status == DPAREN);
+		just_closed_paren = (brack_status == DPAREN || brack_status == PAREN);
 		pop_bracket_from_stack(stack);
-		if (just_closed_dparen)
+		if (just_closed_paren)
 			return ;
 	}
-	just_closed_dparen = false;
+	just_closed_paren = false;
 }

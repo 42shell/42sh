@@ -47,6 +47,7 @@ SRC_BUILTINS    :=	builtins.c\
 					builtin_utils.c\
 					cd.c\
 					cd_utils.c\
+					cd_utils2.c\
 					export.c\
 					set_unset.c\
 					jobs.c\

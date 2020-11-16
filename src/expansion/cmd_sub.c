@@ -118,6 +118,8 @@ int			cmd_sub(t_token *token, int *i)
 	int		fildes[2];
 
 	end = get_end_of_braces(token->value->str, *i);
+	if (end < 0)
+		return (1 && ft_dprintf(2, "42sh: invalid command substitution\n"));
 	token->value->str[end] = '\0';
 	token->exp_info->str[end] = '\0';
 	g_cmd = ft_strsplit(token->value->str + *i + 2, '\n');

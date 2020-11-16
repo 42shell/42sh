@@ -44,6 +44,20 @@ echo '~~~'
 unsetenv OLDPWD; cd -;
 echo '~~~'
 
+cd /
+export PWD=..
+cd ..
+
+echo '~~~'
 echo "cd -\255 getopt bug"
 cd -L -P -L -P -L -P -L -ÿ .
 cd -L .
+echo '~~~'
+
+echo "cd too many dots"
+cd /
+cd .../..
+echo '~~~'
+
+setenv PWD ./../..
+cd 0

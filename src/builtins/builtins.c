@@ -117,5 +117,6 @@ void		builtin_exit(char **argv
 		status = ft_atoi(argv[1]);
 	if (g_shell.interactive_mode && g_job_control_enabled)
 		tcsetattr(STDIN_FILENO, TCSADRAIN, &g_shell.tmodes);
+	msgctl(g_msg_qid, IPC_RMID, NULL);
 	exit(status);
 }

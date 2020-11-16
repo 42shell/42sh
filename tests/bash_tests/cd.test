@@ -151,3 +151,14 @@ echo $PWD
 echo $OLDPWD
 /bin/pwd
 echo '~~~'
+
+#TEST 07
+export PWD=/
+cd .
+pwd
+echo '~~~'
+
+#TEST 08
+export PWD=..
+cd ..
+pwd

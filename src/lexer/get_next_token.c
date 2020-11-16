@@ -85,6 +85,11 @@ t_token			*get_next_token(void)
 		g_lexer.end_of_input = 0;
 		if ((ret = g_shell.get_input(get_prompt(), false)) != 0)
 			return (end_of_input(ret));
+		if (g_lexer.i > 0 && (g_lexer.line[g_lexer.i - 1] == '$'
+				|| g_lexer.line[g_lexer.i - 1] == '<'
+				|| g_lexer.line[g_lexer.i - 1] == '>'))
+			set_bracket_status(g_lexer.line, g_lexer.i - 1,
+					g_lexer.brack_stack, true);
 		g_lexer.line_cont = 0;
 	}
 	while (!g_lexer.end_of_input && !g_lexer.token_delimited)

@@ -37,7 +37,7 @@ static int	get_redirection_fd(t_redir *redir)
 	type = redir->operator->type;
 	filename = redir->right_op->value;
 	if (type == DLESS)
-		return (open_heredoc(filename));
+		return (open_heredoc(ft_dstr_dup(filename)));
 	else if ((type == GREATAND || type == LESSAND)
 	&& ft_strisnbr(filename->str))
 		return (ft_atoi(filename->str));

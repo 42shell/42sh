@@ -1,5 +1,12 @@
+#TEST 00
 cat << EOF
 bad expansion in heredoc
 ${@asdf}
 lol
 EOF
+
+echo '~~~~'
+
+#TEST 01
+''$\
+T<<0

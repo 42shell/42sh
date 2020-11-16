@@ -94,9 +94,10 @@ int				get_all_heredocs(void)
 	t_token	*tmp;
 
 	if (g_parser.status != NOERR || !(curr = g_parser.heredocs)
-	|| !(g_heredoc_ptr = ft_strchr(g_lexer.line, '\n')))
+	|| (!(g_heredoc_ptr = ft_strchr(g_lexer.line, '\n'))
+		&& !(g_heredoc_ptr = ft_strchr(g_lexer.line, '\0'))))
 		return (0);
-	g_heredoc_ptr++;
+	g_heredoc_ptr = *g_heredoc_ptr == '\n' ? g_heredoc_ptr + 1 : g_heredoc_ptr;
 	while (curr)
 	{
 		ft_dstr_add(curr->value, '\n');
