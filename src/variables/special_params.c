@@ -70,3 +70,8 @@ char	*get_last_bg_job_pgid(void)
 		return ("");
 	return (ft_itoa(g_last_bg_job_pgid, str));
 }
+
+char	*get_shell_name(void)
+{
+	return (g_shell_name);
+}

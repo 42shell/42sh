@@ -66,8 +66,11 @@ int					main_loop(void)
 	return (0);
 }
 
+char	*g_shell_name;
+
 int					main(int argc, char **argv)
 {
+	g_shell_name = argv[0];
 	init(argc - 1, argv + 1);
 	main_loop();
 	return (0);

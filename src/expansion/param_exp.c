@@ -53,7 +53,7 @@ static int	get_var_end(char *str, int start, bool brace)
 			return (-1);
 		i = start + 2;
 	}
-	if (str[i] == '$' || str[i] == '!' || str[i] == '?')
+	if (str[i] == '$' || str[i] == '!' || str[i] == '?' || str[i] == '0')
 	{
 		if (str[i] == '!' && str[i + 1] == '!')
 			i++;

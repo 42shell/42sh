@@ -43,6 +43,8 @@
 ** vars.h
 */
 
+extern char *g_shell_name;
+
 # define V_NOATTR	0
 # define V_RDONLY	1
 # define V_EXPORT	2
@@ -169,6 +171,7 @@ void					set_temp_env_variables(t_simple_cmd *cmd,
 char					*get_last_exit_status(void);
 char					*get_shell_pid(void);
 char					*get_last_bg_job_pid(void);
+char					*get_shell_name(void);
 char					*get_last_bg_job_pgid(void);
 
 # define BRACK_CAN_OPEN		0x1

@@ -31,6 +31,8 @@ static void	init_vars(void)
 	ht_put(g_shell.vars, "!", var);
 	var = make_new_var("!!", NULL, V_HIDDEN | V_SPECIAL, get_last_bg_job_pgid);
 	ht_put(g_shell.vars, "!!", var);
+	var = make_new_var("0", NULL, V_HIDDEN | V_SPECIAL, get_shell_name);
+	ht_put(g_shell.vars, "0", var);
 }
 
 static void	init_builtins(void)
@@ -111,6 +113,7 @@ int			init(int argc, char **argv)
 	if (argc > 0)
 	{
 		set_input_fd(argv[0]);
+		g_shell_name = argv[0];
 		g_shell.get_input = &input_batch;
 		g_shell.interactive_mode = false;
 	}
