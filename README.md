@@ -41,6 +41,8 @@ An advanced unix shell coded entirely from scratch with the following features:
     *   Subshells, command grouping with (...) and {...}
     *   Command substitution with $(...)
     *   Process substitution with <(...) and >(...)
+    *   If/while clauses
+    *   Automatic line continuation with indicative prompt when a valid syntax element is not completed
 
 *   **Full job control support:**
     *   Signal handling
